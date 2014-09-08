@@ -1,6 +1,7 @@
 var browserify = require('browserify');
 var gulp = require('gulp');
 var source = require('vinyl-source-stream');
+var handleErrors = require('../util/handle-errors');
 
 function createSingleBundle(options) {
     browserify({
@@ -8,6 +9,7 @@ function createSingleBundle(options) {
         extensions: options.extensions
     })
         .bundle({debug: true})
+        .on('error', handleErrors)
         .pipe(source(options.output))
         .pipe(gulp.dest(options.destination));
 }
@@ -23,29 +25,24 @@ function createBundles(bundles) {
     });
 }
 
-gulp.task('default', function() {
+gulp.task('browserify', function() {
     createBundles([
         {
-            input: ['./client/js/app.js'],
-            output: 'app.js',
-            destination: './public/js/'
-        }
-/*        {
-            input: ['./client/js/BootstrapButton.js'],
+            input: ['./client/js/App.js'],
             output: 'app.js',
             destination: './public/js/'
         },
-        {
-            input: ['./client/js/BootstrapModal.js'],
-            output: 'app.js',
-            destination: './public/js/'
-        },
-        {
-            input: ['./client/js/Example.js'],
-            output: 'app.js',
-            destination: './public/js/'
-        }
-*/
+            {
+                input: ['./client/js/BootstrapButton.js'],
+                output: 'app.js',
+                destination: './public/js/'
+            },
+            {
+                input: ['./client/js/Head.js'],
+                output: 'app.js',
+                destination: './public/js/'
+            }
+
         ]
     );
 });

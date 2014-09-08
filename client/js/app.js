@@ -1,9 +1,8 @@
-/** @jsx React.DOM */
+/** @jsx React.DOM  */
+'use strict';
+var React = require('react');
+var BootstrapButton = require('./BootstrapButton.js');
+var Head = require('./Head.js');
 
-require('react');
-//require('./Example.js');
-
-React.renderComponent(
-    React.DOM.h1(null, 'Hello, world!'),
-    document.body
-);
+React.renderComponent(<BootstrapButton>Fungerer ikke, her jeg stoppet</BootstrapButton>, document.body);
+React.renderComponent(<Head/>, document.head);

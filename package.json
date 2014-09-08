@@ -2,10 +2,16 @@
     "name": "react-basic-match",
     "description": "Lets use modern stuff to build this ",
     "main": "index.js",
-    "devDependencies": {
+    "dependencies": {
         "envify": "~1.2.1",
         "react": "~0.10.0",
+        "react-async": "^0.9.1",
+        "react-router-component": "^0.18.2",
         "reactify": "~0.13.1",
+        "express": "4.x",
+        "node-jsx": "0.11.0"
+    },
+    "devDependencies": {
         "browserify": "~3.44.2",
         "vinyl-source-stream": "~0.1.x",
         "gulp": "~3.8.x",
@@ -14,7 +20,13 @@
         "gulp-nodemon": "~1.0.x",
         "gulp-mocha": "~0.5.x"
     },
+    "browserify": {
+        "transform": [
+            "envify",
+            "reactify"
+        ]
+    },
     "scripts": {
-        "build": "gulp"
+        "develop": "gulp"
     }
 }
