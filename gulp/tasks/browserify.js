@@ -25,24 +25,13 @@ function createBundles(bundles) {
     });
 }
 
-gulp.task('browserify', function() {
+gulp.task('browserify', function () {
     createBundles([
-        {
-            input: ['./client/js/App.js'],
-            output: 'app.js',
-            destination: './public/js/'
-        },
             {
-                input: ['./client/js/BootstrapButton.js'],
-                output: 'app.js',
-                destination: './public/js/'
-            },
-            {
-                input: ['./client/js/Head.js'],
+                input: './client/js/App.js',
                 output: 'app.js',
                 destination: './public/js/'
             }
-
         ]
     );
 });

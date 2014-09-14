@@ -1,10 +1,6 @@
 /** @jsx React.DOM  */
 'use strict';
 var React = require('react');
-window.React = require('react');
-
-var Head = require('./Head.js');
-
 
 var AddTeam = React.createClass({
 
@@ -19,24 +15,22 @@ var AddTeam = React.createClass({
         }
 
         this.props.submitFunc(player1, player2);
-        this.refs.player1.getDOMNode().value = '';
-        this.refs.player2.getDOMNode().value = '';
+        this.props.showNext();
     },
 
     render: function () {
         return (
             <div>
-                <h4>Add Team</h4>
+                <h3>Add Team</h3>
                 <form className="add-team-form" onSubmit={this.handleSubmit}>
-                    <div className="col-md-4">
-                        <div className="input-group">
-                            <input type="text" className="form-control" ref="player1" placeholder={this.props.player1}></input>
-                        </div>
-                        <div className="input-group">
-                            <input type="text" className="form-control" ref="player2" placeholder={this.props.player2}></input>
-                        </div>
-                        <button type="submit" className="btn btn-default">Add Team</button>
+                    <div className="form-group">
+                        <input type="text" className="form-control" ref="player1" placeholder={this.props.player1}></input>
                     </div>
+                    <div className="form-group">
+                        <input  type="text" className="form-control" ref="player2" placeholder={this.props.player2}></input>
+                    </div>
+                    <button type="submit" className="btn btn-primary  pull-right">Add Team</button>
+
                 </form>
             </div>
         )
@@ -46,8 +40,8 @@ var AddTeam = React.createClass({
 var ShowTeam = React.createClass({
     render: function () {
         return (
-            <div>
-                <p>{this.props.team}</p>
+            <div className={this.props.team}>
+                <p>Team {this.props.team}</p>
                 <ul>
                     <li>{this.props.player1}</li>
                     <li>{this.props.player2}</li>
@@ -59,15 +53,30 @@ var ShowTeam = React.createClass({
 
 var App = React.createClass({
 
+    showB: function() {
+      document.getElementById('A').style.display = 'none';
+      document.getElementById('B').style.display = 'inline';
+    },
+
+    showScoreboard: function() {
+        document.getElementById('A').style.display = 'none';
+        document.getElementById('B').style.display = 'inline';
+    },
+
+
+    showTeams: function() {
+
+    },
+
     getInitialState: function () {
         return {
             teamA: {
-                player1: "Navn A1",
-                player2: "Navn A2"
+                player1: "Player 1",
+                player2: "Player 2"
             },
             teamB: {
-                player1: "Navn B1",
-                player2: "Navn B2"
+                player1: "Player 1",
+                player2: "Player 2"
             }
         }
     },
@@ -79,19 +88,29 @@ var App = React.createClass({
                 player1: name1,
                 player2: name2
             };
-            this.setState(stateObject);
-        }
+            this.setState(stateObject)
+        }.bind(this);
     },
 
     render: function () {
         return (
             <div className="container">
                 <div className="row">
-                    <AddTeam team="teamA" submitFunc={this.submitTeamFunction("teamA")} />
+                    <div className="col-md-4  col-md-offset-4" >
+                        <AddTeam team="teamA" submitFunc={this.submitTeamFunction("teamA")} showNext={this.props.showB}
+                        player1={this.state.teamA.player1}
+                        player2={this.state.teamA.player2} />
+                        <AddTeam team="teamB" submitFunc={this.submitTeamFunction("teamB")} showNext={this.showScoreboard}
+                            player1={this.state.teamB.player1}
+                            player2={this.state.teamB.player2} />
+                    </div>
                 </div>
                 <div className="row">
+                    <div className="col-md-4 col-md-offset-2">
+                        <ShowTeam team="A" player1={this.state.teamA.player1} player2={this.state.teamA.player2} />
+                    </div>
                     <div className="col-md-4">
-                        <ShowTeam team="Team A" player1={this.state.teamA.player1} player2={this.state.teamA.player2} />
+                        <ShowTeam team="B" player1={this.state.teamB.player1} player2={this.state.teamB.player2} />
                     </div>
                 </div>
             </div>
@@ -99,6 +118,4 @@ var App = React.createClass({
     }
 });
 
-React.renderComponent(<Head/>, document.head);
 React.renderComponent(<App />, document.body);
-
