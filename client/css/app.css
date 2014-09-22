@@ -89,6 +89,14 @@ hr {
     margin-bottom: 40px;
 }
 
-#B {
+.addTeamB {
+    display: none;
+}
+
+.showTeamA {
+    display: none;
+}
+
+.showTeamB {
     display: none;
 }
