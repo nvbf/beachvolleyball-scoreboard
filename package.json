@@ -27,7 +27,6 @@
         ]
     },
     "scripts": {
-        "develop": "gulp",
-        "start": "./node_modules/.bin/gulp build && node app.js"
+        "develop": "gulp"
     }
 }
