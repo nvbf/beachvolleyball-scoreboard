@@ -1,7 +1,7 @@
 {
-    "name": "react-basic-match",
+    "name": "beachvollleyball-scoreboard",
     "description": "Lets use modern stuff to build this ",
-    "main": "index.js",
+    "main": "app.js",
     "dependencies": {
         "envify": "~1.2.1",
         "react": "~0.10.0",
@@ -27,7 +27,7 @@
         ]
     },
     "scripts": {
-        "develop": "gulp ",
+        "develop": "gulp",
         "start": "./node_modules/.bin/gulp build && node app.js"
     }
 }
