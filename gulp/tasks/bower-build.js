@@ -1,16 +1,21 @@
 var gulp = require('gulp');
 var source = require('vinyl-source-stream');
 var handleErrors = require('../util/handle-errors');
+var fs = require('fs');
 
 function createSingleBundle(path) {
-        gulp.src(path.input)
-            .on('error', handleErrors)
-            .pipe(gulp.dest(path.output));
+    basedir = __dirname + '/../../';
+    sourcefile = basedir + path.input;
+    if (!fs.existsSync(sourcefile)) {
+        throw new Error('Sourcefile ' + sourcefile + ' do not exist' );
+    }
+    gulp.src(sourcefile)
+        .on('error', handleErrors)
+        .pipe(gulp.dest(path.output));
 }
 
 function createBundles(bundles) {
     bundles.forEach(function (bundle) {
-        console.log('from ' + bundle.input + ' to ' + bundle.output);
         createSingleBundle(bundle);
     });
 }
