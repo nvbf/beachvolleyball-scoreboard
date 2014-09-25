@@ -28,6 +28,8 @@
         ]
     },
     "scripts": {
-        "develop": "gulp"
+        "develop": "gulp",
+        "postinstall" : "./node_modules/bower/bin/bower install"
     }
+
 }

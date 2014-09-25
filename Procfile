@@ -1,1 +1,1 @@
-web: ./node_modules/.bin/gulp build && ./node_modules/bower/bin/bower install && node app.js
+web: ./node_modules/.bin/gulp build && node app.js
