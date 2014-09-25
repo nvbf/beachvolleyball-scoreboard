@@ -1,8 +1,10 @@
 var gulp = require('gulp');
 var source = require('vinyl-source-stream');
+var handleErrors = require('../util/handle-errors');
 
 function createSingleBundle(paths) {
         gulp.src(paths.input)
+            .on('error', handleErrors)
             .pipe(gulp.dest(paths.output));
 }
 
