@@ -2,14 +2,15 @@ var gulp = require('gulp');
 var source = require('vinyl-source-stream');
 var handleErrors = require('../util/handle-errors');
 
-function createSingleBundle(paths) {
-        gulp.src(paths.input)
+function createSingleBundle(path) {
+        gulp.src(path.input)
             .on('error', handleErrors)
-            .pipe(gulp.dest(paths.output));
+            .pipe(gulp.dest(path.output));
 }
 
 function createBundles(bundles) {
     bundles.forEach(function (bundle) {
+        console.log('from ' + bundle.input + ' to ' + bundle.output);
         createSingleBundle(bundle);
     });
 }

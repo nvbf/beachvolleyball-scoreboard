@@ -4,6 +4,7 @@ module.exports = function () {
 
     var args = Array.prototype.slice.call(arguments);
 
+    console.log("NOE FEILET");
     // Send error to notification center with gulp-notify
     notify.onError({
         title: "Compile Error",
