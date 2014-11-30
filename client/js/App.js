@@ -1,108 +1,118 @@
 /** @jsx React.DOM  */
 'use strict';
+
 var React = require('react');
 
 var AddTeam = require('./add-team.js');
-var ShowTeam = require('./show-team.js');
 
 var App = React.createClass({
-
-    showB: function () {
-        document.getElementsByClassName('addTeamA')[0].style.display = 'none';
-        document.getElementsByClassName('addTeamB')[0].style.display = 'inline';
-    },
-
-    showScoreboard: function () {
-        document.getElementsByClassName('addTeamContainer')[0].style.display = 'none';
-        document.getElementsByClassName('showTeamA')[0].style.display = 'inline';
-        document.getElementsByClassName('showTeamB')[0].style.display = 'inline';
-    },
-
-
-    getInitialState: function () {
-        return {
-            teamA: {
-                teamInital : "A",
-                player1: "Player 1",
-                player2: "Player 2",
-                set1: 0,
-                set2: 0,
-                set3: 0
-            },
-            teamB: {
-                teamInital : "B",
-                player1: "Player 1",
-                player2: "Player 2",
-                set1: 0,
-                set2: 0,
-                set3: 0
+        getInitialState: function () {
+            return {
+                Aplayer1: "Player 1",
+                Aplayer2: "Player 2",
+                Aset1: 0,
+                Aset2: 0,
+                Aset3: 0,
+                Bplayer1: "Player 1",
+                Bplayer2: "Player 2",
+                Bset1: 0,
+                Bset2: 0,
+                Bset3: 0
             }
+        },
+
+        showB: function () {
+            document.getElementsByClassName('addTeamA')[0].style.display = 'none';
+            document.getElementsByClassName('addTeamB')[0].style.display = 'inline';
         }
-    },
+        ,
+        showScoreboard: function () {
+            document.getElementsByClassName('addTeamContainer')[0].style.display = 'none';
+            document.getElementsByClassName('showTeamA')[0].style.display = 'inline';
+            document.getElementsByClassName('showTeamB')[0].style.display = 'inline';
+        }
+        ,
 
-    submitTeamFunction: function (team) {
-        return function (name1, name2) {
-            var stateObject = {};
-            stateObject[team] = {
-                player1: name1,
-                player2: name2
-            };
-            this.setState(stateObject)
-        }.bind(this);
-    },
+        submitTeamA: function (name1, name2) {
+            this.setState({
+                Aplayer1: name1,
+                Aplayer2: name2
+            });
+        },
 
-    submitTeamA: function (name1, name2) {
-        var stateObject = {};
-        stateObject['teamA'] = {
-            player1: name1,
-            player2: name2
-        };
-        this.setState(stateObject)
-    },
+        submitTeamB: function (name1, name2) {
+            this.setState({
+                Bplayer1: name1,
+                Bplayer2: name2
+            });
+        },
 
-    submitTeamB: function (name1, name2) {
-        var stateObject = {};
-        stateObject['teamB'] = {
-            player1: name1,
-            player2: name2
-        };
-        this.setState(stateObject)
-    },
+        addPointA: function (e) {
+            event.preventDefault();
+            this.setState({Aset1: this.state.Aset1 + 1});
+        },
 
-    addPointA: function(e) {
-        e.preventDefault();
-        this.setState({teamA : this.state.teamA.set1+1 });
-    }.bind(this),
+        addPointB: function (e) {
+            event.preventDefault();
 
-    addPointB: function(e) {
-        e.preventDefault();
-        this.setState({teamB : this.state.teamB.set1+1 });
-    }.bind(this),
+            this.setState({Bset1: 1});
+        }
+        ,
 
-    render: function () {
-        return (
-            <div className="container">
-                <div className="row">
-                    <div className="col-md-4  col-md-offset-4 addTeamContainer" >
-                        <div className="addTeamA">
-                            <AddTeam team={this.state.teamA} submitFunc={this.submitTeamA} showNext={this.showB} />
-                        </div>
-                        <div className="addTeamB">
-                            <AddTeam team={this.state.teamB} submitFunc={this.submitTeamB} showNext={this.showScoreboard} />
-                        </div>
-                    </div>
+        render: function () {
+            return (
+                <div className="container">
                     <div className="row">
-                        <div className="col-md-4 col-md-offset-2 showTeamA" >
-                            <ShowTeam team={this.state.teamA} addPoint={this.addPointA} />
+                        <div className="col-md-4  col-md-offset-4 addTeamContainer" >
+                            <div className="addTeamA">
+                                <AddTeam state={this.state} teamInitial="A" submitFunc={this.submitTeamA} showNext={this.showB} />
+                            </div>
+                            <div className="addTeamB">
+                                <AddTeam state={this.state} teamInitial="B" submitFunc={this.submitTeamB} showNext={this.showScoreboard} />
+                            </div>
                         </div>
-                        <div className="col-md-4 showTeamB">
-                            <ShowTeam team={this.state.teamB} addPoint={this.addPointB}/>
+                        <div className="row">
+                            <div className="col-md-4 col-md-offset-2 showTeamA" >
+                                <div>
+                                    <div className="headline">
+                                        <h3>
+                                            <div className="team-name">
+                                                {this.state.Aplayer1} - {this.state.Aplayer2}
+                                            </div>
+                                        </h3>
+                                    </div>
+                                    <div className="team-score">
+                                        <h3>
+                                            {this.state.Aset1}
+                                        </h3>
+                                        <button className="btn btn-primary" onClick={this.addPointA}>Legg til Poeng</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-md-4 showTeamB">
+                                <div>
+                                    <div className="headline">
+                                        <h3>
+                                            <div className="team-name">
+                                                {this.state.Bplayer1} - {this.state.Bplayer2}
+                                            </div>
+                                        </h3>
+                                    </div>
+                                    <div className="team-score">
+                                        <h3>
+                                            {this.state.Bset1}
+                                        </h3>
+                                        <button className="btn btn-primary" onClick={this.addPointB}>Legg til Poeng</button>
+                                    </div>
+                                </div>
+
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        )
-    }
-});
+            )
+        }
+    })
+    ;
 
 React.renderComponent(<App />, document.body);

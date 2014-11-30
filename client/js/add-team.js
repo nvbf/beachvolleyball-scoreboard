@@ -23,15 +23,15 @@ var AddTeam = React.createClass({
     render: function () {
         return (
             <div>
-                <h3>Add team {this.props.team.teamInital}</h3>
+                <h2>Add Team </h2>
                 <form className="add-team-form" onSubmit={this.handleSubmit}>
                     <div className="form-group">
-                        <input autofocus={this.props.af} type="text" className="form-control" ref="player1" placeholder={this.props.team.player1}></input>
+                        <input type="text" className="form-control" ref="player1"></input>
                     </div>
                     <div className="form-group">
-                        <input  type="text" className="form-control" ref="player2" placeholder={this.props.team.player2}></input>
+                        <input type="text" className="form-control" ref="player2"></input>
                     </div>
-                    <button type="submit" className="btn btn-primary  pull-right">Add Team</button>
+                    <button type="submit" className="btn btn-primary pull-right">Add Team</button>
                 </form>
             </div>
         )
