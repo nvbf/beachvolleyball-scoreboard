@@ -1,5 +1,7 @@
 var assert = require("assert");
-var match = require("./../client/js/Match");
+var Match = require("./../client/js/Match");
+var Team = require("./../client/js/Team");
+var match = new Match();
 var eventHandler = require("./matchEventHandlerMock");
 
 describe('Match Logic', function () {
@@ -33,4 +35,17 @@ describe('Match Logic', function () {
             });
         assert.equal(triggerEvent, "switch")
     });
+
+    it('Adding Hometeam', function () {
+        var  hometeam = new Team('player1', 'player2');
+        match.hometeam(hometeam);
+        assert.deepEqual(match.state.hometeam, hometeam);
+    });
+
+    it('Adding Awayteam', function () {
+        var awayteam = new Team('player3', 'player4');
+        match.awayteam(awayteam);
+        assert.deepEqual(match.state.awayteam, awayteam);
+    });
+
 });

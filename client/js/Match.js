@@ -45,4 +45,13 @@ Match.prototype.addPoint = function (eventHandler, team) {
     }
 };
 
-exports = module.exports = new Match();
+Match.prototype.hometeam = function (team) {
+    this.state.hometeam = team;
+};
+
+Match.prototype.awayteam = function (team) {
+    this.state.awayteam = team;
+};
+
+
+exports = module.exports = Match;
