@@ -21,11 +21,6 @@ Match.prototype.addPointHomeTeam = function (eventHandler) {
     return this.addPoint(eventHandler, 0);
 };
 
-Match.prototype.getPointsInCurrentSet = function () {
-    var set = this.getCurrentSet();
-    return set[0] + set[1];
-};
-
 Match.prototype.changeSide = function () {
     var set = this.getCurrentSet();
     return (0 === (set[0] + set[1]) % 7);
@@ -54,4 +49,4 @@ Match.prototype.awayteam = function (team) {
 };
 
 
-exports = module.exports = Match;
+module.exports = new Match();

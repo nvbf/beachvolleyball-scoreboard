@@ -2,7 +2,7 @@
 'use strict';
 
 var React = require('react');
-
+var match = require('./Match');
 
 var Scoreboard = React.createClass({
     render: function () {
@@ -15,13 +15,13 @@ var Scoreboard = React.createClass({
                                 <div className="headline">
                                     <h3>
                                         <div className="team-name">
-                                                {this.props.match.hometeam.players().person1} - {this.props.match.hometeam.players().person1}
+                                        {match.hometeam.players().person1} - {match.hometeam.players().person2}
                                         </div>
                                     </h3>
                                 </div>
                                 <div className="team-score">
                                     <h3>
-                                            {this.props.match.getCurrentSet()[0]}
+                                            {match.getCurrentSet()[0]}
                                     </h3>
                                     <button className="btn btn-primary" onClick={this.addPointA}>Legg til Poeng</button>
                                 </div>
@@ -32,13 +32,13 @@ var Scoreboard = React.createClass({
                                 <div className="headline">
                                     <h3>
                                         <div className="team-name">
-                                                {this.props.match.hometeam.players().person1} - {this.props.match.hometeam.players().person1}
+                                        {match.hometeam.players().person1} - {match.hometeam.players().person1}
                                         </div>
                                     </h3>
                                 </div>
                                 <div className="team-score">
                                     <h3>
-                                            {this.props.match.getCurrentSet()[0]}
+                                            {match.getCurrentSet()[0]}
                                     </h3>
                                     <button className="btn btn-primary" onClick={this.addPointB}>Legg til Poeng</button>
                                 </div>

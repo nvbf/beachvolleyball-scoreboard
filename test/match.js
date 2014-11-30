@@ -1,7 +1,6 @@
 var assert = require("assert");
-var Match = require("./../client/js/Match");
+var match = require("./../client/js/Match");
 var Team = require("./../client/js/Team");
-var match = new Match();
 var eventHandler = require("./matchEventHandlerMock");
 
 describe('Match Logic', function () {

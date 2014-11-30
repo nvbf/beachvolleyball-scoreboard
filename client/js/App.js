@@ -4,10 +4,10 @@
 var React = require('react');
 
 
-//var Scoreboard = require('./../../backup/Scoreboard');
-var Match = require('./Match');
-var match = new Match();
-var AddTeamContainer = require('./add-Team-Container');
+var match = require('./Match');
+var Scoreboard = require('./Scoreboard');
+var AddAwayTeam= require('./AddAwayTeam');
+var AddHomeTeam = require('./AddHomeTeam');
 
 var Router = require('react-router');
 var Route = Router.Route;
@@ -32,7 +32,6 @@ var App = React.createClass({
         this.setState(match.state);
     },
 
-    //<Scoreboard match={this.match} />
     render: function () {
         return (
             <div>
@@ -45,7 +44,9 @@ var App = React.createClass({
 
 var routes = (
     <Route handler={App} path="/">
-        <DefaultRoute handler={AddTeamContainer }/>
+        <DefaultRoute  name="hometeam" handler={AddHomeTeam} />
+        <Route name="awayteam" handler={AddAwayTeam} />
+        <Route name="scoreboard" handler={Scoreboard} />
     </Route>
 );
 
