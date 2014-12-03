@@ -3,27 +3,20 @@
 
 var React = require('react');
 var Team = require('./Team');
-var match = require('./Match');
-var Router = require('react-router');
-
+var AddAwayTeam = require('./AddAwayTeam');
 
 var AddHomeTeam = React.createClass({
 
-    mixins: [ Router.Navigation ],
-
     handleSubmit: function (e) {
+        e.preventDefault();
         var player1 = this.refs.player1.getDOMNode().value.trim();
         var player2 = this.refs.player2.getDOMNode().value.trim();
         if (!player2 || !player1) {
-
             console.error("Fyll inn navn");
             return;
         }
-        match.hometeam(new Team(player1, player2));
-        this.setState(
-            match.state
-        );
-        this.transitionTo('/awayTeam');
+        this.props.match.addHomeTeam(new Team(player1, player2));
+        React.render(<AddAwayTeam match={this.props.match}/>, document.body);
     },
 
     render: function () {

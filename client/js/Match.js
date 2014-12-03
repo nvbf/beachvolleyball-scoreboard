@@ -40,12 +40,20 @@ Match.prototype.addPoint = function (eventHandler, team) {
     }
 };
 
-Match.prototype.hometeam = function (team) {
+Match.prototype.addHomeTeam= function (team) {
     this.state.hometeam = team;
 };
 
-Match.prototype.awayteam = function (team) {
+Match.prototype.homeTeam = function () {
+    return this.state.hometeam.players();
+};
+
+Match.prototype.addAwayTeam = function (team) {
     this.state.awayteam = team;
+};
+
+Match.prototype.awayTeam= function () {
+    return this.state.awayteam.players();
 };
 
 
