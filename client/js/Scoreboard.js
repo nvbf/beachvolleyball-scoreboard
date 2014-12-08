@@ -5,19 +5,20 @@ var React = require('react');
 
 var Scoreboard = React.createClass({
 
+    getInitialState: function() {
+        return this.props.match.state;
+    },
+
     pointToHomeTeam: function (e) {
-        this.props.test = "HJEMME";
         event.preventDefault();
         this.props.match.addPointHomeTeam();
-        this.setState(
-            match.state
-        )
+        this.setState(this.props.match.state)
     },
 
     pointToAwayTeam: function (e) {
-        this.props.test = "BORTE";
         event.preventDefault();
         this.props.match.addPointAwayTeam();
+        this.setState(this.props.match.state)
     },
 
     render: function () {
@@ -26,7 +27,6 @@ var Scoreboard = React.createClass({
                 <div className="row">
                     <div className="row">
                         <div className="col-md-4 col-md-offset-2 showTeamA" >
-                            {this.props.test}
                             <div>
                                 <div className="headline">
                                     <h3>
@@ -38,7 +38,7 @@ var Scoreboard = React.createClass({
                                 </div>
                                 <div className="team-score">
                                     <h3>
-                                            {this.props.match.getCurrentSet()[0]}
+                                            {this.state.currentSetScore.home}
                                     </h3>
                                     <button className="btn btn-primary" onClick={this.pointToHomeTeam}>Legg til Poeng</button>
                                 </div>
@@ -55,7 +55,7 @@ var Scoreboard = React.createClass({
                                 </div>
                                 <div className="team-score">
                                     <h3>
-                                            {this.props.match.getCurrentSet()[1]}
+                                            {this.state.currentSetScore.away}
                                     </h3>
                                     <button className="btn btn-primary" onClick={this.pointToAwayTeam}>Legg til Poeng</button>
                                 </div>

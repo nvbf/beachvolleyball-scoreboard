@@ -2,13 +2,16 @@
 'use strict';
 
 var React = require('react');
-var match = require('./Match');
-var AddHomeTeam = require('./AddHomeTeam');
-
 var Router = require('react-router');
 
+var AddHomeTeam = require('./AddHomeTeam');
+var Match = require('./Match');
+var match = new Match();
 
 var App = React.createClass({
+    displayName: function() {
+        return "App";
+    },
 
     render: function () {
         return (
@@ -16,20 +19,5 @@ var App = React.createClass({
         )
     }
 });
-
-//var routes = (
-//    <Route handler={App} path="/">
-//        <DefaultRoute  name="hometeam" handler={AddHomeTeam} />
-//        <Route name="awayteam" handler={AddAwayTeam} />
-//        <Route name="scoreboard" handler={Scoreboard} />
-//    </Route>
-//);
-
-
-//Router.run(routes, function (Handler, whatisthis) {
-//
-//    React.render(<Handler whatisthis={whatisthis} />, document.body);
-//});
-
 
 React.render(<App />, document.body);

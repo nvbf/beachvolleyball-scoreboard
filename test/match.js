@@ -1,9 +1,10 @@
 var assert = require("assert");
-var match = require("./../client/js/Match");
+var Match = require("./../client/js/Match");
 var Team = require("./../client/js/Team");
 var eventHandler = require("./matchEventHandlerMock");
 
 describe('Match Logic', function () {
+        match = new Match();
         it('Set one should be 1-0, after we add point to hometeam', function () {
             match.addPointHomeTeam(eventHandler);
             assert.deepEqual([1,0], match.getCurrentSet());
@@ -37,13 +38,13 @@ describe('Match Logic', function () {
 
     it('Adding Hometeam', function () {
         var  hometeam = new Team('player1', 'player2');
-        match.hometeam(hometeam);
+        match.addHomeTeam(hometeam);
         assert.deepEqual(match.state.hometeam, hometeam);
     });
 
     it('Adding Awayteam', function () {
         var awayteam = new Team('player3', 'player4');
-        match.awayteam(awayteam);
+        match.addAwayTeam(awayteam);
         assert.deepEqual(match.state.awayteam, awayteam);
     });
 

@@ -3,7 +3,11 @@ function Match() {
         hometeam: undefined,
         awayteam: undefined,
         sets: [[0, 0], [0, 0], [0, 0]],
-        currentSet: 0
+        currentSet: 0,
+        currentSetScore: {
+            home: 0,
+            away: 0
+        }
     };
     return this;
 }
@@ -14,8 +18,11 @@ Match.prototype.getCurrentSet = function () {
 
 Match.prototype.updatePoints = function (setScore) {
     this.state.sets[this.state.currentSet] = setScore;
+    this.state.currentSetScore = {
+        home: this.getCurrentSet()[0],
+        away: this.getCurrentSet()[1]
+    }
 };
-
 
 Match.prototype.addPointHomeTeam = function (eventHandler) {
     return this.addPoint(eventHandler, 0);
@@ -40,7 +47,7 @@ Match.prototype.addPoint = function (eventHandler, team) {
     }
 };
 
-Match.prototype.addHomeTeam= function (team) {
+Match.prototype.addHomeTeam = function (team) {
     this.state.hometeam = team;
 };
 
@@ -52,9 +59,9 @@ Match.prototype.addAwayTeam = function (team) {
     this.state.awayteam = team;
 };
 
-Match.prototype.awayTeam= function () {
+Match.prototype.awayTeam = function () {
     return this.state.awayteam.players();
 };
 
 
-module.exports = new Match();
+module.exports = Match;
