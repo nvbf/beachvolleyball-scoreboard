@@ -2,28 +2,58 @@
 'use strict';
 
 var React = require('react');
+//var ChangeSideDialog = require('./ChangeSideDialog');
+var mui = require('material-ui');
+var Dialog = mui.Dialog;
 
 var Scoreboard = React.createClass({
+
+    displayName: function() {
+        return "Scoreboard";
+    },
+
+    componentDidMount: function() {
+      this.props.match.on("switch", function() {
+          this.refs.changeSideDialog.show();
+      }.bind(this));
+    },
 
     getInitialState: function() {
         return this.props.match.state;
     },
 
-    pointToHomeTeam: function (e) {
+    pointToHomeTeam: function(event) {
         event.preventDefault();
         this.props.match.addPointHomeTeam();
-        this.setState(this.props.match.state)
+        this.setState(this.props.match.state);
     },
 
-    pointToAwayTeam: function (e) {
+    pointToAwayTeam: function(event) {
         event.preventDefault();
         this.props.match.addPointAwayTeam();
-        this.setState(this.props.match.state)
+        this.setState(this.props.match.state);
     },
+
+
+    alertOnSwitch: function() {
+        console.log("alertOnSwitch");
+        this.refs.changeSideDialog.show();
+    },
+
 
     render: function () {
         return (
             <div className="container">
+                <Dialog
+                    ref="changeSideDialog"
+                    title="Sidebytte"
+                    actions={[
+                        {text: 'OK', onClick: this.dismiss}
+                    ]}>
+
+                    Lagene skal bytte side
+                </Dialog>
+
                 <div className="row">
                     <div className="row">
                         <div className="col-md-4 col-md-offset-2 showTeamA" >

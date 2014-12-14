@@ -12,7 +12,7 @@
     "tests"
   ],
   "dependencies": {
-    "bootstrapvalidator": "0.5.1"
+    "bootstrapvalidator": "0.5.3"
   },
   "homepage": "https://github.com/SindreSvendby/beachvollleyball-scoreboard",
   "authors": [

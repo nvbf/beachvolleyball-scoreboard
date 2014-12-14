@@ -1,6 +1,7 @@
 var util = require('util');
 var EventEmitter = require('events').EventEmitter;
 
+
 function Match() {
     this.state = {
         hometeam: undefined,
@@ -47,7 +48,9 @@ Match.prototype.addPoint = function (team) {
     var set = this.getCurrentSet();
     set[team]++;
     this.updatePoints(set);
-    this.emit("switch");
+    if(this.changeSide()) {
+        this.emit("switch");
+    }
 };
 
 Match.prototype.addHomeTeam = function (team) {

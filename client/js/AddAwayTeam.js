@@ -5,6 +5,7 @@ var React = require('react');
 var Team = require('./Team');
 var Scoreboard = require('./Scoreboard');
 
+
 var AddAwayTeam = React.createClass({
 
     handleSubmit: function (e) {

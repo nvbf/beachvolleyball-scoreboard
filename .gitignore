@@ -3,3 +3,5 @@ node_modules
 bower_components
 public/js/app.js
 public/css/app.css
+public/css/bootstrap.css
+public/css/bootstrapValidator.css

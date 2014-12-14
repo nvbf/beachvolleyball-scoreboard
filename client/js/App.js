@@ -8,12 +8,6 @@ var AddHomeTeam = require('./AddHomeTeam');
 var Match = require('./Match');
 var match = new Match();
 
-var alertOnSwitch = function() {
-    window.alert("switch");
-};
-
-match.on("switch", alertOnSwitch);
-
 var App = React.createClass({
     displayName: function() {
         return "App";
@@ -25,5 +19,8 @@ var App = React.createClass({
         )
     }
 });
+
+
+window.React = React;
 
 React.render(<App />, document.body);
