@@ -1,3 +1,6 @@
+var util = require('util');
+var EventEmitter = require('events').EventEmitter;
+
 function Match() {
     this.state = {
         hometeam: undefined,
@@ -12,6 +15,8 @@ function Match() {
     return this;
 }
 
+util.inherits(Match, EventEmitter);
+
 Match.prototype.getCurrentSet = function () {
     return this.state.sets[this.state.currentSet];
 };
@@ -24,8 +29,8 @@ Match.prototype.updatePoints = function (setScore) {
     }
 };
 
-Match.prototype.addPointHomeTeam = function (eventHandler) {
-    return this.addPoint(eventHandler, 0);
+Match.prototype.addPointHomeTeam = function () {
+    return this.addPoint(0);
 };
 
 Match.prototype.changeSide = function () {
@@ -34,17 +39,15 @@ Match.prototype.changeSide = function () {
 };
 
 
-Match.prototype.addPointAwayTeam = function (eventHandler) {
-    return this.addPoint(eventHandler, 1);
+Match.prototype.addPointAwayTeam = function () {
+    return this.addPoint(1);
 };
 
-Match.prototype.addPoint = function (eventHandler, team) {
+Match.prototype.addPoint = function (team) {
     var set = this.getCurrentSet();
     set[team]++;
     this.updatePoints(set);
-    if (this.changeSide(set)) {
-        eventHandler("switch");
-    }
+    this.emit("switch");
 };
 
 Match.prototype.addHomeTeam = function (team) {
