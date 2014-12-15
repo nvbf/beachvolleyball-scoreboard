@@ -20,30 +20,22 @@ function createBundles(bundles) {
     });
 }
 
-gulp.task('bower-build', function () {
+gulp.task('view-lib-build', function () {
     createBundles([
             {
-                input: './bower_components/bootstrap/dist/css/bootstrap.css',
+                input: './node_modules/bootstrap/dist/css/bootstrap.css',
                 output: './public/css'
             },
             {
-                input: './bower_components/bootstrapvalidator/dist/css/bootstrapValidator.css',
-                output: './public/css'
+                input: './node_modules/bootstrap/dist/js/bootstrap.js',
+                output: './public/js'
             },
             {
                 input: './client/css/app.css',
                 output: './public/css'
             },
             {
-                input: './bower_components/bootstrapvalidator/dist/js/bootstrapValidator.js',
-                output: './public/js'
-            },
-            {
-                input: './bower_components/bootstrapvalidator/dist/js/bootstrapValidator.js',
-                output: './public/js'
-            },
-            {
-                input: './bower_components/jquery/dist/jquery.js',
+                input: './node_modules/jquery/dist/jquery.js',
                 output: './public/js'
             }
         ]

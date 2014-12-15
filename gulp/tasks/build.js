@@ -1,3 +1,3 @@
 var gulp = require('gulp');
 
-gulp.task('build', [ 'bower-build', 'browserify']);
+gulp.task('build', [ 'view-lib-build', 'less', 'browserify']);

@@ -14,7 +14,7 @@ function createSingleBundle(options) {
         .pipe(gulp.dest(options.destination));
 }
 
-function createBundles(bundles) {
+function createBundles(bundles, markAsDoneCallback) {
     bundles.forEach(function (bundle) {
         createSingleBundle({
             input: bundle.input,
@@ -23,15 +23,17 @@ function createBundles(bundles) {
             destination: bundle.destination
         });
     });
+    markAsDoneCallback();
 }
 
-gulp.task('browserify', function () {
+gulp.task('browserify', function (markAsDoneCallback) {
     createBundles([
             {
                 input: './client/js/App.js',
                 output: 'app.js',
                 destination: './public/js/'
             }
-        ]
+        ],
+        markAsDoneCallback
     );
 });
