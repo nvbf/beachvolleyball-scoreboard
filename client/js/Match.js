@@ -1,3 +1,4 @@
+'use strict';
 var util = require('util');
 var EventEmitter = require('events').EventEmitter;
 
@@ -49,7 +50,7 @@ Match.prototype.addPoint = function (team) {
 
     //Trigger event if due
     this.changeSide();
-    this.setFinished()
+    this.setFinished();
 };
 
 Match.prototype.addHomeTeam = function (team) {
@@ -80,22 +81,22 @@ Match.prototype.isSetWonByAwayTeam = function (setScore) {
 Match.prototype.setFinished = function () {
     var score = this.state.currentSetScore;
     if (this.isSetWonByHomeTeam(score) || this.isSetWonByAwayTeam(score)) {
-        this.emit("setFinished")
+        this.emit("setFinished");
     }
     this.state.currentSet++;
-    this.matchFinished()
+    this.matchFinished();
 };
 
 Match.prototype.matchFinished = function () {
     if (this.state.currentSet > 1) {
-        this.getSet()
+        this.getSet();
     }
 };
 
 //starts at 0
 Match.prototype.getSet = function (setNumberFromZero) {
-    return this.state.sets[setNumberFromZero]
-}
+    return this.state.sets[setNumberFromZero];
+};
 
 
 module.exports = Match;
