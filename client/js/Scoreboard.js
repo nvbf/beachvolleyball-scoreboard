@@ -50,7 +50,6 @@ var Scoreboard = React.createClass({
                     actions={[
                         {text: 'OK', onClick: this.dismiss}
                     ]}>
-
                     Lagene skal bytte side
                 </Dialog>
 

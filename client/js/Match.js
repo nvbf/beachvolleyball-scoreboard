@@ -8,10 +8,7 @@ function Match() {
         awayteam: undefined,
         sets: [[0, 0], [0, 0], [0, 0]],
         currentSet: 0,
-        currentSetScore: {
-            home: 0,
-            away: 0
-        }
+        currentSetScore: [0, 0]
     };
     return this;
 }
@@ -24,10 +21,7 @@ Match.prototype.getCurrentSet = function () {
 
 Match.prototype.updatePoints = function (setScore) {
     this.state.sets[this.state.currentSet] = setScore;
-    this.state.currentSetScore = {
-        home: this.getCurrentSet()[0],
-        away: this.getCurrentSet()[1]
-    }
+    this.state.currentSetScore = this.getCurrentSet()
 };
 
 Match.prototype.addPointHomeTeam = function () {
@@ -36,7 +30,11 @@ Match.prototype.addPointHomeTeam = function () {
 
 Match.prototype.changeSide = function () {
     var set = this.getCurrentSet();
-    return (0 === (set[0] + set[1]) % 7);
+
+    // every 7 point
+    if (0 === (set[0] + set[1]) % 7) {
+        this.emit("switch");
+    }
 };
 
 
@@ -48,9 +46,10 @@ Match.prototype.addPoint = function (team) {
     var set = this.getCurrentSet();
     set[team]++;
     this.updatePoints(set);
-    if(this.changeSide()) {
-        this.emit("switch");
-    }
+
+    //Trigger event if due
+    this.changeSide();
+    this.setFinished()
 };
 
 Match.prototype.addHomeTeam = function (team) {
@@ -68,6 +67,35 @@ Match.prototype.addAwayTeam = function (team) {
 Match.prototype.awayTeam = function () {
     return this.state.awayteam.players();
 };
+
+Match.prototype.isSetWonByHomeTeam = function (setScore) {
+    return (setScore[0] >= 21 && setScore[0] > setScore[1] + 1)
+};
+
+Match.prototype.isSetWonByAwayTeam = function (setScore) {
+    return (setScore[1] >= 21 && setScore[1] > setScore[0] + 1);
+};
+
+
+Match.prototype.setFinished = function () {
+    var score = this.state.currentSetScore;
+    if (this.isSetWonByHomeTeam(score) || this.isSetWonByAwayTeam(score)) {
+        this.emit("setFinished")
+    }
+    this.state.currentSet++;
+    this.matchFinished()
+};
+
+Match.prototype.matchFinished = function () {
+    if (this.state.currentSet > 1) {
+        this.getSet()
+    }
+};
+
+//starts at 0
+Match.prototype.getSet = function (setNumberFromZero) {
+    return this.state.sets[setNumberFromZero]
+}
 
 
 module.exports = Match;
