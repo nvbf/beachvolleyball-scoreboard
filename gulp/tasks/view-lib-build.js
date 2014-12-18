@@ -27,6 +27,10 @@ gulp.task('view-lib-build', function () {
                 output: './public/css'
             },
             {
+                input: './node_modules/bootstrap/dist/css/bootstrap.css.map',
+                output: './public/css'
+            },
+            {
                 input: './node_modules/bootstrap/dist/js/bootstrap.js',
                 output: './public/js'
             },
