@@ -7,22 +7,22 @@
     "browserify": "~3.44.2",
     "envify": "~1.2.1",
     "express": "4.x",
-    "gulp": "~3.8.x",
+    "gulp": "3.8.10",
     "gulp-less": "^2.0.1",
     "gulp-mocha": "~0.5.x",
     "gulp-nodemon": "~1.0.x",
-    "gulp-notify": "~1.4.x",
-    "gulp-sourcemaps": "^1.2.8",
+    "gulp-notify": "2.1.0",
+    "gulp-sourcemaps": "1.2.8",
     "gulp-stylus": "~1.1.x",
     "gulp-watch": "^3.0.0",
     "jquery": "^2.1.1",
-    "material-ui": "^0.3.3",
+    "material-ui": "^0.4.0",
     "mocha": "^2.0.1",
     "node-jsx": "^0.12.4",
     "react": "^0.12.1",
     "react-async": "^2.0.1",
-    "reactify": "^0.13.1",
-    "vinyl-source-stream": "~0.1.x"
+    "reactify": "0.17.1",
+    "vinyl-source-stream": "1.0.0"
   },
   "devDependencies": {
     "jest-cli": "^0.2.0"
@@ -35,7 +35,7 @@
   },
   "scripts": {
     "test": "./node_modules/.bin/jest",
-    "postInstall" : "gulp build",
-    "develop": "gulp"
+    "postinstall" : "gulp build",
+    "develop": "gulp development"
   }
 }

@@ -3,6 +3,7 @@ var util = require('util');
 var EventEmitter = require('events').EventEmitter;
 
 
+
 function Match() {
     this.state = {
         hometeam: undefined,
@@ -16,21 +17,36 @@ function Match() {
 
 util.inherits(Match, EventEmitter);
 
-Match.prototype.getCurrentSet = function () {
+Match.prototype.getCurrentSetScore = function () {
     return this.state.sets[this.state.currentSet];
 };
 
 Match.prototype.updatePoints = function (setScore) {
     this.state.sets[this.state.currentSet] = setScore;
-    this.state.currentSetScore = this.getCurrentSet()
+    this.state.currentSetScore = this.getCurrentSetScore()
 };
 
 Match.prototype.addPointHomeTeam = function () {
     return this.addPoint(0);
 };
 
+Match.prototype.addPointAwayTeam = function () {
+    return this.addPoint(1);
+};
+
+Match.prototype.addPoint = function (teamIndex) {
+    var set = this.getCurrentSetScore();
+    set[teamIndex]++;
+    this.updatePoints(set);
+
+    //Trigger event if due
+    this.changeSide();
+    this.setFinished();
+};
+
+
 Match.prototype.changeSide = function () {
-    var set = this.getCurrentSet();
+    var set = this.getCurrentSetScore();
 
     // every 7 point
     if (0 === (set[0] + set[1]) % 7) {
@@ -38,20 +54,6 @@ Match.prototype.changeSide = function () {
     }
 };
 
-
-Match.prototype.addPointAwayTeam = function () {
-    return this.addPoint(1);
-};
-
-Match.prototype.addPoint = function (team) {
-    var set = this.getCurrentSet();
-    set[team]++;
-    this.updatePoints(set);
-
-    //Trigger event if due
-    this.changeSide();
-    this.setFinished();
-};
 
 Match.prototype.addHomeTeam = function (team) {
     this.state.hometeam = team;
@@ -69,25 +71,40 @@ Match.prototype.awayTeam = function () {
     return this.state.awayteam.players();
 };
 
-Match.prototype.isSetWonByHomeTeam = function (setScore) {
-    return (setScore[0] >= 21 && setScore[0] > setScore[1] + 1)
+Match.prototype.isSetWonByHomeTeam = function () {
+    var setScore = this.getCurrentSetScore();
+    var setNumber = this.set;
+    if (setNumber === 2) {
+        return (setScore[0] >= 15 && setScore[0] > setScore[1] + 1)
+    } else {
+        return (setScore[0] >= 21 && setScore[0] > setScore[1] + 1)
+    }
 };
 
-Match.prototype.isSetWonByAwayTeam = function (setScore) {
-    return (setScore[1] >= 21 && setScore[1] > setScore[0] + 1);
+Match.prototype.isSetWonByAwayTeam = function () {
+    var setScore = this.getCurrentSetScore();
+    var setNumber = this.currentSet;
+    if (setNumber === 2) {
+        return (setScore[0] >= 15 && setScore[0] > setScore[1] + 1)
+    } else {
+        return (setScore[0] >= 21 && setScore[0] > setScore[1] + 1)
+    }
+
 };
 
 
 Match.prototype.setFinished = function () {
-    var score = this.state.currentSetScore;
-    if (this.isSetWonByHomeTeam(score) || this.isSetWonByAwayTeam(score)) {
+    if (this.isSetWonByHomeTeam() || this.isSetWonByAwayTeam()) {
+        this.state.currentSet++;
         this.emit("setFinished");
     }
-    this.state.currentSet++;
     this.matchFinished();
 };
 
 Match.prototype.matchFinished = function () {
+    if (this.state.currentSet > 2) {
+
+    }
     if (this.state.currentSet > 1) {
         this.getSet();
     }
