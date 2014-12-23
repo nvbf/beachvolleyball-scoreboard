@@ -1,13 +1,13 @@
 'use strict';
 var util = require('util');
 var EventEmitter = require('events').EventEmitter;
-
+var Team = require('./Team');
 
 
 function Match() {
     this.state = {
-        hometeam: undefined,
-        awayteam: undefined,
+        hometeam: new Team('',''),
+        awayteam: new Team('',''),
         sets: [[0, 0], [0, 0], [0, 0]],
         currentSet: 0,
         currentSetScore: [0, 0]
@@ -40,8 +40,9 @@ Match.prototype.addPoint = function (teamIndex) {
     this.updatePoints(set);
 
     //Trigger event if due
-    this.changeSide();
-    this.setFinished();
+    if(!this.setFinished()) {
+        this.changeSide();
+    }
 };
 
 
@@ -51,7 +52,9 @@ Match.prototype.changeSide = function () {
     // every 7 point
     if (0 === (set[0] + set[1]) % 7) {
         this.emit("switch");
+        return true;
     }
+    return false;
 };
 
 
@@ -85,9 +88,9 @@ Match.prototype.isSetWonByAwayTeam = function () {
     var setScore = this.getCurrentSetScore();
     var setNumber = this.currentSet;
     if (setNumber === 2) {
-        return (setScore[0] >= 15 && setScore[0] > setScore[1] + 1)
+        return (setScore[1] >= 15 && setScore[1] > setScore[0] + 1)
     } else {
-        return (setScore[0] >= 21 && setScore[0] > setScore[1] + 1)
+        return (setScore[1] >= 21 && setScore[1] > setScore[0] + 1)
     }
 
 };
@@ -96,18 +99,24 @@ Match.prototype.isSetWonByAwayTeam = function () {
 Match.prototype.setFinished = function () {
     if (this.isSetWonByHomeTeam() || this.isSetWonByAwayTeam()) {
         this.state.currentSet++;
-        this.emit("setFinished");
+        if(!this.matchFinished()) {
+            this.emit("set-finished");
+        }
+        return true;
     }
-    this.matchFinished();
+    return false;
 };
 
 Match.prototype.matchFinished = function () {
     if (this.state.currentSet > 2) {
-
+        this.emit("match-finished");
+        return true;
     }
     if (this.state.currentSet > 1) {
-        this.getSet();
+        //TODO: Match can also be win 2-0, need to support that :)
+        //this.getSet();
     }
+    return false;
 };
 
 //starts at 0

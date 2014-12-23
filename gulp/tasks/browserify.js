@@ -2,38 +2,26 @@ var browserify = require('browserify');
 var gulp = require('gulp');
 var source = require('vinyl-source-stream');
 var handleErrors = require('../util/handle-errors');
+var reactify = require('reactify');
+var envify = require('envify');
+var production = process.env.NODE_ENV === 'production';
 
-function createSingleBundle(options) {
+
+var browserifyTask = function (markAsDoneCallback) {
+
     browserify({
-        entries: options.input,
-        extensions: options.extensions
+        entries: './client/js/App.js',
+        debug: !production
     })
-        .bundle({debug: true})
+        .transform(envify)
+        .transform(reactify)
+        .bundle()
         .on('error', handleErrors)
-        .pipe(source(options.output))
-        .pipe(gulp.dest(options.destination));
-}
-
-function createBundles(bundles, markAsDoneCallback) {
-    bundles.forEach(function (bundle) {
-        createSingleBundle({
-            input: bundle.input,
-            output: bundle.output,
-            extensions: bundle.extensions,
-            destination: bundle.destination
-        });
-    });
+        .pipe(source('app.js'))
+        .pipe(gulp.dest('./public/js/'));
     markAsDoneCallback();
-}
+};
 
-gulp.task('browserify', function (markAsDoneCallback) {
-    createBundles([
-            {
-                input: './client/js/App.js',
-                output: 'app.js',
-                destination: './public/js/'
-            }
-        ],
-        markAsDoneCallback
-    );
-});
+gulp.task('browserify', ['clean'], browserifyTask);
+
+

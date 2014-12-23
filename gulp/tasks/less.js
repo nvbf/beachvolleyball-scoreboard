@@ -5,9 +5,7 @@ var gulp = require('gulp'),
 
 gulp.task('less', function() {
     return gulp.src('client/css/material.less')
-        .pipe(sourcemaps.init())
         .pipe(less())
         .on('error', handleErrors)
-        .pipe(sourcemaps.write())
         .pipe(gulp.dest('public/css/'));
 });

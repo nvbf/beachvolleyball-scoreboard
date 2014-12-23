@@ -3,9 +3,12 @@
 
 var React = require('react');
 var Team = require('./Team');
-var AddAwayTeam = require('./AddAwayTeam');
+var Button = require('react-bootstrap').Button;
 
 var AddHomeTeam = React.createClass({
+    displayName: function () {
+        return "AddHomeTeam";
+    },
 
     handleSubmit: function (e) {
         e.preventDefault();
@@ -16,7 +19,10 @@ var AddHomeTeam = React.createClass({
             return;
         }
         this.props.match.addHomeTeam(new Team(player1, player2));
-        React.render(<AddAwayTeam match={this.props.match}/>, document.body);
+
+        this.props.changeState(
+            {show: 'AddAwayTeam'}
+        );
     },
 
     render: function () {
@@ -31,7 +37,9 @@ var AddHomeTeam = React.createClass({
                         <div className="form-group">
                             <input type="text" className="form-control" ref="player2"></input>
                         </div>
-                        <button type="submit" className="btn btn-primary pull-right">Add Team</button>
+                        <Button type="submit" bsStyle="primary" className="pull-right">
+                            Add Team
+                        </Button>
                     </form>
                 </div>
             </div>

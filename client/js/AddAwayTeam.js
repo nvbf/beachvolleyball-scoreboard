@@ -3,10 +3,13 @@
 
 var React = require('react');
 var Team = require('./Team');
-var Scoreboard = require('./Scoreboard');
+var Button = require('react-bootstrap').Button;
 
 
 var AddAwayTeam = React.createClass({
+    displayName: function() {
+        return "AddAwayTeam";
+    },
 
     handleSubmit: function (e) {
         e.preventDefault();
@@ -17,7 +20,10 @@ var AddAwayTeam = React.createClass({
             return;
         }
         this.props.match.addAwayTeam(new Team(player1, player2));
-        React.render(<Scoreboard match={this.props.match} test="test" />, document.body);
+
+        this.props.changeState(
+            {show: 'Scoreboard'}
+        );
     },
 
     render: function () {
@@ -32,7 +38,9 @@ var AddAwayTeam = React.createClass({
                         <div className="form-group">
                             <input type="text" className="form-control" ref="player2"></input>
                         </div>
-                        <button type="submit" className="btn btn-primary pull-right">Add Team</button>
+                        <Button type="submit" bsStyle="primary" className="pull-right">
+                            Add Team
+                        </Button>
                     </form>
                 </div>
             </div>

@@ -20,28 +20,12 @@ function createBundles(bundles) {
     });
 }
 
-gulp.task('view-lib-build', function () {
+gulp.task('css', function () {
     createBundles([
-            {
-                input: './node_modules/bootstrap/dist/css/bootstrap.css',
-                output: './public/css'
-            },
-            {
-                input: './node_modules/bootstrap/dist/css/bootstrap.css.map',
-                output: './public/css'
-            },
-            {
-                input: './node_modules/bootstrap/dist/js/bootstrap.js',
-                output: './public/js'
-            },
             {
                 input: './client/css/app.css',
                 output: './public/css'
             },
-            {
-                input: './node_modules/jquery/dist/jquery.js',
-                output: './public/js'
-            }
         ]
     );
 });

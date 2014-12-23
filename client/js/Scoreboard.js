@@ -1,101 +1,88 @@
 /** @jsx React.DOM  */
 'use strict';
-
 var React = require('react');
-//var ChangeSideDialog = require('./ChangeSideDialog');
-var mui = require('material-ui');
-var Dialog = mui.Dialog;
+var NotificationModal = require('./NotificationModal');
+var Button = require('react-bootstrap').Button;
+
 
 var Scoreboard = React.createClass({
-
-    displayName: function() {
+    displayName: function () {
         return "Scoreboard";
     },
 
-    componentDidMount: function() {
-      this.props.match.on("switch", function() {
-          this.refs.changeSideDialog.show();
-      }.bind(this));
-    },
+    handleHide: function () {
+        this.refs.changeSideDialog.hidden();
+    }.bind(this),
 
-    getInitialState: function() {
+    getInitialState: function () {
         return this.props.match.state;
     },
 
-    pointToHomeTeam: function(event) {
+    pointToHomeTeam: function (event) {
         event.preventDefault();
         this.props.match.addPointHomeTeam();
         this.setState(this.props.match.state);
     },
 
-    pointToAwayTeam: function(event) {
+    pointToAwayTeam: function (event) {
         event.preventDefault();
         this.props.match.addPointAwayTeam();
         this.setState(this.props.match.state);
     },
 
-
-    alertOnSwitch: function() {
-        console.log("alertOnSwitch");
-        this.refs.changeSideDialog.show();
-    },
-
-
     render: function () {
         return (
-            <div className="container">
-                <Dialog
-                    ref="changeSideDialog"
-                    title="Sidebytte"
-                    actions={[
-                        {text: 'OK', onClick: this.dismiss}
-                    ]}>
-                    Lagene skal bytte side
-                </Dialog>
+            <div className="container scoreboard">
+                <div className="switch-modal">
+                    <NotificationModal message="Sidebytte" eventTrigger="switch" match={this.props.match} />
+                </div>
+                <div className="set-finished-modal">
+                    <NotificationModal message="Settet er ferdig" eventTrigger="set-finished" match={this.props.match} />
+                </div>
+                <div className="game-finished-modal">
+                    <NotificationModal message="Kampen er ferdig" eventTrigger="match-finished" match={this.props.match} />
+                </div>
 
                 <div className="row">
-                    <div className="row">
-                        <div className="col-md-4 col-md-offset-2 showTeamA" >
-                            <div>
-                                <div className="headline">
-                                    <h3>
-                                        <div className="team-name">
+                    <div className="col-md-8 col-md-offset-2">
+                        <div className="row">
+                            <Button type="submit" bsSize="small" bsStyle="primary" onClick={this.pointToHomeTeam}>Legg til Poeng</Button>
 
-                                        {this.props.match.homeTeam().player1} - {this.props.match.homeTeam().player2}
-                                        </div>
-                                    </h3>
-                                </div>
-                                <div className="team-score">
-                                    <h3>
-                                            {this.state.currentSetScore.home}
-                                    </h3>
-                                    <button className="btn btn-primary" onClick={this.pointToHomeTeam}>Legg til Poeng</button>
-                                </div>
-                            </div>
+                            <h3 className="names">
+                                            {this.props.match.homeTeam().player1} - {this.props.match.homeTeam().player2}
+                            </h3>
+                            <h3 className="set">
+                                            {this.state.sets[0][0]}
+                            </h3>
+                            <h3 className="set">
+                                            {this.state.sets[1][0]}
+                            </h3>
+                            <h3 className="set">
+                                            {this.state.sets[2][0]}
+                            </h3>
                         </div>
-                        <div className="col-md-4 showTeamB">
-                            <div>
-                                <div className="headline">
-                                    <h3>
-                                        <div className="team-name">
-                                        {this.props.match.awayTeam().player1} - {this.props.match.awayTeam().player2}
-                                        </div>
-                                    </h3>
-                                </div>
-                                <div className="team-score">
-                                    <h3>
-                                            {this.state.currentSetScore.away}
-                                    </h3>
-                                    <button className="btn btn-primary" onClick={this.pointToAwayTeam}>Legg til Poeng</button>
-                                </div>
-                            </div>
+                        <div className="row">
+
+                            <Button type="submit" bsSize="small" bsStyle="primary" onClick={this.pointToAwayTeam}>Legg til Poeng</Button>
+                            <h3 className="names">
+                                            {this.props.match.awayTeam().player1} - {this.props.match.awayTeam().player2}
+                            </h3>
+                            <h3 className="set">
+                                            {this.state.sets[0][1]}
+                            </h3>
+                            <h3 className="set">
+                                            {this.state.sets[1][1]}
+                            </h3>
+                            <h3 className="set">
+                                            {this.state.sets[2][1]}
+                            </h3>
                         </div>
                     </div>
                 </div>
             </div>
+
         )
     }
 });
-
 
 module.exports = Scoreboard;
