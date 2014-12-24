@@ -1,7 +1,6 @@
 # Beachvolleyball scoreboard
 
-[![Build Status](https://travis-ci.org/SindreSvendby/beachvollleyball-scoreboard.svg?branch=master)](https://travis-ci.org/SindreSvendby/beachvollleyball-scoreboard)
-
+[![Build Status](https://travis-ci.org/SindreSvendby/beachvollleyball-scoreboard.svg?branch=master)](https://travis-ci.org/SindreSvendby/beachvollleyball-scoreboard) [![Coverage Status](https://img.shields.io/coveralls/SindreSvendby/beachvollleyball-scoreboard.svg)](https://coveralls.io/r/SindreSvendby/beachvollleyball-scoreboard)
 
 ## Prerequisit
 
