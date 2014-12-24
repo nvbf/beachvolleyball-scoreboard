@@ -1,13 +1,8 @@
-var gulp = require('gulp');
+var gulp = require('gulp'),
+  paths = ['src/**/*.js', 'src/**/*.css'];
 
-var paths = ['client/**/*.js', 'client/**/*.css'];
-
-gulp.task('watch', ['build'], function () {
-    gulp.watch(paths, ['build']);
+gulp.task('watch', ['build'], function() {
+  gulp.watch(paths, ['build']);
 });
 
-
-gulp.task('development', ['watch'], function (callback) {
-        callback();
-    }
-);
+gulp.task('development', ['watch']);

@@ -5269,11 +5269,11 @@ var ReactComponentBrowserEnvironment = {
             'You\'re trying to render a component to the document using ' +
             'server rendering but the checksum was invalid. This usually ' +
             'means you rendered a different component type or props on ' +
-            'the client from the one on the server, or your render() ' +
+            'the src from the one on the server, or your render() ' +
             'methods are impure. React cannot handle this case due to ' +
             'cross-browser quirks by rendering at the document root. You ' +
             'should look for environment dependent code in your components ' +
-            'and ensure the props are the same client and server side.'
+            'and ensure the props are the same src and server side.'
           ) : invariant(container.nodeType !== DOC_NODE_TYPE));
 
           if ("production" !== "development") {
@@ -5281,10 +5281,10 @@ var ReactComponentBrowserEnvironment = {
               'React attempted to use reuse markup in a container but the ' +
               'checksum was invalid. This generally means that you are ' +
               'using server rendering and the markup generated on the ' +
-              'server was not what the client was expecting. React injected ' +
+              'server was not what the src was expecting. React injected ' +
               'new markup to compensate which works but you have lost many ' +
               'of the benefits of server rendering. Instead, figure out ' +
-              'why the markup being generated is different on the client ' +
+              'why the markup being generated is different on the src ' +
               'or server.'
             );
           }
@@ -15630,7 +15630,7 @@ var MOD = 65521;
 // This is a clean-room implementation of adler32 designed for detecting
 // if markup is not what we expect it to be. It does not need to be
 // cryptographically strong, only reasonably good at detecting if markup
-// generated on the server is different than that on the client.
+// generated on the server is different than that on the src.
 function adler32(data) {
   var a = 1;
   var b = 0;

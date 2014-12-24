@@ -1,9 +1,10 @@
-var gulp = require('gulp');
-var del = require('del');
+var gulp = require('gulp'),
+  del = require('del');
 
-gulp.task('clean', function (cb) {
-    del([
-        'public/js/app.js'
+gulp.task('clean', function(cb) {
+  return del([
+    'public/js/**',
+    'public/css/**'
 
-    ], cb);
+  ], cb);
 });
