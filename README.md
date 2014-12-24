@@ -3,6 +3,8 @@
 [![Build Status](https://travis-ci.org/SindreSvendby/beachvollleyball-scoreboard.svg?branch=master)](https://travis-ci.org/SindreSvendby/beachvollleyball-scoreboard)
 [![Coverage Status](https://img.shields.io/coveralls/SindreSvendby/beachvollleyball-scoreboard.svg)](https://coveralls.io/r/SindreSvendby/beachvollleyball-scoreboard)
 [![Dependencies Status](https://david-dm.org/SindreSvendby/beachvollleyball-scoreboard.svg?style=flat)](https://david-dm.org/SindreSvendby/beachvollleyball-scoreboard)
+[![DevDependencies Status](https://david-dm.org/SindreSvendby/beachvollleyball-scoreboard/dev-status.svg?style=flat)](https://david-dm.org/SindreSvendby/beachvollleyball-scoreboard#info=devDependencies)
+
 ## Prerequisit
 
 You need to have [Node](http://nodejs.org/) and npm installed.
