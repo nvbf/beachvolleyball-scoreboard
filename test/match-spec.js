@@ -1,9 +1,6 @@
-jest.dontMock('./../src/js/Match');
-jest.dontMock('events');
-jest.dontMock('util');
-
-var Match = require('././js/Match'),
-  Team = require('././js/Team');
+var Match = require(
+    './../src/js/Match'),
+  Team = require('./../src/js/Team');
 
 describe('Match Logic', function() {
 
@@ -21,7 +18,7 @@ describe('Match Logic', function() {
   });
 
   it('Sould not return "switch", score is 0-1 ', function() {
-      match = new Match();
+    var match = new Match();
     match.addPointAwayTeam();
   });
 

@@ -1,5 +1,5 @@
-jest.dontMock('./../src/js/Team');
-var Team = require('././js/Team');
+
+var Team = require('./../src/js/Team');
 
 describe('Team Logic', function() {
   it('Add Players to team', function() {
