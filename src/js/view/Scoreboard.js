@@ -45,43 +45,54 @@ Scoreboard = React.createClass({
         <div className="row">
           <div className="col-md-8 col-md-offset-2">
             <div className="row">
-              <Button type="submit" bsSize="small" bsStyle="primary" onClick={this.pointToHomeTeam}>
-                Legg til Poeng
-              </Button>
-              <h3 className="names">
-                {this.props.match.homeTeam().player1} - {this.props.match.homeTeam().player2}
-              </h3>
-              <h3 className="set">
-                {this.state.sets[0][0]}
-              </h3>
-              <h3 className="set">
-                {this.state.sets[1][0]}
-              </h3>
-              <h3 className="set">
-                {this.state.sets[2][0]}
-              </h3>
-            </div>
-            <div className="row">
-              <Button type="submit" bsSize="small" bsStyle="primary" onClick={this.pointToAwayTeam}>
-                Legg til Poeng
-              </Button>
-              <h3 className="names">
-                {this.props.match.awayTeam().player1} - {this.props.match.awayTeam().player2}
-              </h3>
-              <h3 className="set">
+              <table>
+                <tr>
+                  <td className='points'>
+                    <Button type="submit" bsSize="small" bsStyle="primary" onClick={this.pointToHomeTeam}>
+                      Legg til Poeng
+                    </Button>
+                  </td>
+                  <td>
+                    <span className='name'>
+                      {this.props.match.homeTeam().player1} - {this.props.match.homeTeam().player2}
+                    </span>
+                  </td>
+                  <td className='set'>
+                    {this.state.sets[0][0]}
+                  </td>
+                  <td className='set'>
+                    {this.state.sets[1][0]}
+                  </td>
+                  <td className='set'>
+                    {this.state.sets[2][0]}
+                  </td>
+                </tr>
+                <tr>
+                  <td className='points'>
+                    <Button type="submit" bsSize="small" bsStyle="primary" onClick={this.pointToAwayTeam}>
+                      Legg til Poeng
+                    </Button>
+                  </td>
+                  <td>
+                    <span className='name'>
+                      {this.props.match.awayTeam().player1} - {this.props.match.awayTeam().player2}
+                    </span>
+                  </td>
+                  <td className='set'>
                   {this.state.sets[0][1]}
-              </h3>
-              <h3 className="set">
+                  </td>
+                  <td className='set'>
                   {this.state.sets[1][1]}
-              </h3>
-              <h3 className="set">
+                  </td>
+                  <td className='set'>
                   {this.state.sets[2][1]}
-              </h3>
+                  </td>
+                </tr>
+              </table>
             </div>
           </div>
         </div>
       </div>
-
     )
   }
 });

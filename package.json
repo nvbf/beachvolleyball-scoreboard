@@ -20,7 +20,6 @@
     "gulp-watch": "^3.0.0",
     "jquery": "^2.1.1",
     "jsxcs": "^0.2.1",
-    "material-ui": "^0.4.0",
     "node-jsx": "^0.12.4",
     "react": "^0.12.1",
     "react-bootstrap": "^0.13.0",
