@@ -3,8 +3,6 @@ var gulp = require('gulp'),
 
 gulp.task('clean', function(cb) {
   return del([
-    'public/js/**',
-    'public/css/**'
-
+    'public//**'
   ], cb);
 });

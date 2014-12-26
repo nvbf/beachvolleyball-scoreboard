@@ -27,9 +27,9 @@ var React = require('react'),
 
     render: function() {
       return (
-        <div className="col-md-4  col-md-offset-4 addTeamContainer" >
+        <div className="addTeamContainer" >
           <div>
-            <h2>Legg til Bortelag</h2>
+            <h2>Add Team</h2>
             <form className="add-team-form" onSubmit={this.handleSubmit}>
               <div className="form-group">
                 <input type="text" className="form-control" ref="player1"></input>

@@ -20,6 +20,3 @@ var browserifyTask = function() {
 };
 
 gulp.task('browserify', ['clean'], browserifyTask);
-
-
-

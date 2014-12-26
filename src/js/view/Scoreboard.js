@@ -32,7 +32,7 @@ Scoreboard = React.createClass({
 
   render: function() {
     return (
-      <div className="container scoreboard">
+      <div>
         <div className="switch-modal">
           <NotificationModal message="Sidebytte" eventTrigger="switch" match={this.props.match} />
         </div>
@@ -42,53 +42,55 @@ Scoreboard = React.createClass({
         <div className="game-finished-modal">
           <NotificationModal message="Kampen er ferdig" eventTrigger="match-finished" match={this.props.match} />
         </div>
-        <div className="row">
-          <div className="col-md-8 col-md-offset-2">
-            <div className="row">
-              <table>
-                <tr>
-                  <td className='points'>
-                    <Button type="submit" bsSize="small" bsStyle="primary" onClick={this.pointToHomeTeam}>
-                      Legg til Poeng
-                    </Button>
-                  </td>
-                  <td>
-                    <span className='name'>
+        <div className="container scoreboard">
+          <div className="row">
+            <div>
+              <div className="row">
+                <table>
+                  <tr>
+                    <td>
+                      <span className='names'>
                       {this.props.match.homeTeam().player1} - {this.props.match.homeTeam().player2}
-                    </span>
-                  </td>
-                  <td className='set'>
+                      </span>
+                    </td>
+                    <td className='set'>
                     {this.state.sets[0][0]}
-                  </td>
-                  <td className='set'>
+                    </td>
+                    <td className='set'>
                     {this.state.sets[1][0]}
-                  </td>
-                  <td className='set'>
+                    </td>
+                    <td className='set'>
                     {this.state.sets[2][0]}
-                  </td>
-                </tr>
-                <tr>
-                  <td className='points'>
-                    <Button type="submit" bsSize="small" bsStyle="primary" onClick={this.pointToAwayTeam}>
-                      Legg til Poeng
-                    </Button>
-                  </td>
-                  <td>
-                    <span className='name'>
+                    </td>
+                    <td>
+                      <Button className='points btn-primary' type="submit" onClick={this.pointToHomeTeam}>
+                        <span className="glyphicon glyphicon-plus-sign" aria-hidden="true"/>
+                      </Button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span className='names'>
                       {this.props.match.awayTeam().player1} - {this.props.match.awayTeam().player2}
-                    </span>
-                  </td>
-                  <td className='set'>
-                  {this.state.sets[0][1]}
-                  </td>
-                  <td className='set'>
-                  {this.state.sets[1][1]}
-                  </td>
-                  <td className='set'>
-                  {this.state.sets[2][1]}
-                  </td>
-                </tr>
-              </table>
+                      </span>
+                    </td>
+                    <td className='set'>
+                    {this.state.sets[0][1]}
+                    </td>
+                    <td className='set'>
+                    {this.state.sets[1][1]}
+                    </td>
+                    <td className='set'>
+                    {this.state.sets[2][1]}
+                    </td>
+                    <td>
+                      <Button className="points btn-primary" type="submit" onClick={this.pointToAwayTeam}>
+                        <span className="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+                      </Button>
+                    </td>
+                  </tr>
+                </table>
+              </div>
             </div>
           </div>
         </div>
