@@ -1,5 +1,4 @@
 var should = require('should'),
-
   Team = require('./../src/js/domain/Team');
 
 describe('Team Logic', function() {

@@ -13,7 +13,6 @@
     "envify": "~1.2.1",
     "express": "4.x",
     "gulp": "3.8.10",
-    "gulp-jsxcs": "^0.1.2",
     "gulp-less": "^2.0.1",
     "gulp-mocha": "~0.5.x",
     "gulp-nodemon": "~1.0.x",
@@ -38,7 +37,7 @@
   "scripts": {
     "pretest": "jsxcs --preset airbnb src/js/**",
     "test": "gulp test",
-    "posttest": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
+    "posttest": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js || rm -rf ./coverage",
     "prestart": "gulp build",
     "start": "node app.js"
   },

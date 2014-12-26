@@ -10,7 +10,7 @@ util.setScoreToTest = function(score) {
       awayteam: new Team('Player3', 'Player4'),
       sets: score,
       currentSet: score.length - 1,
-      currentSetScore: score[score.length - 1]
+      currentSetScore: score[score.length - 1].score
     };
 
   match.setPrivateState(state);
