@@ -2,7 +2,7 @@
 'use strict';
 
 var React = require('react'),
-  Match = require('./Match'),
+  Match = require('./../domain/Match'),
   AddHomeTeam = require('./AddHomeTeam'),
   AddAwayTeam = require('./AddAwayTeam'),
   Scoreboard = require('./Scoreboard'),

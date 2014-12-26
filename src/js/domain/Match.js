@@ -11,18 +11,39 @@ function Match() {
     currentSet: 0,
     currentSetScore: [0, 0]
   };
+
+  this.getCurrentSetScore = function() {
+    return this.state.sets[this.state.currentSet];
+  };
+
+  this.addPoint = function(teamIndex) {
+    var set = this.getCurrentSetScore();
+    set[teamIndex]++;
+
+    //Trigger event if due
+    if (!this.setFinished()) {
+      this.changeSide();
+    }
+  };
+
+  this.changeSide = function() {
+    var set = this.getCurrentSetScore();
+
+    // every 7 point
+    if ((set[0] + set[1]) % 7 === 0) {
+      this.emit('switch');
+      return true;
+    }
+    return false;
+  };
   return this;
+
 }
 
 util.inherits(Match, EventEmitter);
 
-Match.prototype.getCurrentSetScore = function() {
-  return this.state.sets[this.state.currentSet];
-};
-
-Match.prototype.updatePoints = function(setScore) {
-  this.state.sets[this.state.currentSet] = setScore;
-  this.state.currentSetScore = this.getCurrentSetScore()
+Match.prototype.setPrivateState = function(state) {
+  this.state = state;
 };
 
 Match.prototype.addPointHomeTeam = function() {
@@ -31,28 +52,6 @@ Match.prototype.addPointHomeTeam = function() {
 
 Match.prototype.addPointAwayTeam = function() {
   return this.addPoint(1);
-};
-
-Match.prototype.addPoint = function(teamIndex) {
-  var set = this.getCurrentSetScore();
-  set[teamIndex]++;
-  this.updatePoints(set);
-
-  //Trigger event if due
-  if (!this.setFinished()) {
-    this.changeSide();
-  }
-};
-
-Match.prototype.changeSide = function() {
-  var set = this.getCurrentSetScore();
-
-  // every 7 point
-  if ((set[0] + set[1]) % 7 === 0) {
-    this.emit('switch');
-    return true;
-  }
-  return false;
 };
 
 Match.prototype.addHomeTeam = function(team) {
@@ -109,7 +108,7 @@ Match.prototype.matchFinished = function() {
     return true;
   }
   if (this.state.currentSet > 1) {
-    var readTodo =  this.state.currentSet;
+    var readTodo = this.state.currentSet;
     //TODO: Match can also be win 2-0, need to support that :)
     //this.getSet();
   }

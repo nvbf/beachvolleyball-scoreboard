@@ -8,7 +8,7 @@ var production = process.env.NODE_ENV === 'production';
 
 var browserifyTask = function() {
   return browserify({
-    entries: './src/js/App.js',
+    entries: './src/js/view/App.js',
     debug: !production
   })
     .transform(envify)
