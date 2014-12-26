@@ -1,20 +1,11 @@
 .scoreboard {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  -webkit-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
   background-color:  lightgrey;
 }
 
 .addTeamContainer {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  -webkit-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
   background-color:  lightgrey;
   padding: 20px 40px;
+  padding-bottom: 80px;
 }
 
 .set {
