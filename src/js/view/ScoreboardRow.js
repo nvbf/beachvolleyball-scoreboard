@@ -18,9 +18,7 @@ ScoreboardRow = React.createClass({
     return (
       <tr>
         <td>
-          <span className='names'>
             {players.player1} - {players.player2}
-          </span>
         </td>
         <td className='set'>
           {score[0]}
