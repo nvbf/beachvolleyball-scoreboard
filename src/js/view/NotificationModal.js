@@ -12,12 +12,12 @@ var NotificationModal = React.createClass({
 
   propTypes: {
     eventTrigger: React.PropTypes.string.isRequired,
-    match: React.PropTypes.object.isRequired,
+    notification: React.PropTypes.object.isRequired,
     message: React.PropTypes.string.isRequired
   },
 
   componentDidMount: function() {
-    this.props.match.on(this.props.eventTrigger, function() {
+    this.props.notification.on(this.props.eventTrigger, function() {
       this.handleToggle();
     }.bind(this));
   },

@@ -6,42 +6,46 @@ var React = require('react'),
   AddHomeTeam = require('./AddHomeTeam'),
   AddAwayTeam = require('./AddAwayTeam'),
   Scoreboard = require('./Scoreboard'),
+  MatchNotifications = require('./../domain/MatchNotifications'),
   match = new Match(),
-  App = React.createClass({
-    displayName: function() {
-      return 'App';
-    },
+  matchNotifications = new MatchNotifications(match),
+  App;
 
-    changeState: function() {
-      return function(state) {
-        this.setState(
-          state
-        );
-      }.bind(this);
-    },
+App = React.createClass({
+  displayName: function() {
+    return 'App';
+  },
 
-    getInitialState: function() {
-      return {
-        show: 'AddHomeTeam',
-        match: match.state
-      }
-    },
+  changeState: function() {
+    return function(state) {
+      this.setState(
+        state
+      );
+    }.bind(this);
+  },
 
-    render: function() {
-      var show = this.state.show,
-        changeState = this.changeState();
-
-      if (show === 'AddHomeTeam') {
-        return <AddHomeTeam changeState={changeState} match={match} />;
-      }
-      else if (show === 'AddAwayTeam') {
-        return <AddAwayTeam changeState={changeState} match={match} />;
-      }
-      else {
-        return <Scoreboard match={match} />
-      }
+  getInitialState: function() {
+    return {
+      show: 'AddHomeTeam',
+      match: match.state
     }
-  });
+  },
+
+  render: function() {
+    var show = this.state.show,
+      changeState = this.changeState();
+
+    if (show === 'AddHomeTeam') {
+      return <AddHomeTeam changeState={changeState} match={match} />;
+    }
+    else if (show === 'AddAwayTeam') {
+      return <AddAwayTeam changeState={changeState} match={match} />;
+    }
+    else {
+      return <Scoreboard match={match} notification={matchNotifications} />
+    }
+  }
+});
 
 window.React = React;
 

@@ -10,6 +10,13 @@ Scoreboard = React.createClass({
     return 'Scoreboard';
   },
 
+  componentWillMount: function() {
+    var sets = this.props.match.state.sets;
+    sets[0].notification = this.props.notification;
+    sets[1].notification = this.props.notification;
+    sets[2].notification = this.props.notification;
+  },
+
   handleHide: function() {
     this.refs.changeSideDialog.hidden();
   }.bind(this),
@@ -20,13 +27,13 @@ Scoreboard = React.createClass({
 
   pointToHomeTeam: function(event) {
     event.preventDefault();
-    this.props.match.addPointHomeTeam();
+    this.props.match.getCurrentSet().addPointHomeTeam();
     this.setState(this.props.match.state);
   },
 
   pointToAwayTeam: function(event) {
     event.preventDefault();
-    this.props.match.addPointAwayTeam();
+    this.props.match.getCurrentSet().addPointAwayTeam();
     this.setState(this.props.match.state);
   },
 
@@ -34,13 +41,13 @@ Scoreboard = React.createClass({
     return (
       <div>
         <div className="switch-modal">
-          <NotificationModal message="Sidebytte" eventTrigger="switch" match={this.props.match} />
+          <NotificationModal message="Sidebytte" eventTrigger="switch-notification" notification={this.props.notification} />
         </div>
         <div className="set-finished-modal">
-          <NotificationModal message="Settet er ferdig" eventTrigger="set-finished" match={this.props.match} />
+          <NotificationModal message="Settet er ferdig" eventTrigger="set-notification" notification={this.props.notification} />
         </div>
         <div className="game-finished-modal">
-          <NotificationModal message="Kampen er ferdig" eventTrigger="match-finished" match={this.props.match} />
+          <NotificationModal message="Kampen er ferdig" eventTrigger="match-notification" notification={this.props.notification} />
         </div>
         <div className="container scoreboard">
           <div className="row">
@@ -54,13 +61,13 @@ Scoreboard = React.createClass({
                       </span>
                     </td>
                     <td className='set'>
-                    {this.state.sets[0][0]}
+                    {this.state.sets[0].score[0]}
                     </td>
                     <td className='set'>
-                    {this.state.sets[1][0]}
+                    {this.state.sets[1].score[0]}
                     </td>
                     <td className='set'>
-                    {this.state.sets[2][0]}
+                    {this.state.sets[2].score[0]}
                     </td>
                     <td>
                       <Button className='points btn-primary' type="submit" onClick={this.pointToHomeTeam}>
@@ -75,13 +82,13 @@ Scoreboard = React.createClass({
                       </span>
                     </td>
                     <td className='set'>
-                    {this.state.sets[0][1]}
+                    {this.state.sets[0].score[1]}
                     </td>
                     <td className='set'>
-                    {this.state.sets[1][1]}
+                    {this.state.sets[1].score[1]}
                     </td>
                     <td className='set'>
-                    {this.state.sets[2][1]}
+                    {this.state.sets[2].score[1]}
                     </td>
                     <td>
                       <Button className="points btn-primary" type="submit" onClick={this.pointToAwayTeam}>
@@ -97,6 +104,7 @@ Scoreboard = React.createClass({
       </div>
     )
   }
-});
+})
+;
 
 module.exports = Scoreboard;
