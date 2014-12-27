@@ -27,9 +27,9 @@ var React = require('react'),
 
     render: function() {
       return (
-        <div className="addTeamContainer" >
-          <div>
-            <h2>Add Away Team</h2>
+        <div className="panel panel-default" >
+        <div className="panel-heading"><h2>Add Away Team</h2></div>
+          <div className="panel-body">
             <form className="add-team-form" onSubmit={this.handleSubmit}>
               <div className="form-group">
                 <Input type="text" className="form-control" ref="player1" placeholder="Player 1" />

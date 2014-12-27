@@ -76,7 +76,7 @@ Scoreboard = React.createClass({
           <div className="row">
             <div>
               <div className="row">
-                <table>
+                <table className="table table-striped">
                   <ScoreboardRow
                     pointsToTeam={this.pointToHomeTeam()}
                     scoreForThisTeam={scoreHomeTeam}
