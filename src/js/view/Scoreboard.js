@@ -3,6 +3,7 @@
 var React = require('react'),
   NotificationModal = require('./NotificationModal'),
   Button = require('react-bootstrap').Button,
+  ScoreboardRow = require('./ScoreboardRow'),
   Scoreboard;
 
 Scoreboard = React.createClass({
@@ -15,6 +16,11 @@ Scoreboard = React.createClass({
     sets[0].notification = this.props.notification;
     sets[1].notification = this.props.notification;
     sets[2].notification = this.props.notification;
+
+    this.props.notification.on('match-notification', function() {
+      this.props.match.state.finished = true;
+      this.setState(this.props.match.state);
+    }.bind(this));
   },
 
   handleHide: function() {
@@ -26,18 +32,35 @@ Scoreboard = React.createClass({
   },
 
   pointToHomeTeam: function(event) {
-    event.preventDefault();
-    this.props.match.getCurrentSet().addPointHomeTeam();
-    this.setState(this.props.match.state);
+    return function(event) {
+      event.preventDefault();
+      this.props.match.getCurrentSet().addPointHomeTeam();
+      this.setState(this.props.match.state);
+    }.bind(this)
   },
 
   pointToAwayTeam: function(event) {
-    event.preventDefault();
-    this.props.match.getCurrentSet().addPointAwayTeam();
-    this.setState(this.props.match.state);
+    return function(event) {
+      event.preventDefault();
+      this.props.match.getCurrentSet().addPointAwayTeam();
+      this.setState(this.props.match.state);
+    }.bind(this)
   },
 
   render: function() {
+
+    var scoreAwayTeam = [
+        this.state.sets[0].score[1],
+        this.state.sets[1].score[1],
+        this.state.sets[2].score[1]
+      ],
+
+      scoreHomeTeam = [
+        this.state.sets[0].score[0],
+        this.state.sets[1].score[0],
+        this.state.sets[2].score[0]
+      ];
+
     return (
       <div>
         <div className="switch-modal">
@@ -54,48 +77,16 @@ Scoreboard = React.createClass({
             <div>
               <div className="row">
                 <table>
-                  <tr>
-                    <td>
-                      <span className='names'>
-                      {this.props.match.homeTeam().player1} - {this.props.match.homeTeam().player2}
-                      </span>
-                    </td>
-                    <td className='set'>
-                    {this.state.sets[0].score[0]}
-                    </td>
-                    <td className='set'>
-                    {this.state.sets[1].score[0]}
-                    </td>
-                    <td className='set'>
-                    {this.state.sets[2].score[0]}
-                    </td>
-                    <td>
-                      <Button className='points btn-primary' type="submit" onClick={this.pointToHomeTeam}>
-                        <span className="glyphicon glyphicon-plus-sign" aria-hidden="true"/>
-                      </Button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <span className='names'>
-                      {this.props.match.awayTeam().player1} - {this.props.match.awayTeam().player2}
-                      </span>
-                    </td>
-                    <td className='set'>
-                    {this.state.sets[0].score[1]}
-                    </td>
-                    <td className='set'>
-                    {this.state.sets[1].score[1]}
-                    </td>
-                    <td className='set'>
-                    {this.state.sets[2].score[1]}
-                    </td>
-                    <td>
-                      <Button className="points btn-primary" type="submit" onClick={this.pointToAwayTeam}>
-                        <span className="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
-                      </Button>
-                    </td>
-                  </tr>
+                  <ScoreboardRow
+                    pointsToTeam={this.pointToHomeTeam()}
+                    scoreForThisTeam={scoreHomeTeam}
+                    team={this.props.match.homeTeam()}
+                    match={this.props.match} />
+                  <ScoreboardRow
+                    pointsToTeam={this.pointToAwayTeam()}
+                    scoreForThisTeam={scoreAwayTeam}
+                    team={this.props.match.awayTeam()}
+                    match={this.props.match} />
                 </table>
               </div>
             </div>
@@ -104,7 +95,6 @@ Scoreboard = React.createClass({
       </div>
     )
   }
-})
-;
+});
 
 module.exports = Scoreboard;
