@@ -8,23 +8,19 @@ function Set(limit) {
 
   this.addPoint = function(teamIndex) {
     this.score[teamIndex]++;
-  };
-
-  this.changeSide = function() {
-    var score = this.score;
-
-    // every 7 point
-    if ((score[0] + score[1]) % 7 === 0) {
-      this.emit('switch');
-      return true;
+    if (this.notification) {
+      this.notification.emit('point-added');
     }
-    return false;
   };
 
   return this;
 }
 
-util.inherits(Set, EventEmitter);
+Set.prototype.shouldChangeSide = function() {
+  var score = this.score;
+  // true every 7 point
+  return ((score[0] + score[1]) % 7 === 0);
+};
 
 Set.prototype.addPointHomeTeam = function() {
   return this.addPoint(0);

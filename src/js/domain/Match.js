@@ -5,11 +5,11 @@ var util = require('util'),
   Set = require('./Set');
 
 function Match() {
-  var set1 = new Set()
+  var set1 = new Set(21);
   this.state = {
     hometeam: new Team('', ''),
     awayteam: new Team('', ''),
-    sets: [set1, new Set(), new Set()],
+    sets: [set1, new Set(21), new Set(15)],
     currentSet: 0,
     currentSetScore: set1.score
   };
@@ -21,6 +21,11 @@ util.inherits(Match, EventEmitter);
 
 Match.prototype.getCurrentSet = function() {
   return this.state.sets[this.state.currentSet]
+};
+
+Match.prototype.nextSet = function() {
+  this.state.currentSet++;
+  this.currentSetScore = this.getCurrentSet().score;
 };
 
 Match.prototype.setPrivateState = function(state) {
@@ -41,35 +46,6 @@ Match.prototype.addAwayTeam = function(team) {
 
 Match.prototype.awayTeam = function() {
   return this.state.awayteam.players();
-};
-
-Match.prototype.isFinished = function() {
-  if (this.getCurrentSet().isSetWonByHomeTeam() || this.getCurrentSet().isSetWonByAwayTeam()) {
-    this.state.currentSet++;
-    this.state.currentSetScore = this.getCurrentSet().score;
-    if (!this.matchFinished()) {
-      this.emit('set-finished');
-    }
-    return true;
-  }
-  return false;
-};
-
-Match.prototype.matchFinished = function() {
-  if (this.state.currentSet > 2) {
-    this.emit('match-finished');
-    return true;
-  }
-  if (this.state.currentSet > 2) {
-    var set1 = this.state.sets[0],
-      set2 = this.state.sets[1];
-
-    if ((set1.isSetWonByAwayTeam() && set2.isSetWonByAwayTeam())
-      || (set1.isSetWonByHomeTeam() && set2.isSetWonByHomeTeam())) {
-      return true
-    }
-  }
-  return false;
 };
 
 module.exports = Match;

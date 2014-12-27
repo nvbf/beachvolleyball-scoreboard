@@ -20,29 +20,4 @@ describe('Set Logic', function() {
     set.score.should.eql([0, 1]);
   });
 
-  it('Sould not return "switch", score is 0-1 ', function() {
-    var set = new Set(),
-      callback = sinon.spy(),
-      switchObserver = function() {
-        callback();
-      };
-    set.on('switch', switchObserver);
-    set.addPointAwayTeam();
-    callback.called.should.not.be.ok;
-  });
-
-  it('Sould return "switch" score will become 4-3', function() {
-    var set = new Set(),
-      callback = sinon.spy(),
-      switchObserver = function() {
-        callback();
-      };
-
-    set.score = [3, 3];
-    set.on('switch', switchObserver);
-    set.addPointHomeTeam();
-    callback.notCalled.should.be.ok;
-  });
-
 });
-
