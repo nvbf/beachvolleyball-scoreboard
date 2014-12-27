@@ -36,7 +36,7 @@ Scoreboard = React.createClass({
     this.props.match.getCurrentSet().addPointAwayTeam();
     this.setState(this.props.match.state);
   },
-
+  
   render: function() {
     return (
       <div>
@@ -53,12 +53,10 @@ Scoreboard = React.createClass({
           <div className="row">
             <div>
               <div className="row">
-                <table>
+                <table className="table table-striped">
                   <tr>
                     <td>
-                      <span className='names'>
                       {this.props.match.homeTeam().player1} - {this.props.match.homeTeam().player2}
-                      </span>
                     </td>
                     <td className='set'>
                     {this.state.sets[0].score[0]}
@@ -77,9 +75,7 @@ Scoreboard = React.createClass({
                   </tr>
                   <tr>
                     <td>
-                      <span className='names'>
                       {this.props.match.awayTeam().player1} - {this.props.match.awayTeam().player2}
-                      </span>
                     </td>
                     <td className='set'>
                     {this.state.sets[0].score[1]}
@@ -92,7 +88,7 @@ Scoreboard = React.createClass({
                     </td>
                     <td>
                       <Button className="points btn-primary" type="submit" onClick={this.pointToAwayTeam}>
-                        <span className="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+                        <span className="glyphicon glyphicon-plus-sign" aria-hidden="true"/>
                       </Button>
                     </td>
                   </tr>
