@@ -1,5 +1,5 @@
 .scoreboard {
-  background-color:  lightgrey;
+  /*background-color:  lightgrey;*/
 }
 
 .addTeamContainer {
@@ -18,7 +18,6 @@
   display: inline;
   font-weight: bold;
   font-size: 25px;
-  padding-left: 50px;
 }
 
 .points {
@@ -122,4 +121,17 @@ h4 {
 hr {
   margin-top: 40px;
   margin-bottom: 40px;
+}
+
+td{
+  vertical-align: middle !important;
+}
+
+@media (max-width: 600px) {
+
+  table,
+  table .names,
+  table .set{
+    font-size: 16px
+  }
 }
