@@ -24,12 +24,17 @@ describe('Match Logic', function() {
 });
 
 describe('Test Match Util functions', function() {
+  var option = {
+    length: 21,
+    switch: 7
+  };
+
   it('Setting state', function() {
     var match,
-      score = [new Set(), new Set(), new Set()];
-    score[0].score = [19, 21];
-    score[1].score = [23, 21];
-    score[2].score = [13, 14];
+      score = [new Set(option), new Set(option), new Set(option)];
+    score[0].scoreForThisTeam = [19, 21];
+    score[1].scoreForThisTeam = [23, 21];
+    score[2].scoreForThisTeam = [13, 14];
     match = matchTestUtil.setScoreToTest(score);
     match.state.currentSet.should.be.equal(2);
     match.state.currentSetScore.should.eql([13, 14]);

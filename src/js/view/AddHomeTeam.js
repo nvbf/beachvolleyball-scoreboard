@@ -4,48 +4,51 @@
 var React = require('react'),
   Team = require('./../domain/Team'),
   Button = require('react-bootstrap').Button,
-  AddHomeTeam = React.createClass({
-    displayName: function() {
-      return 'AddHomeTeam';
-    },
+  Input = require('react-bootstrap').Input,
+  AddHomeTeam;
 
-    handleSubmit: function(e) {
-      e.preventDefault();
-      var player1 = this.refs.player1.getDOMNode().value.trim(),
-        player2 = this.refs.player2.getDOMNode().value.trim();
-      if (!player2 || !player1) {
-        console.error('Fyll inn navn');
-        return;
-      }
-      this.props.match.addHomeTeam(new Team(player1, player2));
+AddHomeTeam = React.createClass({
+  displayName: function() {
+    return 'AddHomeTeam';
+  },
 
-      this.props.changeState(
-        {show: 'AddAwayTeam'}
-      );
-    },
-
-    render: function() {
-      return (
-        <div className="panel panel-default" >
-        <div className="panel-heading"><h2>Add Home Team</h2></div>
-          <div className="panel-body">
-            <form className="add-team-form" onSubmit={this.handleSubmit} >
-              <div className="names-input">
-                <div className="form-group">
-                  <input type="text" className="form-control" ref="player1" autofocus></input>
-                </div>
-                <div className="form-group">
-                  <input type="text" className="form-control" ref="player2"></input>
-                </div>
-              </div>
-              <Button type="submit" bsStyle="primary" className="pull-right">
-                Add Team
-              </Button>
-            </form>
-          </div>
-        </div>
-      )
+  handleSubmit: function(e) {
+    e.preventDefault();
+    var player1 = this.refs.player1.getValue(),
+      player2 = this.refs.player2.getValue();
+    if (!player2 || !player1) {
+      console.error('Fyll inn navn');
+      return;
     }
-  });
+    this.props.match.addHomeTeam(new Team(player1, player2));
+
+    this.props.changeState(
+      {show: 'AddAwayTeam'}
+    );
+  },
+
+  render: function() {
+    return (
+      <div className="panel panel-default" >
+        <div className="panel-heading"><h2>Add Home Team</h2></div>
+        <div className="panel-body">
+          <form className="add-team-form" onSubmit={this.handleSubmit} >
+            <div className="names-input">
+              <div className="form-group">
+                <Input type="text" className="form-control" ref="player1" placeholder="Player 1" />
+              </div>
+              <div className="form-group">
+                <Input type="text" className="form-control" ref="player2" placeholder="Player 2" />
+              </div>
+            </div>
+            <Button type="submit" bsStyle="primary" className="pull-right">
+              Add Team
+            </Button>
+          </form>
+        </div>
+      </div>
+    )
+  }
+});
 
 module.exports = AddHomeTeam;

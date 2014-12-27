@@ -2,9 +2,10 @@
 var util = require('util'),
   EventEmitter = require('events').EventEmitter;
 
-function Set(limit) {
+function Set(option) {
   this.score = [0, 0];
-  this.pointLimit = limit;
+  this.pointLimit = option.lenght;
+  this.switch = option.switch;
 
   this.addPoint = function(teamIndex) {
     this.score[teamIndex]++;
@@ -19,7 +20,7 @@ function Set(limit) {
 Set.prototype.shouldChangeSide = function() {
   var score = this.score;
   // true every 7 point
-  return ((score[0] + score[1]) % 7 === 0);
+  return ((score[0] + score[1]) % this.switch === 0);
 };
 
 Set.prototype.addPointHomeTeam = function() {

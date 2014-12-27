@@ -5,13 +5,23 @@ var util = require('util'),
   Set = require('./Set');
 
 function Match() {
-  var set1 = new Set(21);
+  var defaultSetOption = {
+    lenght: 21,
+    switch: 7
+    },
+  thirdSetOption = {
+    lenght: 15,
+    switch: 5
+  },
+
+  set1 = new Set(defaultSetOption);
   this.state = {
     hometeam: new Team('', ''),
     awayteam: new Team('', ''),
-    sets: [set1, new Set(21), new Set(15)],
+    sets: [set1, new Set(defaultSetOption), new Set(thirdSetOption)],
     currentSet: 0,
-    currentSetScore: set1.score
+    currentSetScore: set1.score,
+    finished: false
   };
 
   return this;
@@ -25,7 +35,7 @@ Match.prototype.getCurrentSet = function() {
 
 Match.prototype.nextSet = function() {
   this.state.currentSet++;
-  this.currentSetScore = this.getCurrentSet().score;
+  this.currentSetScore = this.getCurrentSet().scoreForThisTeam;
 };
 
 Match.prototype.setPrivateState = function(state) {

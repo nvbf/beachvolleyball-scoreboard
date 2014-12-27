@@ -13,11 +13,11 @@ function MatchNotifications(match) {
       set2 = match.state.sets[1];
 
     if (match.getCurrentSet().isFinished()) {
-      if (match.state.currentSet > 2) {
+      if (match.state.currentSet == 2) {
         return this.emit('match-notification');
       }
 
-      if (match.state.currentSet > 2) {
+      if (match.state.currentSet === 1) {
         if ((set1.isSetWonByAwayTeam() && set2.isSetWonByAwayTeam())
           || (set1.isSetWonByHomeTeam() && set2.isSetWonByHomeTeam())) {
           return this.emit('match-notification');

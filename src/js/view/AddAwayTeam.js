@@ -4,6 +4,7 @@
 var React = require('react'),
   Team = require('./../domain/Team'),
   Button = require('react-bootstrap').Button,
+  Input = require('react-bootstrap').Input,
   AddAwayTeam = React.createClass({
     displayName: function() {
       return 'AddAwayTeam';
@@ -11,9 +12,8 @@ var React = require('react'),
 
     handleSubmit: function(e) {
       e.preventDefault();
-      var player1 = this.refs.player1.getDOMNode().value.trim(),
-        player2 = this.refs.player2.getDOMNode().value.trim();
-
+      var player1 = this.refs.player1.getValue(),
+        player2 = this.refs.player2.getValue();
       if (!player2 || !player1) {
         console.error('Fyll inn navn');
         return;
@@ -32,10 +32,10 @@ var React = require('react'),
           <div className="panel-body">
             <form className="add-team-form" onSubmit={this.handleSubmit}>
               <div className="form-group">
-                <input type="text" className="form-control" ref="player1"></input>
+                <Input type="text" className="form-control" ref="player1" placeholder="Player 1" />
               </div>
               <div className="form-group">
-                <input type="text" className="form-control" ref="player2"></input>
+                <Input type="text" className="form-control" ref="player2" placeholder="Player 2" />
               </div>
               <Button type="submit" bsStyle="primary" className="pull-right">
                 Add Team
