@@ -73,22 +73,23 @@ Scoreboard = React.createClass({
           <NotificationModal message="Kampen er ferdig" eventTrigger="match-notification" notification={this.props.notification} />
         </div>
         <div className="container scoreboard">
-          <div className="row">
-            <div>
-              <div className="row">
-                <table className="table table-striped">
-                  <ScoreboardRow
-                    pointsToTeam={this.pointToHomeTeam()}
-                    scoreForThisTeam={scoreHomeTeam}
-                    team={this.props.match.homeTeam()}
-                    match={this.props.match} />
-                  <ScoreboardRow
-                    pointsToTeam={this.pointToAwayTeam()}
-                    scoreForThisTeam={scoreAwayTeam}
-                    team={this.props.match.awayTeam()}
-                    match={this.props.match} />
-                </table>
-              </div>
+          <div className="panel panel-default" >
+            <div className="panel-heading">
+              <h2 className="panel-title">Match standing</h2>
+            </div>
+            <div className="panel-body">
+              <table className="table table-striped">
+                <ScoreboardRow
+                  pointsToTeam={this.pointToHomeTeam()}
+                  scoreForThisTeam={scoreHomeTeam}
+                  team={this.props.match.homeTeam()}
+                  match={this.props.match} />
+                <ScoreboardRow
+                  pointsToTeam={this.pointToAwayTeam()}
+                  scoreForThisTeam={scoreAwayTeam}
+                  team={this.props.match.awayTeam()}
+                  match={this.props.match} />
+              </table>
             </div>
           </div>
         </div>

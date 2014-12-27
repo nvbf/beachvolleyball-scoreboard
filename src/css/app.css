@@ -32,8 +32,8 @@ body {
   font-size: 15px;
   line-height: 1.7;
   margin: 0;
-  margin-top: 30px;
   padding: 30px;
+  background: #DFD5BE;
 }
 
 a {
@@ -69,9 +69,10 @@ h1 {
   padding: 0;
 }
 
-h2 {
+.panel-heading h2 {
   border-bottom: 1px solid #eee;
   font-size: 2em;
+  margin:0;
 }
 
 h3 {
@@ -95,8 +96,21 @@ ul {
 }
 
 body {
-  margin-top: 80px;
+  margin-top: 40px;
 }
+/*
+body::after{
+  opacity: 0.5;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  z-index: -1;
+  content: "";
+  background: url('http://fc09.deviantart.net/fs70/i/2010/231/a/2/Beach_sand_1_by_eddieretelj.jpg');
+}
+*/
 
 h4 {
   margin-top: 25px;
@@ -126,7 +140,15 @@ hr {
 td{
   vertical-align: middle !important;
 }
+.panel-default {
+  -webkit-box-shadow: 0px 0px 9px #888;
+  box-shadow: 0px 0px 9px #888;
+}
 
+table {
+  border: 1px solid #ddd;
+  margin-bottom:0!important;
+}
 @media (max-width: 600px) {
 
   table,
