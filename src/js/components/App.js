@@ -6,10 +6,8 @@ var React = require('react'),
   AddHomeTeam = require('./AddHomeTeam'),
   AddAwayTeam = require('./AddAwayTeam'),
   Scoreboard = require('./Scoreboard'),
-  MatchNotifications = require('./../domain/MatchNotifications'),
   Menu = require('./Menu'),
   match = new Match(),
-  matchNotifications = new MatchNotifications(match),
   App;
 
 App = React.createClass({
@@ -53,9 +51,9 @@ App = React.createClass({
     else {
       return (
         <section>
-          <Menu />
+          {/*<Menu /> */}
           <main>
-            <Scoreboard match={match} notification={matchNotifications} />
+            <Scoreboard match={match}/>
           </main>
         </section>
       )

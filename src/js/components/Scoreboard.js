@@ -11,12 +11,7 @@ Scoreboard = React.createClass({
   },
 
   componentWillMount: function() {
-    var sets = this.props.match.state.sets;
-    sets[0].notification = this.props.notification;
-    sets[1].notification = this.props.notification;
-    sets[2].notification = this.props.notification;
-
-    this.props.notification.on('match-notification', function() {
+    this.props.match.notification.on('match-notification', function() {
       this.props.match.state.finished = true;
       this.setState(this.props.match.state);
     }.bind(this));

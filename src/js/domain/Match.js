@@ -2,19 +2,20 @@
 var util = require('util'),
   EventEmitter = require('events').EventEmitter,
   Team = require('./Team'),
-  Set = require('./Set');
+  Set = require('./Set'),
+  MatchNotifications = require('./MatchNotifications');
 
 function Match() {
   var defaultSetOption = {
-    length: 21,
-    switch: 7
+      length: 21,
+      switch: 7
     },
-  thirdSetOption = {
-    length: 15,
-    switch: 5
-  },
+    thirdSetOption = {
+      length: 15,
+      switch: 5
+    },
+    set1 = new Set(defaultSetOption);
 
-  set1 = new Set(defaultSetOption);
   this.state = {
     hometeam: new Team('', ''),
     awayteam: new Team('', ''),
@@ -23,6 +24,8 @@ function Match() {
     currentSetScore: set1.score,
     finished: false
   };
+
+  this.notification = new MatchNotifications();
 
   return this;
 }
