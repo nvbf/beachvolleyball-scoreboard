@@ -2,7 +2,6 @@
 'use strict';
 var React = require('react'),
   NotificationAlerts = require('./NotificationAlerts'),
-  Button = require('react-bootstrap').Button,
   ScoreboardRow = require('./ScoreboardRow'),
   Scoreboard;
 

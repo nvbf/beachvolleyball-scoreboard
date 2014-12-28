@@ -6,11 +6,11 @@ var util = require('util'),
 
 function Match() {
   var defaultSetOption = {
-    lenght: 21,
+    length: 21,
     switch: 7
     },
   thirdSetOption = {
-    lenght: 15,
+    length: 15,
     switch: 5
   },
 

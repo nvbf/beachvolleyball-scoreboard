@@ -7,6 +7,7 @@ var React = require('react'),
   AddAwayTeam = require('./AddAwayTeam'),
   Scoreboard = require('./Scoreboard'),
   MatchNotifications = require('./../domain/MatchNotifications'),
+  Menu = require('./Menu'),
   match = new Match(),
   matchNotifications = new MatchNotifications(match),
   App;
@@ -36,13 +37,28 @@ App = React.createClass({
       changeState = this.changeState();
 
     if (show === 'AddHomeTeam') {
-      return <AddHomeTeam changeState={changeState} match={match} />;
+      return (
+        <main>
+          <AddHomeTeam changeState={changeState} match={match} />
+        </main>
+      )
     }
     else if (show === 'AddAwayTeam') {
-      return <AddAwayTeam changeState={changeState} match={match} />;
+      return (
+        <main>
+          <AddAwayTeam changeState={changeState} match={match} />
+        </main>
+      );
     }
     else {
-      return <Scoreboard match={match} notification={matchNotifications} />
+      return (
+        <section>
+          <Menu />
+          <main>
+            <Scoreboard match={match} notification={matchNotifications} />
+          </main>
+        </section>
+      )
     }
   }
 });

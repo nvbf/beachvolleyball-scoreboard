@@ -4,7 +4,7 @@ var util = require('util'),
 
 function Set(option) {
   this.score = [0, 0];
-  this.pointLimit = option.lenght;
+  this.pointLimit = option.length;
   this.switch = option.switch;
 
   this.addPoint = function(teamIndex) {

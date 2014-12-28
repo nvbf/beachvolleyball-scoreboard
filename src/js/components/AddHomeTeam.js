@@ -3,7 +3,7 @@
 
 var React = require('react'),
   Team = require('./../domain/Team'),
-  Button = require('react-bootstrap').Button,
+  Button = require('react-bootstrap/Button'),
   PlayerInput = require('./PlayerInput'),
   AddHomeTeam;
 
