@@ -1,7 +1,7 @@
 /** @jsx React.DOM  */
 'use strict';
 var React = require('react'),
-  NotificationModal = require('./NotificationModal'),
+  NotificationAlerts = require('./NotificationAlerts'),
   Button = require('react-bootstrap').Button,
   ScoreboardRow = require('./ScoreboardRow'),
   Scoreboard;
@@ -63,16 +63,17 @@ Scoreboard = React.createClass({
 
     return (
       <div>
-        <div className="switch-modal">
-          <NotificationModal message="Sidebytte" eventTrigger="switch-notification" notification={this.props.notification} />
-        </div>
-        <div className="set-finished-modal">
-          <NotificationModal message="Settet er ferdig" eventTrigger="set-notification" notification={this.props.notification} />
-        </div>
-        <div className="game-finished-modal">
-          <NotificationModal message="Kampen er ferdig" eventTrigger="match-notification" notification={this.props.notification} />
-        </div>
         <div className="container scoreboard">
+          <div className="switch-modal">
+            <NotificationAlerts message="Sidebytte" eventTrigger="switch-notification" notification={this.props.notification} />
+          </div>
+          <div className="set-finished-modal">
+            <NotificationAlerts message="Settet er ferdig" eventTrigger="set-notification" notification={this.props.notification} />
+          </div>
+          <div className="game-finished-modal">
+            <NotificationAlerts message="Kampen er ferdig" eventTrigger="match-notification" notification={this.props.notification} />
+          </div>
+
           <div className="panel panel-default" >
             <div className="panel-heading">
               <h2 className="panel-title">Match standing</h2>
