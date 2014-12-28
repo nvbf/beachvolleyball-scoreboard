@@ -33,8 +33,8 @@ var NotificationAlerts = React.createClass({
   render: function() {
     if (this.state.alertVisible) {
       return (
-        <Alert bsStyle="warning" onDismiss={this.handleAlertDismiss} dismissAfter={5000}>
-          <strong>      {this.props.message}</strong>
+        <Alert bsStyle="info" onDismiss={this.handleAlertDismiss} dismissAfter={5000}>
+          <strong>{this.props.message}</strong>
         </Alert>
       )
     } else {
