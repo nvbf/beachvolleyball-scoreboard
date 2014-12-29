@@ -8,6 +8,7 @@ var React = require('react'),
   OverlayMixin = require('react-bootstrap/OverlayMixin'),
   Modal = require('react-bootstrap/Modal'),
   ModalBodyList = require('./ModalBodyList'),
+  ServingOrder = require('./../domain/ServingOrder'),
   ServeOrder;
 
 ServeOrder = React.createClass({
@@ -35,16 +36,33 @@ ServeOrder = React.createClass({
   },
 
   awayTeamStarts: function() {
+    this.props.match.getCurrentSet().setStartServing('awayteam');
     this.setState({
       startToServe: 'awayteam'
     })
   },
 
   homeTeamStarts: function() {
-
+    this.props.match.getCurrentSet().setStartServing('hometeam');
     this.setState({
       startToServe: 'hometeam'
     })
+  },
+
+  componentDidMount: function() {
+    this.props.match.notification.on('switch-server', function() {
+      var servingOrder = this.state.servingOrder;
+      if (servingOrder) {
+        servingOrder.nextServer();
+        this.setState({
+          servingOrder: servingOrder
+        })
+      }
+    }.bind(this));
+
+    this.props.match.notification.on('set-notification', function() {
+      this.replaceState(this.getInitialState());
+    }.bind(this));
   },
 
   render: function() {
@@ -52,7 +70,7 @@ ServeOrder = React.createClass({
       return (
         <section>
           <Alert bsStyle='warning'>
-            <p>Player to serve: {this.state.order[0]} </p>
+            <p>Player to serve: {this.state.servingOrder.toServe()} </p>
           </Alert>
         </section>
       )
@@ -76,11 +94,17 @@ ServeOrder = React.createClass({
         state = {};
       state.order = order;
 
-      order.push(names[0]);
-      order.push(names[1]);
+      if (order.length === 2) {
+        order.splice(1, 0, names[0]);
+        order.push(names[1]);
 
+      } else {
+        order.push(names[0]);
+        order.push(names[1]);
+      }
       if (order.length === 4) {
-        state.isModalOpen = false
+        state.isModalOpen = false;
+        state.servingOrder = new ServingOrder(order);
       }
 
       this.setState(state);
@@ -99,8 +123,8 @@ ServeOrder = React.createClass({
       || (this.state.startToServe == 'awayteam' && this.state.order.length === 2)) {
       modalBodyList = getPlayerModalBodyList(
         homeTeam,
-        this.chosenPlayer([homeTeam.player1, awayTeam.player2]),
-        this.chosenPlayer([homeTeam.player2, awayTeam.player1])
+        this.chosenPlayer([homeTeam.player1, homeTeam.player2]),
+        this.chosenPlayer([homeTeam.player2, homeTeam.player1])
       );
     } else if ((this.state.startToServe == 'awayteam' && this.state.order.length === 0)
       || (this.state.startToServe == 'hometeam' && this.state.order.length === 2)) {

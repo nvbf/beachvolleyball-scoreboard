@@ -1,11 +1,10 @@
 'use strict';
-var util = require('util'),
-  EventEmitter = require('events').EventEmitter;
 
 function Set(option) {
   this.score = [0, 0];
   this.pointLimit = option.length;
   this.switch = option.switch;
+  this.servingOrder;
 
   this.addPoint = function(teamIndex) {
     this.score[teamIndex]++;
@@ -14,8 +13,18 @@ function Set(option) {
     }
   };
 
+  this.notifyServerOrder = function(team) {
+    if (this.teamCurrentlyServing !== team && this.notification) {
+      this.notification.emit('switch-server');
+    }
+  };
+
   return this;
 }
+
+Set.prototype.setStartServing = function(team) {
+  this.teamCurrentlyServing = team;
+};
 
 Set.prototype.shouldChangeSide = function() {
   var score = this.score;
@@ -24,10 +33,14 @@ Set.prototype.shouldChangeSide = function() {
 };
 
 Set.prototype.addPointHomeTeam = function() {
+  this.notifyServerOrder('hometeam');
+  this.teamCurrentlyServing = 'hometeam';
   return this.addPoint(0);
 };
 
 Set.prototype.addPointAwayTeam = function() {
+  this.notifyServerOrder('awayteam');
+  this.teamCurrentlyServing = 'awayteam';
   return this.addPoint(1);
 };
 
@@ -46,7 +59,7 @@ Set.prototype.isFinished = function() {
 };
 
 Set.prototype.hasStarted = function() {
-  return !(this.score[0] === 0 && this.score[1]  === 0);
+  return !(this.score[0] === 0 && this.score[1] === 0);
 };
 
 module.exports = Set;
