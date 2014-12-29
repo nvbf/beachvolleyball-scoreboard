@@ -3,6 +3,7 @@
 var React = require('react'),
   NotificationAlerts = require('./NotificationAlerts'),
   ScoreboardRow = require('./ScoreboardRow'),
+  ServeOrder = require('./ServeOrder'),
   Scoreboard;
 
 Scoreboard = React.createClass({
@@ -59,13 +60,13 @@ Scoreboard = React.createClass({
       <div>
         <div className="container scoreboard">
           <div className="switch-modal">
-            <NotificationAlerts message="Sidebytte" eventTrigger="switch-notification" notification={this.props.notification} />
+            <NotificationAlerts message="Sidebytte" eventTrigger="switch-notification" notification={this.props.match.notification} />
           </div>
           <div className="set-finished-modal">
-            <NotificationAlerts message="Settet er ferdig" eventTrigger="set-notification" notification={this.props.notification} />
+            <NotificationAlerts message="Settet er ferdig" eventTrigger="set-notification" notification={this.props.match.notification} />
           </div>
           <div className="game-finished-modal">
-            <NotificationAlerts message="Kampen er ferdig" eventTrigger="match-notification" notification={this.props.notification} />
+            <NotificationAlerts message="Kampen er ferdig" eventTrigger="match-notification" notification={this.props.match.notification} />
           </div>
 
           <div className="panel panel-default" >
@@ -87,6 +88,7 @@ Scoreboard = React.createClass({
               </table>
             </div>
           </div>
+          <ServeOrder  match={this.props.match} />
         </div>
       </div>
     )

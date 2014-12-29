@@ -8,7 +8,10 @@ var React = require('react'),
   Scoreboard = require('./Scoreboard'),
   Menu = require('./Menu'),
   match = new Match(),
+  MatchNotifications = require('./../domain/MatchNotifications'),
   App;
+
+match.notification = new MatchNotifications(match);
 
 App = React.createClass({
   displayName: function() {

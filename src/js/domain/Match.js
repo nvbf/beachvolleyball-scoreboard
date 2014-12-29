@@ -25,12 +25,12 @@ function Match() {
     finished: false
   };
 
-  this.notification = new MatchNotifications();
-
   return this;
 }
 
 util.inherits(Match, EventEmitter);
+
+Match.prototype.notification = undefined;
 
 Match.prototype.getCurrentSet = function() {
   return this.state.sets[this.state.currentSet]

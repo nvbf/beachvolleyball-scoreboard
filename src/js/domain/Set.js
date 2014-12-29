@@ -45,4 +45,8 @@ Set.prototype.isFinished = function() {
   return (this.isSetWonByHomeTeam() || this.isSetWonByAwayTeam())
 };
 
+Set.prototype.hasStarted = function() {
+  return !(this.score[0] === 0 && this.score[1]  === 0);
+};
+
 module.exports = Set;

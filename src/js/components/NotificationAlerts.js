@@ -2,7 +2,7 @@
 'use strict';
 
 var React = require('react'),
-  Alert  = require('react-bootstrap').Alert;
+  Alert  = require('react-bootstrap/Alert');
 
 var NotificationAlerts = React.createClass({
 

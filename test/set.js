@@ -97,4 +97,16 @@ describe('Set Logic', function() {
     set.score = [17, 20];
     set.isFinished().should.be.not.ok;
   });
+
+  it('Set is not started on', function() {
+    var set = new Set(option);
+    set.score = [0, 0];
+    set.hasStarted().should.be.not.be.ok;
+  });
+
+  it('Set is not started on', function() {
+    var set = new Set(option);
+    set.score = [1, 0];
+    set.hasStarted().should.be.ok;
+  });
 });
