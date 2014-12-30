@@ -65,16 +65,19 @@ Scoreboard = React.createClass({
       <div>
         <div className="container scoreboard">
           <div className="switch-modal">
-            <NotificationAlerts message="Sidebytte" eventTrigger="switch-notification" notification={this.props.match.notification} />
+            <NotificationAlerts message="Switch" eventTrigger="switch-notification" notification={this.props.match.notification} />
           </div>
           <div className="set-finished-modal">
-            <NotificationAlerts message="Settet er ferdig" eventTrigger="set-notification" notification={this.props.match.notification} />
+            <NotificationAlerts message="Set finished" eventTrigger="set-notification" notification={this.props.match.notification} />
           </div>
           <div className="game-finished-modal">
-            <NotificationAlerts message="Kampen er ferdig" eventTrigger="match-notification" notification={this.props.match.notification} />
+            <NotificationAlerts message="Match finished" eventTrigger="match-notification" notification={this.props.match.notification} />
           </div>
           <div className="timeout-alerts">
-            <Timeout seconds={30} eventTrigger="timeout-notification" notification={this.props.match.notification} />
+            <Timeout seconds={30} message="Timeout: " eventTrigger="timeout-notification" notification={this.props.match.notification} />
+          </div>
+          <div className="timeout-alerts">
+            <Timeout seconds={60} message="Technical time-out: " eventTrigger="tto-notification" notification={this.props.match.notification} />
           </div>
           <div className="panel panel-default" >
             <div className="panel-heading">

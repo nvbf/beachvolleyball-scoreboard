@@ -8,7 +8,8 @@ AlertEventMixin = {
 
   propTypes: {
     eventTrigger: React.PropTypes.string.isRequired,
-    notification: React.PropTypes.object.isRequired
+    notification: React.PropTypes.object.isRequired,
+    message: React.PropTypes.string.isRequired
   },
 
   componentDidMount: function() {

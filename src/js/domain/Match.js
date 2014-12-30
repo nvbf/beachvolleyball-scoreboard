@@ -8,7 +8,8 @@ var util = require('util'),
 function Match() {
   var defaultSetOption = {
       length: 21,
-      switch: 7
+      switch: 7,
+      tto: 21
     },
     thirdSetOption = {
       length: 15,

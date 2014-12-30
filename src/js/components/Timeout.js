@@ -45,7 +45,7 @@ Timeout = React.createClass({
   renderOverlay: function() {
     return (
       <Alert bsStyle="info" onDismiss={this.handleAlertDismiss} isDismissable={true}>
-        Timeout: {this.state.secondsLeft}
+        {this.props.message} {this.state.secondsLeft}
       </Alert> );
   }
 });

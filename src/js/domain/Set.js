@@ -4,6 +4,7 @@ function Set(option) {
   this.score = [0, 0];
   this.pointLimit = option.length;
   this.switch = option.switch;
+  this.tto = option.tto;
   this.servingOrder;
 
   this.addPoint = function(teamIndex) {
@@ -24,6 +25,16 @@ function Set(option) {
 
 Set.prototype.setStartServing = function(team) {
   this.teamCurrentlyServing = team;
+};
+
+Set.prototype.isTTO = function() {
+  if (!this.tto) {
+    return false;
+  }
+
+  var score = this.score;
+  return ((score[0] + score[1]) === this.tto);
+
 };
 
 Set.prototype.shouldChangeSide = function() {

@@ -32,6 +32,9 @@ function MatchNotifications(match) {
       match.nextSet();
       return this.emit('set-notification');
     }
+    if (match.getCurrentSet().isTTO()) {
+      return this.emit('tto-notification');
+    }
     if (match.getCurrentSet().shouldChangeSide()) {
       return this.emit('switch-notification');
     }

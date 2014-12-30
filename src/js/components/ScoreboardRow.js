@@ -1,7 +1,7 @@
 /** @jsx React.DOM  */
 'use strict';
 var React = require('react'),
-  Button = require('react-bootstrap').Button,
+  Button = require('react-bootstrap/Button'),
   ScoreboardRow;
 
 ScoreboardRow = React.createClass({
@@ -31,7 +31,7 @@ ScoreboardRow = React.createClass({
         </td>
         <td>
           <Button className="points btn-primary" type="submit" onClick={this.props.pointsToTeam} disabled={this.props.match.state.finished}>
-            <span className="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+          &nbsp;&nbsp;&nbsp;<span className="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>&nbsp;&nbsp;&nbsp;
           </Button>
         </td>
       </tr>

@@ -7,10 +7,6 @@ var React = require('react'),
 
 var NotificationAlerts = React.createClass({
 
-  propTypes: {
-    message: React.PropTypes.string.isRequired
-  },
-
   mixins: [AlertEventMixin],
 
   renderOverlay: function() {
