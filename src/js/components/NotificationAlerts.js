@@ -2,44 +2,23 @@
 'use strict';
 
 var React = require('react'),
-  Alert  = require('react-bootstrap/Alert');
+  AlertEventMixin = require('../mixin/AlertEventMixin'),
+  Alert = require('react-bootstrap/Alert');
 
 var NotificationAlerts = React.createClass({
 
   propTypes: {
-    eventTrigger: React.PropTypes.string.isRequired,
-    notification: React.PropTypes.object.isRequired,
     message: React.PropTypes.string.isRequired
   },
 
-  componentDidMount: function() {
-    this.props.notification.on(this.props.eventTrigger, function() {
-      this.setState({
-        alertVisible: true
-      });
-    }.bind(this));
-  },
+  mixins: [AlertEventMixin],
 
-  getInitialState: function() {
-    return {
-      alertVisible: false
-    };
-  },
-
-  handleAlertDismiss: function() {
-    this.setState({alertVisible: false});
-  },
-
-  render: function() {
-    if (this.state.alertVisible) {
-      return (
-        <Alert bsStyle="info" onDismiss={this.handleAlertDismiss} dismissAfter={5000}>
-          <strong>{this.props.message}</strong>
-        </Alert>
-      )
-    } else {
-       return <span/>
-    }
+  renderOverlay: function() {
+    return (
+      <Alert bsStyle="info" onDismiss={this.handleAlertDismiss} dismissAfter={5000}>
+        <strong>{this.props.message}</strong>
+      </Alert>
+    )
   }
 });
 

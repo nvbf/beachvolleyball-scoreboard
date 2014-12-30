@@ -139,7 +139,7 @@ ServeOrder = React.createClass({
     return (
 
       <div className="static-modal">
-        <Modal title="Serve Order"
+        <Modal title="Service Order"
           backdrop={false}
           animation={false}
           onRequestHide={this.handleToggle}>

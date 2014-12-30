@@ -4,6 +4,7 @@ var React = require('react'),
   NotificationAlerts = require('./NotificationAlerts'),
   ScoreboardRow = require('./ScoreboardRow'),
   ServeOrder = require('./ServeOrder'),
+  Timeout = require('./Timeout'),
   Scoreboard;
 
 Scoreboard = React.createClass({
@@ -11,7 +12,11 @@ Scoreboard = React.createClass({
     return 'Scoreboard';
   },
 
-  componentWillMount: function() {
+  propTypes: {
+    match: React.PropTypes.object.isRequired
+  },
+
+  componentDidMount: function() {
     this.props.match.notification.on('match-notification', function() {
       this.props.match.state.finished = true;
       this.setState(this.props.match.state);
@@ -68,7 +73,9 @@ Scoreboard = React.createClass({
           <div className="game-finished-modal">
             <NotificationAlerts message="Kampen er ferdig" eventTrigger="match-notification" notification={this.props.match.notification} />
           </div>
-
+          <div className="timeout-alerts">
+            <Timeout seconds={30} eventTrigger="timeout-notification" notification={this.props.match.notification} />
+          </div>
           <div className="panel panel-default" >
             <div className="panel-heading">
               <h2 className="panel-title">Match standing</h2>

@@ -6,7 +6,9 @@ var React = require('react'),
   AddHomeTeam = require('./AddHomeTeam'),
   AddAwayTeam = require('./AddAwayTeam'),
   Scoreboard = require('./Scoreboard'),
-  Menu = require('./Menu'),
+  Navbar = require('react-bootstrap/Navbar'),
+  Nav = require('react-bootstrap/Nav'),
+  MenuItem = require('react-bootstrap/MenuItem'),
   match = new Match(),
   MatchNotifications = require('./../domain/MatchNotifications'),
   App;
@@ -29,8 +31,13 @@ App = React.createClass({
   getInitialState: function() {
     return {
       show: 'AddHomeTeam',
-      match: match.state
+      match: match.state,
+      showTimeout: false
     }
+  },
+
+  showTimeout: function() {
+    match.notification.emit('timeout-notification');
   },
 
   render: function() {
@@ -54,7 +61,12 @@ App = React.createClass({
     else {
       return (
         <section>
-          {/*<Menu /> */}
+          <Navbar>
+            <Nav>
+              <MenuItem onSelect={this.showTimeout}>Timeout</MenuItem>
+              <MenuItem href="#">Logg inn</MenuItem>
+            </Nav>
+          </Navbar>
           <main>
             <Scoreboard match={match}/>
           </main>

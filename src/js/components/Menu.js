@@ -2,10 +2,6 @@
 'use strict';
 
 var React = require('react'),
-  Navbar = require('react-bootstrap/Navbar'),
-  Nav = require('react-bootstrap/Nav'),
-  DropdownButton = require('react-bootstrap/DropdownButton'),
-  MenuItem = require('react-bootstrap/MenuItem'),
   Menu;
 
 Menu = React.createClass({
