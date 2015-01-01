@@ -11,7 +11,7 @@ PlayerInput = React.createClass({
   },
 
   render: function() {
-    return (
+    return (//noinspection JSUnusedGlobalSymbols
       <div>
         <div className="form-group">
           <Input type="text" id='player1' className="form-control" placeholder="Player 1" />

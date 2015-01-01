@@ -1,6 +1,6 @@
 {
   "name": "beachvollleyball-scoreboard",
-  "description": "Lets use modern stuff to build this ",
+  "description": "Scoreboard for the Lazy Volleyball Referee",
   "version": "0.0.1",
   "main": "app.js",
   "engines": {
@@ -38,6 +38,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/SindreSvendby/beachvollleyball-scoreboard"
+    "url": "git://github.com/nvbf/beachvollleyball-scoreboard"
   }
 }

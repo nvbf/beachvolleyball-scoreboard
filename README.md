@@ -1,11 +1,11 @@
 # Beachvolleyball scoreboard
 
-[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/SindreSvendby/beachvolleyball-scoreboard?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/nvbf/beachvolleyball-scoreboard?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-[![Build Status](https://travis-ci.org/SindreSvendby/beachvolleyball-scoreboard.svg?branch=master)](https://travis-ci.org/SindreSvendby/beachvolleyball-scoreboard)
-[![Coverage Status](https://img.shields.io/coveralls/SindreSvendby/beachvolleyball-scoreboard.svg)](https://coveralls.io/r/SindreSvendby/beachvolleyball-scoreboard)
-[![Dependencies Status](https://david-dm.org/SindreSvendby/beachvolleyball-scoreboard.svg?style=flat)](https://david-dm.org/SindreSvendby/beachvolleyball-scoreboard)
-[![DevDependencies Status](https://david-dm.org/SindreSvendby/beachvolleyball-scoreboard/dev-status.svg?style=flat)](https://david-dm.org/SindreSvendby/beachvolleyball-scoreboard#info=devDependencies)
+[![Build Status](https://travis-ci.org/nvbf/beachvolleyball-scoreboard.svg?branch=master)](https://travis-ci.org/nvbf/beachvolleyball-scoreboard)
+[![Coverage Status](https://img.shields.io/coveralls/nvbf/beachvolleyball-scoreboard.svg)](https://coveralls.io/r/nvbf/beachvolleyball-scoreboard)
+[![Dependencies Status](https://david-dm.org/nvbf/beachvolleyball-scoreboard.svg?style=flat)](https://david-dm.org/nvbf/beachvolleyball-scoreboard)
+[![DevDependencies Status](https://david-dm.org/nvbf/beachvolleyball-scoreboard/dev-status.svg?style=flat)](https://david-dm.org/nvbf/beachvolleyball-scoreboard#info=devDependencies)
 
 ## Prerequisit
 
@@ -36,4 +36,6 @@ when developing it's recommended to run `gulp development` to monitor the files 
 to the public folder.
 
 this way you have `gulp development` and `node app.js` running, but you never need to restart the server.
+
+All files in the public catalog is generated. To understand the build process see gulp folder.
 
