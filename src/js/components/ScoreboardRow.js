@@ -31,7 +31,7 @@ ScoreboardRow = React.createClass({
         </td>
         <td>
           <Button className="points btn-primary" type="submit" onClick={this.props.pointsToTeam} disabled={this.props.match.state.finished}>
-          &nbsp;&nbsp;&nbsp;<span className="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>&nbsp;&nbsp;&nbsp;
+          <span className="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
           </Button>
         </td>
       </tr>

@@ -2,7 +2,7 @@
 'use strict';
 
 var React = require('react'),
-  Input = require('react-bootstrap').Input,
+  Input = require('react-bootstrap/Input'),
   PlayerInput;
 
 PlayerInput = React.createClass({
