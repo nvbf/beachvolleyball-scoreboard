@@ -51,19 +51,11 @@ gulp.task('move-static', ['clean'], function() {
         output: './public/fonts/'
       },
       {
-        input: './src/js/es6-shim.min.js',
+        input: './node_modules/es6-shim/es6-shim.min.js',
         output: './public/js/'
       },
       {
-        input: './src/js/es6-sham.min.js',
-        output: './public/js/'
-      },
-      {
-        input: './src/js/es5-sham.min.js',
-        output: './public/js'
-      },
-      {
-        input: './src/js/es5-shim.min.js',
+        input: './node_modules/es5-shim/es5-shim.min.js',
         output: './public/js'
       },
       {
