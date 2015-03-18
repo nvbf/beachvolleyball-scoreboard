@@ -7,17 +7,19 @@ var React = require('react'),
   AddAwayTeam = require('./AddAwayTeam'),
   Scoreboard = require('./Scoreboard'),
   Navbar = require('react-bootstrap/Navbar'),
+  Input = require('react-bootstrap/Input'),
   Nav = require('react-bootstrap/Nav'),
   MenuItem = require('react-bootstrap/MenuItem'),
   match = new Match(),
   MatchNotifications = require('./../domain/MatchNotifications'),
-  App;
+  PublicBoard = require('./PublicBoard'),
+  Main;
 
 match.notification = new MatchNotifications(match);
 
-App = React.createClass({
+Main = React.createClass({
   displayName: function() {
-    return 'App';
+    return 'Main';
   },
 
   changeState: function() {
@@ -40,7 +42,13 @@ App = React.createClass({
     match.notification.emit('timeout-notification');
   },
 
+
+  test: function(e) {
+    console.log(e);
+  },
+  
   render: function() {
+    
     var show = this.state.show,
       changeState = this.changeState();
 
@@ -49,7 +57,7 @@ App = React.createClass({
         <main>
           <AddHomeTeam changeState={changeState} match={match} />
         </main>
-      )
+      );
     }
     else if (show === 'AddAwayTeam') {
       return (
@@ -65,17 +73,18 @@ App = React.createClass({
             <Nav>
               <MenuItem onSelect={this.showTimeout}>Timeout</MenuItem>
               <MenuItem href="#">Logg inn</MenuItem>
+              <MenuItem href="#">
+                <Input type="checkbox" label="Public" onchange={this.test} />
+              </MenuItem>
             </Nav>
           </Navbar>
           <main>
             <Scoreboard match={match}/>
           </main>
         </section>
-      )
+      );
     }
   }
 });
 
-window.React = React;
-
-React.render(<App />, document.body);
+module.exports = Main;
