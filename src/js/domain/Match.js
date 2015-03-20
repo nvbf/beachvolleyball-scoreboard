@@ -4,7 +4,7 @@ var util = require('util'),
   Team = require('./Team'),
   Set = require('./Set'),
   MatchNotifications = require('./MatchNotifications');
-
+  
 function Match() {
   var defaultSetOption = {
       length: 21,
@@ -34,7 +34,7 @@ util.inherits(Match, EventEmitter);
 Match.prototype.notification = undefined;
 
 Match.prototype.getCurrentSet = function() {
-  return this.state.sets[this.state.currentSet]
+  return this.state.sets[this.state.currentSet];
 };
 
 Match.prototype.nextSet = function() {
@@ -60,6 +60,10 @@ Match.prototype.addAwayTeam = function(team) {
 
 Match.prototype.awayTeam = function() {
   return this.state.awayteam.players();
+};
+
+Match.prototype.sets = function() {
+  return this.state.sets;
 };
 
 module.exports = Match;

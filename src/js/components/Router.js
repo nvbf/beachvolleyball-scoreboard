@@ -4,6 +4,7 @@
 var React = require('react'),
     PublicBoard = require('./PublicBoard'),
     Main = require('./Main'),
+    MatchApi = require('./../domain/MatchApi'),
     Router;
 
 
@@ -11,6 +12,14 @@ Router = React.createClass({
   
   displayName: function() {
     return 'Router';
+  },
+  
+  getInitialState: function() {
+    return {
+        "hometeam": '',
+        "awayteam": '',
+        "sets": []
+    };
   },
   
   splitUpKeyValue: function (param) {
@@ -22,21 +31,33 @@ Router = React.createClass({
   },
   
   render: function() {
-    var match;
+    var matchId;
     var _this = this;
     var getParams = document.location.search.substring(1).split('&');
     var idArgument = 
       getParams
-        .map(_this.splitUpKeyValue)
-        .filter(_this.areKeyId);
+        .map(this.splitUpKeyValue)
+        .filter(this.areKeyId);
         
     if(idArgument[0]) {
-        match = idArgument[0][1];
+        matchId = idArgument[0][1];
     }
       
       
-    if(match) {
-        return <PublicBoard />;
+    if(matchId) {
+        var api = new MatchApi();
+        api.getMatch(matchId, function(ht, aw, s) {
+            this.setState({
+                hometeam: ht,
+                    awayteam: aw,
+                    sets: s
+            })
+          }.bind(this)); 
+        return <PublicBoard 
+                  hometeam={this.state.hometeam} 
+                  awayteam={this.state.awayteam}
+                  score={this.state.sets} 
+                />;
     } else {
         return <Main />;
     }

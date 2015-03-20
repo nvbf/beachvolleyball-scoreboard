@@ -2,11 +2,15 @@ var util = require('util'),
   EventEmitter = require('events').EventEmitter,
   Team = require('./Team'),
   Set = require('./Set'),
-  Match = require('./Match');
+  Match = require('./Match'),
+  superagent = require('superagent'),
+  apiUrl = 'https://scoreboard-api-sindresvendby.c9.io/api/matches/',
+  MatchApi = require('./MatchApi'),
+  matchNumber;
 
-function MatchNotifications(match) {
+function MatchNotifications(match, api) {
   this.match = match;
-
+  this.api = api;
   var sets = this.match.state.sets;
 
   sets.map(function(set) {
@@ -17,7 +21,11 @@ function MatchNotifications(match) {
     var match = this.match,
       set1 = match.state.sets[0],
       set2 = match.state.sets[1];
-
+    
+    if(match.matchNumber) {
+      this.api.update(match);
+    }
+    
     if (match.getCurrentSet().isFinished()) {
       if (match.state.currentSet == 2) {
         return this.emit('match-notification');

@@ -2,7 +2,7 @@ var gulp = require('gulp'),
   paths = ['src/**/*.js', 'src/**/*.css'];
 
 gulp.task('watch', ['build'], function() {
-  gulp.watch(paths, ['build']);
+  gulp.watch(paths, ['browserify', 'move-static']);
 });
 
 gulp.task('development', ['watch']);

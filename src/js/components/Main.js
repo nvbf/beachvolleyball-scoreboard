@@ -9,13 +9,16 @@ var React = require('react'),
   Navbar = require('react-bootstrap/Navbar'),
   Input = require('react-bootstrap/Input'),
   Nav = require('react-bootstrap/Nav'),
+  Button = require('react-bootstrap/Button'),
   MenuItem = require('react-bootstrap/MenuItem'),
-  match = new Match(),
   MatchNotifications = require('./../domain/MatchNotifications'),
+  MatchApi = require('./../domain/MatchApi'),
   PublicBoard = require('./PublicBoard'),
+  match = new Match(),
+  matchApi = new MatchApi(),
   Main;
 
-match.notification = new MatchNotifications(match);
+match.notification = new MatchNotifications(match, matchApi);
 
 Main = React.createClass({
   displayName: function() {
@@ -34,17 +37,43 @@ Main = React.createClass({
     return {
       show: 'AddHomeTeam',
       match: match.state,
-      showTimeout: false
-    }
+      matchUrl: '',
+      showTimeout: false,
+      publicMatch: false
+    };
   },
 
   showTimeout: function() {
     match.notification.emit('timeout-notification');
   },
 
-
-  test: function(e) {
-    console.log(e);
+  
+  showMatchUrl:  function() {
+    if(this.state.publicMatch) {
+      var _this = this;
+      if(!this.state.matchUrl) {
+        matchApi.create(
+          match, 
+          function(matchUrl) {
+            _this.setState( { 'matchUrl': matchUrl });
+          }
+      )}
+      
+      
+      return (
+        <MenuItem>
+          {this.state.matchUrl}
+        </MenuItem>
+        );
+    } else {
+      return;
+    }
+  },
+  
+  doMatchPublic: function() {
+    this.setState({
+      publicMatch : !this.state.publicMatch
+    });
   },
   
   render: function() {
@@ -73,9 +102,10 @@ Main = React.createClass({
             <Nav>
               <MenuItem onSelect={this.showTimeout}>Timeout</MenuItem>
               <MenuItem href="#">Logg inn</MenuItem>
-              <MenuItem href="#">
-                <Input type="checkbox" label="Public" onchange={this.test} />
+              <MenuItem onSelect={this.doMatchPublic}>
+                Public
               </MenuItem>
+              {this.showMatchUrl()}
             </Nav>
           </Navbar>
           <main>

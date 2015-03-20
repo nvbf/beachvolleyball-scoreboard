@@ -10,13 +10,15 @@ PublicBoard = React.createClass({
   },
 
   propTypes: {
-    match: React.PropTypes.object.isRequired
+    hometeam: React.PropTypes.string.isRequired,
+    awayteam: React.PropTypes.string.isRequired,
+    score: React.PropTypes.array.isRequired
   },
   
 getDefaultProps: function() {
     return {
-        hometeam: 'Sindre Svendby - Håkon Tveitan',
-        awayteam: 'Geir Eithun - Iver Horrem',
+        hometeam: '',
+        awayteam: '',
         score: [
           [0,0],
           [0,0],
@@ -41,13 +43,13 @@ getDefaultProps: function() {
                         {this.props.hometeam}
                     </td>
                     <td className='set'>
-                      {this.props.score[0][0]}
+                      {this.props.score[0]}
                     </td>
                     <td className='set'>
-                      {this.props.score[0][1]}
+                      {this.props.score[2]}
                     </td>
                     <td className='set'>
-                      {this.props.score[0][2]}
+                      {this.props.score[4]}
                     </td>
                   </tr>
                   <tr>
@@ -55,13 +57,13 @@ getDefaultProps: function() {
                         {this.props.awayteam}
                     </td>
                     <td className='set'>
-                      {this.props.score[1][0]}
+                      {this.props.score[1]}
                     </td>
                     <td className='set'>
-                      {this.props.score[1][1]}
+                      {this.props.score[3]}
                     </td>
                     <td className='set'>
-                      {this.props.score[1][2]}
+                      {this.props.score[5]}
                     </td>
                   </tr>      
               </table>
