@@ -1,12 +1,12 @@
-var util = require('util'),
-  EventEmitter = require('events').EventEmitter,
-  Team = require('./Team'),
-  Set = require('./Set'),
-  Match = require('./Match'),
-  superagent = require('superagent'),
-  apiUrl = 'https://scoreboard-api-sindresvendby.c9.io/api/matches/',
-  MatchApi = require('./MatchApi'),
-  matchNumber;
+var util = require('util');
+var EventEmitter = require('events').EventEmitter;
+var Team = require('./Team');
+var Set = require('./Set');
+var Match = require('./Match');
+var superagent = require('superagent');
+var apiUrl = 'https://scoreboard-api-sindresvendby.c9.io/api/matches/';
+var MatchApi = require('./MatchApi');
+var matchNumber;
 
 function MatchNotifications(match, api) {
   this.match = match;
@@ -18,14 +18,14 @@ function MatchNotifications(match, api) {
   }.bind(this));
 
   this.notify = function() {
-    var match = this.match,
-      set1 = match.state.sets[0],
-      set2 = match.state.sets[1];
-    
-    if(match.matchNumber) {
+    var match = this.match;
+    var set1 = match.state.sets[0];
+    var set2 = match.state.sets[1];
+
+    if (match.matchNumber) {
       this.api.update(match);
     }
-    
+
     if (match.getCurrentSet().isFinished()) {
       if (match.state.currentSet == 2) {
         return this.emit('match-notification');

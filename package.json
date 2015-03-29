@@ -5,23 +5,26 @@
   "private": true,
   "main": "app.js",
   "engines": {
-    "node": "0.10.x"
+    "node": "0.12.x"
   },
   "dependencies": {
     "bluebird": "^2.9.14",
     "bootstrap": "^3.3.1",
     "browserify": "^7.0.0",
+    "const": "1.0.0",
     "coveralls": "^2.11.2",
     "del": "^1.1.0",
     "envify": "~1.2.1",
     "es5-shim": "^4.0.5",
     "es6-shim": "^0.22.2",
-    "express": "4.x",
+    "es6ify": "1.6.0",
+    "express": "4.12.3",
     "gulp": "3.8.10",
     "gulp-istanbul": "^0.5.0",
-    "gulp-mocha": "~0.5.x",
+    "gulp-mocha": "2.0.0",
     "gulp-notify": "2.1.0",
-    "istanbul": "^0.3.5",
+    "istanbul-harmony": "0.3.12",
+    "jscs": "1.11.3",
     "jsxcs": "^0.2.1",
     "node-jsx": "^0.12.4",
     "react": "^0.12.1",
@@ -30,16 +33,16 @@
     "reactify": "0.17.1",
     "should": "^4.4.1",
     "sinon": "^1.12.2",
+    "sol-style-check": "1.0.0",
     "superagent": "^1.1.0",
-    "superagent-bluebird-promise": "^2.0.0",
     "vinyl-source-stream": "1.0.0"
   },
   "scripts": {
-    "pretest": "jsxcs --preset airbnb src/js/**",
+    "pretest": "gulp style-check",
     "test": "gulp test",
     "posttest": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js || rm -rf ./coverage",
     "prestart": "gulp build",
-    "start": "node app.js"
+    "start": "node --harmony app.js"
   },
   "repository": {
     "type": "git",

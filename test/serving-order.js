@@ -1,19 +1,20 @@
-var should = require('should'),
-  sinon = require('sinon'),
-  ServingOrder = require('./../src/js/domain/ServingOrder');
+const should = require('should');
+const   sinon = require('sinon');
+const   ServingOrder = require('./../src/js/domain/ServingOrder');
 
 describe('serving-order', function() {
 
-  var player1 = 'Player Serving as nr 1',
-    player2 = 'Player Serving as nr 2',
-    player3 = 'Player Serving as nr 3',
-    player4 = 'Player Serving as nr 4',
-    servingOrder = new ServingOrder([
-      player1,
-      player2,
-      player3,
-      player4
-    ]);
+  var player1 = 'Player Serving as nr 1';
+  var player2 = 'Player Serving as nr 2';
+  var player3 = 'Player Serving as nr 3';
+  var player4 = 'Player Serving as nr 4';
+  var servingOrder = new ServingOrder([
+    player1,
+    player2,
+    player3,
+    player4
+  ])
+  ;
 
   it('Set ServingOrder', function() {
     var playerToServe = servingOrder.toServe();

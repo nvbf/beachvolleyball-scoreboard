@@ -1,10 +1,9 @@
 /** @jsx React.DOM  */
 'use strict';
-var React = require('react'),
-  Button = require('react-bootstrap/Button'),
-  ScoreboardRow;
+const React = require('react');
+const Button = require('react-bootstrap/Button');
 
-ScoreboardRow = React.createClass({
+var ScoreboardRow = React.createClass({
 
   propTypes: {
     team: React.PropTypes.object.isRequired,
@@ -13,12 +12,13 @@ ScoreboardRow = React.createClass({
   },
 
   render: function() {
-    var players = this.props.team,
-      score = this.props.scoreForThisTeam;
+    var players = this.props.team;
+    var score = this.props.scoreForThisTeam;
+
     return (
       <tr>
         <td>
-            {players.player1} - {players.player2}
+          {players.player1} - {players.player2}
         </td>
         <td className='set'>
           {score[0]}
@@ -30,8 +30,9 @@ ScoreboardRow = React.createClass({
           {score[2]}
         </td>
         <td>
-          <Button className="points btn-primary" type="submit" onClick={this.props.pointsToTeam} disabled={this.props.match.state.finished}>
-          <span className="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+          <Button className="points btn-primary" type="submit" onClick={this.props.pointsToTeam}
+                  disabled={this.props.match.state.finished}>
+            <span className="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
           </Button>
         </td>
       </tr>

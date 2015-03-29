@@ -1,13 +1,13 @@
 /** @jsx React.DOM  */
 'use strict';
-var React = require('react'),
-  NotificationAlerts = require('./NotificationAlerts'),
-  ScoreboardRow = require('./ScoreboardRow'),
-  ServeOrder = require('./ServeOrder'),
-  Timeout = require('./Timeout'),
-  Scoreboard;
+const React = require('react');
+const   NotificationAlerts = require('./NotificationAlerts');
+const   ScoreboardRow = require('./ScoreboardRow');
+const ServeOrder = require('./ServeOrder');
+const   Timeout = require('./Timeout');
 
-Scoreboard = React.createClass({
+
+var Scoreboard = React.createClass({
   displayName: function() {
     return 'Scoreboard';
   },
@@ -53,9 +53,9 @@ Scoreboard = React.createClass({
         this.state.sets[0].score[1],
         this.state.sets[1].score[1],
         this.state.sets[2].score[1]
-      ],
+      ];
 
-      scoreHomeTeam = [
+    var  scoreHomeTeam = [
         this.state.sets[0].score[0],
         this.state.sets[1].score[0],
         this.state.sets[2].score[0]
@@ -65,19 +65,28 @@ Scoreboard = React.createClass({
       <div>
         <div className="container scoreboard">
           <div className="switch-modal">
-            <NotificationAlerts message="Switch" eventTrigger="switch-notification" notification={this.props.match.notification} />
+            <NotificationAlerts message="Switch"
+                                eventTrigger="switch-notification"
+                                notification={this.props.match.notification} />
           </div>
           <div className="set-finished-modal">
-            <NotificationAlerts message="Set finished" eventTrigger="set-notification" notification={this.props.match.notification} />
+            <NotificationAlerts message="Set finished"
+                                eventTrigger="set-notification"
+                                notification={this.props.match.notification} />
           </div>
           <div className="game-finished-modal">
-            <NotificationAlerts message="Match finished" eventTrigger="match-notification" notification={this.props.match.notification} />
+            <NotificationAlerts message="Match finished"
+                                eventTrigger="match-notification"
+                                notification={this.props.match.notification} />
           </div>
           <div className="timeout-alerts">
-            <Timeout seconds={30} message="Timeout: " eventTrigger="timeout-notification" notification={this.props.match.notification} />
+            <Timeout seconds={30} message="Timeout: "
+                     eventTrigger="timeout-notification"
+                     notification={this.props.match.notification} />
           </div>
           <div className="timeout-alerts">
-            <Timeout seconds={60} message="Technical time-out: " eventTrigger="tto-notification" notification={this.props.match.notification} />
+            <Timeout seconds={60} message="Technical time-out: "
+                     eventTrigger="tto-notification" notification={this.props.match.notification} />
           </div>
           <div className="panel panel-default" >
             <div className="panel-heading">

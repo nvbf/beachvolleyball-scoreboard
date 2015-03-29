@@ -1,11 +1,11 @@
 /** @jsx React.DOM  */
 'use strict';
-var React = require('react'),
-  Alert = require('react-bootstrap/Alert'),
-  AlertEventMixin = require('../mixin/AlertEventMixin'),
-  Timeout;
+var React = require('react');
+var   Alert = require('react-bootstrap/Alert');
+var   AlertEventMixin = require('../mixin/AlertEventMixin');
 
-Timeout = React.createClass({
+
+var Timeout = React.createClass({
 
   mixins: [AlertEventMixin],
 
@@ -46,7 +46,8 @@ Timeout = React.createClass({
     return (
       <Alert bsStyle="info" onDismiss={this.handleAlertDismiss} isDismissable={true}>
         {this.props.message} {this.state.secondsLeft}
-      </Alert> );
+      </Alert>
+    );
   }
 });
 

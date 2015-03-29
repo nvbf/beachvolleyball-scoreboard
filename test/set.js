@@ -1,10 +1,8 @@
-'use strict';
-var should = require('should'),
-  sinon = require('sinon'),
-  Set = require(
-    './../src/js/domain/Set'),
-  Team = require('./../src/js/domain/Team'),
-  matchTestUtil = require('./match-test-util');
+const should = require('should');
+const sinon = require('sinon');
+const Set = require('./../src/js/domain/Set');
+const Team = require('./../src/js/domain/Team');
+const matchTestUtil = require('./match-test-util');
 
 describe('Set Logic', function() {
   var option = {
@@ -25,8 +23,8 @@ describe('Set Logic', function() {
   });
 
   it('should send notification on every ', function() {
-    var set = new Set(option),
-      notificationService = {};
+    var set = new Set(option);
+    var  notificationService = {};
 
     notificationService.emit = sinon.spy();
 

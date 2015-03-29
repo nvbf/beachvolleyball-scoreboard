@@ -1,5 +1,5 @@
-var gulp = require('gulp'),
-  paths = ['src/**/*.js', 'src/**/*.css'];
+const  gulp = require('gulp');
+const   paths = ['src/**/*.js', 'src/**/*.css'];
 
 gulp.task('watch', ['build'], function() {
   gulp.watch(paths, ['browserify', 'move-static']);

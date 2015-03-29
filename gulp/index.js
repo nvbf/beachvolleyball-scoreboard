@@ -1,5 +1,5 @@
-var fs = require('fs'),
-  tasks = fs.readdirSync('./gulp/tasks/');
+const fs = require('fs');
+const  tasks = fs.readdirSync('./gulp/tasks/');
 
 tasks.forEach(function(task) {
   require('./tasks/' + task);

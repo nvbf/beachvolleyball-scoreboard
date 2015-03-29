@@ -1,21 +1,20 @@
-'use strict';
-var util = require('util'),
-  EventEmitter = require('events').EventEmitter,
-  Team = require('./Team'),
-  Set = require('./Set'),
-  MatchNotifications = require('./MatchNotifications');
-  
+const util = require('util');
+const EventEmitter = require('events').EventEmitter;
+const Team = require('./Team');
+const Set = require('./Set');
+const MatchNotifications = require('./MatchNotifications');
+
 function Match() {
   var defaultSetOption = {
-      length: 21,
-      switch: 7,
-      tto: 21
-    },
-    thirdSetOption = {
-      length: 15,
-      switch: 5
-    },
-    set1 = new Set(defaultSetOption);
+    length: 21,
+    switch: 7,
+    tto: 21
+  };
+  var thirdSetOption = {
+    length: 15,
+    switch: 5
+  };
+  var set1 = new Set(defaultSetOption);
 
   this.state = {
     hometeam: new Team('', ''),

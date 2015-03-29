@@ -1,10 +1,9 @@
 /** @jsx React.DOM  */
 'use strict';
 
-var React = require('react'),
-  PublicBoard;
+const React = require('react');
 
-PublicBoard = React.createClass({
+var PublicBoard = React.createClass({
   displayName: function() {
     return 'PublicBoard';
   },
@@ -14,33 +13,33 @@ PublicBoard = React.createClass({
     awayteam: React.PropTypes.string.isRequired,
     score: React.PropTypes.array.isRequired
   },
-  
-getDefaultProps: function() {
+
+  getDefaultProps: function() {
     return {
-        hometeam: '',
-        awayteam: '',
-        score: [
-          [0,0],
-          [0,0],
-          [0,0],
-        ]
+      hometeam: '',
+      awayteam: '',
+      score: [
+        [0, 0],
+        [0, 0],
+        [0, 0],
+      ]
     };
-  },  
+  },
 
   render: function() {
     return (
       <div className="publicboard-container">
-      <div className="publicboard">
-        <div className="container scoreboard">
-          <div className="panel panel-default" >
-            <div className="panel-heading">
-              <h2 className="panel-title">Match standing</h2>
-            </div>
-            <div className="panel-body">
-              <table className="table table-striped">
+        <div className="publicboard">
+          <div className="container scoreboard">
+            <div className="panel panel-default">
+              <div className="panel-heading">
+                <h2 className="panel-title">Match standing</h2>
+              </div>
+              <div className="panel-body">
+                <table className="table table-striped">
                   <tr>
                     <td>
-                        {this.props.hometeam}
+                      {this.props.hometeam}
                     </td>
                     <td className='set'>
                       {this.props.score[0]}
@@ -54,7 +53,7 @@ getDefaultProps: function() {
                   </tr>
                   <tr>
                     <td>
-                        {this.props.awayteam}
+                      {this.props.awayteam}
                     </td>
                     <td className='set'>
                       {this.props.score[1]}
@@ -65,12 +64,12 @@ getDefaultProps: function() {
                     <td className='set'>
                       {this.props.score[5]}
                     </td>
-                  </tr>      
-              </table>
+                  </tr>
+                </table>
+              </div>
             </div>
           </div>
         </div>
-      </div>
       </div>
     );
   }

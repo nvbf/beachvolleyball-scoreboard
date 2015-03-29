@@ -1,8 +1,15 @@
-var gulp = require('gulp'),
-  istanbul = require('gulp-istanbul'),
-  mocha = require('gulp-mocha');
+const gulp = require('gulp');
+const istanbul = require('gulp-istanbul');
+const istanbulHarmony = require('istanbul-harmony');
+const mocha = require('gulp-mocha');
 
 gulp.task('test', function(cb) {
+
+  var usedIstanbul = require('gulp-istanbul')
+  var Instrumenter = usedIstanbul.Instrumenter;
+  // Overrides `Instrumenter`
+  usedIstanbul.Instrumenter = istanbulHarmony.Instrumenter;
+
   gulp.src(['./test/**.js', 'src/js/domain/**.js'])
     .pipe(istanbul({includeUntested: true}))
     .pipe(istanbul.hookRequire())

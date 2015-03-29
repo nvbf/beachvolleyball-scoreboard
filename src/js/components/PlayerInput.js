@@ -1,17 +1,16 @@
 /** @jsx React.DOM  */
 'use strict';
 
-var React = require('react'),
-  Input = require('react-bootstrap/Input'),
-  PlayerInput;
+const React = require('react');
+const   Input = require('react-bootstrap/Input');
 
-PlayerInput = React.createClass({
+var PlayerInput = React.createClass({
   displayName: function() {
     return 'PlayerInput';
   },
 
   render: function() {
-    return (//noinspection JSUnusedGlobalSymbols
+    return (
       <div>
         <div className="form-group">
           <Input type="text" id='player1' className="form-control" placeholder="Player 1" />

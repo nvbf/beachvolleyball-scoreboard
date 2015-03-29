@@ -1,6 +1,6 @@
-var should = require('should'),
-  sinon = require('sinon'),
-  VolleyballTechnicalTimeout = require('./../../../src/js/domain/VolleyballTechnicalTimeout');
+var should = require('should');
+var sinon = require('sinon');
+var VolleyballTechnicalTimeout = require('./../../../src/js/domain/VolleyballTechnicalTimeout');
 
 describe('volleyballTechnicalTimeoutTest', function() {
   var volleyballTechnicalTimeout = new VolleyballTechnicalTimeout();

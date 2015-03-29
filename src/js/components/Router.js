@@ -1,65 +1,62 @@
 /** @jsx React.DOM  */
 'use strict';
 
-var React = require('react'),
-    PublicBoard = require('./PublicBoard'),
-    Main = require('./Main'),
-    MatchApi = require('./../domain/MatchApi'),
-    Router;
+const React = require('react');
+const  PublicBoard = require('./PublicBoard');
+const  Main = require('./Main');
+const  MatchApi = require('./../domain/MatchApi');
 
+var Router = React.createClass({
 
-Router = React.createClass({
-  
   displayName: function() {
     return 'Router';
   },
-  
+
   getInitialState: function() {
     return {
-        "hometeam": '',
-        "awayteam": '',
-        "sets": []
+      hometeam: '',
+      awayteam: '',
+      sets: []
     };
   },
-  
-  splitUpKeyValue: function (param) {
-    return param.split('='); 
+
+  splitUpKeyValue: function(param) {
+    return param.split('=');
   },
 
-  areKeyId: function (keyValue) {
+  areKeyId: function(keyValue) {
     return (keyValue[0] === 'match');
   },
-  
+
   render: function() {
     var matchId;
     var _this = this;
     var getParams = document.location.search.substring(1).split('&');
-    var idArgument = 
+    var idArgument =
       getParams
         .map(this.splitUpKeyValue)
         .filter(this.areKeyId);
-        
-    if(idArgument[0]) {
-        matchId = idArgument[0][1];
+
+    if (idArgument[0]) {
+      matchId = idArgument[0][1];
     }
-      
-      
-    if(matchId) {
-        var api = new MatchApi();
-        api.getMatch(matchId, function(ht, aw, s) {
-            this.setState({
-                hometeam: ht,
-                    awayteam: aw,
-                    sets: s
-            })
-          }.bind(this)); 
-        return <PublicBoard 
-                  hometeam={this.state.hometeam} 
-                  awayteam={this.state.awayteam}
-                  score={this.state.sets} 
-                />;
+
+    if (matchId) {
+      var api = new MatchApi();
+      api.getMatch(matchId, function(ht, aw, s) {
+        this.setState({
+          hometeam: ht,
+          awayteam: aw,
+          sets: s
+        })
+      }.bind(this));
+      return <PublicBoard
+        hometeam={this.state.hometeam}
+        awayteam={this.state.awayteam}
+        score={this.state.sets}
+        />;
     } else {
-        return <Main />;
+      return <Main />;
     }
   }
 });

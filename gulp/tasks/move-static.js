@@ -1,7 +1,7 @@
-var gulp = require('gulp'),
-  source = require('vinyl-source-stream'),
-  handleErrors = require('../util/handle-errors'),
-  fs = require('fs');
+const gulp = require('gulp');
+const source = require('vinyl-source-stream');
+const handleErrors = require('../util/handle-errors');
+const fs = require('fs');
 
 function createSingleBundle(path) {
   basedir = __dirname + '/../../';

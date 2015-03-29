@@ -3,14 +3,14 @@ var superagent = require('superagent');
 
 function MatchApi() {
     this.matchNumber = false;
-    this.apiUrl = 'https://scoreboard-api-sindresvendby.c9.io/api/matches/';
+    this.apiUrl = process.env.API;
     return this;
 }
 
 MatchApi.prototype.update = function(match) {
 
-    var apiMatchJsonObject,
-        _this = this;
+    var apiMatchJsonObject;
+    var    _this = this;
 
     apiMatchJsonObject = formatRequestBody(match);
 
@@ -22,8 +22,7 @@ MatchApi.prototype.update = function(match) {
         .end(function(err, res) {
             if (err || !res.ok) {
                 console.log('Oh no! error ' + JSON.stringify(res.body + ' ' + err));
-            }
-            else {
+            } else {
                 match.matchNumber = _this.matchNumber = res.body.id;
             }
         });
@@ -31,8 +30,8 @@ MatchApi.prototype.update = function(match) {
 
 MatchApi.prototype.create = function(match, setMatchUrlState) {
 
-    var apiMatchJsonObject = formatRequestBody(match),
-        _this = this;
+    var apiMatchJsonObject = formatRequestBody(match);
+    var _this = this;
 
     superagent
         .post(this.apiUrl)
@@ -42,8 +41,7 @@ MatchApi.prototype.create = function(match, setMatchUrlState) {
         .end(function(err, res) {
             if (err || !res.ok) {
                 console.log('Oh no! error ' + JSON.stringify(res.body + ' ' + err));
-            }
-            else {
+            } else {
                 match.matchNumber = _this.matchNumber = res.body.id;
                 setMatchUrlState(document.baseURI + '?match=' + res.body.id);
             }
@@ -57,8 +55,7 @@ MatchApi.prototype.getMatch = function(id, setResultState) {
             if (err || !res.ok) {
                 console.log('Oh no! error ' + JSON.stringify(res.body + ' ' + err));
                 return;
-            }
-            else {
+            } else {
                 setResultState(res.body.hometeam, res.body.awayteam, res.body.sets);
             }
         });
@@ -66,9 +63,9 @@ MatchApi.prototype.getMatch = function(id, setResultState) {
 
 
 function formatRequestBody(match) {
-    var homeTeam = match.homeTeam(),
-        awayTeam = match.awayTeam(),
-        sets = [];
+    var homeTeam = match.homeTeam();
+    var awayTeam = match.awayTeam();
+    var sets = [];
 
     match.sets().forEach(function(set) {
         sets.push(set.score[0]);
@@ -76,9 +73,9 @@ function formatRequestBody(match) {
     });
 
     return {
-        "hometeam": homeTeam.player1 + " - " + homeTeam.player2,
-        "awayteam": awayTeam.player1 + " - " + awayTeam.player2,
-        "sets": sets
+        hometeam: homeTeam.player1 + ' - ' + homeTeam.player2,
+        awayteam: awayTeam.player1 + ' - ' + awayTeam.player2,
+        sets: sets
     };
 }
 

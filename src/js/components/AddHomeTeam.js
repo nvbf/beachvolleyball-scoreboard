@@ -1,21 +1,20 @@
 /** @jsx React.DOM  */
 'use strict';
 
-var React = require('react'),
-  Team = require('./../domain/Team'),
-  Button = require('react-bootstrap/Button'),
-  PlayerInput = require('./PlayerInput'),
-  AddHomeTeam;
+const React = require('react');
+const Team = require('./../domain/Team');
+const Button = require('react-bootstrap/Button');
+const PlayerInput = require('./PlayerInput');
 
-AddHomeTeam = React.createClass({
+var AddHomeTeam = React.createClass({
   displayName: function() {
     return 'AddHomeTeam';
   },
 
   handleSubmit: function(e) {
     e.preventDefault();
-    var player1 = document.getElementById('player1').value,
-      player2 = document.getElementById('player2').value;
+    var player1 = document.getElementById('player1').value;
+    var player2 = document.getElementById('player2').value;
 
     if (!player2) {
       document.getElementById('player2').focus();
@@ -35,12 +34,12 @@ AddHomeTeam = React.createClass({
 
   render: function() {
     return (
-      <div className="panel panel-default" >
+      <div className="panel panel-default">
         <div className="panel-heading">
           <h2>Add Home Team</h2>
         </div>
         <div className="panel-body">
-          <form className="add-team-form" onSubmit={this.handleSubmit} >
+          <form className="add-team-form" onSubmit={this.handleSubmit}>
             <PlayerInput />
             <Button type="submit" bsStyle="primary" className="pull-right">
               Add Team

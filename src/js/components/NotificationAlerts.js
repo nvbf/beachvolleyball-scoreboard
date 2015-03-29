@@ -1,9 +1,9 @@
 /** @jsx React.DOM  */
 'use strict';
 
-var React = require('react'),
-  AlertEventMixin = require('../mixin/AlertEventMixin'),
-  Alert = require('react-bootstrap/Alert');
+const React = require('react');
+const  AlertEventMixin = require('../mixin/AlertEventMixin');
+const  Alert = require('react-bootstrap/Alert');
 
 var NotificationAlerts = React.createClass({
 

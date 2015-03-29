@@ -1,26 +1,25 @@
 /** @jsx React.DOM  */
 'use strict';
 
-var React = require('react'),
-  Match = require('./../domain/Match'),
-  AddHomeTeam = require('./AddHomeTeam'),
-  AddAwayTeam = require('./AddAwayTeam'),
-  Scoreboard = require('./Scoreboard'),
-  Navbar = require('react-bootstrap/Navbar'),
-  Input = require('react-bootstrap/Input'),
-  Nav = require('react-bootstrap/Nav'),
-  Button = require('react-bootstrap/Button'),
-  MenuItem = require('react-bootstrap/MenuItem'),
-  MatchNotifications = require('./../domain/MatchNotifications'),
-  MatchApi = require('./../domain/MatchApi'),
-  PublicBoard = require('./PublicBoard'),
-  match = new Match(),
-  matchApi = new MatchApi(),
-  Main;
+const React = require('react');
+const Match = require('./../domain/Match');
+const AddHomeTeam = require('./AddHomeTeam');
+const AddAwayTeam = require('./AddAwayTeam');
+const Scoreboard = require('./Scoreboard');
+const Navbar = require('react-bootstrap/Navbar');
+const Input = require('react-bootstrap/Input');
+const Nav = require('react-bootstrap/Nav');
+const Button = require('react-bootstrap/Button');
+const MenuItem = require('react-bootstrap/MenuItem');
+const MatchNotifications = require('./../domain/MatchNotifications');
+const MatchApi = require('./../domain/MatchApi');
+const PublicBoard = require('./PublicBoard');
+const match = new Match();
+const matchApi = new MatchApi();
 
 match.notification = new MatchNotifications(match, matchApi);
 
-Main = React.createClass({
+var Main = React.createClass({
   displayName: function() {
     return 'Main';
   },
@@ -47,55 +46,52 @@ Main = React.createClass({
     match.notification.emit('timeout-notification');
   },
 
-  
-  showMatchUrl:  function() {
-    if(this.state.publicMatch) {
+  showMatchUrl: function() {
+    if (this.state.publicMatch) {
       var _this = this;
-      if(!this.state.matchUrl) {
+      if (!this.state.matchUrl) {
         matchApi.create(
-          match, 
+          match,
           function(matchUrl) {
-            _this.setState( { 'matchUrl': matchUrl });
+            _this.setState({matchUrl: matchUrl});
           }
-      )}
-      
-      
+        )
+      }
+
       return (
         <MenuItem>
           {this.state.matchUrl}
         </MenuItem>
-        );
+      );
     } else {
       return;
     }
   },
-  
+
   doMatchPublic: function() {
     this.setState({
-      publicMatch : !this.state.publicMatch
+      publicMatch: !this.state.publicMatch
     });
   },
-  
+
   render: function() {
-    
-    var show = this.state.show,
-      changeState = this.changeState();
+
+    var show = this.state.show;
+    var changeState = this.changeState();
 
     if (show === 'AddHomeTeam') {
       return (
         <main>
-          <AddHomeTeam changeState={changeState} match={match} />
+          <AddHomeTeam changeState={changeState} match={match}/>
         </main>
       );
-    }
-    else if (show === 'AddAwayTeam') {
+    } else if (show === 'AddAwayTeam') {
       return (
         <main>
-          <AddAwayTeam changeState={changeState} match={match} />
+          <AddAwayTeam changeState={changeState} match={match}/>
         </main>
       );
-    }
-    else {
+    } else {
       return (
         <section>
           <Navbar>

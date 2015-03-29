@@ -1,6 +1,6 @@
-var express = require('express'),
-  app = express(),
-  server;
+var express = require('express');
+var  app = express();
+var server;
 
 app.use(express.static(__dirname + '/public'));
 

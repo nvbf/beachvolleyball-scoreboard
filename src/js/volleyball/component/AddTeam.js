@@ -1,10 +1,8 @@
 /** @jsx React.DOM  */
 'use strict';
+var React = require('react');
 
-var React = require('react'),
-  AddTeam;
-
-AddTeam = React.createClass({
+var AddTeam = React.createClass({
   displayName: function() {
     return 'AddTeam';
   },

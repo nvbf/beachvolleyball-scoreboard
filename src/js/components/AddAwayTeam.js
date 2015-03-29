@@ -1,21 +1,20 @@
 /** @jsx React.DOM  */
 'use strict';
 
-var React = require('react'),
-  Team = require('./../domain/Team'),
-  Button = require('react-bootstrap/Button'),
-  PlayerInput = require('./PlayerInput'),
-  AddAwayTeam;
+const React = require('react');
+const Team = require('./../domain/Team');
+const Button = require('react-bootstrap/Button');
+const PlayerInput = require('./PlayerInput');
 
-AddAwayTeam = React.createClass({
+var AddAwayTeam = React.createClass({
   displayName: function() {
     return 'AddAwayTeam';
   },
 
   handleSubmit: function(e) {
     e.preventDefault();
-    var player1 = document.getElementById('player1').value,
-      player2 = document.getElementById('player2').value;
+    var player1 = document.getElementById('player1').value;
+    var player2 = document.getElementById('player2').value;
 
     if (!player2) {
       document.getElementById('player2').focus();
@@ -35,7 +34,7 @@ AddAwayTeam = React.createClass({
 
   render: function() {
     return (
-      <div className="panel panel-default" >
+      <div className="panel panel-default">
         <div className="panel-heading">
           <h2>Add Away Team</h2>
         </div>

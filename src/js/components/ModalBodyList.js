@@ -1,12 +1,11 @@
 /** @jsx React.DOM  */
 'use strict';
 
-var React = require('react'),
-  ListGroup = require('react-bootstrap/ListGroup'),
-  ListGroupItem = require('react-bootstrap/ListGroupItem'),
-  ModalBodyList;
+const React = require('react');
+const  ListGroup = require('react-bootstrap/ListGroup');
+const  ListGroupItem = require('react-bootstrap/ListGroupItem');
 
-ModalBodyList = React.createClass({
+var ModalBodyList = React.createClass({
   displayName: function() {
     return 'ModalBodyList';
   },

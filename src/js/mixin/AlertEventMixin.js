@@ -1,10 +1,9 @@
 /** @jsx React.DOM  */
 'use strict';
 
-var React = require('react'),
-  AlertEventMixin;
+var React = require('react');
 
-AlertEventMixin = {
+var AlertEventMixin = {
 
   propTypes: {
     eventTrigger: React.PropTypes.string.isRequired,

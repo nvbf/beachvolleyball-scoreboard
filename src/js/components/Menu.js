@@ -1,10 +1,10 @@
 /** @jsx React.DOM  */
 'use strict';
 
-var React = require('react'),
-  Menu;
+const React = require('react');
 
-Menu = React.createClass({
+
+var Menu = React.createClass({
   displayName: function() {
     return 'Menu';
   },
