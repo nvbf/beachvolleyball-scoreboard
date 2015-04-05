@@ -13,4 +13,8 @@ Team.prototype.players = function() {
   }
 };
 
+Team.prototype.display = function() {
+  return this.state.player1 + ' - ' + this.state.player2
+};
+
 module.exports = Team;

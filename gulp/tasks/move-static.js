@@ -55,7 +55,15 @@ gulp.task('move-static', ['clean'], function() {
         output: './public/js/'
       },
       {
+        input: './node_modules/es6-shim/es6-shim.map',
+        output: './public/js/'
+      },
+      {
         input: './node_modules/es5-shim/es5-shim.min.js',
+        output: './public/js'
+      },
+      {
+        input: './node_modules/es5-shim/es5-shim.map',
         output: './public/js'
       },
       {

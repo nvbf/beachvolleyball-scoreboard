@@ -8,7 +8,8 @@ function Match() {
   var defaultSetOption = {
     length: 21,
     switch: 7,
-    tto: 21
+    tto: 21,
+    timeoutLimit: 1
   };
   var thirdSetOption = {
     length: 15,

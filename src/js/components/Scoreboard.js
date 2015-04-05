@@ -1,10 +1,10 @@
-/** @jsx React.DOM  */
 'use strict';
+
 const React = require('react');
-const   NotificationAlerts = require('./NotificationAlerts');
-const   ScoreboardRow = require('./ScoreboardRow');
+const NotificationAlerts = require('./NotificationAlerts');
+const ScoreboardRow = require('./ScoreboardRow');
 const ServeOrder = require('./ServeOrder');
-const   Timeout = require('./Timeout');
+const Timeout = require('./Timeout');
 
 
 var Scoreboard = React.createClass({

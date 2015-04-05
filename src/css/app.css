@@ -163,6 +163,10 @@ table {
   }
 }
 
+.disabled {
+  color: lightgray;
+  cursor: not-allowed;
+}
 
 .list-group-item {
    cursor: pointer;

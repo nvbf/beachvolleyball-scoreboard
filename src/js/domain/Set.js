@@ -6,6 +6,11 @@ function Set(option) {
   this.switch = option.switch;
   this.tto = option.tto;
   this.servingOrder;
+  this.timeoutLimit = option.timeoutLimit;
+  this.timeout = {
+    homeTeam: 0,
+    awayTeam: 0
+  };
 
   this.addPoint = function(teamIndex) {
     this.score[teamIndex]++;
@@ -72,5 +77,25 @@ Set.prototype.isFinished = function() {
 Set.prototype.hasStarted = function() {
   return !(this.score[0] === 0 && this.score[1] === 0);
 };
+
+Set.prototype.canAwayTeamTakeTimeout = function() {
+  return canTeamTakeTimeout(this, 'awayteam');
+};
+
+Set.prototype.canHomeTeamTakeTimeout = function() {
+  return canTeamTakeTimeout(this, 'hometeam');
+};
+
+function canTeamTakeTimeout(Set, side) {
+  let timeoutsTaken = Set.timeout[side];
+  return timeoutsTaken < Set.timeoutLimit;
+}
+
+/**
+ * TODO: implement
+ */
+function takeTakeTimeout(Set, side) {
+  throw new Error('Not implmented');
+}
 
 module.exports = Set;

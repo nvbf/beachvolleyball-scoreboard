@@ -1,22 +1,25 @@
-const gulp = require('gulp');
-const istanbul = require('gulp-istanbul');
-const istanbulHarmony = require('istanbul-harmony');
-const mocha = require('gulp-mocha');
+var gulp = require('gulp');
+var babel = require('gulp-babel');
+var istanbul = require('gulp-istanbul');
+var mocha = require('gulp-mocha');
+var isparta = require('isparta');
 
 gulp.task('test', function(cb) {
-
-  var usedIstanbul = require('gulp-istanbul')
-  var Instrumenter = usedIstanbul.Instrumenter;
-  // Overrides `Instrumenter`
-  usedIstanbul.Instrumenter = istanbulHarmony.Instrumenter;
-
   gulp.src(['./test/**.js', 'src/js/domain/**.js'])
-    .pipe(istanbul({includeUntested: true}))
+    .pipe(babel())
+    .pipe(istanbul({
+        includeUntested: true,
+        instrumenter: isparta.Instrumenter
+      }
+    ))
     .pipe(istanbul.hookRequire())
     .on('finish', function() {
       gulp.src(['test/*.js'])
+        .pipe(babel())
         .pipe(mocha())
-        .pipe(istanbul.writeReports())
+        .pipe(istanbul.writeReports({
+          reporters: ['lcovonly']
+        }))
         .on('end', cb);
     });
 });

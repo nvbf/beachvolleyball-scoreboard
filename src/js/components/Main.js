@@ -1,4 +1,3 @@
-/** @jsx React.DOM  */
 'use strict';
 
 const React = require('react');
@@ -7,13 +6,11 @@ const AddHomeTeam = require('./AddHomeTeam');
 const AddAwayTeam = require('./AddAwayTeam');
 const Scoreboard = require('./Scoreboard');
 const Navbar = require('react-bootstrap/Navbar');
-const Input = require('react-bootstrap/Input');
 const Nav = require('react-bootstrap/Nav');
-const Button = require('react-bootstrap/Button');
+const DropdownButton = require('react-bootstrap/DropdownButton');
 const MenuItem = require('react-bootstrap/MenuItem');
 const MatchNotifications = require('./../domain/MatchNotifications');
 const MatchApi = require('./../domain/MatchApi');
-const PublicBoard = require('./PublicBoard');
 const match = new Match();
 const matchApi = new MatchApi();
 
@@ -42,7 +39,7 @@ var Main = React.createClass({
     };
   },
 
-  showTimeout: function() {
+  showTimeout: function(e) {
     match.notification.emit('timeout-notification');
   },
 
@@ -96,9 +93,12 @@ var Main = React.createClass({
         <section>
           <Navbar>
             <Nav>
-              <MenuItem onSelect={this.showTimeout}>Timeout</MenuItem>
-              <MenuItem href="#">Logg inn</MenuItem>
-              <MenuItem onSelect={this.doMatchPublic}>
+              <DropdownButton title="Timeout">
+                <MenuItem onSelect={this.showTimeout()}>{match.state.hometeam.display()}</MenuItem>
+                <MenuItem onSelect={this.showTimeout}>{match.state.awayteam.display()}</MenuItem>
+              </DropdownButton>
+              {/* <MenuItem href="#">Logg inn</MenuItem> -*/}
+              <MenuItem onSelect={this.doMatchPublic} ref="public">
                 Public
               </MenuItem>
               {this.showMatchUrl()}

@@ -22,7 +22,7 @@ var ServeOrder = React.createClass({
 
   getInitialState: function() {
     return {
-      isModalOpen: false,
+      isModalOpen: true,
       order: []
     };
   },

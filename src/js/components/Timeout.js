@@ -1,4 +1,3 @@
-/** @jsx React.DOM  */
 'use strict';
 var React = require('react');
 var   Alert = require('react-bootstrap/Alert');

@@ -8,6 +8,7 @@
     "node": "0.10.38"
   },
   "dependencies": {
+    "babelify": "^6.0.1",
     "bluebird": "^2.9.14",
     "bootstrap": "^3.3.1",
     "browserify": "^7.0.0",
@@ -17,12 +18,14 @@
     "envify": "~1.2.1",
     "es5-shim": "^4.0.5",
     "es6-shim": "^0.22.2",
-    "es6ify": "1.6.0",
     "express": "4.12.3",
     "gulp": "3.8.10",
-    "gulp-istanbul": "^0.5.0",
+    "gulp-babel": "^5.0.0",
+    "gulp-istanbul": "0.8.1",
     "gulp-mocha": "2.0.0",
     "gulp-notify": "2.1.0",
+    "gulp-sourcemaps": "^1.5.1",
+    "isparta": "^3.0.0",
     "istanbul-harmony": "0.3.12",
     "node-jsx": "^0.12.4",
     "react": "^0.12.1",
@@ -40,7 +43,7 @@
     "test": "gulp test",
     "posttest": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js | rm -rf ./coverage",
     "prestart": "gulp build",
-    "start": "node --harmony app.js"
+    "start": "node app.js"
   },
   "repository": {
     "type": "git",

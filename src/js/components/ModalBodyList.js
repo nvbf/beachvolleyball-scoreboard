@@ -1,4 +1,3 @@
-/** @jsx React.DOM  */
 'use strict';
 
 const React = require('react');
@@ -15,7 +14,9 @@ var ModalBodyList = React.createClass({
     chosenSecondItem: React.PropTypes.func.isRequired,
     firstItemText: React.PropTypes.string.isRequired,
     secondItemText: React.PropTypes.string.isRequired,
-    footerText: React.PropTypes.string
+    footerText: React.PropTypes.string,
+    firstDisabled: React.PropTypes.bool,
+    secondDisabled: React.PropTypes.bool
   },
 
   render: function() {
