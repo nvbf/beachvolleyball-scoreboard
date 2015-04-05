@@ -22,6 +22,7 @@ Prerequisit: Install
 
 `npm start`
 
+It will then open on localhost:3000 by defaul
 
 ### Test
 Prerequisit: Install
