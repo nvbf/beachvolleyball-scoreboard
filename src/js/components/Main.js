@@ -39,8 +39,36 @@ var Main = React.createClass({
     };
   },
 
-  showTimeout: function(e) {
+  showTimeout: function() {
     match.notification.emit('timeout-notification');
+  },
+
+  timeoutHomeTeam: function() {
+    let set = match.getCurrentSet();
+    set.homeTeamTakesTimeout();
+    this.showTimeout();
+  },
+
+  timeoutAwayTeam: function() {
+    let set = match.getCurrentSet();
+    set.awayTeamTakesTimeout();
+    this.showTimeout();
+  },
+
+  showHomeTeamAsDisabled() {
+    let set = match.getCurrentSet();
+    if (set.canHomeTeamTakeTimeout()) {
+      return '';
+    }
+    return 'disabled';
+  },
+
+  showAwayTeamAsDisabled() {
+    let set = match.getCurrentSet();
+    if (set.canAwayTeamTakeTimeout()) {
+      return '';
+    }
+    return 'disabled';
   },
 
   showMatchUrl: function() {
@@ -94,10 +122,9 @@ var Main = React.createClass({
           <Navbar>
             <Nav>
               <DropdownButton title="Timeout">
-                <MenuItem onSelect={this.showTimeout()}>{match.state.hometeam.display()}</MenuItem>
-                <MenuItem onSelect={this.showTimeout}>{match.state.awayteam.display()}</MenuItem>
+                <MenuItem className={this.showHomeTeamAsDisabled()} onSelect={this.timeoutHomeTeam}>{match.state.hometeam.display()}</MenuItem>
+                <MenuItem className={this.showAwayTeamAsDisabled()} onSelect={this.timeoutAwayTeam}>{match.state.awayteam.display()}</MenuItem>
               </DropdownButton>
-              {/* <MenuItem href="#">Logg inn</MenuItem> -*/}
               <MenuItem onSelect={this.doMatchPublic} ref="public">
                 Public
               </MenuItem>

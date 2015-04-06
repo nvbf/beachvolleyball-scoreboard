@@ -79,23 +79,29 @@ Set.prototype.hasStarted = function() {
 };
 
 Set.prototype.canAwayTeamTakeTimeout = function() {
-  return canTeamTakeTimeout(this, 'awayteam');
+  return canTeamTakeTimeout(this, 'awayTeam');
 };
 
 Set.prototype.canHomeTeamTakeTimeout = function() {
-  return canTeamTakeTimeout(this, 'hometeam');
+  return canTeamTakeTimeout(this, 'homeTeam');
 };
+
+Set.prototype.homeTeamTakesTimeout = function() {
+  takeTimeout(this, 'homeTeam');
+};
+
+Set.prototype.awayTeamTakesTimeout = function() {
+  takeTimeout(this, 'awayTeam');
+};
+
 
 function canTeamTakeTimeout(Set, side) {
   let timeoutsTaken = Set.timeout[side];
   return timeoutsTaken < Set.timeoutLimit;
 }
 
-/**
- * TODO: implement
- */
-function takeTakeTimeout(Set, side) {
-  throw new Error('Not implmented');
+function takeTimeout(Set, side) {
+  Set.timeout[side]++;
 }
 
 module.exports = Set;
