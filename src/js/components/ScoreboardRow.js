@@ -1,6 +1,6 @@
 'use strict';
 const React = require('react');
-const Button = require('react-bootstrap/Button');
+const Button = require('react-bootstrap').Button;
 
 var ScoreboardRow = React.createClass({
 

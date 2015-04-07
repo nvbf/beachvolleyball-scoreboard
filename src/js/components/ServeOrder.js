@@ -1,9 +1,9 @@
 const React = require('react');
-const ButtonToolbar = require('react-bootstrap/ButtonToolbar');
-const Button = require('react-bootstrap/Button');
-const Alert = require('react-bootstrap/Alert');
-const OverlayMixin = require('react-bootstrap/OverlayMixin');
-const Modal = require('react-bootstrap/Modal');
+const ButtonToolbar = require('react-bootstrap').ButtonToolbar;
+const Button = require('react-bootstrap').Button;
+const Alert = require('react-bootstrap').Alert;
+const OverlayMixin = require('react-bootstrap').OverlayMixin;
+const Modal = require('react-bootstrap').Modal;
 const ModalBodyList = require('./ModalBodyList');
 const ServingOrder = require('./../domain/ServingOrder');
 

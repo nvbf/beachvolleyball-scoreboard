@@ -1,7 +1,7 @@
 'use strict';
 
 const React = require('react');
-const   Input = require('react-bootstrap/Input');
+const   Input = require('react-bootstrap').Input;
 
 var PlayerInput = React.createClass({
   displayName: function() {

@@ -1,6 +1,6 @@
 'use strict';
 var React = require('react');
-var   Alert = require('react-bootstrap/Alert');
+var   Alert = require('react-bootstrap').Alert;
 var   AlertEventMixin = require('../mixin/AlertEventMixin');
 
 

@@ -1,8 +1,8 @@
 'use strict';
 
 const React = require('react');
-const  ListGroup = require('react-bootstrap/ListGroup');
-const  ListGroupItem = require('react-bootstrap/ListGroupItem');
+const  ListGroup = require('react-bootstrap').ListGroup;
+const  ListGroupItem = require('react-bootstrap').ListGroupItem;
 
 var ModalBodyList = React.createClass({
   displayName: function() {

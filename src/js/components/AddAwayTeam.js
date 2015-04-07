@@ -2,7 +2,7 @@
 
 const React = require('react');
 const Team = require('./../domain/Team');
-const Button = require('react-bootstrap/Button');
+const Button = require('react-bootstrap').Button;
 const PlayerInput = require('./PlayerInput');
 
 var AddAwayTeam = React.createClass({
