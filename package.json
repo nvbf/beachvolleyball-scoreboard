@@ -39,7 +39,6 @@
     "vinyl-source-stream": "1.0.0"
   },
   "scripts": {
-    "pretest": "gulp style-check",
     "test": "gulp test",
     "posttest": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js | rm -rf ./coverage",
     "prestart": "gulp build",
