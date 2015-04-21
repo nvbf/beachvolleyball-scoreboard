@@ -10,7 +10,7 @@ var AlertEventMixin = {
     message: React.PropTypes.string.isRequired
   },
 
-  componentDidMount: function() {
+  componentDidMount() {
     this.props.notification.on(this.props.eventTrigger, function() {
       this.setState({
         alertVisible: true
@@ -18,20 +18,20 @@ var AlertEventMixin = {
     }.bind(this));
   },
 
-  handleAlertDismiss: function() {
+  handleAlertDismiss() {
     this.replaceState(this.getInitialState());
     if (this.handleAlertDismissOverlay) {
       this.handleAlertDismissOverlay();
     }
   },
 
-  getInitialState: function() {
+  getInitialState() {
     return {
       alertVisible: false
     };
   },
 
-  render: function() {
+  render() {
     if (this.state.alertVisible) {
       return this.renderOverlay();
     } else {

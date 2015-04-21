@@ -10,7 +10,7 @@ var ScoreboardRow = React.createClass({
     pointsToTeam: React.PropTypes.func.isRequired
   },
 
-  render: function() {
+  render() {
     var players = this.props.team;
     var score = this.props.scoreForThisTeam;
 

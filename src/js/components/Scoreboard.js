@@ -8,7 +8,7 @@ const Timeout = require('./Timeout');
 
 
 var Scoreboard = React.createClass({
-  displayName: function() {
+  displayName() {
     return 'Scoreboard';
   },
 
@@ -16,22 +16,18 @@ var Scoreboard = React.createClass({
     match: React.PropTypes.object.isRequired
   },
 
-  componentDidMount: function() {
+  componentDidMount() {
     this.props.match.notification.on('match-notification', function() {
       this.props.match.state.finished = true;
       this.setState(this.props.match.state);
     }.bind(this));
   },
 
-  handleHide: function() {
-    this.refs.changeSideDialog.hidden();
-  }.bind(this),
-
-  getInitialState: function() {
+  getInitialState() {
     return this.props.match.state;
   },
 
-  pointToHomeTeam: function(event) {
+  pointToHomeTeam(event) {
     return function(event) {
       event.preventDefault();
       this.props.match.getCurrentSet().addPointHomeTeam();
@@ -39,7 +35,7 @@ var Scoreboard = React.createClass({
     }.bind(this)
   },
 
-  pointToAwayTeam: function(event) {
+  pointToAwayTeam(event) {
     return function(event) {
       event.preventDefault();
       this.props.match.getCurrentSet().addPointAwayTeam();
@@ -47,7 +43,7 @@ var Scoreboard = React.createClass({
     }.bind(this)
   },
 
-  render: function() {
+  render() {
 
     var scoreAwayTeam = [
         this.state.sets[0].score[1],

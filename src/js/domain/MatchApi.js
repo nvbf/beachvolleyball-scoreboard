@@ -1,9 +1,10 @@
 'use strict';
-var superagent = require('superagent');
+const superagent = require('superagent');
+const util = require('util');
 
 function MatchApi() {
     this.matchNumber = false;
-    this.apiUrl = process.env.API;
+    this.internalApi = '/api/matches/';
     return this;
 }
 
@@ -15,7 +16,7 @@ MatchApi.prototype.update = function(match) {
     apiMatchJsonObject = formatRequestBody(match);
 
     superagent
-        .put(this.apiUrl + this.matchNumber)
+        .put(this.internalApi + this.matchNumber)
         .send(apiMatchJsonObject)
         .set('Accept', 'application/json')
         .set('Content-Type', 'application/json')
@@ -23,7 +24,8 @@ MatchApi.prototype.update = function(match) {
             if (err || !res.ok) {
                 console.log('Oh no! error ' + JSON.stringify(res.body + ' ' + err));
             } else {
-                match.matchNumber = _this.matchNumber = res.body.id;
+                var responds = JSON.parse(res.text);
+                match.matchNumber = _this.matchNumber = responds.id;
             }
         });
 };
@@ -34,7 +36,7 @@ MatchApi.prototype.create = function(match, setMatchUrlState) {
     var _this = this;
 
     superagent
-        .post(this.apiUrl)
+        .post(this.internalApi)
         .send(apiMatchJsonObject)
         .set('Accept', 'application/json')
         .set('Content-Type', 'application/json')
@@ -42,21 +44,23 @@ MatchApi.prototype.create = function(match, setMatchUrlState) {
             if (err || !res.ok) {
                 console.log('Oh no! error ' + JSON.stringify(res.body + ' ' + err));
             } else {
-                match.matchNumber = _this.matchNumber = res.body.id;
-                setMatchUrlState(document.baseURI + '?match=' + res.body.id);
+                var responds = JSON.parse(res.text);
+                match.matchNumber = _this.matchNumber = responds.id;
+                setMatchUrlState(document.baseURI + '?match=' + responds.id);
             }
         });
 };
 
 MatchApi.prototype.getMatch = function(id, setResultState) {
     superagent
-        .get(this.apiUrl + id)
+        .get(this.internalApi + id)
         .end(function(err, res) {
             if (err || !res.ok) {
                 console.log('Oh no! error ' + JSON.stringify(res.body + ' ' + err));
                 return;
             } else {
-                setResultState(res.body.hometeam, res.body.awayteam, res.body.sets);
+                var responds = JSON.parse(res.text);
+                setResultState(responds.hometeam, responds.awayteam, responds.sets);
             }
         });
 };
@@ -78,5 +82,7 @@ function formatRequestBody(match) {
         sets: sets
     };
 }
+
+
 
 module.exports = MatchApi;

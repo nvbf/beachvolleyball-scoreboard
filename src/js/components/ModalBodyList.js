@@ -5,7 +5,7 @@ const  ListGroup = require('react-bootstrap').ListGroup;
 const  ListGroupItem = require('react-bootstrap').ListGroupItem;
 
 var ModalBodyList = React.createClass({
-  displayName: function() {
+  displayName() {
     return 'ModalBodyList';
   },
 
@@ -19,7 +19,7 @@ var ModalBodyList = React.createClass({
     secondDisabled: React.PropTypes.bool
   },
 
-  render: function() {
+  render() {
     return (
       <div className="modal-body">
         <ListGroup>

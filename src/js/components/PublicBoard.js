@@ -1,31 +1,44 @@
 'use strict';
-
 const React = require('react');
+const MatchApi = require('./../domain/MatchApi');
 
 var PublicBoard = React.createClass({
-  displayName: function() {
+  displayName() {
     return 'PublicBoard';
   },
 
   propTypes: {
-    hometeam: React.PropTypes.string.isRequired,
-    awayteam: React.PropTypes.string.isRequired,
-    score: React.PropTypes.array.isRequired
+    matchId: React.PropTypes.string.isRequired
   },
 
-  getDefaultProps: function() {
+  componentDidMount() {
+    var api = new MatchApi();
+    this.intervalId = setInterval(function() {
+      api.getMatch(this.props.matchId, function(hTeam, aTeam, score) {
+        this.setState({
+          hometeam: hTeam,
+          awayteam: aTeam,
+          score: score
+        })
+      }.bind(this))
+    }.bind(this), 1000);
+  },
+
+  componentWillUnmount() {
+    clearInterval(this.intervalId);
+  },
+
+  getInitialState() {
     return {
-      hometeam: '',
-      awayteam: '',
+      hometeam: 'Loading players... ',
+      awayteam: 'Loading players... ',
       score: [
-        [0, 0],
-        [0, 0],
-        [0, 0],
+        0, 0, 0, 0, 0, 0
       ]
     };
   },
 
-  render: function() {
+  render() {
     return (
       <div className="publicboard-container">
         <div className="publicboard">
@@ -38,30 +51,30 @@ var PublicBoard = React.createClass({
                 <table className="table table-striped">
                   <tr>
                     <td>
-                      {this.props.hometeam}
+                      {this.state.hometeam}
                     </td>
                     <td className='set'>
-                      {this.props.score[0]}
+                      {this.state.score[0]}
                     </td>
                     <td className='set'>
-                      {this.props.score[2]}
+                      {this.state.score[2]}
                     </td>
                     <td className='set'>
-                      {this.props.score[4]}
+                      {this.state.score[4]}
                     </td>
                   </tr>
                   <tr>
                     <td>
-                      {this.props.awayteam}
+                      {this.state.awayteam}
                     </td>
                     <td className='set'>
-                      {this.props.score[1]}
+                      {this.state.score[1]}
                     </td>
                     <td className='set'>
-                      {this.props.score[3]}
+                      {this.state.score[3]}
                     </td>
                     <td className='set'>
-                      {this.props.score[5]}
+                      {this.state.score[5]}
                     </td>
                   </tr>
                 </table>

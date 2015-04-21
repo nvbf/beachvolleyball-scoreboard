@@ -8,19 +8,19 @@ const ModalBodyList = require('./ModalBodyList');
 const ServingOrder = require('./../domain/ServingOrder');
 
 var ServeOrder = React.createClass({
-  displayName: function() {
+  displayName() {
     return 'ServeOrder';
   },
 
   mixins: [OverlayMixin],
 
-  handleToggle: function() {
+  handleToggle() {
     this.setState({
       isModalOpen: !this.state.isModalOpen
     });
   },
 
-  getInitialState: function() {
+  getInitialState() {
     return {
       isModalOpen: true,
       order: []
@@ -31,21 +31,21 @@ var ServeOrder = React.createClass({
     match: React.PropTypes.object.isRequired
   },
 
-  awayTeamStarts: function() {
+  awayTeamStarts() {
     this.props.match.getCurrentSet().setStartServing('awayteam');
     this.setState({
       startToServe: 'awayteam'
     })
   },
 
-  homeTeamStarts: function() {
+  homeTeamStarts() {
     this.props.match.getCurrentSet().setStartServing('hometeam');
     this.setState({
       startToServe: 'hometeam'
     })
   },
 
-  componentDidMount: function() {
+  componentDidMount() {
     this.props.match.notification.on('switch-server', function() {
       var servingOrder = this.state.servingOrder;
       if (servingOrder) {
@@ -61,7 +61,7 @@ var ServeOrder = React.createClass({
     }.bind(this));
   },
 
-  render: function() {
+  render() {
     if (this.state.order.length === 4) {
       return (
         <section>
@@ -84,7 +84,7 @@ var ServeOrder = React.createClass({
     );
   },
 
-  chosenPlayer: function(names) {
+  chosenPlayer(names) {
     return function() {
       var order = this.state.order;
       var state = {};
@@ -107,7 +107,7 @@ var ServeOrder = React.createClass({
     }.bind(this)
   },
 
-  renderOverlay: function() {
+  renderOverlay() {
     var modalBodyList;
     var awayTeam = this.props.match.awayTeam();
     var homeTeam = this.props.match.homeTeam();

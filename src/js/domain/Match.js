@@ -2,7 +2,6 @@ const util = require('util');
 const EventEmitter = require('events').EventEmitter;
 const Team = require('./Team');
 const Set = require('./Set');
-const MatchNotifications = require('./MatchNotifications');
 
 function Match() {
   var defaultSetOption = {

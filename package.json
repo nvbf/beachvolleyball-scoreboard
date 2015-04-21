@@ -10,6 +10,7 @@
   "dependencies": {
     "babelify": "6.0.1",
     "bluebird": "2.9.14",
+    "body-parser": "1.12.3",
     "bootstrap": "3.3.1",
     "browserify": "7.0.0",
     "const": "1.0.0",
@@ -36,7 +37,8 @@
     "sinon": "1.12.2",
     "sol-style-check": "1.2.0",
     "superagent": "1.1.0",
-    "vinyl-source-stream": "1.0.0"
+    "vinyl-source-stream": "1.0.0",
+    "winston": "1.0.0"
   },
   "scripts": {
     "test": "gulp test",

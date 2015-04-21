@@ -30,11 +30,11 @@ describe('Test Match Util functions', function() {
   };
 
   it('Setting state', function() {
-    var  match;
+    var match;
     var score = [new Set(option), new Set(option), new Set(option)];
-    score[0].scoreForThisTeam = [19, 21];
-    score[1].scoreForThisTeam = [23, 21];
-    score[2].scoreForThisTeam = [13, 14];
+    score[0] = [19, 21];
+    score[1] = [23, 21];
+    score[2] = [13, 14];
     match = matchTestUtil.setScoreToTest(score);
     match.state.currentSet.should.be.equal(2);
     match.state.currentSetScore.should.eql([13, 14]);

@@ -2,7 +2,7 @@
 var React = require('react');
 
 var AddTeam = React.createClass({
-  displayName: function() {
+  displayName() {
     return 'AddTeam';
   },
 
@@ -10,7 +10,7 @@ var AddTeam = React.createClass({
     optionalArray: React.PropTypes.array
   },
 
-  render: function() {
+  render() {
     return (
       <div className="panel panel-default" >
         <div className="panel-heading">

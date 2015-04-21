@@ -12,13 +12,13 @@ var Timeout = React.createClass({
     seconds: React.PropTypes.number.isRequired
   },
 
-  getInitialState: function() {
+  getInitialState() {
     return {
       secondsLeft: this.props.seconds
     };
   },
 
-  tick: function() {
+  tick() {
     if (this.state.secondsLeft === -5) {
       this.handleAlertDismiss();
     } else {
@@ -26,22 +26,22 @@ var Timeout = React.createClass({
     }
   },
 
-  componentDidMount: function() {
-    this.props.notification.on(this.props.eventTrigger, function() {
+  componentDidMount() {
+    this.props.notification.on(this.props.eventTrigger, () => {
       if (!this.state.interval) {
         this.interval = setInterval(this.tick, 1000);
         this.setState({
           interval: true
         });
       }
-    }.bind(this));
+    });
   },
 
-  handleAlertDismissOverlay: function() {
+  handleAlertDismissOverlay() {
     clearInterval(this.interval);
   },
 
-  renderOverlay: function() {
+  renderOverlay() {
     return (
       <Alert bsStyle="info" onDismiss={this.handleAlertDismiss} isDismissable={true}>
         {this.props.message} {this.state.secondsLeft}

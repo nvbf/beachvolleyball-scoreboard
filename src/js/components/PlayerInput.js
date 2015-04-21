@@ -4,11 +4,11 @@ const React = require('react');
 const   Input = require('react-bootstrap').Input;
 
 var PlayerInput = React.createClass({
-  displayName: function() {
+  displayName() {
     return 'PlayerInput';
   },
 
-  render: function() {
+  render() {
     return (
       <div>
         <div className="form-group">

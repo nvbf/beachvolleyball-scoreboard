@@ -16,13 +16,12 @@ NPM, the node package manager, is installed when you install node.
 
 `npm install`
 
-
 ### Run
 Prerequisit: Install
 
-`npm start`
+`NODE_ENV=development DEBUG="*" API="http://localhost:3000/api/matches/" PORT=4000 npm start`
 
-It will then open on localhost:3000 by defaul
+It will then open on localhost:3000 by default
 
 ### Test
 Prerequisit: Install
@@ -39,4 +38,3 @@ to the public folder.
 this way you have `gulp development` and `node app.js` running, but you never need to restart the server.
 
 All files in the public catalog is generated. To understand the build process see gulp folder.
-

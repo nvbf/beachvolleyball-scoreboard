@@ -6,11 +6,11 @@ const Button = require('react-bootstrap').Button;
 const PlayerInput = require('./PlayerInput');
 
 var AddHomeTeam = React.createClass({
-  displayName: function() {
+  displayName() {
     return 'AddHomeTeam';
   },
 
-  handleSubmit: function(e) {
+  handleSubmit(e) {
     e.preventDefault();
     var player1 = document.getElementById('player1').value;
     var player2 = document.getElementById('player2').value;
@@ -27,11 +27,11 @@ var AddHomeTeam = React.createClass({
     );
   },
 
-  componentDidMount: function() {
+  componentDidMount() {
     document.getElementById('player1').focus();
   },
 
-  render: function() {
+  render() {
     return (
       <div className="panel panel-default">
         <div className="panel-heading">

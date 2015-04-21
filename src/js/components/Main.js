@@ -17,11 +17,11 @@ const matchApi = new MatchApi();
 match.notification = new MatchNotifications(match, matchApi);
 
 var Main = React.createClass({
-  displayName: function() {
+  displayName() {
     return 'Main';
   },
 
-  changeState: function() {
+  changeState() {
     return function(state) {
       this.setState(
         state
@@ -29,7 +29,7 @@ var Main = React.createClass({
     }.bind(this);
   },
 
-  getInitialState: function() {
+  getInitialState() {
     return {
       show: 'AddHomeTeam',
       match: match.state,
@@ -39,17 +39,17 @@ var Main = React.createClass({
     };
   },
 
-  showTimeout: function() {
+  showTimeout() {
     match.notification.emit('timeout-notification');
   },
 
-  timeoutHomeTeam: function() {
+  timeoutHomeTeam() {
     let set = match.getCurrentSet();
     set.homeTeamTakesTimeout();
     this.showTimeout();
   },
 
-  timeoutAwayTeam: function() {
+  timeoutAwayTeam() {
     let set = match.getCurrentSet();
     set.awayTeamTakesTimeout();
     this.showTimeout();
@@ -71,7 +71,7 @@ var Main = React.createClass({
     return 'disabled';
   },
 
-  showMatchUrl: function() {
+  showMatchUrl() {
     if (this.state.publicMatch) {
       var _this = this;
       if (!this.state.matchUrl) {
@@ -93,13 +93,13 @@ var Main = React.createClass({
     }
   },
 
-  doMatchPublic: function() {
+  doMatchPublic() {
     this.setState({
       publicMatch: !this.state.publicMatch
     });
   },
 
-  render: function() {
+  render() {
 
     var show = this.state.show;
     var changeState = this.changeState();

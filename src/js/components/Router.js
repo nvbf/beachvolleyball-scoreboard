@@ -3,33 +3,23 @@
 const React = require('react');
 const  PublicBoard = require('./PublicBoard');
 const  Main = require('./Main');
-const  MatchApi = require('./../domain/MatchApi');
 
 var Router = React.createClass({
 
-  displayName: function() {
+  displayName() {
     return 'Router';
   },
 
-  getInitialState: function() {
-    return {
-      hometeam: '',
-      awayteam: '',
-      sets: []
-    };
-  },
-
-  splitUpKeyValue: function(param) {
+  splitUpKeyValue(param) {
     return param.split('=');
   },
 
-  areKeyId: function(keyValue) {
+  areKeyId(keyValue) {
     return (keyValue[0] === 'match');
   },
 
-  render: function() {
+  render() {
     var matchId;
-    var _this = this;
     var getParams = document.location.search.substring(1).split('&');
     var idArgument =
       getParams
@@ -41,19 +31,7 @@ var Router = React.createClass({
     }
 
     if (matchId) {
-      var api = new MatchApi();
-      api.getMatch(matchId, function(ht, aw, s) {
-        this.setState({
-          hometeam: ht,
-          awayteam: aw,
-          sets: s
-        })
-      }.bind(this));
-      return <PublicBoard
-        hometeam={this.state.hometeam}
-        awayteam={this.state.awayteam}
-        score={this.state.sets}
-        />;
+      return <PublicBoard matchId={matchId} />;
     } else {
       return <Main />;
     }
