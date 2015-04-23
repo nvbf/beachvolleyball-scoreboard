@@ -35,7 +35,7 @@
     "reactify": "0.17.1",
     "should": "5.2.0",
     "sinon": "1.12.2",
-    "sol-style-check": "1.2.0",
+    "sol-style-checker": "1.2.0",
     "superagent": "1.1.0",
     "vinyl-source-stream": "1.0.0",
     "winston": "1.0.0"
