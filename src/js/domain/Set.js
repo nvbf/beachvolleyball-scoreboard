@@ -5,7 +5,6 @@ function Set(option) {
   this.pointLimit = option.length;
   this.switch = option.switch;
   this.tto = option.tto;
-  this.servingOrder;
   this.timeoutLimit = option.timeoutLimit;
   this.timeout = {
     homeTeam: 0,
@@ -77,31 +76,5 @@ Set.prototype.isFinished = function() {
 Set.prototype.hasStarted = function() {
   return !(this.score[0] === 0 && this.score[1] === 0);
 };
-
-Set.prototype.canAwayTeamTakeTimeout = function() {
-  return canTeamTakeTimeout(this, 'awayTeam');
-};
-
-Set.prototype.canHomeTeamTakeTimeout = function() {
-  return canTeamTakeTimeout(this, 'homeTeam');
-};
-
-Set.prototype.homeTeamTakesTimeout = function() {
-  takeTimeout(this, 'homeTeam');
-};
-
-Set.prototype.awayTeamTakesTimeout = function() {
-  takeTimeout(this, 'awayTeam');
-};
-
-
-function canTeamTakeTimeout(Set, side) {
-  let timeoutsTaken = Set.timeout[side];
-  return timeoutsTaken < Set.timeoutLimit;
-}
-
-function takeTimeout(Set, side) {
-  Set.timeout[side]++;
-}
 
 module.exports = Set;

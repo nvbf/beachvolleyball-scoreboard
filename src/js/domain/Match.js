@@ -22,13 +22,17 @@ function Match() {
     sets: [set1, new Set(defaultSetOption), new Set(thirdSetOption)],
     currentSet: 0,
     currentSetScore: set1.score,
-    finished: false
+    homeTeamTimeout: 0,
+    awayTeamTimeout: 0,
+    finished: false,
+    events: []
   };
 
   return this;
 }
 
 util.inherits(Match, EventEmitter);
+
 
 Match.prototype.notification = undefined;
 
@@ -38,7 +42,7 @@ Match.prototype.getCurrentSet = function() {
 
 Match.prototype.nextSet = function() {
   this.state.currentSet++;
-  this.currentSetScore = this.getCurrentSet().scoreForThisTeam;
+  this.currentSetScore = this.getCurrentSet();
 };
 
 Match.prototype.setPrivateState = function(state) {
@@ -63,6 +67,22 @@ Match.prototype.awayTeam = function() {
 
 Match.prototype.sets = function() {
   return this.state.sets;
+};
+
+Match.prototype.homeTeamTakesTimeout = function() {
+  this.state.homeTeamTimeout = 1;
+  this.state.events.push(
+    this.state.hometeam.display() +
+    ' takes timeout on ' +
+    this.getCurrentSet().score.join('-'));
+};
+
+Match.prototype.awayTeamTakesTimeout = function() {
+  this.state.awayTeamTimeout = 1;
+  this.state.events.push(
+    this.state.awayteam.display() +
+    ' takes timeout on ' +
+    this.getCurrentSet().score.join('-'));
 };
 
 module.exports = Match;

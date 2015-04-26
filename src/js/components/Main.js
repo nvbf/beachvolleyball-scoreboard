@@ -1,16 +1,19 @@
 'use strict';
 
 const React = require('react');
-const Match = require('./../domain/Match');
 const AddHomeTeam = require('./AddHomeTeam');
 const AddAwayTeam = require('./AddAwayTeam');
 const Scoreboard = require('./Scoreboard');
+
+const ButtonToolbar = require('react-bootstrap').ButtonToolbar;
 const Navbar = require('react-bootstrap').Navbar;
+const Button = require('react-bootstrap').Button;
 const Nav = require('react-bootstrap').Nav;
-const DropdownButton = require('react-bootstrap').DropdownButton;
-const MenuItem = require('react-bootstrap').MenuItem;
+
 const MatchNotifications = require('./../domain/MatchNotifications');
+const Match = require('./../domain/Match');
 const MatchApi = require('./../domain/MatchApi');
+
 const match = new Match();
 const matchApi = new MatchApi();
 
@@ -39,38 +42,6 @@ var Main = React.createClass({
     };
   },
 
-  showTimeout() {
-    match.notification.emit('timeout-notification');
-  },
-
-  timeoutHomeTeam() {
-    let set = match.getCurrentSet();
-    set.homeTeamTakesTimeout();
-    this.showTimeout();
-  },
-
-  timeoutAwayTeam() {
-    let set = match.getCurrentSet();
-    set.awayTeamTakesTimeout();
-    this.showTimeout();
-  },
-
-  showHomeTeamAsDisabled() {
-    let set = match.getCurrentSet();
-    if (set.canHomeTeamTakeTimeout()) {
-      return '';
-    }
-    return 'disabled';
-  },
-
-  showAwayTeamAsDisabled() {
-    let set = match.getCurrentSet();
-    if (set.canAwayTeamTakeTimeout()) {
-      return '';
-    }
-    return 'disabled';
-  },
-
   showMatchUrl() {
     if (this.state.publicMatch) {
       var _this = this;
@@ -84,19 +55,41 @@ var Main = React.createClass({
       }
 
       return (
-        <MenuItem>
+        <p>
           {this.state.matchUrl}
-        </MenuItem>
+        </p>
       );
-    } else {
-      return;
     }
   },
 
-  doMatchPublic() {
+  doMatchPublic(e) {
+    e.preventDefault();
     this.setState({
       publicMatch: !this.state.publicMatch
     });
+  },
+
+  handleCopy() {
+    window.alert('sorry not implmented yet');
+  },
+
+  renderPublicComponent() {
+    if (!this.state.publicMatch) {
+      return (
+        <ButtonToolbar>
+          <Button bsStyle='success' onClick={this.doMatchPublic} ref="public">
+            Make this match public
+          </Button>
+        </ButtonToolbar>
+      );
+    } else {
+      return (
+        <div>
+          {this.showMatchUrl()}
+          <Button onClick={this.handleCopy}> Copy to clipboard </Button>
+        </div>
+      )
+    }
   },
 
   render() {
@@ -121,18 +114,7 @@ var Main = React.createClass({
         <section>
           <Navbar>
             <Nav>
-              <DropdownButton title="Timeout">
-                <MenuItem className={this.showHomeTeamAsDisabled()} onSelect={this.timeoutHomeTeam}>
-                  {match.state.hometeam.display()}
-                </MenuItem>
-                <MenuItem className={this.showAwayTeamAsDisabled()} onSelect={this.timeoutAwayTeam}>
-                  {match.state.awayteam.display()}
-                </MenuItem>
-              </DropdownButton>
-              <MenuItem onSelect={this.doMatchPublic} ref="public">
-                Public
-              </MenuItem>
-              {this.showMatchUrl()}
+              {this.renderPublicComponent()}
             </Nav>
           </Navbar>
           <main>

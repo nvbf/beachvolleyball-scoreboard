@@ -1,15 +1,15 @@
 'use strict';
 var React = require('react');
-var   Alert = require('react-bootstrap').Alert;
-var   AlertEventMixin = require('../mixin/AlertEventMixin');
-
+var Alert = require('react-bootstrap').Alert;
+var AlertEventMixin = require('../mixin/AlertEventMixin');
 
 var Timeout = React.createClass({
 
   mixins: [AlertEventMixin],
 
   propTypes: {
-    seconds: React.PropTypes.number.isRequired
+    seconds: React.PropTypes.number.isRequired,
+    message: React.PropTypes.string.isRequired
   },
 
   getInitialState() {
