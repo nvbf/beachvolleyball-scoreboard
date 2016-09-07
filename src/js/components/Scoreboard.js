@@ -85,6 +85,8 @@ var Scoreboard = React.createClass({
         this.state.sets[2].score[0]
       ];
 
+      window.socket.emit('match-update', getScoreAndTeam(this.props.match.state));
+
       return (
         <div>
           <div className="container scoreboard">
@@ -149,5 +151,13 @@ var Scoreboard = React.createClass({
     }
   })
   ;
+
+function getScoreAndTeam(state) {
+  return {
+    homeTeam: state.hometeam.state,
+    awayTeam: state.awayteam.state,
+    sets: [state.sets[0].score, state.sets[1].score, state.sets[2].score]
+  }
+}
 
 module.exports = Scoreboard;

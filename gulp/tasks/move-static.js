@@ -69,7 +69,11 @@ gulp.task('move-static', ['clean'], function() {
       {
         input: './src/index.html',
         output: './public/'
-      }
+      },
+      {
+        input: './src/live.html',
+        output: './public/'
+      },
     ]
   );
 });

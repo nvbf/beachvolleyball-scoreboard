@@ -51,9 +51,9 @@ const TimeoutMenu = React.createClass({
                   onClick={this.onTimeoutAwayTeam}>
             {this.props.match.state.awayteam.display()}
           </Button>
-          <Button className="pull-right" bsStyle="warning">
+          {/* <Button className="pull-right" bsStyle="warning">
             Undo
-          </Button>
+          </Button> */}
         </ButtonToolbar>
       </div>
     )

@@ -77,16 +77,17 @@ var Main = React.createClass({
     if (!this.state.publicMatch) {
       return (
         <ButtonToolbar>
-          <Button bsStyle='success' onClick={this.doMatchPublic} ref="public">
+          {/* <Button bsStyle='success' onClick={this.doMatchPublic} ref="public">
             Make this match public
-          </Button>
+          </Button> */}
         </ButtonToolbar>
       );
     } else {
       return (
         <div>
-          {this.showMatchUrl()}
+          {/* {this.showMatchUrl()}
           <Button onClick={this.handleCopy}> Copy to clipboard </Button>
+          */}
         </div>
       )
     }

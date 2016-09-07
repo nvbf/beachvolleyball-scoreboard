@@ -4,14 +4,29 @@ const superagent = require('superagent');
 const bodyParser = require('body-parser');
 const logger = require('winston');
 const util = require('util');
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
+
 
 if (!process.env.API) {
   throw new Error('process.env.API is not defined');
 }
 
+io.on('connection', function(socket) {
+  io.emit('user', 1, {for: 'everyone'});
+
+  socket.on('disconnect', function() {
+    io.emit('user', -1, {for: 'everyone'});
+  });
+
+  socket.on('match-update', function(match) {
+    io.emit('match-update', match);
+  });
+});
+
+
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json()); // for parsing application/json
-
 
 app.put('/api/matches/:id', function(req, res, next) {
   var apiUrl = process.env.API + req.params.id;
@@ -80,6 +95,6 @@ app.get('/api/matches/:id', function(req, res, next) {
 });
 
 
-var server = app.listen(process.env.PORT || 3000, function() {
+var server = http.listen(process.env.PORT || 3000, function() {
   logger.info('Listening on port %d', server.address().port);
 });
