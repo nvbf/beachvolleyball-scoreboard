@@ -1,3 +1,3 @@
 var gulp = require('gulp');
 
-gulp.task('build', ['check-style', 'test', 'move-static', 'browserify']);
+gulp.task('build', ['test', 'move-static', 'browserify']);

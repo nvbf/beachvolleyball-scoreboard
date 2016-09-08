@@ -6,9 +6,7 @@ const AddAwayTeam = require('./AddAwayTeam');
 const Scoreboard = require('./Scoreboard');
 
 const ButtonToolbar = require('react-bootstrap').ButtonToolbar;
-const Navbar = require('react-bootstrap').Navbar;
 const Button = require('react-bootstrap').Button;
-const Nav = require('react-bootstrap').Nav;
 
 const MatchNotifications = require('./../domain/MatchNotifications');
 const Match = require('./../domain/Match');
@@ -69,30 +67,6 @@ var Main = React.createClass({
     });
   },
 
-  handleCopy() {
-    window.alert('sorry not implmented yet');
-  },
-
-  renderPublicComponent() {
-    if (!this.state.publicMatch) {
-      return (
-        <ButtonToolbar>
-          {/* <Button bsStyle='success' onClick={this.doMatchPublic} ref="public">
-            Make this match public
-          </Button> */}
-        </ButtonToolbar>
-      );
-    } else {
-      return (
-        <div>
-          {/* {this.showMatchUrl()}
-          <Button onClick={this.handleCopy}> Copy to clipboard </Button>
-          */}
-        </div>
-      )
-    }
-  },
-
   render() {
 
     var show = this.state.show;
@@ -113,11 +87,6 @@ var Main = React.createClass({
     } else {
       return (
         <section>
-          <Navbar>
-            <Nav>
-              {this.renderPublicComponent()}
-            </Nav>
-          </Navbar>
           <main>
             <Scoreboard match={match}/>
           </main>

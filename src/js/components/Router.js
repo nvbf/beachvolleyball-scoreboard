@@ -1,6 +1,7 @@
 'use strict';
 
 const React = require('react');
+const ReactDom = require('react-dom')
 const  PublicBoard = require('./PublicBoard');
 const  Main = require('./Main');
 
@@ -39,4 +40,4 @@ var Router = React.createClass({
 });
 
 window.React = React;
-React.render(<Router />, document.body);
+ReactDom.render(<Router />, document.getElementById('app'));

@@ -19,7 +19,7 @@ var Timeout = React.createClass({
   },
 
   tick() {
-    if (this.state.secondsLeft === -5) {
+    if (this.state.secondsLeft === -15) {
       this.handleAlertDismiss();
     } else {
       this.setState({secondsLeft: this.state.secondsLeft - 1});
@@ -43,7 +43,7 @@ var Timeout = React.createClass({
 
   renderOverlay() {
     return (
-      <Alert bsStyle="info" onDismiss={this.handleAlertDismiss} isDismissable={true}>
+      <Alert bsStyle="info" onDismiss={this.handleAlertDismiss}>
         {this.props.message} {this.state.secondsLeft}
       </Alert>
     );

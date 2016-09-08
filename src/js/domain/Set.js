@@ -18,6 +18,13 @@ function Set(option) {
     }
   };
 
+  this.removePoint = function(teamIndex) {
+    this.score[teamIndex]--;
+    if (this.notification) {
+      this.notification.emit('point-remove');
+    }
+  };
+
   this.notifyServerOrder = function(team) {
     if (this.teamCurrentlyServing !== team && this.notification) {
       this.notification.emit('switch-server');
@@ -47,10 +54,22 @@ Set.prototype.shouldChangeSide = function() {
   return ((score[0] + score[1]) % this.switch === 0);
 };
 
+Set.prototype.removePointHomeTeam = function() {
+  this.notifyServerOrder('hometeam');
+  this.teamCurrentlyServing = 'homaddeteam';
+  return this.removePoint(0);
+};
+
 Set.prototype.addPointHomeTeam = function() {
   this.notifyServerOrder('hometeam');
   this.teamCurrentlyServing = 'hometeam';
   return this.addPoint(0);
+};
+
+Set.prototype.removePointAwayTeam = function() {
+  this.notifyServerOrder('awayteam');
+  this.teamCurrentlyServing = 'awayteam';
+  return this.removePoint(1);
 };
 
 Set.prototype.addPointAwayTeam = function() {

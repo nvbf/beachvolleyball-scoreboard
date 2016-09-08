@@ -6,16 +6,15 @@ const ButtonToolbar = require('react-bootstrap').ButtonToolbar;
 const Label = require('react-bootstrap').Label;
 
 const TimeoutMenu = React.createClass({
-
-  displayName: function() {
-    return 'TimeoutMenu';
-  },
-
   propTypes: {
     match: React.PropTypes.object,
     homeTeamTimeout: React.PropTypes.number.isRequired,
     awayTeamTimeout: React.PropTypes.number.isRequired,
     updateState: React.PropTypes.func.isRequired
+  },
+
+  restart() {
+      location.reload();
   },
 
   showTimeout() {
@@ -51,9 +50,9 @@ const TimeoutMenu = React.createClass({
                   onClick={this.onTimeoutAwayTeam}>
             {this.props.match.state.awayteam.display()}
           </Button>
-          {/* <Button className="pull-right" bsStyle="warning">
-            Undo
-          </Button> */}
+          <Button bsStyle="danger" type="submit" className="pull-right" onClick={this.restart}>
+            New Match
+          </Button>
         </ButtonToolbar>
       </div>
     )

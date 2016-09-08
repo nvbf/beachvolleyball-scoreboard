@@ -3,11 +3,9 @@
 const React = require('react');
 const  ListGroup = require('react-bootstrap').ListGroup;
 const  ListGroupItem = require('react-bootstrap').ListGroupItem;
+const Modal = require('react-bootstrap').Modal;
 
 var ModalBodyList = React.createClass({
-  displayName() {
-    return 'ModalBodyList';
-  },
 
   propTypes: {
     chosenFirstItem: React.PropTypes.func.isRequired,
@@ -21,7 +19,11 @@ var ModalBodyList = React.createClass({
 
   render() {
     return (
-      <div className="modal-body">
+      <div>
+      <Modal.Header closeButton>
+        <Modal.Title>Service Order</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
         <ListGroup>
           <ListGroupItem onClick={this.props.chosenFirstItem}> {this.props.firstItemText} </ListGroupItem>
           <ListGroupItem onClick={this.props.chosenSecondItem}> {this.props.secondItemText} </ListGroupItem>
@@ -29,6 +31,7 @@ var ModalBodyList = React.createClass({
         <div className="modal-footer">
           <p>{this.props.footerText}</p>
         </div>
+      </Modal.Body>
       </div>
     )
   }

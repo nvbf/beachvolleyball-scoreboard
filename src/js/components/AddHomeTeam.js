@@ -3,6 +3,8 @@
 const React = require('react');
 const Team = require('./../domain/Team');
 const Button = require('react-bootstrap').Button;
+const Well = require('react-bootstrap').Well;
+
 const PlayerInput = require('./PlayerInput');
 
 var AddHomeTeam = React.createClass({
@@ -33,9 +35,10 @@ var AddHomeTeam = React.createClass({
 
   render() {
     return (
+      <div>
       <div className="panel panel-default">
         <div className="panel-heading">
-          <h2>Add Home Team</h2>
+          <h2>Lets add the first team..</h2>
         </div>
         <div className="panel-body">
           <form className="add-team-form" onSubmit={this.handleSubmit}>
@@ -45,6 +48,11 @@ var AddHomeTeam = React.createClass({
             </Button>
           </form>
         </div>
+      </div>
+
+      <Well>
+        <Button bsStyle="primary"> 1 </Button> The first thing we need to do is to add the teams that are playing against each other
+      </Well>
       </div>
     )
   }

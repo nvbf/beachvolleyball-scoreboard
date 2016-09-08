@@ -2,17 +2,11 @@ const React = require('react');
 const ButtonToolbar = require('react-bootstrap').ButtonToolbar;
 const Button = require('react-bootstrap').Button;
 const Alert = require('react-bootstrap').Alert;
-const OverlayMixin = require('react-bootstrap').OverlayMixin;
 const Modal = require('react-bootstrap').Modal;
 const ModalBodyList = require('./ModalBodyList');
 const ServingOrder = require('./../domain/ServingOrder');
 
 var ServeOrder = React.createClass({
-  displayName() {
-    return 'ServeOrder';
-  },
-
-  mixins: [OverlayMixin],
 
   handleToggle() {
     this.setState({
@@ -22,7 +16,7 @@ var ServeOrder = React.createClass({
 
   getInitialState() {
     return {
-      isModalOpen: true,
+      isModalOpen: false,
       order: []
     };
   },
@@ -73,14 +67,17 @@ var ServeOrder = React.createClass({
     }
 
     var setHasStarted = this.props.match.getCurrentSet().hasStarted();
+    const modal = this.renderOverlay();
     return (
       <section>
         <Alert bsStyle='warning'>
           <ButtonToolbar>
-            <Button onClick={this.handleToggle} disabled={setHasStarted}>Set serve order</Button>
+            <Button onClick={this.handleToggle} disabled={setHasStarted}>Set service order</Button>
           </ButtonToolbar>
         </Alert>
+        {modal}
       </section>
+
     );
   },
 
@@ -113,7 +110,7 @@ var ServeOrder = React.createClass({
     var homeTeam = this.props.match.homeTeam();
 
     if (!this.state.isModalOpen) {
-      return <span/>;
+      return null;
     }
     if ((this.state.startToServe == 'hometeam' && this.state.order.length === 0)
       || (this.state.startToServe == 'awayteam' && this.state.order.length === 2)) {
@@ -135,10 +132,9 @@ var ServeOrder = React.createClass({
     return (
 
       <div className="static-modal">
-        <Modal title="Service Order"
-               backdrop={false}
-               animation={false}
-               onRequestHide={this.handleToggle}>
+        <Modal
+               show={this.state.isModalOpen}
+               onHide={this.handleToggle}>
           {modalBodyList}
         </Modal>
       </div>

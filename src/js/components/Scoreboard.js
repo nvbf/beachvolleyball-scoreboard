@@ -1,18 +1,18 @@
 'use strict';
 
 const React = require('react');
+const ReactDom = require('react-dom');
 const NotificationAlerts = require('./NotificationAlerts');
 const ScoreboardRow = require('./ScoreboardRow');
 const ServeOrder = require('./ServeOrder');
 const Timeout = require('./Timeout');
 const TimeoutButtons = require('./TimeoutButtons');
+const Button = require('react-bootstrap').Button;
+const Well = require('react-bootstrap').Well;
 const Alert = require('react-bootstrap').Alert;
+const AlertInfo = require('./AlertInfo');
 
 var Scoreboard = React.createClass({
-    displayName() {
-      return 'Scoreboard';
-    },
-
     propTypes: {
       match: React.PropTypes.object.isRequired
     },
@@ -39,6 +39,30 @@ var Scoreboard = React.createClass({
       return function(event) {
         event.preventDefault();
         this.props.match.getCurrentSet().addPointHomeTeam();
+        this.setState(this.props.match.state);
+      }.bind(this)
+    },
+
+    removePointHomeTeam(event) {
+      return function(event) {
+        event.preventDefault();
+        this.props.match.getCurrentSet().removePointHomeTeam();
+        this.setState(this.props.match.state);
+      }.bind(this)
+    },
+
+    pointToHomeTeam(event) {
+      return function(event) {
+        event.preventDefault();
+        this.props.match.getCurrentSet().addPointHomeTeam();
+        this.setState(this.props.match.state);
+      }.bind(this)
+    },
+
+    removePointAwayTeam(event) {
+      return function(event) {
+        event.preventDefault();
+        this.props.match.getCurrentSet().removePointAwayTeam();
         this.setState(this.props.match.state);
       }.bind(this)
     },
@@ -106,12 +130,12 @@ var Scoreboard = React.createClass({
                                   notification={this.props.match.notification}/>
             </div>
             <div className="timeout-alerts">
-              <Timeout seconds={30} message="Timeout: "
+              <Timeout seconds={45} message="Timeout: "
                        eventTrigger="timeout-notification"
                        notification={this.props.match.notification}/>
             </div>
             <div className="timeout-alerts">
-              <Timeout seconds={60} message="Technical time-out: "
+              <Timeout seconds={45} message="Technical time-out: "
                        eventTrigger="tto-notification" notification={this.props.match.notification}/>
             </div>
             <div className="panel panel-default">
@@ -120,16 +144,30 @@ var Scoreboard = React.createClass({
               </div>
               <div className="panel-body">
                 <table className="table table-striped">
-                  <ScoreboardRow
-                    pointsToTeam={this.pointToHomeTeam()}
-                    scoreForThisTeam={scoreHomeTeam}
-                    team={this.props.match.homeTeam()}
-                    match={this.props.match}/>
-                  <ScoreboardRow
-                    pointsToTeam={this.pointToAwayTeam()}
-                    scoreForThisTeam={scoreAwayTeam}
-                    team={this.props.match.awayTeam()}
-                    match={this.props.match}/>
+                  <thead>
+                    <tr>
+                      <td>Teams</td>
+                      <td>Set 1</td>
+                      <td>Set 2</td>
+                      <td>Set 3</td>
+                      <td>Add Point</td>
+                      <td>Remove Point</td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <ScoreboardRow
+                      pointsToTeam={this.pointToHomeTeam()}
+                      removePoint={this.removePointHomeTeam()}
+                      scoreForThisTeam={scoreHomeTeam}
+                      team={this.props.match.homeTeam()}
+                      match={this.props.match}/>
+                    <ScoreboardRow
+                      pointsToTeam={this.pointToAwayTeam()}
+                      removePoint={this.removePointAwayTeam()}
+                      scoreForThisTeam={scoreAwayTeam}
+                      team={this.props.match.awayTeam()}
+                      match={this.props.match}/>
+                  </tbody>
                 </table>
               </div>
               <div className="panel-footer">
@@ -145,6 +183,18 @@ var Scoreboard = React.createClass({
             <section className="events">
               {this.renderEvents()}
             </section>
+            <Well>
+              <Button bsStyle="primary"> 3 </Button> You can set the service order by clicking the "Set service order" button above. (Optional)
+            </Well>
+            <Well>
+              <Button bsStyle="primary"> 4 </Button> Now you kan keep score with the blue buttons right under "Add Point"
+            </Well>
+            <h2>Notes for first time users</h2>
+            <AlertInfo message='If you do a mistake, you can adjust the score by also using the buttons below "remove point" to get the score right.' />
+            <AlertInfo message="When you have set the service order, we will help you keep track of how is serving, It's almost magic." />
+            <AlertInfo message='Want to start over or register a new match?  Click on the "new match button"!' />
+            <AlertInfo message='You can not set the service order for a set after a points is given' />
+            <AlertInfo message="For now it's not possible to change the score after a set or the match is finished."/>
           </div>
         </div>
       )

@@ -10,6 +10,11 @@
   font-size: 25px;
 }
 
+.list-group-item {
+  padding: 5px;
+  margin: 10px;
+}
+
 .names {
   display: inline;
   font-weight: bold;

@@ -15,7 +15,12 @@ var AlertEventMixin = {
       this.setState({
         alertVisible: true
       });
+      setTimeout(()=> this.hide, 5000);
     }.bind(this));
+  },
+
+  hide() {
+    this.setState({alertVisible: false})
   },
 
   handleAlertDismiss() {
@@ -34,9 +39,8 @@ var AlertEventMixin = {
   render() {
     if (this.state.alertVisible) {
       return this.renderOverlay();
-    } else {
-      return <span/>
     }
+    return null;
   }
 };
 
