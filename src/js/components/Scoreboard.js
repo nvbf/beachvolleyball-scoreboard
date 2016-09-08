@@ -154,10 +154,28 @@ var Scoreboard = React.createClass({
 
 function getScoreAndTeam(state) {
   return {
+    id: hashCode(state.hometeam.state.player1 + state.hometeam.state.player2 +
+      state.awayteam.state.player1 + state.awayteam.state.player2),
     homeTeam: state.hometeam.state,
     awayTeam: state.awayteam.state,
     sets: [state.sets[0].score, state.sets[1].score, state.sets[2].score]
   }
 }
+
+function hashCode(hashString) {
+  var hash = 0;
+  var i;
+  var chr;
+  var len;
+  if (hashString.length === 0) {
+    return hash;
+  }
+  for (i = 0, len = hashString.length; i < len; i++) {
+    chr   = hashString.charCodeAt(i);
+    hash  = ((hash << 5) - hash) + chr;
+    hash |= 0; // Convert to 32bit integer
+  }
+  return hash;
+};
 
 module.exports = Scoreboard;

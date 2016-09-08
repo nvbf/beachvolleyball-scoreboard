@@ -16,6 +16,7 @@
 <script>
   var socket = io();
   socket.on('match-update', function(match){
+    console.log('id: ', match.id)
     formatMatch(match)
   });
 
@@ -24,7 +25,14 @@
     var score = '<td>' + match.sets[0][0] + '-' + match.sets[0][1] + '</td><td>' +
                 match.sets[1][0] + '-' + match.sets[1][1] +'</td><td>'  +
                 match.sets[2][0] + '-' + match.sets[2][1] + '</td>'
-    return $('#matches').prepend('<tr><td>' + team + '</td>' + score)
+    var newMatchNode = '<tr id="match-' + match.id +'"><td>' + team + '</td>' + score
+    var matchNode = $('#match-' + match.id);
+    if(matchNode.length > 0) {
+      matchNode.replaceWith(newMatchNode);
+    } else {
+      $('#matches').prepend(newMatchNode);
+    }
+
   }
 
 </script>
