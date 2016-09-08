@@ -24,6 +24,9 @@ io.on('connection', function(socket) {
   });
 });
 
+app.get('/match', function(req, res) {
+  res.sendFile(__dirname + '/public/match.html');
+});
 
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json()); // for parsing application/json
