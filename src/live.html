@@ -2,6 +2,14 @@
 <head>
   <script src="/socket.io/socket.io.js"></script>
   <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+  <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 </head>
 
 
@@ -12,9 +20,11 @@
   });
 
   function formatMatch(match) {
-    var team = match.homeTeam.player1 + '/' + match.homeTeam.player2 + ' - ' + match.awayTeam.player1 + '/' + match.awayTeam.player2 + '   ';
-    var score = match.sets[0][0] + '-' + match.sets[0][1] + ', ' + match.sets[1][0] + '-' + match.sets[1][1] + ', ' + match.sets[2][0] + '-' + match.sets[2][1];
-    return $('#matches').prepend('<li>' + team + score + '</li>')
+    var team = match.homeTeam.player1 + '/' + match.homeTeam.player2 + ' - ' + match.awayTeam.player1 + '/' + match.awayTeam.player2;
+    var score = '<td>' + match.sets[0][0] + '-' + match.sets[0][1] + '</td><td>' +
+                match.sets[1][0] + '-' + match.sets[1][1] +'</td><td>'  +
+                match.sets[2][0] + '-' + match.sets[2][1] + '</td>'
+    return $('#matches').prepend('<tr><td>' + team + '</td>' + score)
   }
 
 </script>
@@ -23,9 +33,16 @@
 
 <h3> Matches </h3>
 
-<ul id="matches">
+<table class="table" id="matches">
+  <thead>
+    <tr>
+      <th>Teams</th>
+      <th>Set 1</th>
+      <th>Set 2</th>
+      <th>Set 3</th>
+    </tr>
+  </thead>
+</table>
 
-</ul>
 
-
-<p>* This is a real-time list of changes since you connected. the scores will appear as soon as there are changes in any matches, be pations</p>
+<p>* This is a real-time list of changes since you connected. the scores will appear as soon as there are changes in any matches</p>
