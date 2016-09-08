@@ -69,6 +69,10 @@ Match.prototype.sets = function() {
   return this.state.sets;
 };
 
+Match.prototype.addEvent = function(msg) {
+  this.state.events.push(msg);
+}
+
 Match.prototype.homeTeamTakesTimeout = function() {
   this.state.homeTeamTimeout = 1;
   this.state.events.push(

@@ -56,7 +56,7 @@ Set.prototype.shouldChangeSide = function() {
 
 Set.prototype.removePointHomeTeam = function() {
   this.notifyServerOrder('hometeam');
-  this.teamCurrentlyServing = 'homaddeteam';
+  this.teamCurrentlyServing = 'hometeam';
   return this.removePoint(0);
 };
 

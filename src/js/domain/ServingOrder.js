@@ -6,6 +6,11 @@ function ServingOrder(servingOrder) {
   return this;
 }
 
+ServingOrder.prototype.getServiceOrder = function() {
+  return this.servingOrder
+};
+
+
 ServingOrder.prototype.toServe = function() {
   return this.servingOrder[this.currentServer];
 };

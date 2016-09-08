@@ -98,6 +98,12 @@ var ServeOrder = React.createClass({
       if (order.length === 4) {
         state.isModalOpen = false;
         state.servingOrder = new ServingOrder(order);
+
+        let orderOfServer = state.servingOrder.getServiceOrder().slice();
+        orderOfServer.reverse().forEach((server, i) => {
+          this.props.match.addEvent(4 -i +'. ' + server);
+        })
+        this.props.match.addEvent('Service Order')
       }
 
       this.setState(state);
