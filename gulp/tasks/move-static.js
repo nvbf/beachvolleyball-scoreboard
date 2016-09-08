@@ -67,6 +67,10 @@ gulp.task('move-static', ['clean'], function() {
         output: './public/js'
       },
       {
+        input: './src/index.html',
+        output: './public/'
+      },
+      {
         input: './src/match.html',
         output: './public/'
       },
