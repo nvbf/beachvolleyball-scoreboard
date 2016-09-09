@@ -195,6 +195,7 @@ var Scoreboard = React.createClass({
             <AlertInfo message='Want to start over or register a new match?  Click on the "new match button"!' />
             <AlertInfo message='You can not set the service order for a set after a points is given' />
             <AlertInfo message="For now it's not possible to change the score after a set or the match is finished."/>
+            <AlertInfo message="If you need to use the remove points button the service order may be wrong afterwards! ."/>
           </div>
         </div>
       )
