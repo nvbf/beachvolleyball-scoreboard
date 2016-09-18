@@ -1,5 +1,5 @@
 'use strict';
-const React = require('react');
+import React from 'react';
 const MatchApi = require('./../domain/MatchApi');
 
 var PublicBoard = React.createClass({
