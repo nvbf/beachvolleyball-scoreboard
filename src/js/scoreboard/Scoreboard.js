@@ -14,12 +14,13 @@ const AlertInfo = require('./AlertInfo');
 
 const Scoreboard = React.createClass({
     propTypes: {
-      state: React.PropTypes.object.isRequired
+      score: React.PropTypes.object.isRequired,
+      events: React.PropTypes.array.isRequired,
     },
 
     renderEvents() {
       let eventsComponent = [];
-      this.state.events.forEach((event, index) => {
+      this.props.events.forEach((event, index) => {
         eventsComponent.push(<p key={index}>{event} </p>);
       });
 
@@ -148,7 +149,8 @@ Scoreboard.contextTypes = {
 
 const mapStateToProps = (state) => {
   return {
-    state: state
+    state: state,
+    events: [],
   }
 }
 

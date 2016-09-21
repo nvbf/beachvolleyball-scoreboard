@@ -31,7 +31,9 @@ import AddHomeTeam from './team/AddHomeTeam';
 import AddAwayTeam from './team/AddAwayTeam';
 import Scoreboard from './scoreboard/Scoreboard';
 
-const NoApp = () => <div>Fant ikke noe her :/ </div>;
+const NoApp = () => {
+  return (<div>Fant ikke noe her :/ </div>)
+}
 //TODO: Move PublicBoard to it's own app, see git history
 
 ReactDom.render(

@@ -1,15 +1,7 @@
-'use strict';
-
 import React from 'react';
 import { Label, Button, ButtonToolbar } from 'react-bootstrap';
 
 const TimeoutMenu = React.createClass({
-  propTypes: {
-    match: React.PropTypes.object,
-    homeTeamTimeout: React.PropTypes.number.isRequired,
-    awayTeamTimeout: React.PropTypes.number.isRequired,
-    updateState: React.PropTypes.func.isRequired
-  },
 
   restart() {
       location.reload();
