@@ -8,9 +8,6 @@ const Well = require('react-bootstrap').Well;
 const PlayerInput = require('./PlayerInput');
 
 var AddHomeTeam = React.createClass({
-  displayName() {
-    return 'AddHomeTeam';
-  },
 
   handleSubmit(e) {
     e.preventDefault();

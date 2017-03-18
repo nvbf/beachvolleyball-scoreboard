@@ -7,9 +7,6 @@ const Well = require('react-bootstrap').Well;
 const PlayerInput = require('./PlayerInput');
 
 var AddAwayTeam = React.createClass({
-  displayName() {
-    return 'AddAwayTeam';
-  },
 
   handleSubmit(e) {
     e.preventDefault();

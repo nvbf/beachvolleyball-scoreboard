@@ -3,9 +3,6 @@
 const React = require('react');
 
 const EventList = React.createClass({
-  displayName() {
-    return 'EventList';
-  },
 
   propTypes: {
     eventList: React.PropTypes.string.isRequired,

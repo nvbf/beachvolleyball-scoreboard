@@ -1,6 +1,8 @@
 'use strict';
 
-const React = require('react');
+import React from  'react';
+import url from 'url';
+
 const AddHomeTeam = require('./AddHomeTeam');
 const AddAwayTeam = require('./AddAwayTeam');
 const Scoreboard = require('./Scoreboard');
@@ -11,16 +13,24 @@ const Button = require('react-bootstrap').Button;
 const MatchNotifications = require('./../domain/MatchNotifications');
 const Match = require('./../domain/Match');
 const MatchApi = require('./../domain/MatchApi');
+const Team = require('./../domain/Team');
 
 const match = new Match();
 const matchApi = new MatchApi();
 
 match.notification = new MatchNotifications(match, matchApi);
 
-var Main = React.createClass({
-  displayName() {
-    return 'Main';
-  },
+class Main extends React.Component {
+  constructor(props) {
+      super(props);
+      this.state =  {
+        show: 'AddHomeTeam',
+        match: match.state,
+        matchUrl: '',
+        showTimeout: false,
+        publicMatch: false
+    };
+  }
 
   changeState() {
     return function(state) {
@@ -28,17 +38,7 @@ var Main = React.createClass({
         state
       );
     }.bind(this);
-  },
-
-  getInitialState() {
-    return {
-      show: 'AddHomeTeam',
-      match: match.state,
-      matchUrl: '',
-      showTimeout: false,
-      publicMatch: false
-    };
-  },
+  }
 
   showMatchUrl() {
     if (this.state.publicMatch) {
@@ -58,14 +58,24 @@ var Main = React.createClass({
         </p>
       );
     }
-  },
+  }
 
   doMatchPublic(e) {
     e.preventDefault();
     this.setState({
       publicMatch: !this.state.publicMatch
     });
-  },
+  }
+
+  componentDidMount() {
+    const qs = url.parse(document.location.search, true).query
+    if(qs.name1 && qs.name2 && qs.name3 && qs.name4) {
+        match.addHomeTeam(new Team(qs.name1, qs.name2));
+        match.addAwayTeam(new Team(qs.name3, qs.name4));
+        console.log('Setting show to Scoreboard');
+        this.setState({show: 'Scoreboard'});
+    }
+  }
 
   render() {
 
@@ -94,6 +104,6 @@ var Main = React.createClass({
       );
     }
   }
-});
+};
 
 module.exports = Main;

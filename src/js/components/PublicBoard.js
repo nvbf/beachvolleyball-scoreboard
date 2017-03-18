@@ -3,9 +3,6 @@ const React = require('react');
 const MatchApi = require('./../domain/MatchApi');
 
 var PublicBoard = React.createClass({
-  displayName() {
-    return 'PublicBoard';
-  },
 
   propTypes: {
     matchId: React.PropTypes.string.isRequired

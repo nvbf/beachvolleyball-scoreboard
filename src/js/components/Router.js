@@ -6,11 +6,6 @@ const  PublicBoard = require('./PublicBoard');
 const  Main = require('./Main');
 
 var Router = React.createClass({
-
-  displayName() {
-    return 'Router';
-  },
-
   splitUpKeyValue(param) {
     return param.split('=');
   },

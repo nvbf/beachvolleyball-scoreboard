@@ -109,7 +109,9 @@ var Scoreboard = React.createClass({
         this.state.sets[2].score[0]
       ];
 
-      window.socket.emit('match-update', getScoreAndTeam(this.props.match.state));
+      if(window.socket) {
+        window.socket.emit('match-update', getScoreAndTeam(this.props.match.state));
+      }
 
       return (
         <div>
