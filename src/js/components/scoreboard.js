@@ -2,118 +2,117 @@
 
 const React = require('react');
 const ReactDom = require('react-dom');
-const NotificationAlerts = require('./NotificationAlerts');
-const ScoreboardRow = require('./ScoreboardRow');
-const ServeOrder = require('./ServeOrder');
-const Timeout = require('./Timeout');
-const TimeoutButtons = require('./TimeoutButtons');
+const NotificationAlerts = require('./notification-alerts');
+const ScoreboardRow = require('./scoreboard-row');
+const ServeOrder = require('./serve-order');
+const Timeout = require('./timeout');
+const TimeoutButtons = require('./timeout-buttons');
 const Button = require('react-bootstrap').Button;
 const Well = require('react-bootstrap').Well;
 const Alert = require('react-bootstrap').Alert;
-const AlertInfo = require('./AlertInfo');
+const AlertInfo = require('./alert-info');
 
-var Scoreboard = React.createClass({
-    propTypes: {
-      match: React.PropTypes.object.isRequired
-    },
+const Scoreboard = React.createClass({
+	propTypes: {
+		match: React.PropTypes.object.isRequired
+	},
 
-    componentDidMount() {
-      this.props.match.notification.on('match-notification', function() {
-        this.props.match.state.finished = true;
-        this.setState(this.props.match.state);
-      }.bind(this));
+	componentDidMount() {
+		this.props.match.notification.on('match-notification', () => {
+			this.props.match.state.finished = true;
+			this.setState(this.props.match.state);
+		});
 
-      this.props.match.notification.on('set-notification', function() {
-        let state = this.props.match.state;
-        state.homeTeamTimeout = 0;
-        state.awayTeamTimeout = 0;
-        this.setState(state);
-      }.bind(this));
-    },
+		this.props.match.notification.on('set-notification', () => {
+			const state = this.props.match.state;
+			state.homeTeamTimeout = 0;
+			state.awayTeamTimeout = 0;
+			this.setState(state);
+		});
+	},
 
-    getInitialState() {
-      return this.props.match.state;
-    },
+	getInitialState() {
+		return this.props.match.state;
+	},
 
-    pointToHomeTeam(event) {
-      return function(event) {
-        event.preventDefault();
-        this.props.match.getCurrentSet().addPointHomeTeam();
-        this.setState(this.props.match.state);
-      }.bind(this)
-    },
+	pointToHomeTeam(event) {
+		return function (event) {
+			event.preventDefault();
+			this.props.match.getCurrentSet().addPointHomeTeam();
+			this.setState(this.props.match.state);
+		}.bind(this);
+	},
 
-    removePointHomeTeam(event) {
-      return function(event) {
-        event.preventDefault();
-        this.props.match.getCurrentSet().removePointHomeTeam();
-        this.setState(this.props.match.state);
-      }.bind(this)
-    },
+	removePointHomeTeam(event) {
+		return function (event) {
+			event.preventDefault();
+			this.props.match.getCurrentSet().removePointHomeTeam();
+			this.setState(this.props.match.state);
+		}.bind(this);
+	},
 
-    pointToHomeTeam(event) {
-      return function(event) {
-        event.preventDefault();
-        this.props.match.getCurrentSet().addPointHomeTeam();
-        this.setState(this.props.match.state);
-      }.bind(this)
-    },
+	pointToHomeTeam(event) {
+		return function (event) {
+			event.preventDefault();
+			this.props.match.getCurrentSet().addPointHomeTeam();
+			this.setState(this.props.match.state);
+		}.bind(this);
+	},
 
-    removePointAwayTeam(event) {
-      return function(event) {
-        event.preventDefault();
-        this.props.match.getCurrentSet().removePointAwayTeam();
-        this.setState(this.props.match.state);
-      }.bind(this)
-    },
+	removePointAwayTeam(event) {
+		return function (event) {
+			event.preventDefault();
+			this.props.match.getCurrentSet().removePointAwayTeam();
+			this.setState(this.props.match.state);
+		}.bind(this);
+	},
 
-    pointToAwayTeam(event) {
-      return function(event) {
-        event.preventDefault();
-        this.props.match.getCurrentSet().addPointAwayTeam();
-        this.setState(this.props.match.state);
-      }.bind(this)
-    },
+	pointToAwayTeam(event) {
+		return function (event) {
+			event.preventDefault();
+			this.props.match.getCurrentSet().addPointAwayTeam();
+			this.setState(this.props.match.state);
+		}.bind(this);
+	},
 
-    updateState() {
-      return function(state) {
-        this.setState(state);
-      }.bind(this);
-    },
+	updateState() {
+		return function (state) {
+			this.setState(state);
+		}.bind(this);
+	},
 
-    renderEvents() {
-      let eventsComponent = [];
-      this.state.events.forEach((event, index) => {
-        eventsComponent.push(<p key={index}>{event} </p>);
-      });
+	renderEvents() {
+		const eventsComponent = [];
+		this.state.events.forEach((event, index) => {
+			eventsComponent.push(<p key={index}>{event} </p>);
+		});
 
-      return (
-        <Alert bsStyle='info'>
+		return (
+        <Alert bsStyle="info">
           <h3>Match details</h3>
           {eventsComponent.reverse()}
         </Alert>
-      )
-    },
+		);
+	},
 
-    render() {
+	render() {
+		const scoreAwayTeam = [
+			this.state.sets[0].score[1],
+			this.state.sets[1].score[1],
+			this.state.sets[2].score[1]
+		];
 
-      var scoreAwayTeam = [
-        this.state.sets[0].score[1],
-        this.state.sets[1].score[1],
-        this.state.sets[2].score[1]
-      ];
+		const scoreHomeTeam = [
+			this.state.sets[0].score[0],
+			this.state.sets[1].score[0],
+			this.state.sets[2].score[0]
+		];
 
-      var scoreHomeTeam = [
-        this.state.sets[0].score[0],
-        this.state.sets[1].score[0],
-        this.state.sets[2].score[0]
-      ];
+		if (window.socket) {
+			window.socket.emit('match-update', getScoreAndTeam(this.props.match.state));
+		}
 
-      if(window.socket) {
-        window.socket.emit('match-update', getScoreAndTeam(this.props.match.state));
-      }
-
-      return (
+		return (
         <div>
           <div className="container scoreboard">
             <div className="switch-modal">
@@ -195,40 +194,40 @@ var Scoreboard = React.createClass({
             <AlertInfo message='If you do a mistake, you can adjust the score by also using the buttons below "remove point" to get the score right.' />
             <AlertInfo message="When you have set the service order, we will help you keep track of how is serving, It's almost magic." />
             <AlertInfo message='Want to start over or register a new match?  Click on the "new match button"!' />
-            <AlertInfo message='You can not set the service order for a set after a points is given' />
+            <AlertInfo message="You can not set the service order for a set after a points is given" />
             <AlertInfo message="For now it's not possible to change the score after a set or the match is finished."/>
             <AlertInfo message="If you need to use the remove points button the service order may be wrong afterwards! ."/>
           </div>
         </div>
-      )
-    }
-  })
+		);
+	}
+})
   ;
 
 function getScoreAndTeam(state) {
-  return {
-    id: hashCode(state.hometeam.state.player1 + state.hometeam.state.player2 +
+	return {
+		id: hashCode(state.hometeam.state.player1 + state.hometeam.state.player2 +
       state.awayteam.state.player1 + state.awayteam.state.player2),
-    homeTeam: state.hometeam.state,
-    awayTeam: state.awayteam.state,
-    sets: [state.sets[0].score, state.sets[1].score, state.sets[2].score]
-  }
+		homeTeam: state.hometeam.state,
+		awayTeam: state.awayteam.state,
+		sets: [state.sets[0].score, state.sets[1].score, state.sets[2].score]
+	};
 }
 
 function hashCode(hashString) {
-  var hash = 0;
-  var i;
-  var chr;
-  var len;
-  if (hashString.length === 0) {
-    return hash;
-  }
-  for (i = 0, len = hashString.length; i < len; i++) {
-    chr   = hashString.charCodeAt(i);
-    hash  = ((hash << 5) - hash) + chr;
-    hash |= 0; // Convert to 32bit integer
-  }
-  return hash;
-};
+	let hash = 0;
+	let i;
+	let chr;
+	let len;
+	if (hashString.length === 0) {
+		return hash;
+	}
+	for (i = 0, len = hashString.length; i < len; i++) {
+		chr = hashString.charCodeAt(i);
+		hash = ((hash << 5) - hash) + chr;
+		hash |= 0; // Convert to 32bit integer
+	}
+	return hash;
+}
 
 module.exports = Scoreboard;

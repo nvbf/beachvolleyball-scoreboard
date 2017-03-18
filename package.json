@@ -48,7 +48,7 @@
     "winston": "2.2.0"
   },
   "scripts": {
-    "test": "xo && gulp test",
+    "test": "gulp test",
     "posttest": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js | rm -rf ./coverage",
     "prestart": "gulp build",
     "start": "node app.js"

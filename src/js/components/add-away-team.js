@@ -1,36 +1,36 @@
 'use strict';
 
 const React = require('react');
-const Team = require('./../domain/Team');
+const Team = require('./../domain/team');
 const Button = require('react-bootstrap').Button;
 const Well = require('react-bootstrap').Well;
-const PlayerInput = require('./PlayerInput');
+const PlayerInput = require('./player-input');
 
-var AddAwayTeam = React.createClass({
+const AddAwayTeam = React.createClass({
 
-  handleSubmit(e) {
-    e.preventDefault();
-    var player1 = document.getElementById('player1').value;
-    var player2 = document.getElementById('player2').value;
+	handleSubmit(e) {
+		e.preventDefault();
+		const player1 = document.getElementById('player1').value;
+		const player2 = document.getElementById('player2').value;
 
-    if (!player2) {
-      document.getElementById('player2').focus();
-      return;
-    }
+		if (!player2) {
+			document.getElementById('player2').focus();
+			return;
+		}
 
-    this.props.match.addAwayTeam(new Team(player1, player2));
+		this.props.match.addAwayTeam(new Team(player1, player2));
 
-    this.props.changeState(
+		this.props.changeState(
       {show: 'Scoreboard'}
     );
-  },
+	},
 
-  componentDidMount() {
-    document.getElementById('player1').focus();
-  },
+	componentDidMount() {
+		document.getElementById('player1').focus();
+	},
 
-  render() {
-    return (
+	render() {
+		return (
       <div>
         <div className="panel panel-default">
           <div className="panel-heading">
@@ -49,8 +49,8 @@ var AddAwayTeam = React.createClass({
           <Button bsStyle="primary"> 2 </Button> Great! Now lets add the second team!
         </Well>
       </div>
-    );
-  }
+		);
+	}
 });
 
 module.exports = AddAwayTeam;

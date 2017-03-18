@@ -2,20 +2,20 @@
 const React = require('react');
 const Button = require('react-bootstrap').Button;
 
-var ScoreboardRow = React.createClass({
+const ScoreboardRow = React.createClass({
 
-  propTypes: {
-    team: React.PropTypes.object.isRequired,
-    scoreForThisTeam: React.PropTypes.array.isRequired,
-    pointsToTeam: React.PropTypes.func.isRequired,
-    removePoint: React.PropTypes.func.isRequired
-  },
+	propTypes: {
+		team: React.PropTypes.object.isRequired,
+		scoreForThisTeam: React.PropTypes.array.isRequired,
+		pointsToTeam: React.PropTypes.func.isRequired,
+		removePoint: React.PropTypes.func.isRequired
+	},
 
-  render() {
-    var players = this.props.team;
-    var score = this.props.scoreForThisTeam;
+	render() {
+		const players = this.props.team;
+		const score = this.props.scoreForThisTeam;
 
-    return (
+		return (
       <tr>
         <td>
           {players.player1} - {players.player2}
@@ -42,8 +42,8 @@ var ScoreboardRow = React.createClass({
           </Button>
         </td>
       </tr>
-    )
-  }
+		);
+	}
 });
 
 module.exports = ScoreboardRow;

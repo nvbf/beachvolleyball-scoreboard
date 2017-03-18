@@ -1,18 +1,17 @@
-var browserify = require('browserify');
-var gulp = require('gulp');
-var source = require('vinyl-source-stream');
-var handleErrors = require('../util/handle-errors');
-var reactify = require('reactify');
-var envify = require('envify');
-var babelify = require('babelify');
-var production = process.env.NODE_ENV === 'production';
+const browserify = require('browserify');
+const gulp = require('gulp');
+const source = require('vinyl-source-stream');
+const handleErrors = require('../util/handle-errors');
+const reactify = require('reactify');
+const envify = require('envify');
+const babelify = require('babelify');
+const production = process.env.NODE_ENV === 'production';
 
-
-var browserifyTask = function() {
-  return browserify({
-    entries: './src/js/components/Router.js',
-    debug: !production
-  })
+const browserifyTask = function () {
+	return browserify({
+		entries: './src/js/components/router.js',
+		debug: !production
+	})
     .transform(envify)
     .transform(babelify)
     .transform(reactify)

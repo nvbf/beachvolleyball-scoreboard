@@ -1,1 +1,1 @@
-require('./gulp');
+const gulp = require('./gulp');
