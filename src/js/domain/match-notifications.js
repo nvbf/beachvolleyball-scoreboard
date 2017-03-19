@@ -1,10 +1,7 @@
 const util = require('util');
 const EventEmitter = require('events').EventEmitter;
-const Team = require('./team');
-const Set = require('./set');
-const Match = require('./match');
 const superagent = require('superagent');
-//TODO: wtf is this
+// TODO: wtf is this
 const apiUrl = 'https://scoreboard-api-sindresvendby.c9.io/api/matches/';
 const MatchApi = require('./match-api');
 let matchNumber;

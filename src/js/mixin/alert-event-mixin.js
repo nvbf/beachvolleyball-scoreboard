@@ -37,7 +37,6 @@ const AlertEventMixin = {
 		}
 		return null;
 	}
-}
-
+};
 
 module.exports = AlertEventMixin;

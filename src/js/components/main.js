@@ -1,11 +1,9 @@
-'use strict';
-
 import React from 'react';
 import url from 'url';
 
-const AddHomeTeam = require('./add-home-team');
-const AddAwayTeam = require('./add-away-team');
-const Scoreboard = require('./scoreboard');
+import AddHomeTeam from './add-home-team';
+import AddAwayTeam from './add-away-team';
+import Scoreboard from './scoreboard';
 
 const ButtonToolbar = require('react-bootstrap').ButtonToolbar;
 const Button = require('react-bootstrap').Button;

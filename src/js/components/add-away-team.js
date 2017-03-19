@@ -1,12 +1,11 @@
-'use strict';
+import React,{Component} from 'react';
+import PlayerInput from './player-input';
 
-const React = require('react');
 const Team = require('./../domain/team');
 const Button = require('react-bootstrap').Button;
 const Well = require('react-bootstrap').Well;
-const PlayerInput = require('./player-input');
 
-const AddAwayTeam = React.createClass({
+export default class AddAwayTeam extends Component {
 
 	handleSubmit(e) {
 		e.preventDefault();
@@ -23,11 +22,11 @@ const AddAwayTeam = React.createClass({
 		this.props.changeState(
       {show: 'Scoreboard'}
     );
-	},
+	}
 
 	componentDidMount() {
 		document.getElementById('player1').focus();
-	},
+	}
 
 	render() {
 		return (
@@ -37,7 +36,7 @@ const AddAwayTeam = React.createClass({
             <h2>..and now the other team!</h2>
           </div>
           <div className="panel-body">
-            <form className="add-team-form" onSubmit={this.handleSubmit}>
+            <form className="add-team-form" onSubmit={this.handleSubmit.bind(this)}>
               <PlayerInput />
               <Button type="submit" bsStyle="primary" className="pull-right">
                 Add Team
@@ -51,6 +50,4 @@ const AddAwayTeam = React.createClass({
       </div>
 		);
 	}
-});
-
-module.exports = AddAwayTeam;
+}

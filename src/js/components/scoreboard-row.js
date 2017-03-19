@@ -1,15 +1,7 @@
-'use strict';
-const React = require('react');
+import React,{Component} from 'react';
 const Button = require('react-bootstrap').Button;
 
-const ScoreboardRow = React.createClass({
-
-	propTypes: {
-		team: React.PropTypes.object.isRequired,
-		scoreForThisTeam: React.PropTypes.array.isRequired,
-		pointsToTeam: React.PropTypes.func.isRequired,
-		removePoint: React.PropTypes.func.isRequired
-	},
+export default class ScoreboardRow extends Component {
 
 	render() {
 		const players = this.props.team;
@@ -44,6 +36,11 @@ const ScoreboardRow = React.createClass({
       </tr>
 		);
 	}
-});
+}
 
-module.exports = ScoreboardRow;
+ScoreboardRow.propTypes = {
+	team: React.PropTypes.object.isRequired,
+	scoreForThisTeam: React.PropTypes.array.isRequired,
+	pointsToTeam: React.PropTypes.func.isRequired,
+	removePoint: React.PropTypes.func.isRequired
+};

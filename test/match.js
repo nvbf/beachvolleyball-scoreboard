@@ -1,7 +1,7 @@
 const should = require('should');
 const sinon = require('sinon');
 const Match = require('./../src/js/domain/match');
-const Set = require('./../src/js/domain/set');
+const Sett = require('./../src/js/domain/sett');
 const Team = require('./../src/js/domain/team');
 const matchTestUtil = require('./match-test-util');
 
@@ -29,7 +29,7 @@ describe('Test Match Util functions', () => {
 
 	it('Setting state', () => {
 		let match;
-		const score = [new Set(option), new Set(option), new Set(option)];
+		const score = [new Sett(option), new Sett(option), new Sett(option)];
 		score[0] = [19, 21];
 		score[1] = [23, 21];
 		score[2] = [13, 14];

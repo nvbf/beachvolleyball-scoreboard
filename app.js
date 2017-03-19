@@ -1,10 +1,13 @@
-const express = require('express');
-const app = express();
+const util = require('util');
+const httpLib = require('http');
 const superagent = require('superagent');
 const bodyParser = require('body-parser');
 const logger = require('winston');
-const util = require('util');
-const http = require('http').Server(app);
+
+const express = require('express');
+
+const app = express();
+const http = httpLib.Server(app);
 const io = require('socket.io')(http);
 
 if (!process.env.API) {

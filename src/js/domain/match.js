@@ -1,7 +1,7 @@
 const util = require('util');
 const EventEmitter = require('events').EventEmitter;
 const Team = require('./team');
-const Set = require('./set');
+const Sett = require('./sett');
 
 function Match() {
 	const defaultSetOption = {
@@ -14,12 +14,12 @@ function Match() {
 		length: 15,
 		switch: 5
 	};
-	const set1 = new Set(defaultSetOption);
+	const set1 = new Sett(defaultSetOption);
 
 	this.state = {
 		hometeam: new Team('', ''),
 		awayteam: new Team('', ''),
-		sets: [set1, new Set(defaultSetOption), new Set(thirdSetOption)],
+		sets: [set1, new Sett(defaultSetOption), new Sett(thirdSetOption)],
 		currentSet: 0,
 		currentSetScore: set1.score,
 		homeTeamTimeout: 0,

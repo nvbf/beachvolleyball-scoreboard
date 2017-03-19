@@ -1,1 +1,1 @@
-const gulp = require('./gulp');
+require('./gulp'); // eslint-disable-line

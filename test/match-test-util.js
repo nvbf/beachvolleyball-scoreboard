@@ -1,9 +1,6 @@
-'use strict';
-
 const util = {};
 const Match = require('./../src/js/domain/match');
 const Team = require('./../src/js/domain/team');
-const Set = require('./../src/js/domain/set');
 
 util.setScoreToTest = function (score = [[21, 19], [19, 21], [14, 14]]) {
 	const match = new Match();

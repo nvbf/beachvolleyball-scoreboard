@@ -1,6 +1,4 @@
-'use strict';
-
-function Set(option) {
+function Sett(option) {
 	this.score = [0, 0];
 	this.pointLimit = option.length;
 	this.switch = option.switch;
@@ -34,11 +32,11 @@ function Set(option) {
 	return this;
 }
 
-Set.prototype.setStartServing = function (team) {
+Sett.prototype.setStartServing = function (team) {
 	this.teamCurrentlyServing = team;
 };
 
-Set.prototype.isTTO = function () {
+Sett.prototype.isTTO = function () {
 	if (!this.tto) {
 		return false;
 	}
@@ -47,52 +45,52 @@ Set.prototype.isTTO = function () {
 	return ((score[0] + score[1]) === this.tto);
 };
 
-Set.prototype.shouldChangeSide = function () {
+Sett.prototype.shouldChangeSide = function () {
 	const score = this.score;
   // True every 7 point
 	return ((score[0] + score[1]) % this.switch === 0);
 };
 
-Set.prototype.removePointHomeTeam = function () {
+Sett.prototype.removePointHomeTeam = function () {
 	this.notifyServerOrder('hometeam');
 	this.teamCurrentlyServing = 'hometeam';
 	return this.removePoint(0);
 };
 
-Set.prototype.addPointHomeTeam = function () {
+Sett.prototype.addPointHomeTeam = function () {
 	this.notifyServerOrder('hometeam');
 	this.teamCurrentlyServing = 'hometeam';
 	return this.addPoint(0);
 };
 
-Set.prototype.removePointAwayTeam = function () {
+Sett.prototype.removePointAwayTeam = function () {
 	this.notifyServerOrder('awayteam');
 	this.teamCurrentlyServing = 'awayteam';
 	return this.removePoint(1);
 };
 
-Set.prototype.addPointAwayTeam = function () {
+Sett.prototype.addPointAwayTeam = function () {
 	this.notifyServerOrder('awayteam');
 	this.teamCurrentlyServing = 'awayteam';
 	return this.addPoint(1);
 };
 
-Set.prototype.isSetWonByHomeTeam = function () {
+Sett.prototype.isSetWonByHomeTeam = function () {
 	const score = this.score;
 	return (score[0] >= this.pointLimit && score[0] > score[1] + 1);
 };
 
-Set.prototype.isSetWonByAwayTeam = function () {
+Sett.prototype.isSetWonByAwayTeam = function () {
 	const score = this.score;
 	return (score[1] >= this.pointLimit && score[1] > score[0] + 1);
 };
 
-Set.prototype.isFinished = function () {
+Sett.prototype.isFinished = function () {
 	return (this.isSetWonByHomeTeam() || this.isSetWonByAwayTeam());
 };
 
-Set.prototype.hasStarted = function () {
+Sett.prototype.hasStarted = function () {
 	return !(this.score[0] === 0 && this.score[1] === 0);
 };
 
-module.exports = Set;
+module.exports = Sett;

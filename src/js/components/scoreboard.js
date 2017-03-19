@@ -1,9 +1,7 @@
-'use strict';
+import React,{ Component } from 'react';
+import ScoreboardRow from './scoreboard-row';
 
-const React = require('react');
-const ReactDom = require('react-dom');
 const NotificationAlerts = require('./notification-alerts');
-const ScoreboardRow = require('./scoreboard-row');
 const ServeOrder = require('./serve-order');
 const Timeout = require('./timeout');
 const TimeoutButtons = require('./timeout-buttons');
@@ -12,10 +10,11 @@ const Well = require('react-bootstrap').Well;
 const Alert = require('react-bootstrap').Alert;
 const AlertInfo = require('./alert-info');
 
-const Scoreboard = React.createClass({
-	propTypes: {
-		match: React.PropTypes.object.isRequired
-	},
+export default class Scoreboard extends Component {
+	constructor(props) {
+		super(props);
+		this.state = this.props.match.state;
+	}
 
 	componentDidMount() {
 		this.props.match.notification.on('match-notification', () => {
@@ -29,11 +28,7 @@ const Scoreboard = React.createClass({
 			state.awayTeamTimeout = 0;
 			this.setState(state);
 		});
-	},
-
-	getInitialState() {
-		return this.props.match.state;
-	},
+	}
 
 	pointToHomeTeam(event) {
 		return function (event) {
@@ -41,7 +36,7 @@ const Scoreboard = React.createClass({
 			this.props.match.getCurrentSet().addPointHomeTeam();
 			this.setState(this.props.match.state);
 		}.bind(this);
-	},
+	}
 
 	removePointHomeTeam(event) {
 		return function (event) {
@@ -49,7 +44,7 @@ const Scoreboard = React.createClass({
 			this.props.match.getCurrentSet().removePointHomeTeam();
 			this.setState(this.props.match.state);
 		}.bind(this);
-	},
+	}
 
 	pointToHomeTeam(event) {
 		return function (event) {
@@ -57,7 +52,7 @@ const Scoreboard = React.createClass({
 			this.props.match.getCurrentSet().addPointHomeTeam();
 			this.setState(this.props.match.state);
 		}.bind(this);
-	},
+	}
 
 	removePointAwayTeam(event) {
 		return function (event) {
@@ -65,7 +60,7 @@ const Scoreboard = React.createClass({
 			this.props.match.getCurrentSet().removePointAwayTeam();
 			this.setState(this.props.match.state);
 		}.bind(this);
-	},
+	}
 
 	pointToAwayTeam(event) {
 		return function (event) {
@@ -73,13 +68,13 @@ const Scoreboard = React.createClass({
 			this.props.match.getCurrentSet().addPointAwayTeam();
 			this.setState(this.props.match.state);
 		}.bind(this);
-	},
+	}
 
 	updateState() {
 		return function (state) {
 			this.setState(state);
 		}.bind(this);
-	},
+	}
 
 	renderEvents() {
 		const eventsComponent = [];
@@ -93,7 +88,7 @@ const Scoreboard = React.createClass({
           {eventsComponent.reverse()}
         </Alert>
 		);
-	},
+	}
 
 	render() {
 		const scoreAwayTeam = [
@@ -201,8 +196,11 @@ const Scoreboard = React.createClass({
         </div>
 		);
 	}
-})
-  ;
+}
+
+Scoreboard.propTypes = {
+	match: React.PropTypes.object.isRequired
+}
 
 function getScoreAndTeam(state) {
 	return {
@@ -230,4 +228,3 @@ function hashCode(hashString) {
 	return hash;
 }
 
-module.exports = Scoreboard;

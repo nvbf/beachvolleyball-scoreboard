@@ -1,9 +1,7 @@
-'use strict';
-
-const React = require('react');
+import React from 'react';
 const FormControl = require('react-bootstrap').FormControl;
 
-const PlayerInput = React.createClass({
+export default class PlayerInput extends React.Component {
 	render() {
 		return (
       <div>
@@ -16,7 +14,4 @@ const PlayerInput = React.createClass({
       </div>
 		);
 	}
-})
-;
-
-module.exports = PlayerInput;
+}
