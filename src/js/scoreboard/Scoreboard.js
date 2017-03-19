@@ -1,15 +1,15 @@
-'use strict';
-
 import React from 'react';
 import ReactDom from 'react-dom';
 import { Button, Well, Alert } from 'react-bootstrap';
 import { connect } from 'react-redux'
 
+import { TEAM } from './../constants'
+
 const NotificationAlerts = require('./NotificationAlerts');
-const ScoreboardRow = require('./ScoreboardRow');
+import ScoreboardRow from './ScoreboardRow';
 const ServeOrder = require('./ServeOrder');
 const Timeout = require('./Timeout');
-const TimeoutButtons = require('./TimeoutButtons');
+import TimeoutButtons from './TimeoutButtons';
 const AlertInfo = require('./AlertInfo');
 
 const Scoreboard = React.createClass({
@@ -19,10 +19,10 @@ const Scoreboard = React.createClass({
     },
 
     renderEvents() {
-      let eventsComponent = [];
-      this.props.events.forEach((event, index) => {
-        eventsComponent.push(<p key={index}>{event} </p>);
-      });
+      // let eventsComponent = [];
+      // this.props.events.forEach((event, index) => {
+      //   eventsComponent.push(<p key={index}>{event} </p>);
+      // });
 
       return (
         <Alert bsStyle='info'>
@@ -33,8 +33,7 @@ const Scoreboard = React.createClass({
     },
 
     render() {
-
-      // window.socket.emit('match-update', getScoreAndTeam(this.props.match.state));
+      const { hometeam, awayteam } = this.props;
 
       return (
         <div>
@@ -79,8 +78,8 @@ const Scoreboard = React.createClass({
                     </tr>
                   </thead>
                   <tbody>
-                    <ScoreboardRow team="hometeam" />
-                    <ScoreboardRow team="awayteam" />
+                    <ScoreboardRow players={hometeam.get('players')} />
+                    <ScoreboardRow players={awayteam.get('players')} />
                   </tbody>
                 </table>
                 <Button className="pull-right undo" bsStyle="warning" type="submit">
@@ -93,7 +92,7 @@ const Scoreboard = React.createClass({
             </div>
             <ServeOrder />
             <section className="events">
-              {this.renderEvents()}
+              {/* {this.renderEvents()} */}
             </section>
             <Well>
               <Button bsStyle="primary"> 3 </Button> You can set the service order by clicking the "Set service order" button above. (Optional)
@@ -112,35 +111,7 @@ const Scoreboard = React.createClass({
         </div>
       )
     }
-  })
-  ;
-
-function getScoreAndTeam(state) {
-  return {
-    id: hashCode(state.hometeam.state.player1 + state.hometeam.state.player2 +
-      state.awayteam.state.player1 + state.awayteam.state.player2),
-    homeTeam: state.hometeam.state,
-    awayTeam: state.awayteam.state,
-    sets: [state.sets[0].score, state.sets[1].score, state.sets[2].score]
-  }
-}
-
-function hashCode(hashString) {
-  var hash = 0;
-  var i;
-  var chr;
-  var len;
-  if (hashString.length === 0) {
-    return hash;
-  }
-  for (i = 0, len = hashString.length; i < len; i++) {
-    chr   = hashString.charCodeAt(i);
-    hash  = ((hash << 5) - hash) + chr;
-    hash |= 0; // Convert to 32bit integer
-  }
-  return hash;
-};
-
+  });
 
 
 Scoreboard.contextTypes = {
@@ -149,8 +120,8 @@ Scoreboard.contextTypes = {
 
 const mapStateToProps = (state) => {
   return {
-    state: state,
-    events: [],
+    awayteam: state[TEAM].get("awayteam"),
+    hometeam: state[TEAM].get("hometeam")
   }
 }
 

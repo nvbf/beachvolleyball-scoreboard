@@ -3,9 +3,9 @@ import {
   LOCATION_CHANGE
 } from 'react-router-redux';
 
-const initialState = Immutable.fromJS({
+const initialState = {
   locationBeforeTransitions: null
-});
+};
 
 export default (state = initialState, action) => {
   if (action.type === LOCATION_CHANGE) {

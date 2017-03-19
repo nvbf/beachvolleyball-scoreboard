@@ -1,28 +1,29 @@
-import React from 'react';
-import { Label, Button, ButtonToolbar } from 'react-bootstrap';
+const React = require('react');
+const Button = require('react-bootstrap').Button;
+const ButtonToolbar = require('react-bootstrap').ButtonToolbar;
+const Label = require('react-bootstrap').Label;
 
-const TimeoutMenu = React.createClass({
+const TimeoutButtons = React.createClass({
+  propTypes: {
+    homeTeamTimeout: React.PropTypes.number.isRequired,
+    awayTeamTimeout: React.PropTypes.number.isRequired,
+    updateState: React.PropTypes.func.isRequired
+  },
 
   restart() {
       location.reload();
   },
 
   showTimeout() {
-    this.props.match.notification.emit('timeout-notification');
+
   },
 
   onTimeoutHomeTeam(e) {
     e.preventDefault();
-    this.props.match.homeTeamTakesTimeout();
-    this.props.updateState(this.props.match.state);
-    this.showTimeout();
   },
 
   onTimeoutAwayTeam(e) {
     e.preventDefault();
-    this.props.match.awayTeamTakesTimeout();
-    this.props.updateState(this.props.match.state);
-    this.showTimeout(this.props.match.state.awayteam.display());
   },
 
   render: function() {
@@ -33,12 +34,12 @@ const TimeoutMenu = React.createClass({
           <Button type="submit"
                   className={(this.props.homeTeamTimeout != 0 ? 'disabled' : '')}
                   onClick={this.onTimeoutHomeTeam}>
-            {this.props.match.state.hometeam.display()}
+                  Bortelag
           </Button>
           <Button type="submit"
                   className={(this.props.awayTeamTimeout != 0 ? 'disabled' : '')}
                   onClick={this.onTimeoutAwayTeam}>
-            {this.props.match.state.awayteam.display()}
+                  Hjemmelag
           </Button>
           <Button bsStyle="danger" type="submit" className="pull-right" onClick={this.restart}>
             New Match
@@ -49,4 +50,4 @@ const TimeoutMenu = React.createClass({
   }
 });
 
-module.exports = TimeoutMenu;
+export default TimeoutButtons;

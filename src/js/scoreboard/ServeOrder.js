@@ -21,55 +21,18 @@ var ServeOrder = React.createClass({
     };
   },
 
-  propTypes: {
-    match: React.PropTypes.object.isRequired
-  },
-
   awayTeamStarts() {
-    this.props.match.getCurrentSet().setStartServing('awayteam');
-    this.setState({
-      startToServe: 'awayteam'
-    })
   },
 
   homeTeamStarts() {
-    this.props.match.getCurrentSet().setStartServing('hometeam');
-    this.setState({
-      startToServe: 'hometeam'
-    })
   },
 
   componentDidMount() {
-    // this.props.match.notification.on('point-remove', function() {
-    //   this.setState(this.getInitialState());
-    // }.bind(this));
-
-    this.props.match.notification.on('switch-server-reverse', function() {
-      var servingOrder = this.state.servingOrder;
-      if (servingOrder) {
-        servingOrder.lastServer();
-        this.setState({
-          servingOrder: servingOrder
-        })
-      }
-    }.bind(this));
-
-    this.props.match.notification.on('switch-server', function() {
-      var servingOrder = this.state.servingOrder;
-      if (servingOrder) {
-        servingOrder.nextServer();
-        this.setState({
-          servingOrder: servingOrder
-        })
-      }
-    }.bind(this));
-
-    this.props.match.notification.on('set-notification', function() {
-      this.replaceState(this.getInitialState());
-    }.bind(this));
   },
 
   render() {
+    return null;
+
     if (this.state.order.length === 4) {
       return (
         <section>

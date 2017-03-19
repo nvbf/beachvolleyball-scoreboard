@@ -24,14 +24,14 @@ var Timeout = React.createClass({
   },
 
   componentDidMount() {
-    this.props.notification.on(this.props.eventTrigger, () => {
+    () => {
       if (!this.state.interval) {
         this.interval = setInterval(this.tick, 1000);
         this.setState({
           interval: true
         });
       }
-    });
+    };
   },
 
   handleAlertDismissOverlay() {

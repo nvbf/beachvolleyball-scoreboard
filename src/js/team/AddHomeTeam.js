@@ -50,7 +50,7 @@ AddHomeTeam.contextTypes = {
 
 const mapStateToProps = (state) => {
   return {
-    hometeam: state.get(TEAM).get("hometeam")
+    hometeam: state[TEAM].get("hometeam")
   }
 }
 

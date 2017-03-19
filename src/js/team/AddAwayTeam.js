@@ -28,7 +28,7 @@ class AddAwayTeam extends React.Component {
         </div>
         <div className="panel-body">
             <PlayerInput team={team} teamKey="awayteam" />
-            <Link to="/scoreboard">Add Team</Link>
+            <Link to="/scoreboard.html">Add Team</Link>
         </div>
       </div>
 
@@ -50,7 +50,7 @@ AddAwayTeam.contextTypes = {
 
 const mapStateToProps = (state) => {
   return {
-    awayteam: state.get(TEAM).get("awayteam")
+    awayteam: state[TEAM].get("awayteam")
   }
 }
 

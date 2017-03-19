@@ -1,21 +1,27 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
+import { TEAM } from './../constants';
 
 const ScoreboardRow = React.createClass({
   propTypes: {
-    team: React.PropTypes.string.isRequired,
+    players: React.PropTypes.object.isRequired,
+  },
+
+  onClick() {
+    console.log('TODO: Add point');
   },
 
   render() {
-    this.props.team;
+    const player1 = this.props.players.get('player1');
+    const player2 = this.props.players.get('player2');
 
-    var score = this.props.scoreForThisTeam;
+    var score = [0,0,0];
 
     return (
       <tr>
         <td>
-          {players.player1} - {players.player2}
+          {player1} - {player2}
         </td>
         <td>
           {score[0]}
@@ -27,8 +33,8 @@ const ScoreboardRow = React.createClass({
           {score[2]}
         </td>
         <td>
-          <Button bsStyle="primary" className="points" type="submit" onClick={this.props.pointsToTeam}
-                  disabled={this.props.match.state.finished}>
+          <Button bsStyle="primary" className="points" type="submit" onClick={this.onClick}
+                  disabled={false}>
             <span className="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
           </Button>
         </td>
@@ -44,7 +50,7 @@ ScoreboardRow.contextTypes = {
 
 const mapStateToProps = (state) => {
   return {
-    awayteam: state.get(TEAM).get("awayteam")
+    awayteam: state[TEAM].get("awayteam")
   }
 }
 
@@ -52,7 +58,4 @@ const ScoreboardRowConnect = connect(
   mapStateToProps,
 )(ScoreboardRow)
 
-export default ScoreboardRowConnect
-
-
-module.exports = ScoreboardRow;
+export default ScoreboardRowConnect;

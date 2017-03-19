@@ -1,5 +1,6 @@
 var webpack = require("webpack");
 var path = require("path");
+
 module.exports = {
   module: {
     loaders: [
@@ -14,7 +15,7 @@ module.exports = {
     ]
   },
   entry: {
-    app: ["./src/js/Router.js"]
+    app: "./src/js/Router.js"
   },
   output: {
     path: path.resolve(__dirname, "public/dynamic"),
