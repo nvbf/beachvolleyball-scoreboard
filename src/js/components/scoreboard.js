@@ -85,7 +85,7 @@ export default class Scoreboard extends Component {
 		return (
 			<Alert bsStyle="info">
 				<h3>Match details</h3>
-	{eventsComponent.reverse()}
+				{eventsComponent.reverse()}
 			</Alert>
 		);
 	}
@@ -113,32 +113,32 @@ export default class Scoreboard extends Component {
 				<div className="container scoreboard">
 					<div className="switch-modal">
 						<NotificationAlerts
-message="Switch"
-	eventTrigger="switch-notification"
-	notification={this.props.match.notification} />
+							message="Switch"
+							eventTrigger="switch-notification"
+							notification={this.props.match.notification}/>
 					</div>
 					<div className="set-finished-modal">
 						<NotificationAlerts
-message="Set finished"
-	eventTrigger="set-notification"
-	notification={this.props.match.notification} />
+							message="Set finished"
+							eventTrigger="set-notification"
+							notification={this.props.match.notification}/>
 					</div>
 					<div className="game-finished-modal">
 						<NotificationAlerts
-message="Match finished"
-	eventTrigger="match-notification"
-	notification={this.props.match.notification} />
+							message="Match finished"
+							eventTrigger="match-notification"
+							notification={this.props.match.notification}/>
 					</div>
 					<div className="timeout-alerts">
 						<Timeout
-seconds={45} message="Timeout: "
-	eventTrigger="timeout-notification"
-	notification={this.props.match.notification} />
+							seconds={45} message="Timeout: "
+							eventTrigger="timeout-notification"
+							notification={this.props.match.notification}/>
 					</div>
 					<div className="timeout-alerts">
 						<Timeout
-seconds={45} message="Technical time-out: "
-	eventTrigger="tto-notification" notification={this.props.match.notification} />
+							seconds={45} message="Technical time-out: "
+							eventTrigger="tto-notification" notification={this.props.match.notification}/>
 					</div>
 					<div className="panel panel-default">
 						<div className="panel-heading">
@@ -158,32 +158,32 @@ seconds={45} message="Technical time-out: "
 								</thead>
 								<tbody>
 									<ScoreboardRow
-	pointsToTeam={this.pointToHomeTeam()}
-	removePoint={this.removePointHomeTeam()}
-	scoreForThisTeam={scoreHomeTeam}
-	team={this.props.match.homeTeam()}
-	match={this.props.match} />
+										pointsToTeam={this.pointToHomeTeam()}
+										removePoint={this.removePointHomeTeam()}
+										scoreForThisTeam={scoreHomeTeam}
+										team={this.props.match.homeTeam()}
+										match={this.props.match}/>
 									<ScoreboardRow
-	pointsToTeam={this.pointToAwayTeam()}
-	removePoint={this.removePointAwayTeam()}
-	scoreForThisTeam={scoreAwayTeam}
-	team={this.props.match.awayTeam()}
-	match={this.props.match} />
+										pointsToTeam={this.pointToAwayTeam()}
+										removePoint={this.removePointAwayTeam()}
+										scoreForThisTeam={scoreAwayTeam}
+										team={this.props.match.awayTeam()}
+										match={this.props.match}/>
 								</tbody>
 							</table>
 						</div>
 						<div className="panel-footer">
 							<TimeoutButtons
-	homeTeamTimeout={this.state.homeTeamTimeout}
-	awayTeamTimeout={this.state.awayTeamTimeout}
-	match={this.props.match}
-	updateState={this.updateState()}
+								homeTeamTimeout={this.state.homeTeamTimeout}
+								awayTeamTimeout={this.state.awayTeamTimeout}
+								match={this.props.match}
+								updateState={this.updateState()}
 							>
 						</div>
 					</div>
-					<ServeOrder match={this.props.match} />
+					<ServeOrder match={this.props.match}/>
 					<section className="events">
-	{this.renderEvents()}
+						{this.renderEvents()}
 					</section>
 					<Well>
 						<Button bsStyle="primary"> 3 </Button>						You can set the service order by clicking the "Set service order" button above. (Optional)
@@ -192,12 +192,12 @@ seconds={45} message="Technical time-out: "
 						<Button bsStyle="primary"> 4 </Button>						Now you kan keep score with the blue buttons right under "Add Point"
 					</Well>
 					<h2>Notes for first time users</h2>
-					<AlertInfo message='If you do a mistake, you can adjust the score by also using the buttons below "remove point" to get the score right.'/>
-					<AlertInfo message="When you have set the service order, we will help you keep track of how is serving, It's almost magic."/>
-					<AlertInfo message='Want to start over or register a new match?  Click on the "new match button"!'/>
-					<AlertInfo message="You can not set the service order for a set after a points is given"/>
-					<AlertInfo message="For now it's not possible to change the score after a set or the match is finished." />
-					<AlertInfo message="If you need to use the remove points button the service order may be wrong afterwards! ." />
+					<AlertInfo message='If you do a mistake, you can adjust the score by also using the buttons below "remove point" to get the score right.' />
+					<AlertInfo message="When you have set the service order, we will help you keep track of how is serving, It's almost magic." />
+					<AlertInfo message='Want to start over or register a new match?  Click on the "new match button"!' />
+					<AlertInfo message="You can not set the service order for a set after a points is given" />
+					<AlertInfo message="For now it's not possible to change the score after a set or the match is finished."/>
+					<AlertInfo message="If you need to use the remove points button the service order may be wrong afterwards! ."/>
 				</div>
 			</div>
 		);

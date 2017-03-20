@@ -15,7 +15,13 @@
     "ignores": [
       "test/**"
     ],
-    "extends": "xo-react"
+    "extends": [
+      "xo/esnext",
+      "xo-react"
+    ], 
+    "rules": {
+      "jsx-sort-props": 0
+    }
   },
   "dependencies": {
     "babel-cli": "^6.14.0",

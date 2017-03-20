@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-const Button = require('react-bootstrap').Button;
+import {Button} from 'react-bootstrap';
 
 export default class ScoreboardRow extends Component {
 
