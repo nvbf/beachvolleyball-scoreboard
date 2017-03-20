@@ -14,9 +14,9 @@ const NotificationAlerts = React.createClass({
 		if (this.state.alertVisible) {
 			setTimeout(() => this.hide(), 5000);
 			return (
-        <Alert bsStyle="info" onDismiss={this.hide}>
-          <strong>{this.props.message}</strong>
-        </Alert>
+				<Alert bsStyle="info" onDismiss={this.hide}>
+					<strong>{this.props.message}</strong>
+				</Alert>
 			);
 		}
 		return null;

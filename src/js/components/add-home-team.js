@@ -30,25 +30,25 @@ export default class AddHomeTeam extends Component {
 
 	render() {
 		return (
-      <div>
-      <div className="panel panel-default">
-        <div className="panel-heading">
-          <h2>Lets add the first team..</h2>
-        </div>
-        <div className="panel-body">
-          <form className="add-team-form" onSubmit={this.handleSubmit.bind(this)}>
-            <PlayerInput />
-            <Button type="submit" bsStyle="primary" className="pull-right">
+			<div>
+				<div className="panel panel-default">
+					<div className="panel-heading">
+						<h2>Lets add the first team..</h2>
+					</div>
+					<div className="panel-body">
+						<form className="add-team-form" onSubmit={this.handleSubmit.bind(this)}>
+							<PlayerInput />
+							<Button type="submit" bsStyle="primary" className="pull-right">
               Add Team
-            </Button>
-          </form>
-        </div>
-      </div>
+							</Button>
+						</form>
+					</div>
+				</div>
 
-      <Well>
-        <Button bsStyle="primary"> 1 </Button> The first thing we need to do is to add the teams that are playing against each other
-      </Well>
-      </div>
+				<Well>
+					<Button bsStyle="primary"> 1 </Button>					The first thing we need to do is to add the teams that are playing against each other
+				</Well>
+			</div>
 		);
 	}
 }

@@ -30,24 +30,24 @@ export default class AddAwayTeam extends Component {
 
 	render() {
 		return (
-      <div>
-        <div className="panel panel-default">
-          <div className="panel-heading">
-            <h2>..and now the other team!</h2>
-          </div>
-          <div className="panel-body">
-            <form className="add-team-form" onSubmit={this.handleSubmit.bind(this)}>
-              <PlayerInput />
-              <Button type="submit" bsStyle="primary" className="pull-right">
+			<div>
+				<div className="panel panel-default">
+					<div className="panel-heading">
+						<h2>..and now the other team!</h2>
+					</div>
+					<div className="panel-body">
+						<form className="add-team-form" onSubmit={this.handleSubmit.bind(this)}>
+							<PlayerInput />
+							<Button type="submit" bsStyle="primary" className="pull-right">
                 Add Team
-              </Button>
-            </form>
-          </div>
-        </div>
-        <Well>
-          <Button bsStyle="primary"> 2 </Button> Great! Now lets add the second team!
-        </Well>
-      </div>
+							</Button>
+						</form>
+					</div>
+				</div>
+				<Well>
+					<Button bsStyle="primary"> 2 </Button>					Great! Now lets add the second team!
+				</Well>
+			</div>
 		);
 	}
 }

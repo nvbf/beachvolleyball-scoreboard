@@ -58,25 +58,25 @@ const ServeOrder = React.createClass({
 	render() {
 		if (this.state.order.length === 4) {
 			return (
-        <section>
-          <Alert bsStyle="warning">
-            <p>Player to serve: {this.state.servingOrder.toServe()} </p>
-          </Alert>
-        </section>
+				<section>
+					<Alert bsStyle="warning">
+						<p>Player to serve: {this.state.servingOrder.toServe()} </p>
+					</Alert>
+				</section>
 			);
 		}
 
 		const setHasStarted = this.props.match.getCurrentSet().hasStarted();
 		const modal = this.renderOverlay();
 		return (
-      <section>
-        <Alert bsStyle="warning">
-          <ButtonToolbar>
-            <Button onClick={this.handleToggle} disabled={setHasStarted}>Set service order</Button>
-          </ButtonToolbar>
-        </Alert>
-        {modal}
-      </section>
+			<section>
+				<Alert bsStyle="warning">
+					<ButtonToolbar>
+						<Button onClick={this.handleToggle} disabled={setHasStarted}>Set service order</Button>
+					</ButtonToolbar>
+				</Alert>
+	{modal}
+			</section>
 
 		);
 	},
@@ -136,13 +136,14 @@ const ServeOrder = React.createClass({
 		}
 		return (
 
-      <div className="static-modal">
-        <Modal
-               show={this.state.isModalOpen}
-               onHide={this.handleToggle}>
-          {modalBodyList}
-        </Modal>
-      </div>
+			<div className="static-modal">
+				<Modal
+	show={this.state.isModalOpen}
+	onHide={this.handleToggle}
+               >
+	{modalBodyList}
+				</Modal>
+			</div>
 		);
 	}
 });
@@ -154,25 +155,25 @@ function getTeamModalBodyList(match, homeTeamStarts, awayTeamStarts) {
 	const awayTeamText = awayTeam.player1 + '-' + awayTeam.player2;
 
 	return (
-    <ModalBodyList
-      chosenFirstItem={homeTeamStarts}
-      chosenSecondItem={awayTeamStarts}
-      firstItemText={homeTeamText}
-      secondItemText={awayTeamText}
-      footerText="Choose the team that will start serving"
-      />
+		<ModalBodyList
+	chosenFirstItem={homeTeamStarts}
+	chosenSecondItem={awayTeamStarts}
+	firstItemText={homeTeamText}
+	secondItemText={awayTeamText}
+	footerText="Choose the team that will start serving"
+		>
 	);
 }
 
 function getPlayerModalBodyList(team, chosenFirstItem, chosenSecondItem) {
 	return (
-    <ModalBodyList
-      chosenFirstItem={chosenFirstItem}
-      chosenSecondItem={chosenSecondItem}
-      firstItemText={team.player1}
-      secondItemText={team.player2}
-      footerText="Choose the player that will start serving"
-      />
+		<ModalBodyList
+	chosenFirstItem={chosenFirstItem}
+	chosenSecondItem={chosenSecondItem}
+	firstItemText={team.player1}
+	secondItemText={team.player2}
+	footerText="Choose the player that will start serving"
+		>
 	);
 }
 

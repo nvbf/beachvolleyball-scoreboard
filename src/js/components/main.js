@@ -51,9 +51,9 @@ class Main extends React.Component {
 			}
 
 			return (
-        <p>
-          {this.state.matchUrl}
-        </p>
+				<p>
+					{this.state.matchUrl}
+				</p>
 			);
 		}
 	}
@@ -81,23 +81,23 @@ class Main extends React.Component {
 
 		if (show === 'AddHomeTeam') {
 			return (
-        <main>
-          <AddHomeTeam changeState={changeState} match={match}/>
-        </main>
+				<main>
+					<AddHomeTeam changeState={changeState} match={match}/>
+				</main>
 			);
 		} else if (show === 'AddAwayTeam') {
 			return (
-        <main>
-          <AddAwayTeam changeState={changeState} match={match}/>
-        </main>
+				<main>
+					<AddAwayTeam changeState={changeState} match={match}/>
+				</main>
 			);
 		}
 		return (
-        <section>
-          <main>
-            <Scoreboard match={match}/>
-          </main>
-        </section>
+			<section>
+				<main>
+					<Scoreboard match={match}/>
+				</main>
+			</section>
 		);
 	}
 }

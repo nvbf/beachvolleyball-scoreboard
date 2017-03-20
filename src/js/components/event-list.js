@@ -10,12 +10,12 @@ const EventList = React.createClass({
 
 	render() {
 		return (
-      <section>
-        <Label>Match events</Label>
-        <Alert bsStyle="info">
-          {this.props.eventList}
-        </Alert>
-      </section >
+			<section>
+				<Label>Match events</Label>
+				<Alert bsStyle="info">
+					{this.props.eventList}
+				</Alert>
+			</section >
 		);
 	}
 });

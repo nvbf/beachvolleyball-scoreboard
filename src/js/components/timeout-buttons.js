@@ -37,24 +37,28 @@ const TimeoutMenu = React.createClass({
 
 	render() {
 		return (
-      <div>
-        <Label>Timeout</Label>
-        <ButtonToolbar>
-          <Button type="submit"
-                  className={(this.props.homeTeamTimeout != 0 ? 'disabled' : '')}
-                  onClick={this.onTimeoutHomeTeam}>
-            {this.props.match.state.hometeam.display()}
-          </Button>
-          <Button type="submit"
-                  className={(this.props.awayTeamTimeout != 0 ? 'disabled' : '')}
-                  onClick={this.onTimeoutAwayTeam}>
-            {this.props.match.state.awayteam.display()}
-          </Button>
-          <Button bsStyle="danger" type="submit" className="pull-right" onClick={this.restart}>
+			<div>
+				<Label>Timeout</Label>
+				<ButtonToolbar>
+					<Button
+						type="submit"
+						className={(this.props.homeTeamTimeout != 0 ? 'disabled' : '')}
+						onClick={this.onTimeoutHomeTeam}
+					>
+						{this.props.match.state.hometeam.display()}
+					</Button>
+					<Button
+						type="submit"
+						className={(this.props.awayTeamTimeout != 0 ? 'disabled' : '')}
+						onClick={this.onTimeoutAwayTeam}
+					>
+						{this.props.match.state.awayteam.display()}
+					</Button>
+					<Button bsStyle="danger" type="submit" className="pull-right" onClick={this.restart}>
             New Match
-          </Button>
-        </ButtonToolbar>
-      </div>
+					</Button>
+				</ButtonToolbar>
+			</div>
 		);
 	}
 });

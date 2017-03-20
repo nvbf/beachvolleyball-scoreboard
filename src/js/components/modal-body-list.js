@@ -19,20 +19,20 @@ const ModalBodyList = React.createClass({
 
 	render() {
 		return (
-      <div>
-      <Modal.Header closeButton>
-        <Modal.Title>Service Order</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <ListGroup>
-          <ListGroupItem onClick={this.props.chosenFirstItem}> {this.props.firstItemText} </ListGroupItem>
-          <ListGroupItem onClick={this.props.chosenSecondItem}> {this.props.secondItemText} </ListGroupItem>
-        </ListGroup>
-        <div className="modal-footer">
-          <p>{this.props.footerText}</p>
-        </div>
-      </Modal.Body>
-      </div>
+			<div>
+				<Modal.Header closeButton>
+					<Modal.Title>Service Order</Modal.Title>
+				</Modal.Header>
+				<Modal.Body>
+					<ListGroup>
+						<ListGroupItem onClick={this.props.chosenFirstItem}> {this.props.firstItemText} </ListGroupItem>
+						<ListGroupItem onClick={this.props.chosenSecondItem}> {this.props.secondItemText} </ListGroupItem>
+					</ListGroup>
+					<div className="modal-footer">
+						<p>{this.props.footerText}</p>
+					</div>
+				</Modal.Body>
+			</div>
 		);
 	}
 });

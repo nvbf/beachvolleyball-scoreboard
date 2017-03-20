@@ -43,9 +43,9 @@ const Timeout = React.createClass({
 
 	renderOverlay() {
 		return (
-      <Alert bsStyle="info" onDismiss={this.handleAlertDismiss}>
-        {this.props.message} {this.state.secondsLeft}
-      </Alert>
+			<Alert bsStyle="info" onDismiss={this.handleAlertDismiss}>
+				{this.props.message} {this.state.secondsLeft}
+			</Alert>
 		);
 	}
 });
