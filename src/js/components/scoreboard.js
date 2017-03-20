@@ -178,7 +178,7 @@ export default class Scoreboard extends Component {
 								awayTeamTimeout={this.state.awayTeamTimeout}
 								match={this.props.match}
 								updateState={this.updateState()}
-							>
+							/>
 						</div>
 					</div>
 					<ServeOrder match={this.props.match}/>
