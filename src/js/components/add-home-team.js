@@ -1,10 +1,9 @@
-import React,{Component} from 'react';
+import React, {Component} from 'react';
 import PlayerInput from './player-input';
 
 const Team = require('./../domain/team');
 const Button = require('react-bootstrap').Button;
 const Well = require('react-bootstrap').Well;
-
 
 export default class AddHomeTeam extends Component {
 

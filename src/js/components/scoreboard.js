@@ -1,4 +1,4 @@
-import React,{ Component } from 'react';
+import React, {Component} from 'react';
 import ScoreboardRow from './scoreboard-row';
 
 const NotificationAlerts = require('./notification-alerts');
@@ -200,7 +200,7 @@ export default class Scoreboard extends Component {
 
 Scoreboard.propTypes = {
 	match: React.PropTypes.object.isRequired
-}
+};
 
 function getScoreAndTeam(state) {
 	return {

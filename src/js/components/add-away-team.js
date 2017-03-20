@@ -1,4 +1,4 @@
-import React,{Component} from 'react';
+import React, {Component} from 'react';
 import PlayerInput from './player-input';
 
 const Team = require('./../domain/team');
