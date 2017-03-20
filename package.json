@@ -68,8 +68,8 @@
   "scripts": {
     "test": "gulp test",
     "posttest": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js | rm -rf ./coverage",
-    "build": "next build",
-    "start": "NODE_ENV=production node app.js",
+    "prestart": "next build",
+    "start": "node app.js",
     "dev": "next"
   },
   "repository": {

@@ -8,13 +8,14 @@ const express = require('express');
 const dev = process.env.NODE_ENV !== 'production'
 const app = next({ dev })
 
-var io = require('socket.io')(app);
 
 const handle = app.getRequestHandler()
 
 app.prepare().then(() => {
 	const server = express();
-
+	var http = require('http').Server(server);
+	var io = require('socket.io')(http);	
+	
 	server.put('/api/matches/:id', (req, res, next) => {
 		const apiUrl = process.env.API + req.params.id;
 		logger.debug(req.body);
@@ -85,7 +86,7 @@ app.prepare().then(() => {
 		return handle(req, res)
 	})
 
-	server.listen(process.env.PORT || 3000, (err) => {
+	http.listen(process.env.PORT || 3000, (err) => {
     	if (err) throw err
   	})
 
