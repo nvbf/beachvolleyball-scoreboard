@@ -18,7 +18,7 @@
     "extends": [
       "xo/esnext",
       "xo-react"
-    ], 
+    ],
     "rules": {
       "jsx-sort-props": 0
     }
@@ -33,6 +33,7 @@
     "body-parser": "1.15.2",
     "bootstrap": "3.3.7",
     "browserify": "13.1.0",
+    "bulma": "^0.4.0",
     "const": "1.0.0",
     "coveralls": "2.11.12",
     "del": "2.2.2",
@@ -48,6 +49,7 @@
     "gulp-sourcemaps": "1.6.0",
     "isparta": "4.0.0",
     "istanbul-harmony": "0.3.16",
+    "next": "^1.2.3",
     "node-jsx": "0.13.3",
     "react": "15.3.1",
     "react-bootstrap": "0.30.3",
@@ -66,8 +68,9 @@
   "scripts": {
     "test": "gulp test",
     "posttest": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js | rm -rf ./coverage",
-    "prestart": "gulp build",
-    "start": "node app.js"
+    "build": "next build",
+    "start": "next start",
+    "dev": "next"
   },
   "repository": {
     "type": "git",
