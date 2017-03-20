@@ -49,7 +49,7 @@
     "gulp-sourcemaps": "1.6.0",
     "isparta": "4.0.0",
     "istanbul-harmony": "0.3.16",
-    "next": "^1.2.3",
+    "next": "^2.0.0-beta",
     "node-jsx": "0.13.3",
     "react": "15.3.1",
     "react-bootstrap": "0.30.3",
@@ -69,7 +69,7 @@
     "test": "gulp test",
     "posttest": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js | rm -rf ./coverage",
     "build": "next build",
-    "start": "next start",
+    "start": "NODE_ENV=production node app.js",
     "dev": "next"
   },
   "repository": {

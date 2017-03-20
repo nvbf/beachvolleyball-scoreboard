@@ -1,5 +1,3 @@
-import React, {Component} from 'react';
-
 export default () => (
     <div>
         <h1>Beachvolleyball Scoreboard</h1>
