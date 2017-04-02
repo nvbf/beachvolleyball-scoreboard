@@ -32,10 +32,9 @@ const ModalBodyList = React.createClass({
 			footerText
 		} = this.props;
 
-		const homeColoredLGI = styleLGI(); // ListGroupItem;  // styleLGI(firstColor);
-		const awayColoredLGI = styleLGI(); //ListGroupItem;  // styleLGI(secondColor);
+		const homeColoredLGI = styleLGI(firstColor);
+		const awayColoredLGI = styleLGI(secondColor);
 		
-
 		return (
 			<div>
 				<Modal.Header closeButton>
@@ -59,7 +58,8 @@ const ModalBodyList = React.createClass({
 function styleLGI(color) {
 	const rgba = hexToRGBA(color);
 	return styled(ListGroupItem)`
-		background-color: ${rgba}
+		background-color: ${rgba};
+		
 	`;
 }
 
