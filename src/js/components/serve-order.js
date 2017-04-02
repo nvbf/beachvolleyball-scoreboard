@@ -151,7 +151,18 @@ function getTeamModalBodyList(match, homeTeamStarts, awayTeamStarts) {
 	const homeTeamText = homeTeam.player1 + '-' + homeTeam.player2;
 	const awayTeamText = awayTeam.player1 + '-' + awayTeam.player2;
 
-	return <ModalBodyList chosenFirstItem={homeTeamStarts} chosenSecondItem={awayTeamStarts} firstItemText={homeTeamText} secondItemText={awayTeamText} footerText="Choose the team that will start serving" />;
+	return (
+		<ModalBodyList 
+			chosenFirstItem={homeTeamStarts}
+			chosenSecondItem={awayTeamStarts} 
+			firstItemText={homeTeamText}
+			secondItemText={awayTeamText} 
+			firstColor={match.homeTeamColor()}
+			secondColor={match.awayTeamColor()}
+			footerText="Choose the team that will start serving" 
+
+		/>
+	);
 }
 
 function getPlayerModalBodyList(team, chosenFirstItem, chosenSecondItem) {

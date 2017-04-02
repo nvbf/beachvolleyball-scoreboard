@@ -84,7 +84,7 @@ export default class Scoreboard extends Component {
 
 		return (
 			<Alert bsStyle="info">
-				<h3>Match details</h3>
+				<h3>Match details</h3>{/* <Toogle>details</Toogle> ' */}
 				{eventsComponent.reverse()}
 			</Alert>
 		);
@@ -162,12 +162,14 @@ export default class Scoreboard extends Component {
 										removePoint={this.removePointHomeTeam()}
 										scoreForThisTeam={scoreHomeTeam}
 										team={this.props.match.homeTeam()}
+										teamColor={this.props.match.homeTeamColor()}
 										match={this.props.match}/>
 									<ScoreboardRow
 										pointsToTeam={this.pointToAwayTeam()}
 										removePoint={this.removePointAwayTeam()}
 										scoreForThisTeam={scoreAwayTeam}
 										team={this.props.match.awayTeam()}
+										teamColor={this.props.match.awayTeamColor()}
 										match={this.props.match}/>
 								</tbody>
 							</table>

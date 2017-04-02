@@ -1,9 +1,10 @@
-'use strict';
+import hexToRGBA from './utils/rgba';
 
 const React = require('react');
 const Button = require('react-bootstrap').Button;
 const ButtonToolbar = require('react-bootstrap').ButtonToolbar;
 const Label = require('react-bootstrap').Label;
+
 
 const TimeoutMenu = React.createClass({
 	propTypes: {
@@ -36,6 +37,12 @@ const TimeoutMenu = React.createClass({
 	},
 
 	render() {
+		const {
+			match
+		} = this.props;
+		const homeTimeTimeoutStyles = { backgroundColor: hexToRGBA(match.homeTeamColor())}
+		const awayTimeTimeoutStyles = { backgroundColor: hexToRGBA(match.awayTeamColor())}
+		
 		return (
 			<div>
 				<Label>Timeout</Label>
@@ -43,6 +50,7 @@ const TimeoutMenu = React.createClass({
 					<Button
 						type="submit"
 						className={(this.props.homeTeamTimeout != 0 ? 'disabled' : '')}
+						style={homeTimeTimeoutStyles}
 						onClick={this.onTimeoutHomeTeam}
 					>
 						{this.props.match.state.hometeam.display()}
@@ -50,6 +58,7 @@ const TimeoutMenu = React.createClass({
 					<Button
 						type="submit"
 						className={(this.props.awayTeamTimeout != 0 ? 'disabled' : '')}
+						style={awayTimeTimeoutStyles}
 						onClick={this.onTimeoutAwayTeam}
 					>
 						{this.props.match.state.awayteam.display()}
@@ -62,5 +71,6 @@ const TimeoutMenu = React.createClass({
 		);
 	}
 });
+
 
 module.exports = TimeoutMenu;

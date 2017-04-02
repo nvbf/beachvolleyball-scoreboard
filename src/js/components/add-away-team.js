@@ -1,4 +1,6 @@
 import React, {Component} from 'react';
+import ColorPicker from './color-picker';
+
 import PlayerInput from './player-input';
 
 const Team = require('./../domain/team');
@@ -6,6 +8,15 @@ const Button = require('react-bootstrap').Button;
 const Well = require('react-bootstrap').Well;
 
 export default class AddAwayTeam extends Component {
+	constructor(props) {
+		super(props)
+		this.state = { color: "#ff0000"};
+	}
+
+	handleColorPicker(colorObj) {
+		this.setState({ color: colorObj.hex })
+	}
+
 
 	handleSubmit(e) {
 		e.preventDefault();
@@ -17,7 +28,7 @@ export default class AddAwayTeam extends Component {
 			return;
 		}
 
-		this.props.match.addAwayTeam(new Team(player1, player2));
+		this.props.match.addAwayTeam(new Team(player1, player2, this.state.color ));
 
 		this.props.changeState(
       {show: 'Scoreboard'}
@@ -38,6 +49,7 @@ export default class AddAwayTeam extends Component {
 					<div className="panel-body">
 						<form className="add-team-form" onSubmit={this.handleSubmit.bind(this)}>
 							<PlayerInput />
+							<ColorPicker color={this.state.color} onColorSelect={this.handleColorPicker.bind(this)} />
 							<Button type="submit" bsStyle="primary" className="pull-right">
                 Add Team
 							</Button>
