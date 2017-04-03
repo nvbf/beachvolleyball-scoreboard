@@ -45,14 +45,12 @@ export default class AddHomeTeam extends Component {
 						<h2>Lets add the first team..</h2>
 					</div>
 					<div className="panel-body">
-						<form className="add-team-form" onSubmit={this.handleSubmit.bind(this)}>
-							<PlayerInput />
-                <ColorPicker color={this.state.color} onColorSelect={this.handleColorPicker.bind(this)} />
-              {/* TODO: a preview og teamname and shirt color could be nice?: <Preview />*/}
-							<Button type="submit" bsStyle="primary" className="pull-right">
-              Add Team
-							</Button>
-						</form>
+						<PlayerInput />
+                		<ColorPicker color={this.state.color} onColorSelect={this.handleColorPicker.bind(this)} />
+              			{/* TODO: a preview og teamname and shirt color could be nice?: <Preview />*/}
+						<Button onClick={this.handleSubmit.bind(this)} bsStyle="primary" className="pull-right">
+              				Add Team
+						</Button>
 					</div>
 				</div>
 

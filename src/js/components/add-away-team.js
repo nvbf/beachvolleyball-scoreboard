@@ -47,13 +47,11 @@ export default class AddAwayTeam extends Component {
 						<h2>..and now the other team!</h2>
 					</div>
 					<div className="panel-body">
-						<form className="add-team-form" onSubmit={this.handleSubmit.bind(this)}>
-							<PlayerInput />
-							<ColorPicker color={this.state.color} onColorSelect={this.handleColorPicker.bind(this)} />
-							<Button type="submit" bsStyle="primary" className="pull-right">
-                Add Team
-							</Button>
-						</form>
+						<PlayerInput />
+                		<ColorPicker color={this.state.color} onColorSelect={this.handleColorPicker.bind(this)} />
+						<Button onClick={this.handleSubmit.bind(this)} bsStyle="primary" className="pull-right">
+              				Add Team
+						</Button>
 					</div>
 				</div>
 				<Well>

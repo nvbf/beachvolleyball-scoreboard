@@ -32,8 +32,8 @@ const ModalBodyList = React.createClass({
 			footerText
 		} = this.props;
 
-		const homeColoredLGI = styleLGI(firstColor);
-		const awayColoredLGI = styleLGI(secondColor);
+		const HomeColoredLGI = styleLGI(firstColor, chosenFirstItem, firstItemText);
+		const AwayColoredLGI = styleLGI(secondColor, chosenSecondItem, secondItemText);
 		
 		return (
 			<div>
@@ -42,8 +42,8 @@ const ModalBodyList = React.createClass({
 				</Modal.Header>
 				<Modal.Body>
 					<ListGroup>
-						<ListGroupItem onClick={chosenFirstItem}> {firstItemText} </ListGroupItem>
-						<ListGroupItem onClick={chosenSecondItem}> {secondItemText} </ListGroupItem>
+						{HomeColoredLGI}
+						{AwayColoredLGI}
 					</ListGroup>
 					<div className="modal-footer">
 						<p>{footerText}</p>
@@ -55,12 +55,14 @@ const ModalBodyList = React.createClass({
 });
 
 
-function styleLGI(color) {
+function styleLGI(color, onClickHandler, text) {
 	const rgba = hexToRGBA(color);
-	return styled(ListGroupItem)`
+	console.log(rgba)
+	const StyleLGI = styled(ListGroupItem)`
 		background-color: ${rgba};
-		
 	`;
+
+	return <StyleLGI onClick={onClickHandler}> {text} </StyleLGI>
 }
 
 module.exports = ModalBodyList;
