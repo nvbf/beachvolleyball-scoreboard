@@ -1,11 +1,12 @@
 import React, {Component} from 'react';
-import ColorPicker from './color-picker';
+import { Button, Well } from 'react-bootstrap'
 
+import ColorPicker from './color-picker';
+import AddTeamButton from './add-team-button';
 import PlayerInput from './player-input';
+import InfoArea from './info-area';
 
 const Team = require('./../domain/team');
-const Button = require('react-bootstrap').Button;
-const Well = require('react-bootstrap').Well;
 
 export default class AddAwayTeam extends Component {
 	constructor(props) {
@@ -31,8 +32,8 @@ export default class AddAwayTeam extends Component {
 		this.props.match.addAwayTeam(new Team(player1, player2, this.state.color ));
 
 		this.props.changeState(
-      {show: 'Scoreboard'}
-    );
+      		{show: 'Scoreboard'}
+    	);
 	}
 
 	componentDidMount() {
@@ -49,14 +50,12 @@ export default class AddAwayTeam extends Component {
 					<div className="panel-body">
 						<PlayerInput />
                 		<ColorPicker color={this.state.color} onColorSelect={this.handleColorPicker.bind(this)} />
-						<Button onClick={this.handleSubmit.bind(this)} bsStyle="primary" className="pull-right">
-              				Add Team
-						</Button>
+						<AddTeamButton  handleClick={this.handleSubmit.bind(this)} />
 					</div>
 				</div>
-				<Well>
-					<Button bsStyle="primary"> 2 </Button>					Great! Now lets add the second team!
-				</Well>
+				<InfoArea number={2}>
+					Great! Now lets add the second team!
+				</InfoArea>
 			</div>
 		);
 	}

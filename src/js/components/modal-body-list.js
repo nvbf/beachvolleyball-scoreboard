@@ -18,7 +18,8 @@ const ModalBodyList = React.createClass({
 		firstDisabled: React.PropTypes.bool,
 		secondDisabled: React.PropTypes.bool,
 		firstColor: React.PropTypes.string.isRequired,
-		secondColor: React.PropTypes.string.isRequired
+		secondColor: React.PropTypes.string.isRequired,
+		showNumber: React.PropTypes.bool
 	},
 
 	render() {
@@ -29,11 +30,12 @@ const ModalBodyList = React.createClass({
 			chosenSecondItem,
 			firstItemText,
 			secondItemText,
-			footerText
+			footerText,
+			showNumber = false
 		} = this.props;
 
-		const HomeColoredLGI = styleLGI(firstColor, chosenFirstItem, firstItemText);
-		const AwayColoredLGI = styleLGI(secondColor, chosenSecondItem, secondItemText);
+		const FirstColoredLGI = styleLGI(firstColor, chosenFirstItem, firstItemText, showNumber ? 1 : 0);
+		const SecondColoredLGI = styleLGI(secondColor, chosenSecondItem, secondItemText, showNumber ? 2 : 0);
 		
 		return (
 			<div>
@@ -42,8 +44,8 @@ const ModalBodyList = React.createClass({
 				</Modal.Header>
 				<Modal.Body>
 					<ListGroup>
-						{HomeColoredLGI}
-						{AwayColoredLGI}
+						{FirstColoredLGI}
+						{SecondColoredLGI}
 					</ListGroup>
 					<div className="modal-footer">
 						<p>{footerText}</p>
@@ -55,12 +57,18 @@ const ModalBodyList = React.createClass({
 });
 
 
-function styleLGI(color, onClickHandler, text) {
+function styleLGI(color, onClickHandler, text, number) {
 	const rgba = hexToRGBA(color);
 	console.log(rgba)
 	const StyleLGI = styled(ListGroupItem)`
 		background-color: ${rgba};
 	`;
+
+	if(number) {
+		return (
+				<StyleLGI onClick={onClickHandler}> <span>{number}</span> {text} </StyleLGI>
+		);
+	}
 
 	return <StyleLGI onClick={onClickHandler}> {text} </StyleLGI>
 }

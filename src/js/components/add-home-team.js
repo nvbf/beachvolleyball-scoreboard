@@ -1,10 +1,14 @@
 import React, {Component} from 'react';
+
+import { Button, Well }  from 'react-bootstrap';
+
 import PlayerInput from './player-input';
 import ColorPicker from './color-picker';
+import AddTeamButton from './add-team-button';
+import InfoArea from './info-area';
+
 
 const Team = require('./../domain/team');
-const Button = require('react-bootstrap').Button;
-const Well = require('react-bootstrap').Well;
 
 export default class AddHomeTeam extends Component {
 	constructor(props) {
@@ -48,15 +52,13 @@ export default class AddHomeTeam extends Component {
 						<PlayerInput />
                 		<ColorPicker color={this.state.color} onColorSelect={this.handleColorPicker.bind(this)} />
               			{/* TODO: a preview og teamname and shirt color could be nice?: <Preview />*/}
-						<Button onClick={this.handleSubmit.bind(this)} bsStyle="primary" className="pull-right">
-              				Add Team
-						</Button>
+              			<AddTeamButton  handleClick={this.handleSubmit.bind(this)} />
 					</div>
 				</div>
 
-				<Well>
-					<Button bsStyle="primary"> 1 </Button>					The first thing we need to do is to add the teams that are playing against each other
-				</Well>
+				<InfoArea number={1}>
+					The first thing we need to do is to add the teams that are playing against each other
+				</InfoArea>
 			</div>
 		);
 	}
