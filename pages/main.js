@@ -22,7 +22,7 @@ class Main extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			show: 'AddHomeTeam',
+			show: 'Loading',
 			match: match.state,
 			matchUrl: '',
 			showTimeout: false,
@@ -67,11 +67,14 @@ class Main extends React.Component {
 
 	componentDidMount() {
 		const qs = url.parse(document.location.search, true).query;
+		
 		if (qs.name1 && qs.name2 && qs.name3 && qs.name4) {
-			match.addHomeTeam(new Team(qs.name1, qs.name2));
-			match.addAwayTeam(new Team(qs.name3, qs.name4));
+			match.addHomeTeam(new Team(qs.name1, qs.name2, qs.color1 ? `#${qs.color1}` : '#ff0000'));
+			match.addAwayTeam(new Team(qs.name3, qs.name4, qs.color2 ? `#${qs.color2}`: '#0000ff'));
 			console.log('Setting show to Scoreboard');
 			this.setState({show: 'Scoreboard'});
+		} else {
+			this.setState({show: 'AddHomeTeam'});
 		}
 	}
 
@@ -91,6 +94,10 @@ class Main extends React.Component {
 					<AddAwayTeam changeState={changeState} match={match}/>
 				</main>
 			);
+		} else if (show === 'Loading') {
+			return (
+				<main> Loading... </main>
+			)
 		}
 		return (
 			<section>
