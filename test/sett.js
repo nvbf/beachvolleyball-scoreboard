@@ -1,6 +1,6 @@
 require('should'); // eslint-disable-line import/no-unassigned-import
 const sinon = require('sinon');
-const Sett = require('./../src/js/domain/sett');
+const Sett = require('./../src/domain/sett');
 
 describe('Sett Logic', () => {
 	const option = {

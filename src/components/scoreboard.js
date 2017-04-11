@@ -1,19 +1,20 @@
 import React, {Component} from 'react';
+
 import ScoreboardRow from './scoreboard-row';
+import InfoArea from './info-area';
+import MatchDetails from './match-details'
 
 const NotificationAlerts = require('./notification-alerts');
 const ServeOrder = require('./serve-order');
 const Timeout = require('./timeout');
 const TimeoutButtons = require('./timeout-buttons');
-const Button = require('react-bootstrap').Button;
-const Well = require('react-bootstrap').Well;
-const Alert = require('react-bootstrap').Alert;
+
 const AlertInfo = require('./alert-info');
 
 export default class Scoreboard extends Component {
 	constructor(props) {
 		super(props);
-		this.state = this.props.match.state;
+		this.state = Object.assign({}, this.props.match.state, {showDetails: false, events: []})
 	}
 
 	componentDidMount() {
@@ -28,6 +29,16 @@ export default class Scoreboard extends Component {
 			state.awayTeamTimeout = 0;
 			this.setState(state);
 		});
+
+		this.props.match.notification.on('*', (event) => {
+			const newEvents = events.slice();
+			newEvents.push(event)
+			this.setState({ events: newEvents });
+		})
+	}
+	
+	handleDetailToogle() {
+		this.setState({showDetails: !this.state.showDetails })
 	}
 
 	pointToHomeTeam(event) {
@@ -76,20 +87,6 @@ export default class Scoreboard extends Component {
 		}.bind(this);
 	}
 
-	renderEvents() {
-		const eventsComponent = [];
-		this.state.events.forEach((event, index) => {
-			eventsComponent.push(<p key={index}>{event} </p>);
-		});
-
-		return (
-			<Alert bsStyle="info">
-				<h3>Match details</h3>
-				{eventsComponent.reverse()}
-			</Alert>
-		);
-	}
-
 	render() {
 		const scoreAwayTeam = [
 			this.state.sets[0].score[1],
@@ -115,18 +112,6 @@ export default class Scoreboard extends Component {
 						<NotificationAlerts
 							message="Switch"
 							eventTrigger="switch-notification"
-							notification={this.props.match.notification}/>
-					</div>
-					<div className="set-finished-modal">
-						<NotificationAlerts
-							message="Set finished"
-							eventTrigger="set-notification"
-							notification={this.props.match.notification}/>
-					</div>
-					<div className="game-finished-modal">
-						<NotificationAlerts
-							message="Match finished"
-							eventTrigger="match-notification"
 							notification={this.props.match.notification}/>
 					</div>
 					<div className="timeout-alerts">
@@ -162,12 +147,14 @@ export default class Scoreboard extends Component {
 										removePoint={this.removePointHomeTeam()}
 										scoreForThisTeam={scoreHomeTeam}
 										team={this.props.match.homeTeam()}
+										teamColor={this.props.match.homeTeamColor()}
 										match={this.props.match}/>
 									<ScoreboardRow
 										pointsToTeam={this.pointToAwayTeam()}
 										removePoint={this.removePointAwayTeam()}
 										scoreForThisTeam={scoreAwayTeam}
 										team={this.props.match.awayTeam()}
+										teamColor={this.props.match.awayTeamColor()}
 										match={this.props.match}/>
 								</tbody>
 							</table>
@@ -183,14 +170,19 @@ export default class Scoreboard extends Component {
 					</div>
 					<ServeOrder match={this.props.match}/>
 					<section className="events">
-						{this.renderEvents()}
+						<MatchDetails 
+							events={this.state.events}
+							showDetails={this.state.showDetails}
+							handleDetailToogle={this.handleDetailToogle.bind(this)}
+						/>
 					</section>
-					<Well>
-						<Button bsStyle="primary"> 3 </Button>						You can set the service order by clicking the "Set service order" button above. (Optional)
-					</Well>
-					<Well>
-						<Button bsStyle="primary"> 4 </Button>						Now you kan keep score with the blue buttons right under "Add Point"
-					</Well>
+					
+					<InfoArea number={3}>
+						You can set the service order by clicking the "Set service order" button above. (Optional)
+					</InfoArea>
+					<InfoArea number={4}>
+						 Now you kan keep score with the blue buttons right under "Add Point"
+					</InfoArea>
 					<h2>Notes for first time users</h2>
 					<AlertInfo message='If you do a mistake, you can adjust the score by also using the buttons below "remove point" to get the score right.' />
 					<AlertInfo message="When you have set the service order, we will help you keep track of how is serving, It's almost magic." />
@@ -207,6 +199,8 @@ export default class Scoreboard extends Component {
 Scoreboard.propTypes = {
 	match: React.PropTypes.object.isRequired
 };
+
+
 
 function getScoreAndTeam(state) {
 	return {

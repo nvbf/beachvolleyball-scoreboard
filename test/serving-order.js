@@ -1,6 +1,6 @@
 const should = require('should');
 const sinon = require('sinon');
-const ServingOrder = require('./../src/js/domain/serving-order');
+const ServingOrder = require('./../src/domain/serving-order');
 
 describe('serving-order', () => {
 	const player1 = 'Player Serving as nr 1';

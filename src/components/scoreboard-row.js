@@ -1,14 +1,16 @@
 import React, {Component} from 'react';
 import {Button} from 'react-bootstrap';
 
+import hexToRGBA from './utils/rgba';
+
 export default class ScoreboardRow extends Component {
 
 	render() {
 		const players = this.props.team;
 		const score = this.props.scoreForThisTeam;
-
+		const style = this.props.teamColor ? { backgroundColor: hexToRGBA(this.props.teamColor) } : {}
 		return (
-			<tr>
+			<tr style={style}>
 				<td>
 					{players.player1}					- {players.player2}
 				</td>

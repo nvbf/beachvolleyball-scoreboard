@@ -56,12 +56,21 @@ Match.prototype.homeTeam = function () {
 	return this.state.hometeam.players();
 };
 
+Match.prototype.homeTeamColor = function () {
+	return this.state.hometeam.color();
+};
+
 Match.prototype.addAwayTeam = function (team) {
 	this.state.awayteam = team;
 };
 
 Match.prototype.awayTeam = function () {
 	return this.state.awayteam.players();
+};
+
+
+Match.prototype.awayTeamColor = function () {
+	return this.state.awayteam.color();
 };
 
 Match.prototype.sets = function () {
