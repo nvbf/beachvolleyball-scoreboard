@@ -19,9 +19,11 @@ NPM, the node package manager, is installed when you install node.
 ### Run
 Prerequisit: Install
 
-`NODE_ENV=development DEBUG="*" API="http://localhost:3000/api/matches/" PORT=4000 npm start`
+`NODE_ENV=development DEBUG="*,-babel" API="http://localhost:3000/api/matches/" PORT=4000 npm start`
 
-It will then open on localhost:3000 by default
+You can then reach the app on on http://localhost:4000 
+
+if port is not specified, it will open on port 3000.
 
 ### Test
 Prerequisit: Install

@@ -2,14 +2,13 @@
 
 const should = require('should');
 const sinon = require('sinon');
-const MatchApi = require('./../src/js/domain/MatchApi');
-const Match = require('./../src/js/domain/Match');
-const Util  = require('./match-test-util');
+const MatchApi = require('./../src/domain/match-api');
+const Match = require('./../src/domain/match');
+const Util = require('./match-test-util');
 
-describe('match-api', function() {
-
-    it('update', function() {
-      let match = Util.setScoreToTest();
-      let api = new MatchApi();
-    });
+describe('match-api', () => {
+	it('update', () => {
+		const match = Util.setScoreToTest();
+		const api = new MatchApi();
+	});
 });

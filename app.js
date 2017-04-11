@@ -1,13 +1,11 @@
-const express = require('express');
-const app = express();
-const superagent = require('superagent');
-const bodyParser = require('body-parser');
-const logger = require('winston');
 const util = require('util');
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
+const superagent = require('superagent');
 
+const { parse } = require('url');
+const next = require('next');
+const express = require('express');
 
+<<<<<<< HEAD
 // if (!process.env.API) {
 //   throw new Error('process.env.API is not defined');
 // }
@@ -23,10 +21,86 @@ var io = require('socket.io')(http);
 //     io.emit('match-update', match);
 //   });
 // });
+=======
+const dev = process.env.NODE_ENV !== 'production'
+const app = next({ dev })
 
-app.use(express.static(__dirname + '/public'));
-app.use(bodyParser.json()); // for parsing application/json
 
+const handle = app.getRequestHandler()
+
+app.prepare().then(() => {
+	const server = express();
+	var http = require('http').Server(server);
+	var io = require('socket.io')(http);	
+	
+	server.put('/api/matches/:id', (req, res, next) => {
+		const apiUrl = process.env.API + req.params.id;
+		logger.debug(req.body);
+		superagent
+		.put(apiUrl)
+		.send(req.body)
+		.set('Accept', 'application/json')
+		.set('Content-Type', 'application/json')
+		.end((err, result) => {
+			if (err) {
+				console.log('err', err);
+				res.status(500).send(err);
+				res.end();
+			} else if (!result.ok) {
+				res.status(500).send(result.text);
+				res.end();
+			} else {
+				logger.debug(util.inspect('text: ' + result.text));
+				res.end(result.text);
+			}
+		});
+	});
+
+	server.post('/api/matches/', (req, res, next) => {
+		const apiUrl = process.env.API;
+		logger.debug(req.body);
+		superagent
+		.post(apiUrl)
+		.send(req.body)
+		.set('Accept', 'application/json')
+		.set('Content-Type', 'application/json')
+		.end((err, result) => {
+			if (err) {
+				console.log('err', err);
+				res.status(500).send(err);
+				res.end();
+			} else if (!result.ok) {
+				res.status(500).send(result.text);
+				res.end();
+			} else {
+				logger.debug(util.inspect('text: ' + result.text));
+				res.end(result.text);
+			}
+		});
+	});
+>>>>>>> master
+
+	server.get('/api/matches/:id', (req, res, next) => {
+		const apiUrl = process.env.API + req.params.id;
+		superagent
+		.get(apiUrl)
+		.set('Accept', 'application/json')
+		.end((err, result) => {
+			if (err) {
+				console.log('err', err);
+				res.status(500).send(err);
+				res.end();
+			} else if (!result.ok) {
+				res.status(500).send(result.text);
+				res.end();
+			} else {
+				logger.debug(util.inspect('text: ' + result.text));
+				res.end(result.text);
+			}
+		});
+	});
+
+<<<<<<< HEAD
 app.get('*', function(req, res) {
   res.sendFile(__dirname + '/public/match.html');
 });
@@ -96,8 +170,30 @@ app.get('*', function(req, res) {
 //       }
 //     });
 // });
+=======
+	server.get('*', (req, res) => {
+		return handle(req, res)
+	})
 
+	http.listen(process.env.PORT || 3000, (err) => {
+    	if (err) throw err
+  	})
 
-var server = http.listen(process.env.PORT || 3000, function() {
-  logger.info('Listening on port %d', server.address().port);
+	io.on('connection', socket => {
+		io.emit('user', 1, {for: 'everyone'});
+>>>>>>> master
+
+		socket.on('disconnect', () => {
+			io.emit('user', -1, {for: 'everyone'});
+		});
+
+		socket.on('match-update', match => {
+			io.emit('match-update', match);
+		});
+	});
+
 });
+
+if (!process.env.API) {
+	throw new Error('process.env.API is not defined');
+}
