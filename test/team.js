@@ -1,5 +1,5 @@
 const should = require('should');
-const Team = require('./../src/js/domain/team');
+const Team = require('./../src/domain/team');
 
 describe('Team Logic', () => {
 	it('Add Players to team', () => {

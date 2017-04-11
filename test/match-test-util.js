@@ -1,6 +1,6 @@
 const util = {};
-const Match = require('./../src/js/domain/match');
-const Team = require('./../src/js/domain/team');
+const Match = require('./../src/domain/match');
+const Team = require('./../src/domain/team');
 
 util.setScoreToTest = function (score = [[21, 19], [19, 21], [14, 14]]) {
 	const match = new Match();

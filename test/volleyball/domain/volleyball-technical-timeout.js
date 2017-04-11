@@ -1,6 +1,6 @@
 const should = require('should');
 const sinon = require('sinon');
-const VolleyballTechnicalTimeout = require('./../../../src/js/domain/volleyball-technical-timeout');
+const VolleyballTechnicalTimeout = require('./../../../src/domain/volleyball-technical-timeout');
 
 describe('volleyballTechnicalTimeoutTest', () => {
 	const volleyballTechnicalTimeout = new VolleyballTechnicalTimeout();

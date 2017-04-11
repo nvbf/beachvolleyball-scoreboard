@@ -1,8 +1,8 @@
 const should = require('should');
 const sinon = require('sinon');
-const Match = require('./../src/js/domain/match');
-const Sett = require('./../src/js/domain/sett');
-const Team = require('./../src/js/domain/team');
+const Match = require('./../src/domain/match');
+const Sett = require('./../src/domain/sett');
+const Team = require('./../src/domain/team');
 const matchTestUtil = require('./match-test-util');
 
 describe('Match Logic', () => {
