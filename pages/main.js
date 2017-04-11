@@ -1,17 +1,17 @@
 import React from 'react';
 import url from 'url';
 
-import AddHomeTeam from './../src/js/components/add-home-team';
-import AddAwayTeam from './../src/js/components/add-away-team';
-import Scoreboard from './../src/js/components/scoreboard';
+import AddHomeTeam from './../src/components/add-home-team';
+import AddAwayTeam from './../src/components/add-away-team';
+import Scoreboard from './../src/components/scoreboard';
 
 const ButtonToolbar = require('react-bootstrap').ButtonToolbar;
 const Button = require('react-bootstrap').Button;
 
-const MatchNotifications = require('./../src/js/domain/match-notifications');
-const Match = require('./../src/js/domain/match');
-const MatchApi = require('./../src/js/domain/match-api');
-const Team = require('./../src/js/domain/team');
+const MatchNotifications = require('./../src/domain/match-notifications');
+const Match = require('./../src/domain/match');
+const MatchApi = require('./../src/domain/match-api');
+const Team = require('./../src/domain/team');
 
 const match = new Match();
 const matchApi = new MatchApi();
