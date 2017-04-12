@@ -11,7 +11,7 @@ export default function MatchDetails({events, showDetails, handleDetailToogle}) 
     
     return (
         <Alert bsStyle="info">
-            <h3 style={{display: "inline-flex"}} >Match details</h3>
+            <h3 style={{display: "inline-flex"}} ></h3>
              <DetailToogle checked={showDetails}
                 onChange={handleDetailToogle} /> 
              {eventsComponent.reverse()}

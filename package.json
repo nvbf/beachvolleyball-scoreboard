@@ -41,8 +41,8 @@
     "express": "4.14.0",
     "immutable": "3.8.1",
     "react": "15.3.1",
-    "react-bootstrap": "0.30.3",
-    "react-dom": "15.3.1",
+    "react-bootstrap": "0.30.8",
+    "react-dom": "^15.3.1",
     "react-redux": "4.4.5",
     "react-router": "2.8.0",
     "react-router-redux": "4.0.5",
@@ -62,11 +62,7 @@
     "istanbul-harmony": "0.3.16",
     "next": "^2.0.0-beta",
     "node-jsx": "0.13.3",
-    "react": "15.3.1",
-    "react-bootstrap": "0.30.8",
     "react-color": "^2.11.4",
-    "react-dom": "^15.3.1",
-    "react-tap-event-plugin": "1.0.0",
     "react-toggle": "^3.0.1",
     "reactify": "1.1.1",
     "should": "11.1.0",
@@ -80,21 +76,23 @@
   },
   "scripts": {
     "prestart": "next build",
-    "start": "webpack-dev-server",
+    "start": "node app.js",
     "url": "^0.11.0",
     "vinyl-source-stream": "1.1.0",
     "winston": "2.2.0",
-    "start": "node app.js",
     "dev": "next",
-    "test": "xo"
+    "test": "xo --fix && jest",
+    "jest:watch": "npm test -- --watch"    
   },
   "repository": {
     "type": "git",
     "url": "git://github.com/nvbf/beachvollleyball-scoreboard"
   },
   "devDependencies": {
+    "babel-jest": "^19.0.0",
     "eslint-config-xo-react": "^0.11.0",
     "eslint-plugin-react": "^6.10.2",
+    "jest": "^19.0.2",
     "xo": "^0.18.0"
   }
 }
