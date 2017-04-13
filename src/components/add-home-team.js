@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import { connect } from 'react-redux'
 
 import { Button, Well }  from 'react-bootstrap';
 
@@ -7,10 +8,21 @@ import ColorPicker from './color-picker';
 import AddTeamButton from './add-team-button';
 import InfoArea from './info-area';
 
+import {
+	TEAM,
+	HOMETEAM
+} from '../domain/redux/constants';
+
+import {
+	updateFirstPlayerOnHometeam,
+	updateSecondPlayerOnHometeam,
+	updateColorOnHometeam
+} from '../domain/redux/team/action-creator';
+
 
 const Team = require('./../domain/team');
 
-export default class AddHomeTeam extends Component {
+class AddHomeTeam extends Component {
 	constructor(props) {
 		super(props)
 		this.state = { color: "#0000ff"};
@@ -22,6 +34,14 @@ export default class AddHomeTeam extends Component {
 
 	handleSubmit(e) {
 		e.preventDefault();
+
+		const {
+			dispatchFirstPlayerOnHometeam,
+			dispatchSecondPlayerOnHometeam,
+			dispatchColorOnHometeam,
+			changeState
+		} = this.props;
+
 		const player1 = document.getElementById('player1').value;
 		const player2 = document.getElementById('player2').value;
 
@@ -30,7 +50,9 @@ export default class AddHomeTeam extends Component {
 			return;
 		}
 
-		this.props.match.addHomeTeam(new Team(player1, player2, this.state.color ));
+		dispatchFirstPlayerOnHometeam(player1)
+		dispatchSecondPlayerOnHometeam(player2)
+		dispatchColorOnHometeam(this.state.color);
 
 		this.props.changeState(
       {show: 'AddAwayTeam'}
@@ -63,3 +85,28 @@ export default class AddHomeTeam extends Component {
 		);
 	}
 }
+
+const mapStateToProps = (state) => {
+	console.log('state');
+	console.log(state);
+	window.state = state;
+	console.log('state');
+	return {
+		[HOMETEAM]: state.get(TEAM).get(HOMETEAM)
+	}
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+	dispatchFirstPlayerOnHometeam: (name) => dispatch(updateFirstPlayerOnHometeam(name)),
+	dispatchSecondPlayerOnHometeam: (name) => dispatch(updateSecondPlayerOnHometeam(name)),
+	dispatchColorOnHometeam: (name) => dispatch(updateColorOnHometeam(name))
+  }
+}
+
+const AddHomeTeamAware = connect(
+	mapDispatchToProps,
+  	mapStateToProps
+)(AddHomeTeam)
+
+export default AddHomeTeamAware;

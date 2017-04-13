@@ -3,9 +3,12 @@ export const TEAM = 'team';
 export const PLAYER_NR = 'player_nr';
 export const PLAYER_NAME = 'name'
 export const SCORE = 'SCORE';
+export const COLOR = 'COLOR';
+
 
 // actions
 export const UPDATE_PLAYER = 'UPDATE_PLAYER';
+export const UPDATE_COLOR = 'UPDATE_COLOR';
 export const ADD_POINT = 'ADD_POINT';
 export const REMOVE_POINT = 'REMOVE_POINT';
 

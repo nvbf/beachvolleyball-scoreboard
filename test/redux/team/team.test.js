@@ -1,4 +1,4 @@
-import { Map, fromJS } from 'immutable';
+import { fromJS } from 'immutable';
 
 import { 
   updateFirstPlayerOnHometeam,
@@ -17,63 +17,64 @@ import {
    SECOND_PLAYER,
    TEAM,
    PLAYER_NAME, 
-   PLAYER_NR
+   PLAYER_NR,
+   COLOR
 } from '../../../src/domain/redux/constants';
 
 describe('Players', () => {
   it('Action Creators - updateFirstPlayerOnHometeam', () => {
     const player = 'Sindre Øye Svendby'
-    const expectedAction = Map({
+    const expectedAction = {
       type: UPDATE_PLAYER,
       [TEAM]: HOMETEAM,
       [PLAYER_NR]: FIRST_PLAYER,
-      [PLAYER_NAME]: player
-    })
+      [PLAYER_NAME]: player,
+    }
     expect(updateFirstPlayerOnHometeam(player)).toEqual(expectedAction)
   })
 
   it('Action Creators - updateSecondPlayerOnHometeam', () => {
     const player = 'Sindre Øye Svendby'
-    const expectedAction = Map({
+    const expectedAction = {
       type: UPDATE_PLAYER,
       [TEAM]: HOMETEAM,
       [PLAYER_NR]: SECOND_PLAYER,
-      [PLAYER_NAME]: player
-    })
+      [PLAYER_NAME]: player,
+    }
     expect(updateSecondPlayerOnHometeam(player)).toEqual(expectedAction)
   })  
 
   it('Action Creators - updateFirstPlayerOnAwayteam', () => {
     const player = 'Sindre Øye Svendby'
-    const expectedAction = Map({
+    const expectedAction = {
       type: UPDATE_PLAYER,
       [TEAM]: AWAYTEAM,
       [PLAYER_NR]: FIRST_PLAYER,
       [PLAYER_NAME]: player
-    })
+    }
     expect(updateFirstPlayerOnAwayteam(player)).toEqual(expectedAction)
   })
 
   it('Action Creators - updateSecondPlayerOnAwayteam', () => {
     const player = 'Sindre Øye Svendby'
-    const expectedAction = Map({
+    const expectedAction = {
         type: UPDATE_PLAYER,
         [TEAM]: AWAYTEAM,
         [PLAYER_NR]: SECOND_PLAYER,
         [PLAYER_NAME]: player
-      })
+      }
     expect(updateSecondPlayerOnAwayteam(player)).toEqual(expectedAction)
   })  
 
   it('Reducer - should handle UPDATE_PLAYER', () => {
     expect(
       teamReducer(undefined,
-        Map({
+        {
           'type': UPDATE_PLAYER,
           [TEAM]: HOMETEAM,
           [PLAYER_NR]: SECOND_PLAYER,
-          [PLAYER_NAME]: 'Sindre Øye Svendby'
-        })
+          [PLAYER_NAME]: 'Sindre Øye Svendby',
+        }
       )
     ).toEqual(
       expectedResultUpdatePlayer
@@ -88,7 +89,8 @@ const expectedResultUpdatePlayer = fromJS({
       },
       [SECOND_PLAYER]: {
         [PLAYER_NAME]: "Sindre Øye Svendby"
-      }
+      },
+      [COLOR]: ""      
    },
    [AWAYTEAM]: {
      [FIRST_PLAYER]: { 
@@ -96,6 +98,7 @@ const expectedResultUpdatePlayer = fromJS({
       },
       [SECOND_PLAYER]: {
         [PLAYER_NAME]: ""
-      }
+      },
+      [COLOR]: ""
    }
  });

@@ -21,7 +21,7 @@ import {
   getSetIndexToRemovePointFrom
 } from './logic'
 
-const initialState = fromJS({
+export const initialState = fromJS({
    [SCORE]: {
      [FIRST_SET]: [0,0],
      [SECOND_SET]: [0,0],
@@ -32,19 +32,17 @@ const initialState = fromJS({
 
 const updateTeamName = players => players.get(0) + '/' + players.get(1)
 
-export function teamReducer(state = initialState, action = Map({})) {
-    if(action.get('type') === ADD_POINT) {
+export default function teamReducer(state = initialState, action = Map({})) {
+    if(action.type === ADD_POINT) {
       const team = action.get(TEAM);
       return addPoint(state, team);
     }
-     if(action.get('type') === REMOVE_POINT) {
+     if(action.type === REMOVE_POINT) {
       const team = action.get(TEAM);
       return removePoint(state, team);
     }
-    console.warn('No action configured, returning same state')
     return state;
 }
-
 
 
 function addPoint(state, team) {

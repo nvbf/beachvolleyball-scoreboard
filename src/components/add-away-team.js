@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import { Button, Well } from 'react-bootstrap'
+import { connect } from 'react-redux'
 
 import ColorPicker from './color-picker';
 import AddTeamButton from './add-team-button';
@@ -8,7 +9,18 @@ import InfoArea from './info-area';
 
 const Team = require('./../domain/team');
 
-export default class AddAwayTeam extends Component {
+import {
+	TEAM,
+	AWAYTEAM
+} from '../domain/redux/constants';
+
+import {
+	updateFirstPlayerOnAwayteam,
+	updateSecondPlayerOnAwayteam,
+	updateColorOnAwayteam
+} from '../domain/redux/team/action-creator';
+
+class AddAwayTeam extends Component {
 	constructor(props) {
 		super(props)
 		this.state = { color: "#ff0000"};
@@ -20,6 +32,13 @@ export default class AddAwayTeam extends Component {
 
 
 	handleSubmit(e) {
+		const {
+			dispatchFirstPlayerOnAwayteam,
+			dispatchSecondPlayerOnAwayteam,
+			dispatchColorOnAwayteam,
+			changeState
+		} = this.props;
+
 		e.preventDefault();
 		const player1 = document.getElementById('player1').value;
 		const player2 = document.getElementById('player2').value;
@@ -29,9 +48,11 @@ export default class AddAwayTeam extends Component {
 			return;
 		}
 
-		this.props.match.addAwayTeam(new Team(player1, player2, this.state.color ));
+		dispatchFirstPlayerOnAwayteam(player1);
+		dispatchSecondPlayerOnAwayteam(player2);
+		dispatchColorOnAwayteam(this.state.color);
 
-		this.props.changeState(
+		changeState(
       		{show: 'Scoreboard'}
     	);
 	}
@@ -60,4 +81,28 @@ export default class AddAwayTeam extends Component {
 		);
 	}
 }
-0
+
+
+const mapStateToProps = (state) => {
+	console.log('state');
+  	console.log(state);
+	console.log('state');
+  return {
+	  [AWAYTEAM]: state.get(TEAM).get(AWAYTEAM)
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+	dispatchFirstPlayerOnAwayteam: (name) => dispatch(updateFirstPlayerOnAwayteam(name)),
+	dispatchSecondPlayerOnAwayteam: (name) => dispatch(updateSecondPlayerOnAwayteam(name)),
+	dispatchColorOnAwayteam: (name) => dispatch(updateColorOnAwayteam(name))
+  }
+}
+
+const AddAwayTeamAware = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(AddAwayTeam)
+
+export default AddAwayTeamAware;

@@ -1,4 +1,3 @@
-import { Map } from 'immutable';
 import { 
   TEAM, 
   HOMETEAM,
@@ -24,15 +23,15 @@ export function removePointAwayteam() {
 }
 
 function addPoint(team) {
-  return Map({
+  return {
       'type': ADD_POINT,
       [TEAM]: team
-    })
+    }
 }
 
 function removePoint(team) {
-  return Map({
+  return {
       'type': REMOVE_POINT,
       [TEAM]: team
-    })
+    }
 }

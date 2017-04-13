@@ -8,8 +8,8 @@ const StyledButton = styled(Button)`
 
 export default function AddTeamButton({handleClick}) {
     return (
-    <StyledButton onClick={handleClick} bsStyle="primary" className="pull-right">
-        Add Team
-    </StyledButton>
+        <StyledButton onClick={handleClick} bsStyle="primary" className="pull-right">
+            Add Team
+        </StyledButton>
     )
 }
