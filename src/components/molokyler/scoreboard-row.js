@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Button} from 'react-bootstrap';
 
-import hexToRGBA from './utils/rgba';
+import hexToRGBA from '../utils/rgba';
 
 export default class ScoreboardRow extends Component {
 

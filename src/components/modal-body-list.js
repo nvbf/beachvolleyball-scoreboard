@@ -1,60 +1,44 @@
-import  React from 'react';
+import React, { Component } from 'react';
 import styled from 'styled-components';
 import hexToRGBA from './utils/rgba'
 
-const ListGroup = require('react-bootstrap').ListGroup;
-const ListGroupItem = require('react-bootstrap').ListGroupItem;
-const Modal = require('react-bootstrap').Modal;
+import { ListGroup } from 'react-bootstrap'
+import { ListGroupItem } from 'react-bootstrap'
+import { Modal } from 'react-bootstrap'
 
+const ModalBodyList = (props) => {
+	const {
+		firstColor,
+		secondColor,
+		chosenFirstItem,
+		chosenSecondItem,
+		firstItemText,
+		secondItemText,
+		footerText,
+		showNumber = false
+	} = props;
 
-const ModalBodyList = React.createClass({
+	const FirstColoredLGI = styleLGI(firstColor, chosenFirstItem, firstItemText, showNumber ? 1 : 0);
+	const SecondColoredLGI = styleLGI(secondColor, chosenSecondItem, secondItemText, showNumber ? 2 : 0);
+	
+	return (
+		<div>
+			<Modal.Header closeButton>
+				<Modal.Title>Service Order</Modal.Title>
+			</Modal.Header>
+			<Modal.Body>
+				<ListGroup>
+					{FirstColoredLGI}
+					{SecondColoredLGI}
+				</ListGroup>
+				<div className="modal-footer">
+					<p>{footerText}</p>
+				</div>
+			</Modal.Body>
+		</div>
+	);
+}
 
-	propTypes: {
-		chosenFirstItem: React.PropTypes.func.isRequired,
-		chosenSecondItem: React.PropTypes.func.isRequired,
-		firstItemText: React.PropTypes.string.isRequired,
-		secondItemText: React.PropTypes.string.isRequired,
-		footerText: React.PropTypes.string,
-		firstDisabled: React.PropTypes.bool,
-		secondDisabled: React.PropTypes.bool,
-		firstColor: React.PropTypes.string.isRequired,
-		secondColor: React.PropTypes.string.isRequired,
-		showNumber: React.PropTypes.bool
-	},
-
-	render() {
-		const {
-			firstColor,
-			secondColor,
-			chosenFirstItem,
-			chosenSecondItem,
-			firstItemText,
-			secondItemText,
-			footerText,
-			showNumber = false
-		} = this.props;
-
-		const FirstColoredLGI = styleLGI(firstColor, chosenFirstItem, firstItemText, showNumber ? 1 : 0);
-		const SecondColoredLGI = styleLGI(secondColor, chosenSecondItem, secondItemText, showNumber ? 2 : 0);
-		
-		return (
-			<div>
-				<Modal.Header closeButton>
-					<Modal.Title>Service Order</Modal.Title>
-				</Modal.Header>
-				<Modal.Body>
-					<ListGroup>
-						{FirstColoredLGI}
-						{SecondColoredLGI}
-					</ListGroup>
-					<div className="modal-footer">
-						<p>{footerText}</p>
-					</div>
-				</Modal.Body>
-			</div>
-		);
-	}
-});
 
 
 function styleLGI(color, onClickHandler, text, number) {
@@ -73,4 +57,18 @@ function styleLGI(color, onClickHandler, text, number) {
 	return <StyleLGI onClick={onClickHandler}> {text} </StyleLGI>
 }
 
-module.exports = ModalBodyList;
+ModalBodyList.propTypes = {
+		chosenFirstItem: React.PropTypes.func.isRequired,
+		chosenSecondItem: React.PropTypes.func.isRequired,
+		firstItemText: React.PropTypes.string.isRequired,
+		secondItemText: React.PropTypes.string.isRequired,
+		footerText: React.PropTypes.string,
+		firstDisabled: React.PropTypes.bool,
+		secondDisabled: React.PropTypes.bool,
+		firstColor: React.PropTypes.string.isRequired,
+		secondColor: React.PropTypes.string.isRequired,
+		showNumber: React.PropTypes.bool
+};
+
+
+export default ModalBodyList;

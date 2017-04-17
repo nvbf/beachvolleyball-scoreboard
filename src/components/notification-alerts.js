@@ -1,18 +1,15 @@
-const React = require('react');
-const Alert = require('react-bootstrap').Alert;
-const AlertEventMixin = require('../mixin/alert-event-mixin');
+import  React, {Component} from 'react';
+import { Alert } from 'react-bootstrap' 
+import { wrap } from 'tide'
+import { SWITCH_NOW } from '../../src/domain/tide/state'
 
-const NotificationAlerts = React.createClass({
-
-	mixins: [AlertEventMixin],
-
+class NotificationAlerts extends React.Component {
 	hide() {
 		this.setState({alertVisible: false});
-	},
+	}
 
-	renderOverlay() {
-		if (this.state.alertVisible) {
-			setTimeout(() => this.hide(), 5000);
+	render() {
+		if (this.props.switch) {
 			return (
 				<Alert bsStyle="info" onDismiss={this.hide}>
 					<strong>{this.props.message}</strong>
@@ -21,6 +18,8 @@ const NotificationAlerts = React.createClass({
 		}
 		return null;
 	}
-});
+};
 
-module.exports = NotificationAlerts;
+export default wrap(NotificationAlerts,{
+	[SWITCH_NOW]: SWITCH_NOW	
+})

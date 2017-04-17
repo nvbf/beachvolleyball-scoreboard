@@ -1,18 +1,14 @@
-const React = require('react');
-const Alert = require('react-bootstrap').Alert;
+import React,{Component} from 'react';
+import Alert from 'react-bootstrap';
 
-const AlertInfo = React.createClass({
-	propTypes: {
-		message: React.PropTypes.string.isRequired
-	},
-
+export default class AlertInfo extends Component {
 	getInitialState() {
 		return {showInfo: true};
-	},
+	}
 
 	remove() {
 		this.setState({showInfo: false});
-	},
+	}
 
 	render() {
 		if (this.state.showInfo) {
@@ -24,6 +20,8 @@ const AlertInfo = React.createClass({
 		}
 		return null;
 	}
-});
+}
 
-module.exports = AlertInfo;
+AlertInfo.propTypes = {
+		message: React.PropTypes.string.isRequired
+}

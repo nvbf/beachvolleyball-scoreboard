@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{Component} from 'react';
 import { 
 	ButtonToolbar,
 	Button,	
@@ -6,83 +6,37 @@ import {
    	Modal
 } from 'react-bootstrap';
 
-const ModalBodyList = require('./modal-body-list');
-const ServingOrder = require('./../domain/serving-order');
+import {wrap} from 'tide'
 
-const ServeOrder = React.createClass({
 
-	handleToggle() {
-		this.setState({
-			isModalOpen: !this.state.isModalOpen
-		});
-	},
+import ModalBodyList from '../modal-body-list';
 
-	getInitialState() {
-		return {
-			isModalOpen: false,
-			order: []
-		};
-	},
+import {
+	PLAYER_TO_SERVE,
+	HOMETEAM,
+	AWAYTEAM,
+	FIRST_TEAM_TO_SERVE,
+	SERVICE_ORDER_IS_SET,
+	SHOW_COMPONENT
+} from '../../domain/tide/state'
 
-	propTypes: {
-		match: React.PropTypes.object.isRequired
-	},
+export class ServeOrder extends Component	 {
 
 	awayTeamStarts() {
-		this.props.match.getCurrentSet().setStartServing('awayteam');
-		this.setState({
-			startToServe: 'awayteam'
-		});
-	},
+		this.props.tide.actions.all.mutateAndTrack(FIRST_TEAM_TO_SERVE, AWAYTEAM)
+	}
 
 	homeTeamStarts() {
-		this.props.match.getCurrentSet().setStartServing('hometeam');
-		this.setState({
-			startToServe: 'hometeam'
-		});
-	},
-
-	componentDidMount() {
-		this.props.match.notification.on('switch-server', () => {
-			const servingOrder = this.state.servingOrder;
-			if (servingOrder) {
-				servingOrder.nextServer();
-				this.setState({
-					servingOrder
-				});
-			}
-		});
-
-		this.props.match.notification.on('set-notification', () => {
-			this.replaceState(this.getInitialState());
-		});
-	},
+		this.props.tide.actions.all.mutateAndTrack(FIRST_TEAM_TO_SERVE, HOMETEAM)
+	}
 
 	render() {
-		if (this.state.order.length === 4) {
-			return (
-				<section>
-					<Alert bsStyle="warning">
-						<p>Player to serve: {this.state.servingOrder.toServe()} </p>
-					</Alert>
-				</section>
-			);
-		}
-
-		const setHasStarted = this.props.match.getCurrentSet().hasStarted();
-		const modal = this.renderOverlay();
-		return (
-			<section>
-				<Alert bsStyle="warning">
-					<ButtonToolbar>
-						<Button onClick={this.handleToggle} disabled={setHasStarted}>Set service order</Button>
-					</ButtonToolbar>
-				</Alert>
-				{modal}
-			</section>
-
-		);
-	},
+		const {
+			PLAYER_TO_SERVE,
+			SHOW_COMPONENT
+		 } = this.props;
+		
+	}
 
 	chosenPlayer(names) {
 		return function () {
@@ -110,9 +64,9 @@ const ServeOrder = React.createClass({
 
 			this.setState(state);
 		}.bind(this);
-	},
+	}
 
-	renderOverlay() {
+	render() {
 		let modalBodyList;
 		const awayTeam = this.props.match.awayTeam();
 		const homeTeam = this.props.match.homeTeam();
@@ -148,7 +102,7 @@ const ServeOrder = React.createClass({
 			</div>
 		);
 	}
-});
+}
 
 function getTeamModalBodyList(match, homeTeamStarts, awayTeamStarts) {
 	const homeTeam = match.homeTeam();
@@ -183,4 +137,10 @@ function getPlayerModalBodyList(team, color, chosenFirstItem, chosenSecondItem) 
 		/>
 }
 
-module.exports = ServeOrder;
+
+export default wrap(ServeOrder, {
+	PLAYER_TO_SERVE,
+	SERVICE_ORDER_IS_SET,
+	SHOW_COMPONENT
+
+});

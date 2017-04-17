@@ -2,16 +2,13 @@ import React from 'react';
 import Head from 'next/head';
 import Main from './main';
 
-import { Provider, connect } from 'react-redux'
-import store from './../src/domain/redux/reducer';
+import {Component as TideComponent} from 'tide'
+import createTide from './../src/domain/tide/tide';
 
 export default class Match extends React.Component {
-    constructor(props) {
-        super(props)
-        this.store = store;
-    }
-    
     render() {
+        const tide = createTide()
+
         return <div>
                 <Head>
                     <title>Scoreboard for the Lazy Volleyball Referee</title>
@@ -27,9 +24,9 @@ export default class Match extends React.Component {
                     </script>
                 </Head>
                 <div>
-                    <Provider store={store}>
-                        <Main />
-                    </Provider>
+                    <TideComponent tide={tide}>
+                        {(props) => <Main {...props} />}
+                    </TideComponent>
                 </div>
             </div>
     }

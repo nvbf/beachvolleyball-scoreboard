@@ -1,17 +1,31 @@
 import React, {Component} from 'react';
+import {wrap} from 'tide'
 
-import ScoreboardRow from './scoreboard-row';
-import InfoArea from './info-area';
-import MatchDetails from './match-details'
+import ScoreboardRow from './../molokyler/scoreboard-row';
+import InfoArea from './../molokyler/info-area';
+import MatchDetails from './../match-details'
+import NotificationAlerts from './../notification-alerts';
 
-const NotificationAlerts = require('./notification-alerts');
-const ServeOrder = require('./serve-order');
-const Timeout = require('./timeout');
-const TimeoutButtons = require('./timeout-buttons');
+const ServeOrder = require('../molokyler/serve-order');
+const Timeout = require('../timeout');
+import  TimeoutButtons from '../timeout-buttons';
 
-const AlertInfo = require('./alert-info');
+import AlertInfo from '../atom/alert-info';
 
-export default class Scoreboard extends Component {
+import {
+	HOMETEAM_FIRST_PLAYER_NAME,
+	HOMETEAM_SECOND_PLAYER_NAME,
+	HOMETEAM_COLOR,
+
+	AWAYTEAM_FIRST_PLAYER_NAME,
+	AWAYTEAM_SECOND_PLAYER_NAME,
+	AWAYTEAM_COLOR,
+} from '../../domain/tide/state';
+
+
+
+
+class Scoreboard extends Component {
 	constructor(props) {
 		super(props);
 		this.state = Object.assign({}, this.props.match.state, {showDetails: false, events: []})
@@ -146,15 +160,21 @@ export default class Scoreboard extends Component {
 										pointsToTeam={this.pointToHomeTeam()}
 										removePoint={this.removePointHomeTeam()}
 										scoreForThisTeam={scoreHomeTeam}
-										team={this.props.match.homeTeam()}
-										teamColor={this.props.match.homeTeamColor()}
+										team={{
+											player1: this.props[HOMETEAM_FIRST_PLAYER_NAME],
+											player2: this.props[HOMETEAM_SECOND_PLAYER_NAME]
+										}}
+										teamColor={this.props[HOMETEAM_COLOR]}
 										match={this.props.match}/>
 									<ScoreboardRow
 										pointsToTeam={this.pointToAwayTeam()}
 										removePoint={this.removePointAwayTeam()}
 										scoreForThisTeam={scoreAwayTeam}
-										team={this.props.match.awayTeam()}
-										teamColor={this.props.match.awayTeamColor()}
+										team={{
+											player1: this.props[AWAYTEAM_FIRST_PLAYER_NAME],
+											player2: this.props[AWAYTEAM_SECOND_PLAYER_NAME]
+										}}
+										teamColor={this.props[AWAYTEAM_COLOR]}
 										match={this.props.match}/>
 								</tbody>
 							</table>
@@ -196,35 +216,12 @@ export default class Scoreboard extends Component {
 	}
 }
 
-Scoreboard.propTypes = {
-	match: React.PropTypes.object.isRequired
-};
-
-
-
-function getScoreAndTeam(state) {
-	return {
-		id: hashCode(state.hometeam.state.player1 + state.hometeam.state.player2 +
-      state.awayteam.state.player1 + state.awayteam.state.player2),
-		homeTeam: state.hometeam.state,
-		awayTeam: state.awayteam.state,
-		sets: [state.sets[0].score, state.sets[1].score, state.sets[2].score]
-	};
-}
-
-function hashCode(hashString) {
-	let hash = 0;
-	let i;
-	let chr;
-	let len;
-	if (hashString.length === 0) {
-		return hash;
-	}
-	for (i = 0, len = hashString.length; i < len; i++) {
-		chr = hashString.charCodeAt(i);
-		hash = ((hash << 5) - hash) + chr;
-		hash |= 0; // Convert to 32bit integer
-	}
-	return hash;
-}
+export default wrap(Scoreboard, {
+	[HOMETEAM_FIRST_PLAYER_NAME]: HOMETEAM_FIRST_PLAYER_NAME,
+	[HOMETEAM_SECOND_PLAYER_NAME]: HOMETEAM_SECOND_PLAYER_NAME,
+	[HOMETEAM_COLOR]: HOMETEAM_COLOR,
+	[AWAYTEAM_FIRST_PLAYER_NAME]: AWAYTEAM_FIRST_PLAYER_NAME,
+	[AWAYTEAM_SECOND_PLAYER_NAME]: AWAYTEAM_SECOND_PLAYER_NAME,
+	[AWAYTEAM_COLOR]: AWAYTEAM_COLOR,
+});
 

@@ -4,16 +4,20 @@ const React = require('react');
 const Button = require('react-bootstrap').Button;
 const ButtonToolbar = require('react-bootstrap').ButtonToolbar;
 const Label = require('react-bootstrap').Label;
+import {wrap} from 'tide'
 
+import {
+	HOMETEAM_FIRST_PLAYER_NAME,
+	HOMETEAM_SECOND_PLAYER_NAME,
+	HOMETEAM_COLOR,
+
+	AWAYTEAM_FIRST_PLAYER_NAME,
+	AWAYTEAM_SECOND_PLAYER_NAME,
+	AWAYTEAM_COLOR,
+
+} from '../domain/tide/state';
 
 const TimeoutMenu = React.createClass({
-	propTypes: {
-		match: React.PropTypes.object,
-		homeTeamTimeout: React.PropTypes.number.isRequired,
-		awayTeamTimeout: React.PropTypes.number.isRequired,
-		updateState: React.PropTypes.func.isRequired
-	},
-
 	restart() {
 		location.reload();
 	},
@@ -72,5 +76,11 @@ const TimeoutMenu = React.createClass({
 	}
 });
 
-
-module.exports = TimeoutMenu;
+export default wrap(TimeoutMenu, {
+		[HOMETEAM_FIRST_PLAYER_NAME]: HOMETEAM_FIRST_PLAYER_NAME,
+		[HOMETEAM_SECOND_PLAYER_NAME]: HOMETEAM_SECOND_PLAYER_NAME,
+	 	[HOMETEAM_COLOR]: HOMETEAM_COLOR, 
+		[AWAYTEAM_FIRST_PLAYER_NAME]: AWAYTEAM_FIRST_PLAYER_NAME,
+		[AWAYTEAM_SECOND_PLAYER_NAME]: AWAYTEAM_SECOND_PLAYER_NAME,
+	 	[AWAYTEAM_COLOR]: AWAYTEAM_COLOR,		 
+});

@@ -1,4 +1,3 @@
-'use strict';
 const superagent = require('superagent');
 const util = require('util');
 
@@ -79,4 +78,4 @@ function formatRequestBody(match) {
 	};
 }
 
-module.exports = MatchApi;
+export default MatchApi;
