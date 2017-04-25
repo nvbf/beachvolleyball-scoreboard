@@ -1,40 +1,39 @@
 import React, {Component} from 'react';
 import {Button} from 'react-bootstrap';
-
-import hexToRGBA from '../utils/rgba';
+import Label  from '../atom/team-color-label'
 
 export default class ScoreboardRow extends Component {
 
 	render() {
-		const players = this.props.team;
-		const score = this.props.scoreForThisTeam;
-		const style = this.props.teamColor ? { backgroundColor: hexToRGBA(this.props.teamColor) } : {}
+		const {
+			player1,
+			player2,
+			score1,
+			score2,
+			score3,
+			teamColor,
+			matchFinished,
+			addPoint
+		}  = this.props;
+		// const style = this.props.teamColor ? { backgroundColor: hexToRGBA(this.props.teamColor) } : {}
 		return (
-			<tr style={style}>
+			<tr>
 				<td>
-					{players.player1}					- {players.player2}
+					<Label color={teamColor} />  {player1} - {player2}
 				</td>
 				<td>
-					{score[0]}
+					{score1}
 				</td>
 				<td>
-					{score[1]}
+					{score2}
 				</td>
 				<td>
-					{score[2]}
-				</td>
-				<td>
-					<Button
-						bsStyle="primary" className="points" type="submit" onClick={this.props.pointsToTeam}
-						disabled={this.props.match.state.finished}
-					>
-						<span className="glyphicon glyphicon-plus-sign" aria-hidden="true"/>
-					</Button>
+					{score3}
 				</td>
 				<td>
 					<Button
-						bsStyle="warning" className="points" type="submit" onClick={this.props.removePoint}
-						disabled={this.props.match.state.finished}
+						bsStyle="primary" className="points" type="submit" onClick={addPoint}
+						disabled={matchFinished}
 					>
 						<span className="glyphicon glyphicon-plus-sign" aria-hidden="true"/>
 					</Button>
@@ -45,8 +44,12 @@ export default class ScoreboardRow extends Component {
 }
 
 ScoreboardRow.propTypes = {
-	team: React.PropTypes.object.isRequired,
-	scoreForThisTeam: React.PropTypes.array.isRequired,
-	pointsToTeam: React.PropTypes.func.isRequired,
-	removePoint: React.PropTypes.func.isRequired
+	player1: React.PropTypes.string.isRequired,
+	player2: React.PropTypes.string.isRequired,
+	score1: React.PropTypes.number.isRequired,
+	score2: React.PropTypes.number.isRequired,
+	score3: React.PropTypes.number.isRequired,
+	teamColor: React.PropTypes.string.isRequired,
+	matchFinished: React.PropTypes.bool.isRequired,
+	addPoint: React.PropTypes.func.isRequired,
 };

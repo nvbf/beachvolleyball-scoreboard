@@ -93,4 +93,4 @@ Sett.prototype.hasStarted = function () {
 	return !(this.score[0] === 0 && this.score[1] === 0);
 };
 
-module.exports = Sett;
+export default Sett;

@@ -1,7 +1,7 @@
 const util = require('util');
-const EventEmitter = require('events').EventEmitter;
-const Team = require('./team');
-const Sett = require('./sett');
+import { EventEmitter } from 'events';
+import Team from './team';
+import Sett from './sett';
 
 function Match() {
 	const defaultSetOption = {
@@ -97,4 +97,4 @@ Match.prototype.awayTeamTakesTimeout = function () {
     this.getCurrentSet().score.join('-'));
 };
 
-module.exports = Match;
+export default Match;

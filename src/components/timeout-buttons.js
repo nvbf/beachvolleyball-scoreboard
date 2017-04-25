@@ -1,51 +1,44 @@
-import hexToRGBA from './utils/rgba';
+import React from 'react';
+import {
+	 Button,
+	 ButtonToolbar, 
+	 Label
+} from 'react-bootstrap';
+import TeamColorLabel from './atom/team-color-label'
 
-const React = require('react');
-const Button = require('react-bootstrap').Button;
-const ButtonToolbar = require('react-bootstrap').ButtonToolbar;
-const Label = require('react-bootstrap').Label;
 import {wrap} from 'tide'
 
 import {
 	HOMETEAM_FIRST_PLAYER_NAME,
 	HOMETEAM_SECOND_PLAYER_NAME,
 	HOMETEAM_COLOR,
-
+	MATCH,
 	AWAYTEAM_FIRST_PLAYER_NAME,
 	AWAYTEAM_SECOND_PLAYER_NAME,
 	AWAYTEAM_COLOR,
 
+	HOMETEAM_TIMEOUT_TAKEN,
+	AWAYTEAM_TIMEOUT_TAKEN
+
 } from '../domain/tide/state';
 
-const TimeoutMenu = React.createClass({
-	restart() {
-		location.reload();
-	},
-
-	showTimeout() {
-		this.props.match.notification.emit('timeout-notification');
-	},
-
-	onTimeoutHomeTeam(e) {
-		e.preventDefault();
-		this.props.match.homeTeamTakesTimeout();
-		this.props.updateState(this.props.match.state);
-		this.showTimeout();
-	},
-
-	onTimeoutAwayTeam(e) {
-		e.preventDefault();
-		this.props.match.awayTeamTakesTimeout();
-		this.props.updateState(this.props.match.state);
-		this.showTimeout(this.props.match.state.awayteam.display());
-	},
-
+class TimeoutMenu extends React.Component {
 	render() {
 		const {
-			match
-		} = this.props;
-		const homeTimeTimeoutStyles = { backgroundColor: hexToRGBA(match.homeTeamColor())}
-		const awayTimeTimeoutStyles = { backgroundColor: hexToRGBA(match.awayTeamColor())}
+			HOMETEAM_COLOR,
+			AWAYTEAM_COLOR,
+			HOMETEAM_FIRST_PLAYER_NAME,
+			HOMETEAM_SECOND_PLAYER_NAME,
+			AWAYTEAM_FIRST_PLAYER_NAME,
+			AWAYTEAM_SECOND_PLAYER_NAME,
+			HOMETEAM_TIMEOUT_TAKEN,
+			AWAYTEAM_TIMEOUT_TAKEN,
+			tide : {
+				actions: {
+					all
+				}
+			}
+		} = this.props
 		
 		return (
 			<div>
@@ -53,34 +46,36 @@ const TimeoutMenu = React.createClass({
 				<ButtonToolbar>
 					<Button
 						type="submit"
-						className={(this.props.homeTeamTimeout != 0 ? 'disabled' : '')}
-						style={homeTimeTimeoutStyles}
-						onClick={this.onTimeoutHomeTeam}
+						className={(HOMETEAM_TIMEOUT_TAKEN ? 'disabled' : '')}
+						onClick={all.hometeamTakeTimeout}
 					>
-						{this.props.match.state.hometeam.display()}
+						<TeamColorLabel color={HOMETEAM_COLOR}> 
+						</TeamColorLabel> {HOMETEAM_FIRST_PLAYER_NAME} - {HOMETEAM_SECOND_PLAYER_NAME}
 					</Button>
 					<Button
 						type="submit"
-						className={(this.props.awayTeamTimeout != 0 ? 'disabled' : '')}
-						style={awayTimeTimeoutStyles}
-						onClick={this.onTimeoutAwayTeam}
+						className={(AWAYTEAM_TIMEOUT_TAKEN ? 'disabled' : '')}
+						onClick={all.awayteamTakeTimeout}
 					>
-						{this.props.match.state.awayteam.display()}
+						<TeamColorLabel color={AWAYTEAM_COLOR}> 
+						</TeamColorLabel>  {AWAYTEAM_FIRST_PLAYER_NAME} - {AWAYTEAM_SECOND_PLAYER_NAME}
 					</Button>
-					<Button bsStyle="danger" type="submit" className="pull-right" onClick={this.restart}>
-            New Match
-					</Button>
+					<Button bsStyle="warning" type="submit" className="pull-right" onClick={all.undo}>
+            			Undo
+					</Button>					
 				</ButtonToolbar>
 			</div>
 		);
 	}
-});
+}
 
 export default wrap(TimeoutMenu, {
-		[HOMETEAM_FIRST_PLAYER_NAME]: HOMETEAM_FIRST_PLAYER_NAME,
-		[HOMETEAM_SECOND_PLAYER_NAME]: HOMETEAM_SECOND_PLAYER_NAME,
-	 	[HOMETEAM_COLOR]: HOMETEAM_COLOR, 
-		[AWAYTEAM_FIRST_PLAYER_NAME]: AWAYTEAM_FIRST_PLAYER_NAME,
-		[AWAYTEAM_SECOND_PLAYER_NAME]: AWAYTEAM_SECOND_PLAYER_NAME,
-	 	[AWAYTEAM_COLOR]: AWAYTEAM_COLOR,		 
+		[HOMETEAM_FIRST_PLAYER_NAME]: [MATCH, HOMETEAM_FIRST_PLAYER_NAME],
+		[HOMETEAM_SECOND_PLAYER_NAME]: [MATCH, HOMETEAM_SECOND_PLAYER_NAME],
+	 	[HOMETEAM_COLOR]: [MATCH, HOMETEAM_COLOR], 
+		[AWAYTEAM_FIRST_PLAYER_NAME]: [MATCH, AWAYTEAM_FIRST_PLAYER_NAME],
+		[AWAYTEAM_SECOND_PLAYER_NAME]: [MATCH, AWAYTEAM_SECOND_PLAYER_NAME],
+	 	[AWAYTEAM_COLOR]: [MATCH, AWAYTEAM_COLOR],
+		[HOMETEAM_TIMEOUT_TAKEN]: [MATCH, HOMETEAM_TIMEOUT_TAKEN],
+		[AWAYTEAM_TIMEOUT_TAKEN]: [MATCH, AWAYTEAM_TIMEOUT_TAKEN],
 });

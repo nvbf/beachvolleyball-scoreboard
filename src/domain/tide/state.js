@@ -41,16 +41,33 @@ export const SHOW_SERVICE_ORDER_DIALOG_PLAYER_2 = 'SHOW_SERVICE_ORDER_DIALOG_PLA
 export const AWAYTEAM = 'AWAYTEAM'
 export const HOMETEAM = 'HOMETEAM'
 export const SET_HAS_STARTED = 'SET_HAS_STARTED';
+export const AWAYTEAM_POINT = 'AWAYTEAM_POINT'
+export const HOMETEAM_POINT = 'HOMETEAM_POINT'
+export const HOMETEAM_TIMEOUT_TAKEN = 'HOMETEAM_TIMEOUT_TAKEN';
+export const AWAYTEAM_TIMEOUT_TAKEN = 'AWAYTEAM_TIMEOUT_TAKEN'
+export const MATCH_IS_FINISED = 'MATCH_IS_FINISED'
+export const DATE = 'DATE'
+export const VALUE = 'VALUE'
+export const MATCHSTATE = 'MATCHSTATE';
+export const ACTION = 'ACTION'
+export const UNDO = 'UNDO'
 
-export const BeachVolleyballSet = Record({
+const BeachVolleyballSet = Record({
   HOMETEAM_POINT: 0,
   AWAYTEAM_POINT: 0,
   HOMETEAM_TIMEOUT_TAKEN: false,
   AWAYTEAM_TIMEOUT_TAKEN: false,
 })
 
+export const Action = Record({
+  [DATE]: new Date(),
+  [ACTION]: "",
+  [VALUE]: "",
+  [MATCHSTATE]: Match
+})
 
-const Match = Record({
+
+export const Match = Record({
   [FIRST_SET]: new BeachVolleyballSet(),
   [SECOND_SET]: new BeachVolleyballSet(),    
   [THIRD_SET]: new BeachVolleyballSet(),
@@ -71,8 +88,15 @@ const Match = Record({
   [FIRST_TEAM_TO_SERVE]: "",
   [SERVICE_ORDER]: List(),
   [PLAYER_TO_SERVE]: "",
-  [ACTION_HISTORY]: List(),
   [SHOW_COMPONENT] : LOADING_COMPONENT,
+  [MATCH_IS_FINISED]: false,
+  [HOMETEAM_TIMEOUT_TAKEN]: false,
+  [AWAYTEAM_TIMEOUT_TAKEN]: false,
 });
 
-export default Match
+export const State = Record({
+  [MATCH]: new Match(),
+  [ACTION_HISTORY]: List(),
+})
+
+export default State

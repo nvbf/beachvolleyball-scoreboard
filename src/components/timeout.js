@@ -1,53 +1,39 @@
-'use strict';
-const React = require('react');
-const Alert = require('react-bootstrap').Alert;
-const AlertEventMixin = require('../mixin/alert-event-mixin');
+import React from 'react';
+import { Alert } from 'react-bootstrap';
 
-const Timeout = React.createClass({
-
-	mixins: [AlertEventMixin],
-
-	propTypes: {
-		seconds: React.PropTypes.number.isRequired,
-		message: React.PropTypes.string.isRequired
-	},
-
-	getInitialState() {
-		return {
+class Timeout extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			show: props.show,
 			secondsLeft: this.props.seconds
-		};
-	},
+		}
+	}
 
 	tick() {
 		if (this.state.secondsLeft === -15) {
 			this.handleAlertDismiss();
 		} else {
 			this.setState({secondsLeft: this.state.secondsLeft - 1});
+			this.interval = setInterval(tick, 1000);
 		}
-	},
+	}
 
-	componentDidMount() {
-		this.props.notification.on(this.props.eventTrigger, () => {
-			if (!this.state.interval) {
-				this.interval = setInterval(this.tick, 1000);
-				this.setState({
-					interval: true
-				});
-			}
-		});
-	},
-
-	handleAlertDismissOverlay() {
+	handleAlertDismiss() {
 		clearInterval(this.interval);
-	},
+		this.state = { show: false }
+	}
 
-	renderOverlay() {
+	render() {
+		if(this.state.show) {
 		return (
 			<Alert bsStyle="info" onDismiss={this.handleAlertDismiss}>
 				{this.props.message} {this.state.secondsLeft}
 			</Alert>
 		);
+		}
+		return null
 	}
-});
+};
 
-module.exports = Timeout;
+export default Timeout;

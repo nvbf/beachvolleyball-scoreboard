@@ -9,6 +9,7 @@ import {
 
 
 export function getCurrentSetIndex(score) {
+    console.log('getCurrentSetIndex', score)
     if(!isFirstSetFinished(score)) {
         return FIRST_SET
     }
@@ -31,6 +32,7 @@ export function getSetIndexToRemovePointFrom(score) {
 }
 
 export function isFirstSetFinished(score) {
+    console.log('score', score)
     return isSetFinished(score.get(FIRST_SET));
 }
 
@@ -103,6 +105,7 @@ function hasAwayteamWonSet(aSet) {
 }
 
 function hasHometeamWonSet(aSet) {
+    console.log('set', aSet);
     const point1 = aSet.get(0);
     const point2 = aSet.get(1);
     

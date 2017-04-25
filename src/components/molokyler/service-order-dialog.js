@@ -3,7 +3,7 @@ import {
 	ButtonToolbar,
 	Button,	
     Alert,
-   	Modal
+	Panel
 } from 'react-bootstrap';
 
 import {wrap} from 'tide'
@@ -67,11 +67,12 @@ export class ServeOrder extends Component	 {
 	}
 
 	render() {
-		let modalBodyList;
-		const awayTeam = this.props.match.awayTeam();
-		const homeTeam = this.props.match.homeTeam();
-
-		if (!this.state.isModalOpen) {
+		return (
+		<Panel header="Service Order" bsStyle="primary">
+      		Panel content
+    	</Panel>
+		)
+		/*if (!this.state.isModalOpen) {
 			return null;
 		}
 		if ((this.state.startToServe === 'hometeam' && this.state.order.length === 0) ||
@@ -95,12 +96,10 @@ export class ServeOrder extends Component	 {
 		}
 		return (
 
-			<div className="static-modal">
-				<Modal show={this.state.isModalOpen} onHide={this.handleToggle} >
+			<div>
 					{modalBodyList}
-				</Modal>
 			</div>
-		);
+		);*/
 	}
 }
 

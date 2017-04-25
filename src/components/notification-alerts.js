@@ -1,15 +1,19 @@
 import  React, {Component} from 'react';
 import { Alert } from 'react-bootstrap' 
 import { wrap } from 'tide'
-import { SWITCH_NOW } from '../../src/domain/tide/state'
 
-class NotificationAlerts extends React.Component {
+export default class NotificationAlerts extends React.Component {
+	constructor(props) {
+		super(props);
+	}
+
+
 	hide() {
-		this.setState({alertVisible: false});
+		this.setState({show: false});
 	}
 
 	render() {
-		if (this.props.switch) {
+		if (this.props.show && this.state.show) {
 			return (
 				<Alert bsStyle="info" onDismiss={this.hide}>
 					<strong>{this.props.message}</strong>
@@ -19,7 +23,3 @@ class NotificationAlerts extends React.Component {
 		return null;
 	}
 };
-
-export default wrap(NotificationAlerts,{
-	[SWITCH_NOW]: SWITCH_NOW	
-})

@@ -1,9 +1,10 @@
 import React,{Component} from 'react';
-import Alert from 'react-bootstrap';
+import { Alert } from 'react-bootstrap';
 
 export default class AlertInfo extends Component {
-	getInitialState() {
-		return {showInfo: true};
+	constructor(){
+		super()
+		this.state = {showInfo: true};
 	}
 
 	remove() {

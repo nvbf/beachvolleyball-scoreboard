@@ -19,6 +19,16 @@ export function getCurrentSetIndex(score) {
     }
 }
 
+export function getHometeamPointsInCurrentSet(score) {
+    const index = getCurrentSetIndex(score)
+    return score[index][HOMETEAM_POINT];
+}
+
+export function getAwayteamPointsInCurrentSet(score) {
+    const index = getCurrentSetIndex(score)
+    return score[index][AWAYTEAM_POINT];
+}
+
 export function getSetIndexToRemovePointFrom(score) {
     if(isThirdSetStarted(score)) {
         return THIRD_SET

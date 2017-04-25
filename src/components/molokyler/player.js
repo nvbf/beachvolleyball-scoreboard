@@ -1,8 +1,8 @@
 import React from 'react';
-import Label from '../src/components/atom/team-color-label';
+import Label from '../atom/team-color-label';
 
-export default ({number, name}) => (
+export default ({number, name, color = "#ff00ff"}) => (
         <div>
-            <Label color="#ff00ff" number={2} /> {name}
+            <Label color={color} number={number} /> {name}
         </div>
 )

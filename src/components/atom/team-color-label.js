@@ -18,5 +18,7 @@ export default styled.div`
         background-color: ${props => props.color || '#DDDDDD' };
         width: 1.5rem;
         height: 1.5rem;
+        display: inline-flex;
+        
         
 `

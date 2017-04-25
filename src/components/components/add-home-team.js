@@ -12,7 +12,8 @@ import {
 	HOMETEAM_SECOND_PLAYER_NAME,
 	HOMETEAM_COLOR,
 	SHOW_COMPONENT,
-	ADD_AWAYTEAM_COMPONENT
+	ADD_AWAYTEAM_COMPONENT,
+	MATCH,
 } from '../../domain/tide/state';
 
 
@@ -36,10 +37,10 @@ class AddHomeTeam extends Component {
 			return;
 		}
 
-		this.props.tide.actions.all.mutateAndTrack(HOMETEAM_FIRST_PLAYER_NAME, player1)
-		this.props.tide.actions.all.mutateAndTrack(HOMETEAM_SECOND_PLAYER_NAME, player2)
-		this.props.tide.actions.all.mutateAndTrack(HOMETEAM_COLOR, this.state.color)
-		this.props.tide.actions.all.mutateAndTrack(SHOW_COMPONENT, ADD_AWAYTEAM_COMPONENT)
+		this.props.tide.actions.all.mutateAndTrack([MATCH, HOMETEAM_FIRST_PLAYER_NAME], player1)
+		this.props.tide.actions.all.mutateAndTrack([MATCH, HOMETEAM_SECOND_PLAYER_NAME], player2)
+		this.props.tide.actions.all.mutateAndTrack([MATCH, HOMETEAM_COLOR], this.state.color)
+		this.props.tide.actions.all.mutateAndTrack([MATCH, SHOW_COMPONENT], ADD_AWAYTEAM_COMPONENT)
 	}
 
 	componentDidMount() {
@@ -52,7 +53,7 @@ class AddHomeTeam extends Component {
 			<div>
 				<div className="panel panel-default">
 					<div className="panel-heading">
-						<h2>Lets add the first team..</h2>
+						<h2>Home team</h2>
 					</div>
 					<div className="panel-body">
 						<PlayerInput />
@@ -61,16 +62,19 @@ class AddHomeTeam extends Component {
 					</div>
 				</div>
 
-				<InfoArea number={1}>
-					The first thing we need to do is to add the teams that are playing against each other
+				<InfoArea number="ℹ">
+					The first thing we need to do is to add the name of the players to the home team
 				</InfoArea>
+				<InfoArea number="ℹ">
+					Pick and color for the team, or it will default to blue.
+				</InfoArea>				
 			</div>
 		);
 	}
 }
 
 export default wrap(AddHomeTeam, {
-		[HOMETEAM_FIRST_PLAYER_NAME]: HOMETEAM_FIRST_PLAYER_NAME,
-		[HOMETEAM_SECOND_PLAYER_NAME]: HOMETEAM_SECOND_PLAYER_NAME,
-	 	[HOMETEAM_COLOR]: HOMETEAM_COLOR
-});
+		[HOMETEAM_FIRST_PLAYER_NAME]: [MATCH, HOMETEAM_FIRST_PLAYER_NAME],
+		[HOMETEAM_SECOND_PLAYER_NAME]: [MATCH, HOMETEAM_SECOND_PLAYER_NAME],
+	 	[HOMETEAM_COLOR]: [MATCH, HOMETEAM_COLOR],
+})

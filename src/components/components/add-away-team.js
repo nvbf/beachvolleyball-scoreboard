@@ -13,6 +13,7 @@ import {
 	AWAYTEAM_COLOR,
 	SHOW_COMPONENT,
 	SCOREBOARD_COMPONENT,
+	MATCH,
 } from '../../domain/tide/state';
 
 class AddAwayTeam extends Component {
@@ -36,11 +37,11 @@ class AddAwayTeam extends Component {
 			return;
 		}
 
-		this.props.tide.actions.all.mutateAndTrack(AWAYTEAM_FIRST_PLAYER_NAME, player1)
-		this.props.tide.actions.all.mutateAndTrack(AWAYTEAM_SECOND_PLAYER_NAME, player2)
-		this.props.tide.actions.all.mutateAndTrack(AWAYTEAM_COLOR, this.state.color)
-		this.props.tide.actions.all.mutateAndTrack(SHOW_COMPONENT, SCOREBOARD_COMPONENT)
-	}	
+		this.props.tide.actions.all.mutateAndTrack([MATCH, AWAYTEAM_FIRST_PLAYER_NAME], player1)
+		this.props.tide.actions.all.mutateAndTrack([MATCH, AWAYTEAM_SECOND_PLAYER_NAME], player2)
+		this.props.tide.actions.all.mutateAndTrack([MATCH, AWAYTEAM_COLOR], this.state.color)
+		this.props.tide.actions.all.mutateAndTrack([MATCH, SHOW_COMPONENT], SCOREBOARD_COMPONENT)
+	}
 
 	componentDidMount() {
 		document.getElementById('player1').focus();
@@ -51,7 +52,7 @@ class AddAwayTeam extends Component {
 			<div>
 				<div className="panel panel-default">
 					<div className="panel-heading">
-						<h2>..and now the other team!</h2>
+						<h2>Away team</h2>
 					</div>
 					<div className="panel-body">
 						<PlayerInput />
@@ -59,9 +60,12 @@ class AddAwayTeam extends Component {
 						<AddTeamButton  handleClick={this.handleSubmit.bind(this)} />
 					</div>
 				</div>
-				<InfoArea number={2}>
+				<InfoArea number="ℹ">
 					Great! Now lets add the second team!
 				</InfoArea>
+				<InfoArea number="ℹ">
+					Pick and color for the team, or it will default to red.
+				</InfoArea>									
 			</div>
 		);
 	}
