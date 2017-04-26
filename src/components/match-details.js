@@ -75,6 +75,7 @@ export default function MatchDetails({events, showDetails, handleDetailToogle}) 
              <DetailToogle checked={showDetails}
                 onChange={handleDetailToogle} /> 
              {eventsComponent.reverse()}
+             
          </Alert>
     )
 }

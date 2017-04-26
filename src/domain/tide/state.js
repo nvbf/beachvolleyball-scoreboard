@@ -84,7 +84,6 @@ export const Match = Record({
   [AWAYTEAM_FIRST_PLAYER_NAME]: "",
   [AWAYTEAM_SECOND_PLAYER_NAME]: "",        
   [AWAYTEAM_COLOR]: "",
-  [HISTORY]: List(),
   [FIRST_TEAM_TO_SERVE]: "",
   [SERVICE_ORDER]: List(),
   [PLAYER_TO_SERVE]: "",
@@ -97,6 +96,7 @@ export const Match = Record({
 export const State = Record({
   [MATCH]: new Match(),
   [ACTION_HISTORY]: List(),
+  [HISTORY]: List(),
 })
 
 export default State

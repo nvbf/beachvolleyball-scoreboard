@@ -29,7 +29,7 @@ import {
 class AllAction extends Actions {
   mutateAndTrack(key, value) {
       this.mutate(key, (original) => original = value);
-      this.mutate([MATCH, HISTORY], (history) => {
+      this.mutate(HISTORY, (history) => {
         return history.push(
             new Action({
             DATE: new Date(),
@@ -95,26 +95,14 @@ class AllAction extends Actions {
 
   undo = () => {
     console.log('UNDO')
-    const state = new State()
-    console.log('------')
-    const actions = this.get([MATCH, HISTORY]);
-    console.log('actions', actions)
-    const lastAction = actions.last()
-    const undostate = actions.reduce((agg, curr, index) => {
-      // undo the last one.
-      if(index === (actions.size - 1)) {
-        return agg;
-      }
-      const key = curr.get(ACTION);
-      const value = curr.get(VALUE);
-      console.log('key, value', key, value);
-      return agg.setIn(key, value)
-    }, state)
+    const history = this.get([HISTORY]);
+    const secondLastAction = history.pop().last();
+    const matchState = secondLastAction.get(MATCHSTATE)
     
-    const undoAction = [UNDO].concat(lastAction.get(ACTION))
-    console.log('new state after undo', undostate)
-    this.mutate(MATCH, original => original = undostate.get(MATCH));
-    this.track(undoAction, lastAction.get(VALUE))
+    const undoAction = [UNDO].concat(secondLastAction.get(ACTION))
+    this.mutate(MATCH, original => original = matchState);
+    this.mutate(HISTORY, original => original = history.pop());
+    this.track(undoAction, secondLastAction.get(VALUE))
   }
 }
 
