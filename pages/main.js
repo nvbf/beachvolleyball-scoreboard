@@ -23,6 +23,10 @@ import {
 	LOADING_COMPONENT
 } from '../src/domain/tide/state';
 
+import {
+  get as getStateFromLocalStorage
+} from './../src/domain/tide/storage';
+
 
 import {
 	ButtonToolbar,
@@ -33,18 +37,37 @@ import {
 class Main extends React.Component {
 	componentDidMount() {
 		const qs = url.parse(document.location.search, true).query;
+		const state = getStateFromLocalStorage(qs.id)
 		
 		if (qs.name1 && qs.name2 && qs.name3 && qs.name4) {
+			if(state !== false) {
+				if(
+					state[MATCH][HOMETEAM_FIRST_PLAYER_NAME] === qs.name1 &&
+					state[MATCH][HOMETEAM_SECOND_PLAYER_NAME] === qs.name2 &&
+					state[MATCH][AWAYTEAM_FIRST_PLAYER_NAME] === qs.name3 &&
+					state[MATCH][AWAYTEAM_SECOND_PLAYER_NAME] === qs.name4
+				) {
+					this.props.tide.actions.all.load(state)
+					return;
+				} else {
+					this.props.tide.actions.all.mutateAndTrack([MATCH, SHOW_COMPONENT], ADD_HOMETEAM_COMPONENT)
+					return;
+				}
 
-			this.props.tide.actions.all.mutateAndTrack([MATCH, HOMETEAM_FIRST_PLAYER_NAME], qs.name1)
-			this.props.tide.actions.all.mutateAndTrack([MATCH, HOMETEAM_SECOND_PLAYER_NAME], qs.name2)
-			this.props.tide.actions.all.mutateAndTrack([MATCH, HOMETEAM_COLOR], qs.color1 ? `#${qs.color1}` : '#ff0000')
-		
-			this.props.tide.actions.all.mutateAndTrack([MATCH, AWAYTEAM_FIRST_PLAYER_NAME], qs.name3)
-			this.props.tide.actions.all.mutateAndTrack([MATCH, AWAYTEAM_SECOND_PLAYER_NAME], qs.name4)
-			this.props.tide.actions.all.mutateAndTrack([MATCH, AWAYTEAM_COLOR], qs.color2 ? `#${qs.color2}` : '#0000ff')
-			this.props.tide.actions.all.mutateAndTrack([MATCH, SHOW_COMPONENT], SCOREBOARD_COMPONENT)
+			}
+				this.props.tide.actions.all.mutateAndTrack([MATCH, HOMETEAM_FIRST_PLAYER_NAME], qs.name1)
+				this.props.tide.actions.all.mutateAndTrack([MATCH, HOMETEAM_SECOND_PLAYER_NAME], qs.name2)
+				this.props.tide.actions.all.mutateAndTrack([MATCH, HOMETEAM_COLOR], qs.color1 ? `#${qs.color1}` : '#ff0000')
+			
+				this.props.tide.actions.all.mutateAndTrack([MATCH, AWAYTEAM_FIRST_PLAYER_NAME], qs.name3)
+				this.props.tide.actions.all.mutateAndTrack([MATCH, AWAYTEAM_SECOND_PLAYER_NAME], qs.name4)
+				this.props.tide.actions.all.mutateAndTrack([MATCH, AWAYTEAM_COLOR], qs.color2 ? `#${qs.color2}` : '#0000ff')
+				this.props.tide.actions.all.mutateAndTrack([MATCH, SHOW_COMPONENT], SCOREBOARD_COMPONENT)
 		} else {
+			if(state !== false) {
+				this.props.tide.actions.all.load(state)
+				return;
+			}
 			this.props.tide.actions.all.mutateAndTrack([MATCH, SHOW_COMPONENT], ADD_HOMETEAM_COMPONENT)
 		}
 	}

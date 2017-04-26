@@ -11,7 +11,7 @@ export default class Match extends React.Component {
 
         return <div>
                 <Head>
-                    <title>Scoreboard for the Lazy Volleyball Referee</title>
+                    <title>Scorecard for the Lazy Volleyball Referee</title>
                     <link rel="stylesheet" href="/static/css/bootstrap-3.3.1.css" />
                     <link rel="stylesheet" href="/static/css/app.css" type="text/css"/>
                     <meta name="viewport" content="width=device-width, initial-scale=1" />

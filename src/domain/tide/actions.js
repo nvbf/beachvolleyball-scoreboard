@@ -21,6 +21,10 @@ import {
 } from './state';
 
 import {
+  update as storeToLocalStorage 
+} from './storage';
+
+import {
   getHometeamPointsInCurrentSet,
   getAwayteamPointsInCurrentSet,
   getCurrentSetIndex,
@@ -42,52 +46,53 @@ class AllAction extends Actions {
   }
 
   track(key, value) {
-      this.mutate(ACTION_HISTORY, (history) => {
-        return history.push(
-          new Action({
-            DATE: new Date(),
-            ACTION: key,
-            VALUE: value,
-            MATCHSTATE: this.getMatch()
-          }))
-      });
+      const action = new Action({
+        DATE: new Date(),
+        ACTION: key,
+        VALUE: value,
+        MATCHSTATE: this.getMatch()
+      })
+      this.mutate(ACTION_HISTORY, (history) => history.push(action))
       this.mutateSignals()
       const matchId = this.get([MATCH, MATCH_ID]);
-      storeToLocalStorage(matchId, key, value);
+      storeToLocalStorage(matchId, action);
   }
   
   mutateSignals = () => {
     const state = this.getMatch();
-    console.log('STATE:', state); 
     const index = getCurrentSetIndex(state)
     this.mutate([MATCH, HOMETEAM_TIMEOUT_TAKEN], (original => original = state[index][HOMETEAM_TIMEOUT_TAKEN]))
     this.mutate([MATCH, AWAYTEAM_TIMEOUT_TAKEN], (original => original = state[index][AWAYTEAM_TIMEOUT_TAKEN]))
   }
 
-  hometeamTakeTimeout = ()  => {
-    const index  = getCurrentSetIndex(this.getMatch())
+  hometeamTakeTimeout = (proxy, event, state = this.getMatch()) => {
+    const index  = getCurrentSetIndex(state)
     this.mutateAndTrack([MATCH, index, HOMETEAM_TIMEOUT_TAKEN], true)
   }
 
-  awayteamTakeTimeout = ()  => {
-    const index  = getCurrentSetIndex(this.getMatch())
+  awayteamTakeTimeout = (proxy, event, state = this.getMatch()) => {
+    const index  = getCurrentSetIndex(state)
     this.mutateAndTrack([MATCH, index, AWAYTEAM_TIMEOUT_TAKEN], true)
   }
   
 
-  addPointHometeam = () => {
-    console.log('addPoint home');
-    const index  = getCurrentSetIndex(this.getMatch())
-    const currentPoints = getHometeamPointsInCurrentSet(this.getMatch());
+  addPointHometeam = (proxy, event, state = this.getMatch()) => {
+    const index  = getCurrentSetIndex(state)
+    const currentPoints = getHometeamPointsInCurrentSet(state);
     this.mutateAndTrack([MATCH, index, HOMETEAM_POINT], currentPoints + 1)
   }
 
-  addPointAwayteam = () => {
-    console.log('addPoint away');
-    const index  = getCurrentSetIndex(this.getMatch())
-    const currentPoints = getAwayteamPointsInCurrentSet(this.getMatch());
+  addPointAwayteam = (proxy, event, state = this.getMatch()) => {
+    const index  = getCurrentSetIndex(state)
+    const currentPoints = getAwayteamPointsInCurrentSet(state);
     this.mutateAndTrack([MATCH, index, AWAYTEAM_POINT], currentPoints + 1)
   }
+
+  load = (proxy, event, state) => {
+    this.tide.setState(state);
+  }
+
+
 
   getMatch = () => {
     return this.get(MATCH)
@@ -103,21 +108,6 @@ class AllAction extends Actions {
     this.mutate(MATCH, original => original = matchState);
     this.mutate(HISTORY, original => original = history.pop());
     this.track(undoAction, secondLastAction.get(VALUE))
-  }
-}
-
-
-function storeToLocalStorage(matchId = 'Match-0', key, value) {
-  //console.log(matchId, key, value)
-  const historyString = localStorage.getItem(matchId) || [];
-  const history = JSON.parse(historyString);
-  history.push({'action': key, 'value': value})
-  const historyJson = JSON.stringify(history)
-  try {
-    localStorage.setItem(matchId, historyJson)
-  } catch(err) {
-    console.error('Error on storing match object', matchID, key, value)
-    console.error(err);
   }
 }
 
