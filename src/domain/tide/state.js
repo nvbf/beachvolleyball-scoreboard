@@ -51,8 +51,9 @@ export const VALUE = 'VALUE'
 export const MATCHSTATE = 'MATCHSTATE';
 export const ACTION = 'ACTION'
 export const UNDO = 'UNDO'
+export const CURRENT_SET = 'CURRENT_SET'
 
-const BeachVolleyballSet = Record({
+export const BeachVolleyballSet = Record({
   HOMETEAM_POINT: 0,
   AWAYTEAM_POINT: 0,
   HOMETEAM_TIMEOUT_TAKEN: false,
@@ -65,6 +66,15 @@ export const Action = Record({
   [VALUE]: "",
   [MATCHSTATE]: Match
 })
+
+export const ActionHistory = Record({
+  [DATE]: new Date(),
+  [ACTION]: "",
+  [VALUE]: "",
+  [HOMETEAM_POINT]: "",
+  [AWAYTEAM_POINT]: "",
+  [CURRENT_SET]: "",
+});
 
 
 export const Match = Record({

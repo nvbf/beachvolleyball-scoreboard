@@ -16,7 +16,7 @@ import {
 	AWAYTEAM_FIRST_PLAYER_NAME,
 	AWAYTEAM_SECOND_PLAYER_NAME,
 	AWAYTEAM_COLOR,
-
+	HISTORY,
 	HOMETEAM_TIMEOUT_TAKEN,
 	AWAYTEAM_TIMEOUT_TAKEN
 
@@ -33,13 +33,14 @@ class TimeoutMenu extends React.Component {
 			AWAYTEAM_SECOND_PLAYER_NAME,
 			HOMETEAM_TIMEOUT_TAKEN,
 			AWAYTEAM_TIMEOUT_TAKEN,
+			HISTORY,
 			tide : {
 				actions: {
 					all
 				}
 			}
 		} = this.props
-		
+		console.log('HISTORY.size', HISTORY.size)
 		return (
 			<div>
 				<Label>Timeout</Label>
@@ -60,7 +61,11 @@ class TimeoutMenu extends React.Component {
 						<TeamColorLabel color={AWAYTEAM_COLOR}> 
 						</TeamColorLabel>  {AWAYTEAM_FIRST_PLAYER_NAME} - {AWAYTEAM_SECOND_PLAYER_NAME}
 					</Button>
-					<Button bsStyle="warning" type="submit" className="pull-right" onClick={all.undo}>
+					<Button 
+						bsStyle="warning"
+						type="submit"
+						className={(HISTORY.size === 0) ? 'disabled pull-right' : 'pull-right' }
+						onClick={all.undo}>
             			Undo
 					</Button>					
 				</ButtonToolbar>
@@ -78,4 +83,5 @@ export default wrap(TimeoutMenu, {
 	 	[AWAYTEAM_COLOR]: [MATCH, AWAYTEAM_COLOR],
 		[HOMETEAM_TIMEOUT_TAKEN]: [MATCH, HOMETEAM_TIMEOUT_TAKEN],
 		[AWAYTEAM_TIMEOUT_TAKEN]: [MATCH, AWAYTEAM_TIMEOUT_TAKEN],
+		[HISTORY]: [HISTORY]
 });

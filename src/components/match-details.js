@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components';
 import printf from 'printf'
 import moment from 'moment'
+import List from 'immutable'
 
 import DetailToogle from './detail-toggle';
 import { Alert } from 'react-bootstrap';
@@ -30,10 +31,6 @@ import {
     HOMETEAM_TIMEOUT_TAKEN,
 } from '../domain/tide/state';
 
-import {
-    getHometeamPointsInCurrentSet,
-    getAwayteamPointsInCurrentSet
-} from '../domain/tide/logic';
 
 const constantToText = {
     [AWAYTEAM_COLOR]: "Away team has color %s",
@@ -50,18 +47,17 @@ const constantToText = {
 
 export default function MatchDetails({events, showDetails, handleDetailToogle}) {   
     const eventsComponent = events
-        .map((event, index) => {
-            const actions = event.get(ACTION);
-            const lastKey = Array.isArray(actions) ? actions[actions.length - 1]: actions
+        .map((actionHistory, index) => {
+            const actions = actionHistory.get(ACTION);
+            const lastKey = getKey(actions)
             const isUndo = actions[0] === UNDO
             const tekstString = constantToText[lastKey]
-            const value = event.get(VALUE);
-            const date = event.get(DATE);
+            const value = actionHistory.get(VALUE);
+            const date = actionHistory.get(DATE);
             const relativeTime = moment(date).format("HH:mm:ss");
             const undoInfo = isUndo ? "UNDO:" : ""
-            const match = event.get(MATCHSTATE)
-            const homeScore = getHometeamPointsInCurrentSet(match)
-            const awayScore = getAwayteamPointsInCurrentSet(match)
+            const homeScore = actionHistory.get(HOMETEAM_POINT);
+            const awayScore = actionHistory.get(AWAYTEAM_POINT);
             if(tekstString === undefined) {
                 console.log('Skipping', lastKey)
                 return;
@@ -78,4 +74,11 @@ export default function MatchDetails({events, showDetails, handleDetailToogle}) 
              
          </Alert>
     )
+}
+
+function getKey(actions) {
+    if(List.is(actions)) {
+        return actions.list();
+    }
+    return Array.isArray(actions) ? actions[actions.length - 1]: actions
 }

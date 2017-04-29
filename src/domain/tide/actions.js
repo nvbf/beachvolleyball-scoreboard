@@ -18,6 +18,8 @@ import {
   State,
   Action,
   UNDO,
+  ActionHistory,
+  CURRENT_SET
 } from './state';
 
 import {
@@ -46,16 +48,20 @@ class AllAction extends Actions {
   }
 
   track(key, value) {
-      const action = new Action({
-        DATE: new Date(),
-        ACTION: key,
-        VALUE: value,
-        MATCHSTATE: this.getMatch()
+      const state = this.getMatch();
+      const index = getCurrentSetIndex(state)
+      const action = new ActionHistory({
+        [DATE]: new Date(),
+        [ACTION]: key,
+        [VALUE]: value,
+        [HOMETEAM_POINT]: this.get([MATCH, index, HOMETEAM_POINT]),
+        [AWAYTEAM_POINT]: this.get([MATCH, index, AWAYTEAM_POINT]),
+        [CURRENT_SET]: index
       })
       this.mutate(ACTION_HISTORY, (history) => history.push(action))
       this.mutateSignals()
       const matchId = this.get([MATCH, MATCH_ID]);
-      storeToLocalStorage(matchId, action);
+      storeToLocalStorage(matchId, this.getState());
   }
   
   mutateSignals = () => {
@@ -84,15 +90,16 @@ class AllAction extends Actions {
 
   addPointAwayteam = (proxy, event, state = this.getMatch()) => {
     const index  = getCurrentSetIndex(state)
+    console.log('INDEX', index, state)
     const currentPoints = getAwayteamPointsInCurrentSet(state);
     this.mutateAndTrack([MATCH, index, AWAYTEAM_POINT], currentPoints + 1)
   }
 
-  load = (proxy, event, state) => {
-    this.tide.setState(state);
+  load = (state) => {
+    console.log('LOAD!!');
+    console.log(state);
+    this.setState(state);
   }
-
-
 
   getMatch = () => {
     return this.get(MATCH)
