@@ -1,15 +1,16 @@
 import React, {Component} from 'react';
 import {wrap} from 'tide'
 
-import ScoreboardRow from './../molokyler/scoreboard-row';
+import ScoreboardRow from '../molokyler/scoreboard-row';
 import ServiceOrderButton from './../molokyler/service-order-button'
 import InfoArea from './../molokyler/info-area';
 import MatchDetails from './../match-details'
 import NotificationAlerts from './../notification-alerts';
 
-import ServeOrder from '../molokyler/service-order-dialog';
 import Timeout from '../timeout';
-import  TimeoutButtons from '../timeout-buttons';
+import TimeoutButtons from '../timeout-buttons';
+import AwayTeam from '../molokyler/away-team'
+import HomeTeam from '../molokyler/home-team'
 
 import AlertInfo from '../atom/alert-info';
 
@@ -85,18 +86,14 @@ class Scoreboard extends Component {
 										score1={this.props[FIRST_SET][HOMETEAM_POINT]}
 										score2={this.props[SECOND_SET][HOMETEAM_POINT]}
 										score3={this.props[THIRD_SET][HOMETEAM_POINT]}
-										player1={this.props[HOMETEAM_FIRST_PLAYER_NAME]}
-										player2={this.props[HOMETEAM_SECOND_PLAYER_NAME]}
-										teamColor={this.props[HOMETEAM_COLOR]}
+										TeamComponent={HomeTeam}
 										matchFinished={this.props[MATCH_IS_FINISED]} />
 									<ScoreboardRow 
 										addPoint={this.props.tide.actions.all.addPointAwayteam}
 										score1={this.props[FIRST_SET][AWAYTEAM_POINT]}
 										score2={this.props[SECOND_SET][AWAYTEAM_POINT]}
 										score3={this.props[THIRD_SET][AWAYTEAM_POINT]}
-										player1={this.props[AWAYTEAM_FIRST_PLAYER_NAME]}
-										player2={this.props[AWAYTEAM_SECOND_PLAYER_NAME]}
-										teamColor={this.props[AWAYTEAM_COLOR]}
+										TeamComponent={AwayTeam}
 										matchFinished={this.props[MATCH_IS_FINISED]} />
 								</tbody>
 							</table>

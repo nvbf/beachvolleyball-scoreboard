@@ -59,7 +59,7 @@ export default function MatchDetails({events, showDetails, handleDetailToogle}) 
             const homeScore = actionHistory.get(HOMETEAM_POINT);
             const awayScore = actionHistory.get(AWAYTEAM_POINT);
             if(tekstString === undefined) {
-                console.log('Skipping', lastKey)
+                //  console.log('Skipping', lastKey)
                 return;
             }
             return (<p key={index}>{printf(`${undoInfo} ${relativeTime}, ${homeScore}-${awayScore}, ${tekstString}`, value)} </p>);

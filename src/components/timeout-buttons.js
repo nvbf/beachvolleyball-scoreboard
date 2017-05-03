@@ -4,7 +4,9 @@ import {
 	 ButtonToolbar, 
 	 Label
 } from 'react-bootstrap';
-import TeamColorLabel from './atom/team-color-label'
+
+import HomeTeam from './molokyler/home-team'
+import AwayTeam from './molokyler/away-team'
 
 import {wrap} from 'tide'
 
@@ -50,16 +52,14 @@ class TimeoutMenu extends React.Component {
 						className={(HOMETEAM_TIMEOUT_TAKEN ? 'disabled' : '')}
 						onClick={all.hometeamTakeTimeout}
 					>
-						<TeamColorLabel color={HOMETEAM_COLOR}> 
-						</TeamColorLabel> {HOMETEAM_FIRST_PLAYER_NAME} - {HOMETEAM_SECOND_PLAYER_NAME}
+						<HomeTeam />
 					</Button>
 					<Button
 						type="submit"
 						className={(AWAYTEAM_TIMEOUT_TAKEN ? 'disabled' : '')}
 						onClick={all.awayteamTakeTimeout}
 					>
-						<TeamColorLabel color={AWAYTEAM_COLOR}> 
-						</TeamColorLabel>  {AWAYTEAM_FIRST_PLAYER_NAME} - {AWAYTEAM_SECOND_PLAYER_NAME}
+						<AwayTeam />
 					</Button>
 					<Button 
 						bsStyle="warning"

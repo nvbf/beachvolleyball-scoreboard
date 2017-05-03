@@ -8,32 +8,28 @@ import {
 } from 'react-bootstrap';
 
 import {
-	PLAYER_TO_SERVE,
-	SHOW_COMPONENT,
-	SERVICE_ORDER_IS_SET,
-	SHOW_SERVICE_ORDER_DIALOG_TEAM,
-	SET_HAS_STARTED,
-	MATCH,
+	constants as c
 } from '../../domain/tide/state'
 
 export class ServiceOrderButton extends Component {
 
-	showServiceOrderPicker = () =>  {
-		this.props.tide.actions.all.mutateAndTrack([MATCH, SHOW_COMPONENT], SHOW_SERVICE_ORDER_DIALOG_TEAM)
+	showServiceOrderPicker =() => {
+		this.props.tide.actions.all.mutateAndTrack([c.MATCH, c.SHOW_COMPONENT], c.SHOW_SERVICE_ORDER_DIALOG_TEAM)
 	}
 
-	render = () => {
+	render() {
 		const {
-			PLAYER_TO_SERVE,
-			SERVICE_ORDER_IS_SET,
-			SET_HAS_STARTED
+			playerToServe,
+			isServiceOrderSet,
+			hasSetStarted
 		} = this.props;
+		console.log('playerToServe', playerToServe);
 
-		if (SERVICE_ORDER_IS_SET) {
+		if (isServiceOrderSet) {
 			return (
 				<section>
 					<Alert bsStyle="warning">
-						<p>Player to serve: {PLAYER_TO_SERVE} </p>
+						<p>Player to serve: {playerToServe} </p>
 					</Alert>
 				</section>
 			);
@@ -45,7 +41,7 @@ export class ServiceOrderButton extends Component {
 					<ButtonToolbar>
 						<Button 
 						onClick={this.showServiceOrderPicker} 
-						className={ SET_HAS_STARTED ? "disabled": ""}>Set service order</Button>
+						className={ hasSetStarted ? "disabled": ""}>Set service order</Button>
 					</ButtonToolbar>
 				</Alert>
 			</section>
@@ -55,7 +51,7 @@ export class ServiceOrderButton extends Component {
 
 // ServiceOrderButton
 export default  wrap(ServiceOrderButton, {
-	[PLAYER_TO_SERVE]: PLAYER_TO_SERVE,
-	[SERVICE_ORDER_IS_SET]: SERVICE_ORDER_IS_SET,
-	[SET_HAS_STARTED]: SET_HAS_STARTED
+	playerToServe: [c.MATCH, c.PLAYER_TO_SERVE],
+	isServiceOrderSet: [c.MATCH, c.SERVICE_ORDER_IS_SET],
+	hasSetStarted: [c.MATCH, c.SET_HAS_STARTED]
 });

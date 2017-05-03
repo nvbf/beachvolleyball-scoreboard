@@ -4,19 +4,92 @@ import {
     THIRD_SET,
     AWAYTEAM_POINT,
     HOMETEAM_POINT,
+    constants as c
 } from './state';
 
 
-export function getCurrentSetIndex(score) {
-    if(!isFirstSetFinished(score)) {
+export function getCurrentSet(state) {
+    const match = state[c.MATCH]
+    const index = getCurrentSetIndex(match)
+    return match[index]
+}
+
+export function getHistory(state) {
+    return state['HISTORY']
+}
+
+
+export function getMatch(state) {
+    return state[c.MATCH]
+}
+
+export function getFirstTeamToServe(currentSet) {
+    return currentSet[c.FIRST_TEAM_TO_SERVE];
+}
+
+export function calculateNextPersonToServe(firstTeamToServe, serviceOrderHomeTeam, serviceOrderAwayTeam, number) {
+    
+    // resultat mellom 0 og 4. 
+    const server = number % 4 
+    
+    if(server === 0) {
+        return getFirstPlayerToServe(firstTeamToServe, serviceOrderHomeTeam, serviceOrderAwayTeam);
+    } else if(server === 1) {
+        return getSecondPlayerToServe(firstTeamToServe, serviceOrderHomeTeam, serviceOrderAwayTeam);
+    } else if(server === 2) {
+        return getThirdPlayerToServe(firstTeamToServe, serviceOrderHomeTeam, serviceOrderAwayTeam);
+    } else if(server === 3) {
+        return getFourthPlayerToServe(firstTeamToServe, serviceOrderHomeTeam, serviceOrderAwayTeam);
+    }
+}
+
+function getFirstPlayerToServe(firstTeamtoServe, serviceOrderHomeTeam, serviceOrderAwayTeam, ) {
+    if(firstTeamtoServe === c.HOMETEAM) {
+        return serviceOrderHomeTeam.first()
+    }
+    return serviceOrderAwayTeam.first()
+}
+
+function getSecondPlayerToServe(firstTeamtoServe, serviceOrderHomeTeam, serviceOrderAwayTeam, ) {
+    if(firstTeamtoServe === c.HOMETEAM) {
+    return serviceOrderAwayTeam.first()
+    }
+    return serviceOrderHomeTeam.first()
+}
+
+function getThirdPlayerToServe(firstTeamtoServe, serviceOrderHomeTeam, serviceOrderAwayTeam, ) {
+    if(firstTeamtoServe === c.HOMETEAM) {
+        return serviceOrderHomeTeam.last()
+    }
+    return serviceOrderAwayTeam.last()
+}
+
+function getFourthPlayerToServe(firstTeamtoServe, serviceOrderHomeTeam, serviceOrderAwayTeam, ) {
+    if(firstTeamtoServe === c.HOMETEAM) {
+    return serviceOrderAwayTeam.last()
+    }
+    return serviceOrderHomeTeam.last()
+}
+
+
+export function getFirstePersonToServe(state) {
+    const currentSet = getCurrentSet(state)
+    const firstTeamToServe = getFirstTeamToServe(currentSet)
+    return  (firstTeamToServe === c.HOMETEAM) ? currentSet[c.SERVICE_ORDER_HOMETEAM].first() : currentSet[c.SERVICE_ORDER_AWAYTEAMM].first()
+}
+
+
+export function getCurrentSetIndex(match) {
+    if(!isFirstSetFinished(match)) {
         return FIRST_SET
     }
-    if(!isSecondSetFinished(score)) {
+    if(!isSecondSetFinished(match)) {
         return SECOND_SET;
     }
-    if(!isThirdSetFinished(score)) {
+    if(!isThirdSetFinished(match)) {
         return THIRD_SET;
     }
+    throw "You should never be here!" + match
 }
 
 export function getHometeamPointsInCurrentSet(score) {
@@ -71,7 +144,8 @@ export function isSetFinished(aSet) {
     return (hasHometeamWonSet(aSet)) || (hasAwayteamWonSet(aSet));
 }
 
-export function isMatchFinished(score) {
+export function isMatchFinished(state) {
+    const score = state[c.MATCH]
     return (
         hasHometeamWonThirdSet(score) ||
         hasAwayteamWonThirdSet(score) ||
