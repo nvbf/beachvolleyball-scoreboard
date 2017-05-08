@@ -85,13 +85,16 @@ class AllAction extends Actions {
     const currentSet = getCurrentSet(state)
     const currentPoints = getAwayteamPointsInCurrentSet(matchState);
     const currentPoints2 = getHometeamPointsInCurrentSet(matchState);
-    const totalPOints = currentPoints + currentPoints2;
     
     const newPoints = currentPoints2 + 1;        
+    const totalPOints = currentPoints + newPoints;
     const newScore = new BeachVolleyballSet({
-      [c.HOMETEAM_POINT]: currentSet[c.HOMETEAM_POINT] +1,
+      [c.HOMETEAM_POINT]: currentSet[c.HOMETEAM_POINT] + 1,
       [c.AWAYTEAM_POINT]: currentSet[c.AWAYTEAM_POINTT]
     })
+    console.log('current state', currentSet)
+    console.log('newScore', newScore)
+    console.log('currentSet[c.HOMETEAM_POINT]', currentSet[c.HOMETEAM_POINT])
     this.setNotificationsState(state, newScore, totalPOints)
     this.mutateAndTrack([MATCH, index, HOMETEAM_POINT], newPoints)
   }
@@ -102,25 +105,28 @@ class AllAction extends Actions {
     const currentSet = getCurrentSet(state)
     const currentPoints = getAwayteamPointsInCurrentSet(matchState);
     const currentPoints2 = getHometeamPointsInCurrentSet(matchState);
-    const totalPOints = currentPoints + currentPoints2;
     const newPoints = currentPoints + 1;        
+    const totalPOints = newPoints  + currentPoints2;
+
 
     const newScore = new BeachVolleyballSet({
-      [c.HOMETEAM_POINT]: currentSet[c.HOMETEAM_POINT] ,
-      [c.AWAYTEAM_POINT]: currentSet[c.AWAYTEAM_POINTT] +1
+      [c.AWAYTEAM_POINT]: currentSet[c.AWAYTEAM_POINT] + 1,
+      [c.HOMETEAM_POINT]: currentSet[c.HOMETEAM_POINT]
     })
+    console.log('current state', currentSet)
+    console.log('newScore', newScore)
+    console.log('currentSet[c.AWAYTEAM_POINT]', currentSet[c.AWAYTEAM_POINT])
 
     this.setNotificationsState(state, newScore, totalPOints)
     this.mutateAndTrack([MATCH, index, AWAYTEAM_POINT], newPoints)
   }
 
-
-  setNotificationsState(state, newPoints, totalPOints) {
+  setNotificationsState(state, newScore, totalPOints) {
     if(isMatchFinished(state)) {
           this.mutateAndTrack([c.MATCH, c.SHOW_COMPONENT], c.MATCH_FINISHED_COMPONENT)
-      } else if(isSetFinished(newPoints)) {
+      } else if(isSetFinished(newScore)) {
         this.mutateAndTrack([c.MATCH, c.SHOW_COMPONENT], c.SHOW_SET_FINISHED)
-      } else if(totalPOints % 7 === 0) {
+      } else if((totalPOints % 7) === 0) {
         this.mutateAndTrack([c.MATCH, c.SHOW_COMPONENT], c.SHOW_SWITCH)
       }
   }
@@ -177,8 +183,6 @@ class AllAction extends Actions {
   getMatch =() => {
     return this.get(MATCH)
   }
-
-  undoSetS
 
   undo = ()  => {
     console.log('UNDO')

@@ -165,6 +165,16 @@ class Main extends React.Component {
 					</Overdrive>
 				</main>
 			)
+		} else if (show === c.SHOW_SET_FINISHED )	{
+			return (
+				<main>
+					<Overdrive id="scoreboard-components" duration={50}>
+							<NotificationDialog>
+								Set finished
+							</NotificationDialog>			
+					</Overdrive>
+				</main>
+			)
 		} else if (show === c.SHOW_MATCH_FINISHED)	{
 			return (
 				<main>

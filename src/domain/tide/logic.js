@@ -141,6 +141,7 @@ export function isSetStarted(aSet) {
 }
 
 export function isSetFinished(aSet) {
+    console.log('aset:', aSet);
     return (hasHometeamWonSet(aSet)) || (hasAwayteamWonSet(aSet));
 }
 
@@ -190,6 +191,9 @@ function hasHometeamWonSet(aSet) {
     const point2 = aSet.get(AWAYTEAM_POINT);
     const hometeamHas21orMorePoints = point1 >= 21
     const hometeamHas2orMorePointThenAwayteam = point1 > (point2 + 1)    
+    console.log('hometeamHas2orMorePointThenAwayteam', hometeamHas2orMorePointThenAwayteam)
+    console.log('hometeamHas21orMorePoints', hometeamHas21orMorePoints)
+    console.log('hasHometeamWonSet', (hometeamHas21orMorePoints && hometeamHas2orMorePointThenAwayteam))
     return hometeamHas21orMorePoints && hometeamHas2orMorePointThenAwayteam;
 }
 
