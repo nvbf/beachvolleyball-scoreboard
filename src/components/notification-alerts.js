@@ -1,12 +1,11 @@
-import  React, {Component} from 'react';
-import { Alert } from 'react-bootstrap' 
-import { wrap } from 'tide'
+import React, {Component} from 'react';
+import {Alert} from 'react-bootstrap';
+import {wrap} from 'tide';
 
 export default class NotificationAlerts extends React.Component {
 	constructor(props) {
 		super(props);
 	}
-
 
 	hide() {
 		this.setState({show: false});
@@ -22,4 +21,4 @@ export default class NotificationAlerts extends React.Component {
 		}
 		return null;
 	}
-};
+}

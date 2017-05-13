@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import { Button, Well } from 'react-bootstrap'
-import {wrap} from 'tide'
+import {Button, Well} from 'react-bootstrap';
+import {wrap} from 'tide';
 
 import ColorPicker from './../atom/color-picker';
 import AddTeamButton from './../atom/add-team-button';
@@ -8,24 +8,23 @@ import PlayerInput from './../molokyler/player-input';
 import InfoArea from './../molokyler/info-area';
 
 import {
-	AWAYTEAM_FIRST_PLAYER_NAME, 
+	AWAYTEAM_FIRST_PLAYER_NAME,
 	AWAYTEAM_SECOND_PLAYER_NAME,
 	AWAYTEAM_COLOR,
 	SHOW_COMPONENT,
 	SCOREBOARD_COMPONENT,
-	MATCH,
+	MATCH
 } from '../../domain/tide/state';
 
 class AddAwayTeam extends Component {
 	constructor(props) {
-		super(props)
-		this.state = { color: "#ff0000"};
+		super(props);
+		this.state = {color: '#ff0000'};
 	}
 
 	handleColorPicker(colorObj) {
-		this.setState({ color: colorObj.hex })
+		this.setState({color: colorObj.hex});
 	}
-
 
 	handleSubmit(e) {
 		e.preventDefault();
@@ -37,10 +36,10 @@ class AddAwayTeam extends Component {
 			return;
 		}
 
-		this.props.tide.actions.all.mutateAndTrack([MATCH, AWAYTEAM_FIRST_PLAYER_NAME], player1)
-		this.props.tide.actions.all.mutateAndTrack([MATCH, AWAYTEAM_SECOND_PLAYER_NAME], player2)
-		this.props.tide.actions.all.mutateAndTrack([MATCH, AWAYTEAM_COLOR], this.state.color)
-		this.props.tide.actions.all.mutateAndTrack([MATCH, SHOW_COMPONENT], SCOREBOARD_COMPONENT)
+		this.props.tide.actions.all.mutateAndTrack([MATCH, AWAYTEAM_FIRST_PLAYER_NAME], player1);
+		this.props.tide.actions.all.mutateAndTrack([MATCH, AWAYTEAM_SECOND_PLAYER_NAME], player2);
+		this.props.tide.actions.all.mutateAndTrack([MATCH, AWAYTEAM_COLOR], this.state.color);
+		this.props.tide.actions.all.mutateAndTrack([MATCH, SHOW_COMPONENT], SCOREBOARD_COMPONENT);
 	}
 
 	componentDidMount() {
@@ -55,9 +54,9 @@ class AddAwayTeam extends Component {
 						<h2>Away team</h2>
 					</div>
 					<div className="panel-body">
-						<PlayerInput />
-                		<ColorPicker color={this.state.color} onColorSelect={this.handleColorPicker.bind(this)} />
-						<AddTeamButton  handleClick={this.handleSubmit.bind(this)} />
+						<PlayerInput/>
+						<ColorPicker color={this.state.color} onColorSelect={this.handleColorPicker.bind(this)}/>
+						<AddTeamButton handleClick={this.handleSubmit.bind(this)}/>
 					</div>
 				</div>
 				<InfoArea number="ℹ">
@@ -65,15 +64,14 @@ class AddAwayTeam extends Component {
 				</InfoArea>
 				<InfoArea number="ℹ">
 					Pick and color for the team, or it will default to red.
-				</InfoArea>									
+				</InfoArea>
 			</div>
 		);
 	}
 }
 
-
 export default wrap(AddAwayTeam, {
-		[AWAYTEAM_FIRST_PLAYER_NAME]: AWAYTEAM_FIRST_PLAYER_NAME,
-		[AWAYTEAM_SECOND_PLAYER_NAME]: AWAYTEAM_SECOND_PLAYER_NAME,
+	[AWAYTEAM_FIRST_PLAYER_NAME]: AWAYTEAM_FIRST_PLAYER_NAME,
+	[AWAYTEAM_SECOND_PLAYER_NAME]: AWAYTEAM_SECOND_PLAYER_NAME,
 	 	[AWAYTEAM_COLOR]: AWAYTEAM_COLOR
 });

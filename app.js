@@ -1,21 +1,20 @@
 const util = require('util');
 const superagent = require('superagent');
 
-const { parse } = require('url');
+const {parse} = require('url');
 const next = require('next');
 const express = require('express');
 
-const dev = process.env.NODE_ENV !== 'production'
-const app = next({ dev })
+const dev = process.env.NODE_ENV !== 'production';
+const app = next({dev});
 
-
-const handle = app.getRequestHandler()
+const handle = app.getRequestHandler();
 
 app.prepare().then(() => {
 	const server = express();
-	var http = require('http').Server(server);
-	var io = require('socket.io')(http);	
-	
+	const http = require('http').Server(server);
+	const io = require('socket.io')(http);
+
 	server.put('/api/matches/:id', (req, res, next) => {
 		const apiUrl = process.env.API + req.params.id;
 		logger.debug(req.body);
@@ -83,12 +82,14 @@ app.prepare().then(() => {
 	});
 
 	server.get('*', (req, res) => {
-		return handle(req, res)
-	})
+		return handle(req, res);
+	});
 
-	http.listen(process.env.PORT || 3000, (err) => {
-    	if (err) throw err
-  	})
+	http.listen(process.env.PORT || 3000, err => {
+    	if (err) {
+		throw err;
+	}
+  	});
 
 	io.on('connection', socket => {
 		io.emit('user', 1, {for: 'everyone'});
@@ -101,7 +102,6 @@ app.prepare().then(() => {
 			io.emit('match-update', match);
 		});
 	});
-
 });
 
 if (!process.env.API) {

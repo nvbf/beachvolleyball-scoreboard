@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert } from 'react-bootstrap';
+import {Alert} from 'react-bootstrap';
 
 class Timeout extends React.Component {
 	constructor(props) {
@@ -7,7 +7,7 @@ class Timeout extends React.Component {
 		this.state = {
 			show: props.show,
 			secondsLeft: this.props.seconds
-		}
+		};
 	}
 
 	tick() {
@@ -21,19 +21,19 @@ class Timeout extends React.Component {
 
 	handleAlertDismiss() {
 		clearInterval(this.interval);
-		this.state = { show: false }
+		this.state = {show: false};
 	}
 
 	render() {
-		if(this.state.show) {
-		return (
-			<Alert bsStyle="info" onDismiss={this.handleAlertDismiss}>
-				{this.props.message} {this.state.secondsLeft}
-			</Alert>
-		);
+		if (this.state.show) {
+			return (
+				<Alert bsStyle="info" onDismiss={this.handleAlertDismiss}>
+					{this.props.message} {this.state.secondsLeft}
+				</Alert>
+			);
 		}
-		return null
+		return null;
 	}
-};
+}
 
 export default Timeout;

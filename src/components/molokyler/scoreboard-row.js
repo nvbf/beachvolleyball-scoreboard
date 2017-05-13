@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Button} from 'react-bootstrap';
-import Label  from '../atom/team-color-label'
+import Label from '../atom/team-color-label';
 
 export default class ScoreboardRow extends Component {
 
@@ -12,12 +12,12 @@ export default class ScoreboardRow extends Component {
 			matchFinished,
 			addPoint,
 			TeamComponent
-		}  = this.props;
+		} = this.props;
 
 		return (
 			<tr>
 				<td>
-					<TeamComponent />
+					<TeamComponent/>
 				</td>
 				<td>
 					{score1}
@@ -32,7 +32,7 @@ export default class ScoreboardRow extends Component {
 					<Button
 						bsStyle="primary" className="points" type="submit" onClick={addPoint}
 						disabled={matchFinished}
-					>
+						>
 						<span className="glyphicon glyphicon-plus-sign" aria-hidden="true"/>
 					</Button>
 				</td>
@@ -47,5 +47,5 @@ ScoreboardRow.propTypes = {
 	score2: React.PropTypes.number.isRequired,
 	score3: React.PropTypes.number.isRequired,
 	matchFinished: React.PropTypes.bool.isRequired,
-	addPoint: React.PropTypes.func.isRequired,
+	addPoint: React.PropTypes.func.isRequired
 };
