@@ -1,18 +1,19 @@
-const React = require('react');
-const Alert = require('react-bootstrap').Alert;
-const AlertEventMixin = require('../mixin/alert-event-mixin');
+import  React, {Component} from 'react';
+import { Alert } from 'react-bootstrap' 
+import { wrap } from 'tide'
 
-const NotificationAlerts = React.createClass({
+export default class NotificationAlerts extends React.Component {
+	constructor(props) {
+		super(props);
+	}
 
-	mixins: [AlertEventMixin],
 
 	hide() {
-		this.setState({alertVisible: false});
-	},
+		this.setState({show: false});
+	}
 
-	renderOverlay() {
-		if (this.state.alertVisible) {
-			setTimeout(() => this.hide(), 5000);
+	render() {
+		if (this.props.show && this.state.show) {
 			return (
 				<Alert bsStyle="info" onDismiss={this.hide}>
 					<strong>{this.props.message}</strong>
@@ -21,6 +22,4 @@ const NotificationAlerts = React.createClass({
 		}
 		return null;
 	}
-});
-
-module.exports = NotificationAlerts;
+};

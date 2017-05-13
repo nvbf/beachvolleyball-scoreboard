@@ -5,10 +5,10 @@ import styled from 'styled-components';
 const dt = function DetailsToggle ({showDetails, handleDetailsToogle}) {
     return (
 		<label>
-            <Toggle 
+            <Toggle
                 defaultChecked={showDetails}
-                onChange={handleDetailsToogle} /> 
-            <span> details </span>
+                onChange={handleDetailsToogle} />
+            <span> Details </span>
         </label>
     )
 }

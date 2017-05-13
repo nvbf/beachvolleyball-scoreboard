@@ -53,4 +53,4 @@ function MatchNotifications(match, api) {
 
 util.inherits(MatchNotifications, EventEmitter);
 
-module.exports = MatchNotifications;
+export default MatchNotifications;

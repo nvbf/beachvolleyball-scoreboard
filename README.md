@@ -40,3 +40,9 @@ to the public folder.
 this way you have `gulp development` and `node app.js` running, but you never need to restart the server.
 
 All files in the public catalog is generated. To understand the build process see gulp folder.
+
+
+#TOOD:
+
+Add storybook
+add prittier

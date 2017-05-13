@@ -1,76 +1,87 @@
-import hexToRGBA from './utils/rgba';
+import React from 'react';
+import {
+	 Button,
+	 ButtonToolbar, 
+	 Label
+} from 'react-bootstrap';
 
-const React = require('react');
-const Button = require('react-bootstrap').Button;
-const ButtonToolbar = require('react-bootstrap').ButtonToolbar;
-const Label = require('react-bootstrap').Label;
+import HomeTeam from './molokyler/home-team'
+import AwayTeam from './molokyler/away-team'
 
+import {wrap} from 'tide'
 
-const TimeoutMenu = React.createClass({
-	propTypes: {
-		match: React.PropTypes.object,
-		homeTeamTimeout: React.PropTypes.number.isRequired,
-		awayTeamTimeout: React.PropTypes.number.isRequired,
-		updateState: React.PropTypes.func.isRequired
-	},
+import {
+	HOMETEAM_FIRST_PLAYER_NAME,
+	HOMETEAM_SECOND_PLAYER_NAME,
+	HOMETEAM_COLOR,
+	MATCH,
+	AWAYTEAM_FIRST_PLAYER_NAME,
+	AWAYTEAM_SECOND_PLAYER_NAME,
+	AWAYTEAM_COLOR,
+	HISTORY,
+	HOMETEAM_TIMEOUT_TAKEN,
+	AWAYTEAM_TIMEOUT_TAKEN
 
-	restart() {
-		location.reload();
-	},
+} from '../domain/tide/state';
 
-	showTimeout() {
-		this.props.match.notification.emit('timeout-notification');
-	},
-
-	onTimeoutHomeTeam(e) {
-		e.preventDefault();
-		this.props.match.homeTeamTakesTimeout();
-		this.props.updateState(this.props.match.state);
-		this.showTimeout();
-	},
-
-	onTimeoutAwayTeam(e) {
-		e.preventDefault();
-		this.props.match.awayTeamTakesTimeout();
-		this.props.updateState(this.props.match.state);
-		this.showTimeout(this.props.match.state.awayteam.display());
-	},
-
+class TimeoutMenu extends React.Component {
 	render() {
 		const {
-			match
-		} = this.props;
-		const homeTimeTimeoutStyles = { backgroundColor: hexToRGBA(match.homeTeamColor())}
-		const awayTimeTimeoutStyles = { backgroundColor: hexToRGBA(match.awayTeamColor())}
-		
+			HOMETEAM_COLOR,
+			AWAYTEAM_COLOR,
+			HOMETEAM_FIRST_PLAYER_NAME,
+			HOMETEAM_SECOND_PLAYER_NAME,
+			AWAYTEAM_FIRST_PLAYER_NAME,
+			AWAYTEAM_SECOND_PLAYER_NAME,
+			HOMETEAM_TIMEOUT_TAKEN,
+			AWAYTEAM_TIMEOUT_TAKEN,
+			HISTORY,
+			tide : {
+				actions: {
+					all
+				}
+			}
+		} = this.props
+		console.log('HISTORY.size', HISTORY.size)
 		return (
 			<div>
 				<Label>Timeout</Label>
 				<ButtonToolbar>
 					<Button
 						type="submit"
-						className={(this.props.homeTeamTimeout != 0 ? 'disabled' : '')}
-						style={homeTimeTimeoutStyles}
-						onClick={this.onTimeoutHomeTeam}
+						className={(HOMETEAM_TIMEOUT_TAKEN ? 'disabled' : '')}
+						onClick={all.hometeamTakeTimeout}
 					>
-						{this.props.match.state.hometeam.display()}
+						<HomeTeam />
 					</Button>
 					<Button
 						type="submit"
-						className={(this.props.awayTeamTimeout != 0 ? 'disabled' : '')}
-						style={awayTimeTimeoutStyles}
-						onClick={this.onTimeoutAwayTeam}
+						className={(AWAYTEAM_TIMEOUT_TAKEN ? 'disabled' : '')}
+						onClick={all.awayteamTakeTimeout}
 					>
-						{this.props.match.state.awayteam.display()}
+						<AwayTeam />
 					</Button>
-					<Button bsStyle="danger" type="submit" className="pull-right" onClick={this.restart}>
-            New Match
-					</Button>
+					<Button 
+						bsStyle="warning"
+						type="submit"
+						className={(HISTORY.size === 0) ? 'disabled pull-right' : 'pull-right' }
+						onClick={all.undo}>
+            			Undo
+					</Button>					
 				</ButtonToolbar>
 			</div>
 		);
 	}
+}
+
+export default wrap(TimeoutMenu, {
+		[HOMETEAM_FIRST_PLAYER_NAME]: [MATCH, HOMETEAM_FIRST_PLAYER_NAME],
+		[HOMETEAM_SECOND_PLAYER_NAME]: [MATCH, HOMETEAM_SECOND_PLAYER_NAME],
+	 	[HOMETEAM_COLOR]: [MATCH, HOMETEAM_COLOR], 
+		[AWAYTEAM_FIRST_PLAYER_NAME]: [MATCH, AWAYTEAM_FIRST_PLAYER_NAME],
+		[AWAYTEAM_SECOND_PLAYER_NAME]: [MATCH, AWAYTEAM_SECOND_PLAYER_NAME],
+	 	[AWAYTEAM_COLOR]: [MATCH, AWAYTEAM_COLOR],
+		[HOMETEAM_TIMEOUT_TAKEN]: [MATCH, HOMETEAM_TIMEOUT_TAKEN],
+		[AWAYTEAM_TIMEOUT_TAKEN]: [MATCH, AWAYTEAM_TIMEOUT_TAKEN],
+		[HISTORY]: [HISTORY]
 });
-
-
-module.exports = TimeoutMenu;
