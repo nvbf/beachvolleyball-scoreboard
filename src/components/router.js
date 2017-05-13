@@ -27,11 +27,11 @@ const Router = React.createClass({
 		}
 
 		if (matchId) {
-			return <PublicBoard matchId={matchId} />;
+			return <PublicBoard matchId={matchId}/>;
 		}
-		return <Main />;
+		return <Main/>;
 	}
 });
 
 window.React = React;
-ReactDom.render(<Router />, document.getElementById('app'));
+ReactDom.render(<Router/>, document.getElementById('app'));

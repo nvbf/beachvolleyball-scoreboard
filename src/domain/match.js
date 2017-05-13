@@ -1,5 +1,5 @@
 const util = require('util');
-import { EventEmitter } from 'events';
+import {EventEmitter} from 'events';
 import Team from './team';
 import Sett from './sett';
 
@@ -67,7 +67,6 @@ Match.prototype.addAwayTeam = function (team) {
 Match.prototype.awayTeam = function () {
 	return this.state.awayteam.players();
 };
-
 
 Match.prototype.awayTeamColor = function () {
 	return this.state.awayteam.color();

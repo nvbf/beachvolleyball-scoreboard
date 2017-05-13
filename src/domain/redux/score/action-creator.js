@@ -1,5 +1,5 @@
-import { 
-  TEAM, 
+import {
+  TEAM,
   HOMETEAM,
   AWAYTEAM,
   ADD_POINT,
@@ -7,31 +7,31 @@ import {
 } from './../constants';
 
 export function addPointHometeam() {
-  return addPoint(HOMETEAM)
+	return addPoint(HOMETEAM);
 }
 
 export function addPointAwayteam() {
-  return addPoint(AWAYTEAM)
+	return addPoint(AWAYTEAM);
 }
 
 export function removePointHometeam() {
-  return removePoint(HOMETEAM)
+	return removePoint(HOMETEAM);
 }
 
 export function removePointAwayteam() {
-  return removePoint(AWAYTEAM)
+	return removePoint(AWAYTEAM);
 }
 
 function addPoint(team) {
-  return {
-      'type': ADD_POINT,
-      [TEAM]: team
-    }
+	return {
+		type: ADD_POINT,
+		[TEAM]: team
+	};
 }
 
 function removePoint(team) {
-  return {
-      'type': REMOVE_POINT,
-      [TEAM]: team
-    }
+	return {
+		type: REMOVE_POINT,
+		[TEAM]: team
+	};
 }

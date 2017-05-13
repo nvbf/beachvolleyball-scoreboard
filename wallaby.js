@@ -1,19 +1,18 @@
 module.exports = function (wallaby) {
+	return {
+		files: ['src/domain/redux/**/*.js'],
 
-  return {
-    files: ['src/domain/redux/**/*.js'],
+		tests: ['test/redux/**/*.js'],
 
-    tests: ['test/redux/**/*.js'],
+		env: {
+			type: 'node',
+			runner: 'node'
+		},
 
-    env: {
-      type: 'node',
-      runner: 'node'
-    },
+		compilers: {
+			'**/*.js': wallaby.compilers.babel()
+		},
 
-    compilers: {
-      "**/*.js": wallaby.compilers.babel()
-    },
-    
-    testFramework: 'jest'
-  };
+		testFramework: 'jest'
+	};
 };

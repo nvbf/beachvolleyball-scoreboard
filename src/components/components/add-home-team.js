@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import { Button, Well }  from 'react-bootstrap';
-import {wrap} from 'tide'
+import {Button, Well} from 'react-bootstrap';
+import {wrap} from 'tide';
 
 import PlayerInput from './../molokyler/player-input';
 import ColorPicker from '../atom/color-picker';
@@ -13,18 +13,17 @@ import {
 	HOMETEAM_COLOR,
 	SHOW_COMPONENT,
 	ADD_AWAYTEAM_COMPONENT,
-	MATCH,
+	MATCH
 } from '../../domain/tide/state';
-
 
 class AddHomeTeam extends Component {
 	constructor(props) {
-		super(props)
-		this.state = { color: "#0000ff"};
+		super(props);
+		this.state = {color: '#0000ff'};
 	}
 
 	handleColorPicker(colorObj) {
-		this.setState({ color: colorObj.hex })
+		this.setState({color: colorObj.hex});
 	}
 
 	handleSubmit(e) {
@@ -37,10 +36,10 @@ class AddHomeTeam extends Component {
 			return;
 		}
 
-		this.props.tide.actions.all.mutateAndTrack([MATCH, HOMETEAM_FIRST_PLAYER_NAME], player1)
-		this.props.tide.actions.all.mutateAndTrack([MATCH, HOMETEAM_SECOND_PLAYER_NAME], player2)
-		this.props.tide.actions.all.mutateAndTrack([MATCH, HOMETEAM_COLOR], this.state.color)
-		this.props.tide.actions.all.mutateAndTrack([MATCH, SHOW_COMPONENT], ADD_AWAYTEAM_COMPONENT)
+		this.props.tide.actions.all.mutateAndTrack([MATCH, HOMETEAM_FIRST_PLAYER_NAME], player1);
+		this.props.tide.actions.all.mutateAndTrack([MATCH, HOMETEAM_SECOND_PLAYER_NAME], player2);
+		this.props.tide.actions.all.mutateAndTrack([MATCH, HOMETEAM_COLOR], this.state.color);
+		this.props.tide.actions.all.mutateAndTrack([MATCH, SHOW_COMPONENT], ADD_AWAYTEAM_COMPONENT);
 	}
 
 	componentDidMount() {
@@ -48,7 +47,6 @@ class AddHomeTeam extends Component {
 	}
 
 	render() {
-
 		return (
 			<div>
 				<div className="panel panel-default">
@@ -56,9 +54,9 @@ class AddHomeTeam extends Component {
 						<h2>Home team</h2>
 					</div>
 					<div className="panel-body">
-						<PlayerInput />
-                		<ColorPicker color={this.state.color} onColorSelect={this.handleColorPicker.bind(this)} />
-              			<AddTeamButton  handleClick={this.handleSubmit.bind(this)} />
+						<PlayerInput/>
+						<ColorPicker color={this.state.color} onColorSelect={this.handleColorPicker.bind(this)}/>
+						<AddTeamButton handleClick={this.handleSubmit.bind(this)}/>
 					</div>
 				</div>
 
@@ -67,14 +65,14 @@ class AddHomeTeam extends Component {
 				</InfoArea>
 				<InfoArea number="ℹ">
 					Pick and color for the team, or it will default to blue.
-				</InfoArea>				
+				</InfoArea>
 			</div>
 		);
 	}
 }
 
 export default wrap(AddHomeTeam, {
-		[HOMETEAM_FIRST_PLAYER_NAME]: [MATCH, HOMETEAM_FIRST_PLAYER_NAME],
-		[HOMETEAM_SECOND_PLAYER_NAME]: [MATCH, HOMETEAM_SECOND_PLAYER_NAME],
-	 	[HOMETEAM_COLOR]: [MATCH, HOMETEAM_COLOR],
-})
+	[HOMETEAM_FIRST_PLAYER_NAME]: [MATCH, HOMETEAM_FIRST_PLAYER_NAME],
+	[HOMETEAM_SECOND_PLAYER_NAME]: [MATCH, HOMETEAM_SECOND_PLAYER_NAME],
+	 	[HOMETEAM_COLOR]: [MATCH, HOMETEAM_COLOR]
+});

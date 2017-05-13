@@ -1,9 +1,9 @@
-import React,{Component} from 'react';
-import { Alert } from 'react-bootstrap';
+import React, {Component} from 'react';
+import {Alert} from 'react-bootstrap';
 
 export default class AlertInfo extends Component {
-	constructor(){
-		super()
+	constructor() {
+		super();
 		this.state = {showInfo: true};
 	}
 
@@ -24,5 +24,5 @@ export default class AlertInfo extends Component {
 }
 
 AlertInfo.propTypes = {
-		message: React.PropTypes.string.isRequired
-}
+	message: React.PropTypes.string.isRequired
+};
