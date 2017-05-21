@@ -84,7 +84,9 @@ export function getCurrentSetIndex(match) {
 	if (!isThirdSetFinished(match)) {
 		return THIRD_SET;
 	}
-	throw 'You should never be here!' + match;
+	console.log('Is game finished? returning third set');
+	return THIRD_SET;
+	
 }
 
 export function getHometeamPointsInCurrentSet(score) {
@@ -139,8 +141,13 @@ export function isSetFinished(aSet, limit) {
 	return (hasHometeamWonSet(aSet, limit)) || (hasAwayteamWonSet(aSet, limit));
 }
 
-export function isMatchFinished(state) {
-	const score = state[c.MATCH];
+export function isMatchFinished(score) {
+	console.log('hasHometeamWonThirdSet', hasHometeamWonThirdSet(score))
+	console.log('hasAwayteamWonThirdSet', hasAwayteamWonThirdSet(score))
+	console.log('hasHometeamWonSecondSet', hasHometeamWonSecondSet(score))
+	console.log('hasAwayteamWonSecondSet', hasAwayteamWonSecondSet(score))
+	console.log('hasHometeamWonFirstSet', hasHometeamWonFirstSet(score))
+	console.log('hasAwayteamWonFirstSet', hasAwayteamWonFirstSet(score))
 	return (
         hasHometeamWonThirdSet(score) ||
         hasAwayteamWonThirdSet(score) ||
@@ -150,27 +157,27 @@ export function isMatchFinished(state) {
 }
 
 function hasHometeamWonFirstSet(score) {
-	return hasHometeamWonSet(score.get(FIRST_SET), c.DEFAULT_SET_LENGTH);
+	return hasHometeamWonSet(score.get(FIRST_SET), 21);
 }
 
 function hasHometeamWonSecondSet(score) {
-	return hasHometeamWonSet(score.get(SECOND_SET), c.DEFAULT_SET_LENGTH);
+	return hasHometeamWonSet(score.get(SECOND_SET), 21);
 }
 
 function hasHometeamWonThirdSet(score) {
-	return hasHometeamWonSet(score.get(THIRD_SET), c.LAST_SET_LENGTH);
+	return hasHometeamWonSet(score.get(THIRD_SET), 15);
 }
 
 function hasAwayteamWonFirstSet(score) {
-	return hasAwayteamWonSet(score.get(FIRST_SET), c.DEFAULT_SET_LENGTH);
+	return hasAwayteamWonSet(score.get(FIRST_SET), 21);
 }
 
 function hasAwayteamWonSecondSet(score) {
-	return hasAwayteamWonSet(score.get(SECOND_SET), c.DEFAULT_SET_LENGTH);
+	return hasAwayteamWonSet(score.get(SECOND_SET), 21);
 }
 
 function hasAwayteamWonThirdSet(score) {
-	return hasAwayteamWonSet(score.get(THIRD_SET), c.LAST_SET_LENGTH);
+	return hasAwayteamWonSet(score.get(THIRD_SET), 15);
 }
 
 function hasAwayteamWonSet(aSet, limit) {
@@ -182,11 +189,11 @@ function hasAwayteamWonSet(aSet, limit) {
 }
 
 function hasHometeamWonSet(aSet, limit) {
-	
 	const point1 = aSet.get(HOMETEAM_POINT);
 	const point2 = aSet.get(AWAYTEAM_POINT);
 	const hometeamHas21orMorePoints = point1 >= limit;
 	const hometeamHas2orMorePointThenAwayteam = point1 > (point2 + 1);
+	console.log('p1, p2, limit, ,', point1, point2, limit, hometeamHas21orMorePoints, hometeamHas2orMorePointThenAwayteam)
 	return hometeamHas21orMorePoints && hometeamHas2orMorePointThenAwayteam;
 }
 

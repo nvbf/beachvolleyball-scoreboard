@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import MatchApi from './../src/domain/match-api';
+//import MatchApi from './../src/domain/match-api';
 
 export default class PublicBoard extends Component {
 
@@ -21,7 +21,7 @@ export default class PublicBoard extends Component {
 
 		matchId = idArgument[0][1];
 
-		const api = new MatchApi();
+		const api = {} // new{} MatchApi();
 		this.intervalId = setInterval(() => {
 			api.getMatch(this.props.matchId, (hTeam, aTeam, score) => {
 				this.setState({

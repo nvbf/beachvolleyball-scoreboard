@@ -2,7 +2,9 @@ import {Map, List} from 'immutable'
 import debug from 'debug'
 import {Actions} from 'tide'
 
+
 import {
+  Match,
   MATCH,
 	ACTION_HISTORY, 
   HISTORY,
@@ -120,20 +122,31 @@ class AllAction extends Actions {
     this.mutate([c.MATCH, c.SHOW_COMPONENT], c.SCOREBOARD_COMPONENT)
   }
 
-  setNotificationsState(state, newScore, totalPOints) {
+  setNotificationsState(state, newScore, totalPoints) {
+    
     const match = state[c.MATCH]
-    const isLastSet = getCurrentSet(state) === c.THIRD_SET
+    const isLastSet = getCurrentSetIndex(match) === c.THIRD_SET
     const switchOnPoint = isLastSet ? match[c.LAST_SET_SWITCH_EVERY_X_POINT] : match[c.DEFAULT_SWITCH_EVERY_X_POINT];
+    const newMatchState =  Match({
+      [c.FIRST_SET]: getCurrentSetIndex(match) === c.FIRST_SET ? newScore : match[c.FIRST_SET],
+	    [c.SECOND_SET]: getCurrentSetIndex(match) === c.SECOND_SET ? newScore : match[c.SECOND_SET] ,
+	    [c.THIRD_SET]: getCurrentSetIndex(match) === c.THIRD_SET ? newScore : match[c.THIRD_SET]
+    })
+    console.log('newScore ', newScore)
+    console.log('newMatchState ', newMatchState)
+    
     const pointsInSet = isLastSet ? match[c.LAST_SET_LENGTH] : match[c.DEFAULT_SET_LENGTH];
-    if(isMatchFinished(state)) {
-          this.mutateAndTrack([c.MATCH, c.SHOW_COMPONENT], c.MATCH_FINISHED_COMPONENT)
-      } else if(isSetFinished(newScore, pointsInSet)) {
-        this.mutateAndTrack([c.MATCH, c.SHOW_COMPONENT], c.SHOW_SET_FINISHED)
-      } else if((totalPOints === 21 && !isLastSet)) {
-        this.mutateAndTrack([c.MATCH, c.SHOW_COMPONENT], c.SHOW_TTO)
-      } else if((totalPOints % switchOnPoint) === 0) {
-        this.mutateAndTrack([c.MATCH, c.SHOW_COMPONENT], c.SHOW_SWITCH)
-      }
+    if(isMatchFinished(newMatchState)) {
+      this.mutate([c.MATCH, c.SHOW_COMPONENT], c.SHOW_MATCH_FINISHED)
+      //TODO: should this be here?
+      this.mutate([c.MATCH, c.MATCH_IS_FINISED], true)
+    } else if(isSetFinished(newScore, pointsInSet)) {
+      this.mutate([c.MATCH, c.SHOW_COMPONENT], c.SHOW_SET_FINISHED)
+    } else if((totalPoints === 21 && !isLastSet)) {
+      this.mutate([c.MATCH, c.SHOW_COMPONENT], c.SHOW_TTO)
+    } else if((totalPoints % switchOnPoint) === 0) {
+      this.mutate([c.MATCH, c.SHOW_COMPONENT], c.SHOW_SWITCH)
+    }
   }
 
   playerOnHomeTeamToServe =(player) => {

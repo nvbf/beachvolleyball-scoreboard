@@ -35,21 +35,16 @@ const personToServe = state => {
 	console.log('person to servce actions:', actions);
 
 	const personToServeI = actions
-      .filter(action => {
-	console.log('actionH', action);
-	console.log('action[c.ACTION]', action[c.ACTION]);
-	console.log('action[c.ACTION].size', action[c.ACTION].length);
-
-	if (action && action[c.ACTION] && action[c.ACTION] && action[c.ACTION].length > 2) {
-		const actionHistoryAction = action[c.ACTION][2];
-		console.log('actionHistoryState', actionHistoryAction);
-		return actionHistoryAction === c.HOMETEAM_POINT || actionHistoryAction === c.AWAYTEAM_POINT;
-	}
-	return false;
-})
+      	.filter(action => {
+			if (action && action[c.ACTION] && action[c.ACTION] && action[c.ACTION].length > 2) {
+					const actionHistoryAction = action[c.ACTION][2];
+					console.log('actionHistoryState', actionHistoryAction);
+					return actionHistoryAction === c.HOMETEAM_POINT || actionHistoryAction === c.AWAYTEAM_POINT;
+			}
+			return false;
+		})
       .map(action => action[c.ACTION][2])
       .reduce((agg, action) => {
-	console.log('reduce!!!!');
 	if (((action === c.HOMETEAM_POINT && agg.serving === c.HOMETEAM) || (action === c.AWAYTEAM_POINT && agg.serving === c.AWAYTEAM))) {
 		return agg;
 	}

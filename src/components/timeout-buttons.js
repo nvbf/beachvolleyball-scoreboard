@@ -42,7 +42,6 @@ class TimeoutMenu extends React.Component {
 				}
 			}
 		} = this.props;
-		console.log('HISTORY.size', HISTORY.size);
 		return (
 			<div>
 				<Label>Timeout</Label>
