@@ -90,11 +90,9 @@ class AllAction extends Actions {
     const totalPOints = currentPoints + newPoints;
     const newScore = new BeachVolleyballSet({
       [c.HOMETEAM_POINT]: currentSet[c.HOMETEAM_POINT] + 1,
-      [c.AWAYTEAM_POINT]: currentSet[c.AWAYTEAM_POINTT]
+      [c.AWAYTEAM_POINT]: currentSet[c.AWAYTEAM_POINT]
     })
-    console.log('current state', currentSet)
-    console.log('newScore', newScore)
-    console.log('currentSet[c.HOMETEAM_POINT]', currentSet[c.HOMETEAM_POINT])
+
     this.setNotificationsState(state, newScore, totalPOints)
     this.mutateAndTrack([MATCH, index, HOMETEAM_POINT], newPoints)
   }
@@ -106,27 +104,34 @@ class AllAction extends Actions {
     const currentPoints = getAwayteamPointsInCurrentSet(matchState);
     const currentPoints2 = getHometeamPointsInCurrentSet(matchState);
     const newPoints = currentPoints + 1;        
-    const totalPOints = newPoints  + currentPoints2;
+    const totalPoints = newPoints  + currentPoints2;
 
 
     const newScore = new BeachVolleyballSet({
-      [c.AWAYTEAM_POINT]: currentSet[c.AWAYTEAM_POINT] + 1,
-      [c.HOMETEAM_POINT]: currentSet[c.HOMETEAM_POINT]
+      [c.HOMETEAM_POINT]: currentSet[c.HOMETEAM_POINT],
+      [c.AWAYTEAM_POINT]: currentSet[c.AWAYTEAM_POINT] + 1
     })
-    console.log('current state', currentSet)
-    console.log('newScore', newScore)
-    console.log('currentSet[c.AWAYTEAM_POINT]', currentSet[c.AWAYTEAM_POINT])
 
-    this.setNotificationsState(state, newScore, totalPOints)
+    this.setNotificationsState(state, newScore, totalPoints)
     this.mutateAndTrack([MATCH, index, AWAYTEAM_POINT], newPoints)
   }
 
+  notificationOk = (proxy, event, state = this.getState()) => {
+    this.mutate([c.MATCH, c.SHOW_COMPONENT], c.SCOREBOARD_COMPONENT)
+  }
+
   setNotificationsState(state, newScore, totalPOints) {
+    const match = state[c.MATCH]
+    const isLastSet = getCurrentSet(state) === c.THIRD_SET
+    const switchOnPoint = isLastSet ? match[c.LAST_SET_SWITCH_EVERY_X_POINT] : match[c.DEFAULT_SWITCH_EVERY_X_POINT];
+    const pointsInSet = isLastSet ? match[c.LAST_SET_LENGTH] : match[c.DEFAULT_SET_LENGTH];
     if(isMatchFinished(state)) {
           this.mutateAndTrack([c.MATCH, c.SHOW_COMPONENT], c.MATCH_FINISHED_COMPONENT)
-      } else if(isSetFinished(newScore)) {
+      } else if(isSetFinished(newScore, pointsInSet)) {
         this.mutateAndTrack([c.MATCH, c.SHOW_COMPONENT], c.SHOW_SET_FINISHED)
-      } else if((totalPOints % 7) === 0) {
+      } else if((totalPOints === 21 && !isLastSet)) {
+        this.mutateAndTrack([c.MATCH, c.SHOW_COMPONENT], c.SHOW_TTO)
+      } else if((totalPOints % switchOnPoint) === 0) {
         this.mutateAndTrack([c.MATCH, c.SHOW_COMPONENT], c.SHOW_SWITCH)
       }
   }

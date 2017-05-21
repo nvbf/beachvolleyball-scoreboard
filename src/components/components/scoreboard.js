@@ -5,7 +5,6 @@ import ScoreboardRow from '../molokyler/scoreboard-row';
 import ServiceOrderButton from './../molokyler/service-order-button';
 import InfoArea from './../molokyler/info-area';
 import MatchDetails from './../match-details';
-import NotificationAlerts from './../notification-alerts';
 
 import Timeout from '../timeout';
 import TimeoutButtons from '../timeout-buttons';
@@ -50,24 +49,6 @@ class Scoreboard extends Component {
 		return (
 			<div>
 				<div className="container scoreboard">
-					<div className="switch-modal">
-						<NotificationAlerts
-							message="Switch"
-							eventTrigger="switch-notification"
-							/>
-					</div>
-					<div className="timeout-alerts">
-						<Timeout
-							seconds={45} message="Timeout: "
-							eventTrigger="timeout-notification"
-							/>
-					</div>
-					<div className="timeout-alerts">
-						<Timeout
-							seconds={45} message="Technical time-out: "
-							eventTrigger="tto-notification"
-							/>
-					</div>
 					<div className="panel panel-default">
 						<div className="panel-heading">
 							<h2 className="panel-title">Match standing</h2>
@@ -121,7 +102,6 @@ class Scoreboard extends Component {
 							<InfoArea number={'!'}>
 								You can set the service order by clicking the "Set service order" button above. (Optional)
 								When you have set the service order, we will help you keep track of how is serving.
-								You can not set the service order for a set after a points is given
 							</InfoArea>
 						</Panel>
 					</PanelGroup>

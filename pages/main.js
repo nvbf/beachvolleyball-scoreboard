@@ -152,10 +152,20 @@ class Main extends React.Component {
 					</Overdrive>
 				</main>
 			);
+		} else if (show === c.SHOW_TTO)	{
+			return (
+				<main>
+					<Overdrive id="scoreboard-components" duration={0}>
+						<NotificationDialog>
+								Techinal Timeout
+							</NotificationDialog>
+					</Overdrive>
+				</main>
+			);
 		} else if (show === c.SHOW_SWITCH)	{
 			return (
 				<main>
-					<Overdrive id="scoreboard-components" duration={50}>
+					<Overdrive id="scoreboard-components" duration={0}>
 						<NotificationDialog>
 								Switch
 							</NotificationDialog>
@@ -165,7 +175,7 @@ class Main extends React.Component {
 		} else if (show === c.SHOW_SET_FINISHED)	{
 			return (
 				<main>
-					<Overdrive id="scoreboard-components" duration={50}>
+					<Overdrive id="scoreboard-components" duration={0}>
 						<NotificationDialog>
 								Set finished
 							</NotificationDialog>
@@ -175,7 +185,7 @@ class Main extends React.Component {
 		} else if (show === c.SHOW_MATCH_FINISHED)	{
 			return (
 				<main>
-					<Overdrive id="scoreboard-components" duration={100}>
+					<Overdrive id="scoreboard-components" duration={0}>
 						<NotificationDialog>
 								Match Finished
 							</NotificationDialog>
@@ -186,7 +196,7 @@ class Main extends React.Component {
 		return (
 			<section>
 				<main>
-					<Overdrive id="scoreboard-components" duration={400}>
+					<Overdrive id="scoreboard-components" duration={0}>
 						<Scoreboard/>
 					</Overdrive>
 				</main>

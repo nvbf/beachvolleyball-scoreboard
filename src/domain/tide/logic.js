@@ -108,15 +108,15 @@ export function getSetIndexToRemovePointFrom(score) {
 }
 
 export function isFirstSetFinished(score) {
-	return isSetFinished(score.get(FIRST_SET));
+	return isSetFinished(score.get(FIRST_SET), 21);
 }
 
 export function isSecondSetFinished(score) {
-	return isSetFinished(score.get(SECOND_SET));
+	return isSetFinished(score.get(SECOND_SET), 21);
 }
 
 export function isThirdSetFinished(score) {
-	return isSetFinished(score.get(THIRD_SET));
+	return isSetFinished(score.get(THIRD_SET), 15);
 }
 
 export function isFirstSetStarted(score) {
@@ -135,9 +135,8 @@ export function isSetStarted(aSet) {
 	return (aSet.get(HOMETEAM_POINT) !== 0 && aSet.get(AWAYTEAM_POINT) !== 0);
 }
 
-export function isSetFinished(aSet) {
-	console.log('aset:', aSet);
-	return (hasHometeamWonSet(aSet)) || (hasAwayteamWonSet(aSet));
+export function isSetFinished(aSet, limit) {
+	return (hasHometeamWonSet(aSet, limit)) || (hasAwayteamWonSet(aSet, limit));
 }
 
 export function isMatchFinished(state) {
@@ -151,45 +150,43 @@ export function isMatchFinished(state) {
 }
 
 function hasHometeamWonFirstSet(score) {
-	return hasHometeamWonSet(score.get(FIRST_SET));
+	return hasHometeamWonSet(score.get(FIRST_SET), c.DEFAULT_SET_LENGTH);
 }
 
 function hasHometeamWonSecondSet(score) {
-	return hasHometeamWonSet(score.get(SECOND_SET));
+	return hasHometeamWonSet(score.get(SECOND_SET), c.DEFAULT_SET_LENGTH);
 }
 
 function hasHometeamWonThirdSet(score) {
-	return hasHometeamWonSet(score.get(THIRD_SET));
+	return hasHometeamWonSet(score.get(THIRD_SET), c.LAST_SET_LENGTH);
 }
 
 function hasAwayteamWonFirstSet(score) {
-	return hasAwayteamWonSet(score.get(FIRST_SET));
+	return hasAwayteamWonSet(score.get(FIRST_SET), c.DEFAULT_SET_LENGTH);
 }
 
 function hasAwayteamWonSecondSet(score) {
-	return hasAwayteamWonSet(score.get(SECOND_SET));
+	return hasAwayteamWonSet(score.get(SECOND_SET), c.DEFAULT_SET_LENGTH);
 }
 
 function hasAwayteamWonThirdSet(score) {
-	return hasAwayteamWonSet(score.get(THIRD_SET));
+	return hasAwayteamWonSet(score.get(THIRD_SET), c.LAST_SET_LENGTH);
 }
 
-function hasAwayteamWonSet(aSet) {
+function hasAwayteamWonSet(aSet, limit) {
 	const point1 = aSet.get(HOMETEAM_POINT);
 	const point2 = aSet.get(AWAYTEAM_POINT);
-	const awayteamHas21orMorePoints = point2 >= 21;
+	const awayteamHas21orMorePoints = point2 >= limit;
 	const awayteamHas2orMorePointThenHometeam = point2 > (point1 + 1);
 	return awayteamHas21orMorePoints && awayteamHas2orMorePointThenHometeam;
 }
 
-function hasHometeamWonSet(aSet) {
+function hasHometeamWonSet(aSet, limit) {
+	
 	const point1 = aSet.get(HOMETEAM_POINT);
 	const point2 = aSet.get(AWAYTEAM_POINT);
-	const hometeamHas21orMorePoints = point1 >= 21;
+	const hometeamHas21orMorePoints = point1 >= limit;
 	const hometeamHas2orMorePointThenAwayteam = point1 > (point2 + 1);
-	console.log('hometeamHas2orMorePointThenAwayteam', hometeamHas2orMorePointThenAwayteam);
-	console.log('hometeamHas21orMorePoints', hometeamHas21orMorePoints);
-	console.log('hasHometeamWonSet', (hometeamHas21orMorePoints && hometeamHas2orMorePointThenAwayteam));
 	return hometeamHas21orMorePoints && hometeamHas2orMorePointThenAwayteam;
 }
 
