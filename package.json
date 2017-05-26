@@ -49,7 +49,6 @@
     "tide": "^2.0.0-alpha.2"
   },
   "scripts": {
-    "prestart": "next build",
     "start": "API='s' node app.js",
     "url": "^0.11.0",
     "vinyl-source-stream": "1.1.0",
@@ -57,7 +56,8 @@
     "test": "xo --fix && jest",
     "jest:watch": "npm test -- --watch",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "heroku-postbuild": "next build"
   },
   "repository": {
     "type": "git",

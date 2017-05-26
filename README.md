@@ -44,4 +44,10 @@ All files in the public catalog is generated. To understand the build process se
 
 # Prod script
 
-NODE_ENV="production" DEBUG="*,-babel" PORT=4044 npm start
+```
+export NODE_ENV="production"
+export DEBUG="*,-babel"
+export PORT=4044
+next build
+npm start
+```
