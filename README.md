@@ -14,6 +14,7 @@ NPM, the node package manager, is installed when you install node.
 
 ## Install
 
+
 `npm install`
 
 ### Run
@@ -21,7 +22,7 @@ Prerequisit: Install
 
 `NODE_ENV=development DEBUG="*,-babel" API="http://localhost:3000/api/matches/" PORT=4000 npm start`
 
-You can then reach the app on on http://localhost:4000 
+You can then reach the app on on http://localhost:4000
 
 if port is not specified, it will open on port 3000.
 
@@ -41,8 +42,6 @@ this way you have `gulp development` and `node app.js` running, but you never ne
 
 All files in the public catalog is generated. To understand the build process see gulp folder.
 
+# Prod script
 
-#TOOD:
-
-Add storybook
-add prittier
+NODE_ENV="production" DEBUG="*,-babel" PORT=4044 npm start
