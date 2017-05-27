@@ -67,7 +67,7 @@
     "url": "git://github.com/nvbf/beachvollleyball-scoreboard"
   },
   "devDependencies": {
-    "@storybook/react": "^2.21.0",
+    "@storybook/react": "3.0.0-rc.2",
     "babel-jest": "^20.0.1",
     "eslint-config-xo-react": "^0.12.0",
     "eslint-plugin-react": "^7.0.1",
