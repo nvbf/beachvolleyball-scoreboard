@@ -2,33 +2,36 @@
 # yarn lockfile v1
 
 
-"@storybook/addon-actions@^3.0.0-rc.0":
-  version "3.0.0-rc.0"
-  resolved "https://registry.yarnpkg.com/@storybook/addon-actions/-/addon-actions-3.0.0-rc.0.tgz#795037400ff1ce0513a5303ee509004f798815cd"
+"@storybook/addon-actions@^3.0.0-rc.2":
+  version "3.0.0-rc.2"
+  resolved "https://registry.yarnpkg.com/@storybook/addon-actions/-/addon-actions-3.0.0-rc.2.tgz#8aee7ee9d10c58a8e2220f8e275f266b469805dd"
   dependencies:
+    "@storybook/addons" "^3.0.0-rc.2"
     deep-equal "^1.0.1"
     json-stringify-safe "^5.0.1"
     prop-types "^15.5.8"
     react-inspector "^2.0.0"
 
-"@storybook/addon-links@^3.0.0-rc.0":
-  version "3.0.0-rc.0"
-  resolved "https://registry.yarnpkg.com/@storybook/addon-links/-/addon-links-3.0.0-rc.0.tgz#91e4851a14a508f9f5c99fe4eb6f95735310756f"
-
-"@storybook/addons@^3.0.0-rc.0":
-  version "3.0.0-rc.0"
-  resolved "https://registry.yarnpkg.com/@storybook/addons/-/addons-3.0.0-rc.0.tgz#b0f6308e29786bddcaa3e33148b6a4b9bbb0a0ba"
-
-"@storybook/channel-postmessage@^3.0.0-rc.0":
-  version "3.0.0-rc.0"
-  resolved "https://registry.yarnpkg.com/@storybook/channel-postmessage/-/channel-postmessage-3.0.0-rc.0.tgz#8e18099e13624478831f853cd9a2ac5d0a5d097c"
+"@storybook/addon-links@^3.0.0-rc.2":
+  version "3.0.0-rc.2"
+  resolved "https://registry.yarnpkg.com/@storybook/addon-links/-/addon-links-3.0.0-rc.2.tgz#b63ae28ba2aa9c9d3abfb4095de079f56ad15ca0"
   dependencies:
-    "@storybook/channels" "^3.0.0-rc.0"
+    "@storybook/addons" "^3.0.0-rc.2"
+
+"@storybook/addons@^3.0.0-rc.2":
+  version "3.0.0-rc.2"
+  resolved "https://registry.yarnpkg.com/@storybook/addons/-/addons-3.0.0-rc.2.tgz#36d8b35438384912f09a7fb95809f614f88574f1"
+
+"@storybook/channel-postmessage@^3.0.0-rc.2":
+  version "3.0.0-rc.2"
+  resolved "https://registry.yarnpkg.com/@storybook/channel-postmessage/-/channel-postmessage-3.0.0-rc.2.tgz#5a009a1b1c114b343f504f4b8eb08b9819fb56c8"
+  dependencies:
+    "@storybook/channels" "^3.0.0-rc.2"
     json-stringify-safe "^5.0.1"
 
-"@storybook/channels@^3.0.0-rc.0":
-  version "3.0.0-rc.0"
-  resolved "https://registry.yarnpkg.com/@storybook/channels/-/channels-3.0.0-rc.0.tgz#72f3d4c7638a5144fc560df1c3f72049bd4ac8e3"
+"@storybook/channels@^3.0.0-rc.2":
+  version "3.0.0-rc.2"
+  resolved "https://registry.yarnpkg.com/@storybook/channels/-/channels-3.0.0-rc.2.tgz#d8e1522d234b3bd60aa9c6e331f1d93f527cedbd"
 
 "@storybook/react-fuzzy@^0.4.0":
   version "0.4.0"
@@ -40,14 +43,14 @@
     prop-types "^15.5.9"
 
 "@storybook/react@^2.21.0":
-  version "3.0.0-rc.0"
-  resolved "https://registry.yarnpkg.com/@storybook/react/-/react-3.0.0-rc.0.tgz#46acf80ab53d1134c5f0b05b702926c15434608e"
+  version "3.0.0-rc.2"
+  resolved "https://registry.yarnpkg.com/@storybook/react/-/react-3.0.0-rc.2.tgz#4871640499fbdac0ad9b8083531015768ead99dd"
   dependencies:
-    "@storybook/addon-actions" "^3.0.0-rc.0"
-    "@storybook/addon-links" "^3.0.0-rc.0"
-    "@storybook/addons" "^3.0.0-rc.0"
-    "@storybook/channel-postmessage" "^3.0.0-rc.0"
-    "@storybook/ui" "^3.0.0-rc.0"
+    "@storybook/addon-actions" "^3.0.0-rc.2"
+    "@storybook/addon-links" "^3.0.0-rc.2"
+    "@storybook/addons" "^3.0.0-rc.2"
+    "@storybook/channel-postmessage" "^3.0.0-rc.2"
+    "@storybook/ui" "^3.0.0-rc.2"
     airbnb-js-shims "^1.1.1"
     autoprefixer "^7.1.1"
     babel-core "^6.24.1"
@@ -89,9 +92,9 @@
     webpack-dev-middleware "^1.10.2"
     webpack-hot-middleware "^2.18.0"
 
-"@storybook/ui@^3.0.0-rc.0":
-  version "3.0.0-rc.0"
-  resolved "https://registry.yarnpkg.com/@storybook/ui/-/ui-3.0.0-rc.0.tgz#3be3ab83d90ded5852be29ac95bc772d712819a7"
+"@storybook/ui@^3.0.0-rc.2":
+  version "3.0.0-rc.2"
+  resolved "https://registry.yarnpkg.com/@storybook/ui/-/ui-3.0.0-rc.2.tgz#9ffe689c1cf6e9043f0a48e837ec0022b8af3c4d"
   dependencies:
     "@storybook/react-fuzzy" "^0.4.0"
     babel-runtime "^6.23.0"
@@ -1019,14 +1022,14 @@ babel-plugin-transform-function-bind@^6.22.0:
     babel-plugin-syntax-function-bind "^6.8.0"
     babel-runtime "^6.22.0"
 
-babel-plugin-transform-object-rest-spread@6.22.0:
+babel-plugin-transform-object-rest-spread@6.22.0, babel-plugin-transform-object-rest-spread@^6.22.0:
   version "6.22.0"
   resolved "https://registry.yarnpkg.com/babel-plugin-transform-object-rest-spread/-/babel-plugin-transform-object-rest-spread-6.22.0.tgz#1d419b55e68d2e4f64a5ff3373bd67d73c8e83bc"
   dependencies:
     babel-plugin-syntax-object-rest-spread "^6.8.0"
     babel-runtime "^6.22.0"
 
-babel-plugin-transform-object-rest-spread@6.23.0, babel-plugin-transform-object-rest-spread@^6.22.0:
+babel-plugin-transform-object-rest-spread@6.23.0:
   version "6.23.0"
   resolved "https://registry.yarnpkg.com/babel-plugin-transform-object-rest-spread/-/babel-plugin-transform-object-rest-spread-6.23.0.tgz#875d6bc9be761c58a2ae3feee5dc4895d8c7f921"
   dependencies:
@@ -1737,8 +1740,8 @@ caniuse-api@^1.5.2:
     lodash.uniq "^4.5.0"
 
 caniuse-db@^1.0.30000529, caniuse-db@^1.0.30000634, caniuse-db@^1.0.30000639:
-  version "1.0.30000672"
-  resolved "https://registry.yarnpkg.com/caniuse-db/-/caniuse-db-1.0.30000672.tgz#f40f4bf126cb7e063f6a2e1df1c955c803d12265"
+  version "1.0.30000673"
+  resolved "https://registry.yarnpkg.com/caniuse-db/-/caniuse-db-1.0.30000673.tgz#f3333f7ba6871a190f7a26ed20c1285bc96ca072"
 
 caniuse-lite@^1.0.30000670:
   version "1.0.30000673"
@@ -2408,6 +2411,10 @@ detect-indent@^4.0.0:
   dependencies:
     repeating "^2.0.0"
 
+detect-indent@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/detect-indent/-/detect-indent-5.0.0.tgz#3871cc0a6a002e8c3e5b3cf7f336264675f06b9d"
+
 detective@^4.0.0:
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/detective/-/detective-4.5.0.tgz#6e5a8c6b26e6c7a254b1c6b6d7490d98ec91edd1"
@@ -2484,8 +2491,8 @@ ee-first@1.1.1:
   resolved "https://registry.yarnpkg.com/ee-first/-/ee-first-1.1.1.tgz#590c61156b0ae2f4f0255732a158b266bc56b21d"
 
 electron-to-chromium@^1.2.7, electron-to-chromium@^1.3.11:
-  version "1.3.12"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.12.tgz#62f33e4a59b4855f0de4bb8972bf1b841b98b6d2"
+  version "1.3.13"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.13.tgz#1b3a5eace6e087bb5e257a100b0cbfe81b2891fc"
 
 element-class@^0.2.0:
   version "0.2.2"
@@ -7490,9 +7497,10 @@ write-file-webpack-plugin@4.0.2:
     moment "^2.11.2"
 
 write-json-file@^2.0.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/write-json-file/-/write-json-file-2.1.0.tgz#ba1cf3ac7ee89db26c3d528986e48421389046b7"
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/write-json-file/-/write-json-file-2.2.0.tgz#51862506bbb3b619eefab7859f1fd6c6d0530876"
   dependencies:
+    detect-indent "^5.0.0"
     graceful-fs "^4.1.2"
     make-dir "^1.0.0"
     pify "^2.0.0"
