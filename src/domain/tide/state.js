@@ -1,5 +1,7 @@
 import {Record, List} from 'immutable';
 
+export const EMAIL = 'EMAIL'
+export const SHOW_EMAIL_DIALOG = 'SHOW_EMAIL_DIALOG';
 export const COMMENTS = 'COMMENTS';
 export const FIRST_SET = 'FIRST_SET';
 export const SECOND_SET = 'SECOND_SET';
@@ -92,6 +94,7 @@ export const ActionHistory = Record({
 });
 
 export const Match = Record({
+	[EMAIL]: "",
 	[FIRST_SET]: new BeachVolleyballSet(),
 	[SECOND_SET]: new BeachVolleyballSet(),
 	[THIRD_SET]: new BeachVolleyballSet(),
@@ -125,6 +128,8 @@ export const State = Record({
 });
 
 export const constants = {
+	EMAIL,
+	SHOW_EMAIL_DIALOG,
 	COMMENTS,
 	SHOW_COMMENTS_DIALOG,
 	FIRST_SET,

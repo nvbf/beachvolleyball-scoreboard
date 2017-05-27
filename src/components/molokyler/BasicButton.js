@@ -17,7 +17,7 @@ import {
 
 class BasicButton extends Component {
 	handlClick = () => {
-		this.props.tide.actions.all.mutateAndTrack([c.MATCH, c.SHOW_COMPONENT], c.SCOREBOARD_COMPONENT)
+		this.props.tide.actions.all.mutate([c.MATCH, c.SHOW_COMPONENT], c.SCOREBOARD_COMPONENT)
 	}
 
 	render() {

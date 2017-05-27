@@ -257,7 +257,11 @@ class AllAction extends Actions {
     this.appendAndTrack([c.MATCH, c.COMMENTS], comment);
     this.showScoreboard()
   }
-
+  
+  addEmail = (email) => {
+    this.mutateAndTrack([c.MATCH, c.EMAIL], email);
+    this.showScoreboard()
+  }
 }
 
 function assert(bool, message) {

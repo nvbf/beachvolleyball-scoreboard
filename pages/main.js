@@ -10,6 +10,8 @@ import ServiceOrderDialogTeam from './../src/components/molokyler/service-order-
 import ServiceOrderDialogPlayer from './../src/components/molokyler/service-order-player-dialog';
 import NotificationDialog from './../src/components/templates/notifications';
 import AddCommentsDialog from './../src/components/molokyler/add-comments-dialog';
+import AddEmailDialog from './../src/components/molokyler/add-email-dialog';
+
 
 import {
 	HOMETEAM_FIRST_PLAYER_NAME,
@@ -205,6 +207,14 @@ class Main extends React.Component {
 				<main>
 					<Overdrive id="scoreboard-components" duration={0}>
 						<AddCommentsDialog />
+					</Overdrive>
+				</main>
+			);
+		} else if (show === c.SHOW_EMAIL_DIALOG)	{
+			return (
+				<main>
+					<Overdrive id="scoreboard-components" duration={0}>
+						<AddEmailDialog />
 					</Overdrive>
 				</main>
 			);

@@ -39,7 +39,7 @@ class AddHomeTeam extends Component {
 		this.props.tide.actions.all.mutateAndTrack([MATCH, HOMETEAM_FIRST_PLAYER_NAME], player1);
 		this.props.tide.actions.all.mutateAndTrack([MATCH, HOMETEAM_SECOND_PLAYER_NAME], player2);
 		this.props.tide.actions.all.mutateAndTrack([MATCH, HOMETEAM_COLOR], this.state.color);
-		this.props.tide.actions.all.mutateAndTrack([MATCH, SHOW_COMPONENT], ADD_AWAYTEAM_COMPONENT);
+		this.props.tide.actions.all.mutate([MATCH, SHOW_COMPONENT], ADD_AWAYTEAM_COMPONENT);
 	}
 
 	componentDidMount() {

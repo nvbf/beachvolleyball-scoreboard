@@ -57,7 +57,7 @@ const personToServe = state => {
 	};
 }, {serving: firstTeamToServe, name: calculateNextPersonToServe(firstTeamToServe, serviceOrderHomeTeam, serviceOrderAwayTeam, 0), number: 0});
 
-	return personToServeI.name;
+	return {name: personToServeI.name, team: personToServeI.serving};
 };
 
 function mutateSignals() {

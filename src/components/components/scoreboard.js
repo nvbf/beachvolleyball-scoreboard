@@ -11,10 +11,12 @@ import Timeout from '../timeout';
 import TimeoutButtons from '../timeout-buttons';
 import AwayTeam from '../molokyler/away-team';
 import HomeTeam from '../molokyler/home-team';
+import AddEmailButton from '../molokyler/add-email-button';
 
 import AlertInfo from '../atom/alert-info';
 
 import {
+	Button,
 	ButtonToolbar,
 	Alert,
 	PanelGroup,
@@ -113,6 +115,7 @@ class Scoreboard extends Component {
 						</Panel>		
 						<Panel header="Settings ⭢" eventKey="2">
 							<a href={newMatchUrl}>New match</a>
+							<AddEmailButton />
 						</Panel>	
 						<Panel header="Notes for first time users ⭢" eventKey="3">
 							<InfoArea number={'?'}>

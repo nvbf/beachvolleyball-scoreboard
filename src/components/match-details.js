@@ -43,7 +43,7 @@ const constantToText = {
 	[HOMETEAM_POINT]: 'Home team got a point, they have now %s points',
 	[AWAYTEAM_TIMEOUT_TAKEN]: 'Away team is taking a timout',
 	[HOMETEAM_TIMEOUT_TAKEN]: 'Home team is taking a timout',
-	[c.COMMENTS]: '!: %s'
+	[c.COMMENTS]: 'Comment: %s'
 };
 
 export default function MatchDetails({events, showDetails, handleDetailToogle}) {
