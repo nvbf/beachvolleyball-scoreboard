@@ -54,6 +54,23 @@ class AllAction extends Actions {
       this.track(key, value)
   }
 
+  appendAndTrack(key, value) {
+      this.mutate(key, (original) => {
+        console.log(original)
+        return original.push(value)
+      });
+      this.mutate(HISTORY, (history) => {
+        return history.push(
+            new Action({
+            DATE: new Date(),
+            ACTION: key,
+            VALUE: value,
+            MATCHSTATE: this.getMatch()
+          }))
+      });      
+      this.track(key, value)
+  }
+
   track =(key, value)  => {
       const state = this.getMatch();
       const index = getCurrentSetIndex(state)
@@ -192,6 +209,14 @@ class AllAction extends Actions {
     this.mutateAndTrack([c.MATCH, c.SHOW_COMPONENT], c.SHOW_SERVICE_ORDER_DIALOG_PLAYER_HOMETEAM)
   }
 
+  showComponent = (component) => {
+    this.mutate([c.MATCH, c.SHOW_COMPONENT], component)
+  }
+
+  showScoreboard = () => {
+    this.mutate([c.MATCH, c.SHOW_COMPONENT], c.SCOREBOARD_COMPONENT)
+  }
+
   load = (state) => {
     console.log('LOAD!!');
     console.log(state);
@@ -227,6 +252,12 @@ class AllAction extends Actions {
     const index = getCurrentSetIndex(match);
     return this.getMatch()[index]
   }
+
+  addComment = (comment) => {
+    this.appendAndTrack([c.MATCH, c.COMMENTS], comment);
+    this.showScoreboard()
+  }
+
 }
 
 function assert(bool, message) {

@@ -1,5 +1,6 @@
 import {Record, List} from 'immutable';
 
+export const COMMENTS = 'COMMENTS';
 export const FIRST_SET = 'FIRST_SET';
 export const SECOND_SET = 'SECOND_SET';
 export const THIRD_SET = 'THIRD_SET';
@@ -60,6 +61,7 @@ export const SHOW_SWITCH = 'SHOW_SWITCH';
 export const SHOW_TTO = 'SHOW_TTO';
 export const SHOW_MATCH_FINISHED = 'SHOW_MATCH_FINISHED';
 export const SHOW_SET_FINISHED = 'SHOW_SET_FINISHED';
+export const SHOW_COMMENTS_DIALOG = 'SHOW_COMMENTS_DIALOG';
 
 export const BeachVolleyballSet = Record({
 	[HOMETEAM_POINT]: 0,
@@ -112,7 +114,8 @@ export const Match = Record({
 	[SHOW_COMPONENT]: LOADING_COMPONENT,
 	[MATCH_IS_FINISED]: false,
 	[HOMETEAM_TIMEOUT_TAKEN]: false,
-	[AWAYTEAM_TIMEOUT_TAKEN]: false
+	[AWAYTEAM_TIMEOUT_TAKEN]: false,
+	[COMMENTS]: List()
 });
 
 export const State = Record({
@@ -122,6 +125,8 @@ export const State = Record({
 });
 
 export const constants = {
+	COMMENTS,
+	SHOW_COMMENTS_DIALOG,
 	FIRST_SET,
 	SECOND_SET,
 	THIRD_SET,

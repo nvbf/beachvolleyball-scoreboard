@@ -28,7 +28,8 @@ import {
     MATCHSTATE,
     UNDO,
     AWAYTEAM_TIMEOUT_TAKEN,
-    HOMETEAM_TIMEOUT_TAKEN
+    HOMETEAM_TIMEOUT_TAKEN,
+	constants as c
 } from '../domain/tide/state';
 
 const constantToText = {
@@ -41,7 +42,8 @@ const constantToText = {
 	[AWAYTEAM_POINT]: 'Away team got a point, they have now %s points',
 	[HOMETEAM_POINT]: 'Home team got a point, they have now %s points',
 	[AWAYTEAM_TIMEOUT_TAKEN]: 'Away team is taking a timout',
-	[HOMETEAM_TIMEOUT_TAKEN]: 'Home team is taking a timout'
+	[HOMETEAM_TIMEOUT_TAKEN]: 'Home team is taking a timout',
+	[c.COMMENTS]: '!: %s'
 };
 
 export default function MatchDetails({events, showDetails, handleDetailToogle}) {
@@ -58,7 +60,7 @@ export default function MatchDetails({events, showDetails, handleDetailToogle}) 
 	const homeScore = actionHistory.get(HOMETEAM_POINT);
 	const awayScore = actionHistory.get(AWAYTEAM_POINT);
 	if (tekstString === undefined) {
-                //  Console.log('Skipping', lastKey)
+		console.log('Skipping', lastKey)
 		return;
 	}
 	return (<p key={index}>{printf(`${undoInfo} ${relativeTime}, ${homeScore}-${awayScore}, ${tekstString}`, value)} </p>);

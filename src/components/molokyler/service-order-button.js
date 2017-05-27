@@ -2,9 +2,7 @@ import React, {Component} from 'react';
 import {wrap} from 'tide'
 
 import { 
-	ButtonToolbar,
 	Button,	
-    Alert,
 } from 'react-bootstrap';
 
 import {
@@ -20,31 +18,19 @@ export class ServiceOrderButton extends Component {
 	render() {
 		const {
 			playerToServe,
-			isServiceOrderSet,
-			hasSetStarted
+			isServiceOrderSet
 		} = this.props;
-		console.log('playerToServe', playerToServe);
 
 		if (isServiceOrderSet) {
 			return (
-				<section>
-					<Alert bsStyle="warning">
-						<p>Player to serve: {playerToServe} </p>
-					</Alert>
-				</section>
+				<p>Player to serve: {playerToServe} </p>
 			);
 		}
 
 		return (
-			<section>
-				<Alert bsStyle="warning">
-					<ButtonToolbar>
-						<Button 
-						onClick={this.showServiceOrderPicker} 
-						className={ hasSetStarted ? "disabled": ""}>Set service order</Button>
-					</ButtonToolbar>
-				</Alert>
-			</section>
+			<Button onClick={this.showServiceOrderPicker} >
+				Set service order
+			</Button>
 		);
 	}
 }
@@ -53,5 +39,4 @@ export class ServiceOrderButton extends Component {
 export default  wrap(ServiceOrderButton, {
 	playerToServe: [c.MATCH, c.PLAYER_TO_SERVE],
 	isServiceOrderSet: [c.MATCH, c.SERVICE_ORDER_IS_SET],
-	hasSetStarted: [c.MATCH, c.SET_HAS_STARTED]
 });

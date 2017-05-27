@@ -14,7 +14,6 @@ NPM, the node package manager, is installed when you install node.
 
 ## Install
 
-
 `npm install`
 
 ### Run
@@ -35,12 +34,10 @@ It will run checkstyle before it run test.
 
 ## Development
 
-when developing it's recommended to run `gulp development` to monitor the files for changes so that they are auto updated
+when developing it's recommended to run `next` to monitor the files for changes so that they are auto updated
 to the public folder.
 
-this way you have `gulp development` and `node app.js` running, but you never need to restart the server.
-
-All files in the public catalog is generated. To understand the build process see gulp folder.
+For developing UI components you can use storybook. `npm run storybook`
 
 # Prod script
 

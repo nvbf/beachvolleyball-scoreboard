@@ -3,6 +3,7 @@ import {wrap} from 'tide';
 
 import ScoreboardRow from '../molokyler/scoreboard-row';
 import ServiceOrderButton from './../molokyler/service-order-button';
+import AddCommentButton from './../molokyler/add-comments-button';
 import InfoArea from './../molokyler/info-area';
 import MatchDetails from './../match-details';
 
@@ -14,6 +15,8 @@ import HomeTeam from '../molokyler/home-team';
 import AlertInfo from '../atom/alert-info';
 
 import {
+	ButtonToolbar,
+	Alert,
 	PanelGroup,
 	Panel
 } from 'react-bootstrap';
@@ -45,7 +48,10 @@ class Scoreboard extends Component {
 		this.setState({showDetails: !this.state.showDetails});
 	}
 
+	
 	render() {
+		const newMatchUrl = "/match?id=" + (new Date().toDateString() + Math.floor((Math.random() * 10000)));
+		
 		return (
 			<div>
 				<div className="container scoreboard">
@@ -88,18 +94,32 @@ class Scoreboard extends Component {
 							<TimeoutButtons/>
 						</div>
 					</div>
-					<ServiceOrderButton/>
-					<section className="events">
-						<MatchDetails
-							events={this.props[ACTION_HISTORY]}
-							showDetails={this.state.showDetails}
-							handleDetailToogle={this.handleDetailToogle.bind(this)}
-							/>
+					<section>
+						<Alert bsStyle="warning">
+							<ButtonToolbar>
+								<ServiceOrderButton/>
+								<AddCommentButton />
+							</ButtonToolbar>
+						</Alert>
 					</section>
 
 					<PanelGroup accordion>
-						<Panel header="Notes for first time users ⭢" eventKey="1">
-							<InfoArea number={'!'}>
+						<Panel header="Details ⭢" eventKey="1">
+							<MatchDetails
+								events={this.props[ACTION_HISTORY]}
+								showDetails={this.state.showDetails}
+								handleDetailToogle={this.handleDetailToogle.bind(this)}
+								/>
+						</Panel>		
+						<Panel header="Settings ⭢" eventKey="2">
+							<a href={newMatchUrl}>New match</a>
+						</Panel>	
+						<Panel header="Notes for first time users ⭢" eventKey="3">
+							<InfoArea number={'?'}>
+								This scoreboard should be so easy to use and help you in all the parts of the scoreboard
+								process so that it's no need for more people then the referee
+							</InfoArea>
+							<InfoArea number={'?'}>
 								You can set the service order by clicking the "Set service order" button above. (Optional)
 								When you have set the service order, we will help you keep track of how is serving.
 							</InfoArea>

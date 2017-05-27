@@ -1,8 +1,15 @@
 import React from 'react';
-import {storiesOf, action} from '@kadira/storybook';
-import Team from '../src/components/atom/team';
+import { storiesOf, action, linkTo } from '@storybook/react';
+import Button from './Button';
+import Welcome from './Welcome';
+import Sidenav from './../src/components/organims/sidenav';
 
-storiesOf('team', module)
-  .add('basic team', () => (
-	<Team player1="Sindre" player2="Per" color="#ff00ff"/>
-  ));
+storiesOf('Welcome', module).add('to Storybook', () => <Welcome showApp={linkTo('Button')} />);
+
+storiesOf('Button', module)
+  .add('with text', () => <Button onClick={action('clicked')}>Hello Button</Button>)
+  .add('with some emoji', () => <Button onClick={action('clicked')}>😀 😎 👍 💯</Button>);
+
+
+storiesOf('Sidenav', module)
+  .add('basic', () => <Sidenav>Test</Sidenav>)

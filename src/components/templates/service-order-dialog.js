@@ -9,7 +9,6 @@ import UndoButton from '../molokyler/undo-button';
 const ServiceOrderDialog = ({children, heading = 'Service Order'}) => {
 	return (
 		<div>
-
 			<Panel header={heading} bsStyle="primary" footer={<UndoButton/>}>
 				{children}
 			</Panel>

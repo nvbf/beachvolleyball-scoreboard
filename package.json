@@ -24,6 +24,7 @@
     }
   },
   "dependencies": {
+    "babel-cli": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
     "babelify": "7.3.0",
     "bluebird": "3.5.0",
@@ -41,7 +42,9 @@
     "react-bootstrap": "0.31.0",
     "react-color": "^2.11.4",
     "react-dom": "15.5.4",
+    "react-icons-kit": "^1.0.7",
     "react-overdrive": "0.0.5",
+    "react-sidenav": "^2.1.1",
     "react-toggle": "^4.0.1",
     "socket.io": "2.0.1",
     "styled-components": "^1.4.4",
@@ -64,6 +67,7 @@
     "url": "git://github.com/nvbf/beachvollleyball-scoreboard"
   },
   "devDependencies": {
+    "@storybook/react": "^2.21.0",
     "babel-jest": "^20.0.1",
     "eslint-config-xo-react": "^0.12.0",
     "eslint-plugin-react": "^7.0.1",
