@@ -68,17 +68,6 @@ class Scoreboard extends Component {
 		} = this.props;
 		
 		console.log('rendering:');
-		//console.log(FIRST_SET[c.HOMETEAM_POINT])
-		//console.log(FIRST_SET[c.AWAYTEAM_POINT])
-		//console.log(FIRST_SET[c.HOMETEAM_TIMEOUT_TAKEN])
-		//console.log(FIRST_SET[c.AWAYTEAM_TIMEOUT_TAKEN])
-		//console.log(FIRST_SET[c.PLAYER_TO_SERVE])
-		//console.log(FIRST_SET[c.SERVICE_ORDER_IS_SET])
-		//console.log(FIRST_SET[c.FIRST_TEAM_TO_SERVE])
-
-		 //	FIRST_SET,
-		
-		 	
 		
 		const newMatchUrl = "/match?id=" + (new Date().toDateString() + Math.floor((Math.random() * 10000)));
 		
