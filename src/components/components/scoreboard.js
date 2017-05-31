@@ -27,17 +27,16 @@ import {
 	MATCH,
 	HOMETEAM_FIRST_PLAYER_NAME,
 	HOMETEAM_SECOND_PLAYER_NAME,
-	HOMETEAM_COLOR,
 	AWAYTEAM_FIRST_PLAYER_NAME,
 	AWAYTEAM_SECOND_PLAYER_NAME,
-	AWAYTEAM_COLOR,
 	FIRST_SET,
 	SECOND_SET,
 	THIRD_SET,
 	AWAYTEAM_POINT,
 	HOMETEAM_POINT,
 	MATCH_IS_FINISED,
-	ACTION_HISTORY
+	ACTION_HISTORY,
+	constants as c
 } from '../../domain/tide/state';
 
 class Scoreboard extends Component {
@@ -49,11 +48,32 @@ class Scoreboard extends Component {
 	handleDetailToogle() {
 		this.setState({showDetails: !this.state.showDetails});
 	}
-
 	
 	render() {
-		console.log('rendering scoreboard', this.props);
-		this.props
+		const {
+			HOMETEAM_SECOND_PLAYER_NAME,
+			HOMETEAM_FIRST_PLAYER_NAME,
+		 	AWAYTEAM_SECOND_PLAYER_NAME,
+		 	AWAYTEAM_FIRST_PLAYER_NAME,
+			MATCH_IS_FINISED,			
+			ACTION_HISTORY,
+		 	SECOND_SET,
+		 	THIRD_SET,			
+		} = this.props;
+		
+		console.log('rendering:');
+		//console.log(FIRST_SET[c.HOMETEAM_POINT])
+		//console.log(FIRST_SET[c.AWAYTEAM_POINT])
+		//console.log(FIRST_SET[c.HOMETEAM_TIMEOUT_TAKEN])
+		//console.log(FIRST_SET[c.AWAYTEAM_TIMEOUT_TAKEN])
+		//console.log(FIRST_SET[c.PLAYER_TO_SERVE])
+		//console.log(FIRST_SET[c.SERVICE_ORDER_IS_SET])
+		//console.log(FIRST_SET[c.FIRST_TEAM_TO_SERVE])
+
+		 //	FIRST_SET,
+		
+		 	
+		
 		const newMatchUrl = "/match?id=" + (new Date().toDateString() + Math.floor((Math.random() * 10000)));
 		
 		return (
@@ -64,6 +84,7 @@ class Scoreboard extends Component {
 							<h2 className="panel-title">Match standing</h2>
 						</div>
 						<div className="panel-body">
+
 							<table className="table table-striped">
 								<thead>
 									<tr>
@@ -77,22 +98,23 @@ class Scoreboard extends Component {
 								<tbody>
 									<ScoreboardRow
 										addPoint={this.props.tide.actions.all.addPointHometeam}
-										score1={this.props[FIRST_SET][HOMETEAM_POINT]}
-										score2={this.props[SECOND_SET][HOMETEAM_POINT]}
-										score3={this.props[THIRD_SET][HOMETEAM_POINT]}
+										score1={0}
+										score2={SECOND_SET[HOMETEAM_POINT]}
+										score3={THIRD_SET[HOMETEAM_POINT]}
 										TeamComponent={HomeTeam}
-										matchFinished={this.props[MATCH_IS_FINISED]}
+										matchFinished={MATCH_IS_FINISED}
 										/>
 									<ScoreboardRow
 										addPoint={this.props.tide.actions.all.addPointAwayteam}
-										score1={this.props[FIRST_SET][AWAYTEAM_POINT]}
-										score2={this.props[SECOND_SET][AWAYTEAM_POINT]}
-										score3={this.props[THIRD_SET][AWAYTEAM_POINT]}
+										score1={0} 
+										score2={SECOND_SET[AWAYTEAM_POINT]}
+										score3={THIRD_SET[AWAYTEAM_POINT]}
 										TeamComponent={AwayTeam}
-										matchFinished={this.props[MATCH_IS_FINISED]}
+										matchFinished={MATCH_IS_FINISED}
 										/>
 								</tbody>
 							</table>
+
 						</div>
 						<div className="panel-footer">
 							<TimeoutButtons/>
@@ -101,7 +123,7 @@ class Scoreboard extends Component {
 					<section>
 						<Alert bsStyle="warning">
 							<ButtonToolbar>
-								<ServiceOrderButton/>
+								<ServiceOrderButton />	
 								<AddCommentButton />
 							</ButtonToolbar>
 						</Alert>
@@ -110,7 +132,7 @@ class Scoreboard extends Component {
 					<PanelGroup accordion>
 						<Panel header="Details ⭢" eventKey="1">
 							<MatchDetails
-								events={this.props[ACTION_HISTORY]}
+								events={ACTION_HISTORY}
 								showDetails={this.state.showDetails}
 								handleDetailToogle={this.handleDetailToogle.bind(this)}
 								/>
@@ -139,16 +161,16 @@ class Scoreboard extends Component {
 export default wrap(Scoreboard, {
 	[HOMETEAM_FIRST_PLAYER_NAME]: [MATCH, HOMETEAM_FIRST_PLAYER_NAME],
 	[HOMETEAM_SECOND_PLAYER_NAME]: [MATCH, HOMETEAM_SECOND_PLAYER_NAME],
-	[HOMETEAM_COLOR]: [MATCH, HOMETEAM_COLOR],
 	[AWAYTEAM_FIRST_PLAYER_NAME]: [MATCH, AWAYTEAM_FIRST_PLAYER_NAME],
 	[AWAYTEAM_SECOND_PLAYER_NAME]: [MATCH, AWAYTEAM_SECOND_PLAYER_NAME],
-	[AWAYTEAM_COLOR]: [MATCH, AWAYTEAM_COLOR],
-	[FIRST_SET]: [MATCH, FIRST_SET],
+	[MATCH_IS_FINISED]: [MATCH, MATCH_IS_FINISED],
+	[ACTION_HISTORY]: ACTION_HISTORY,
 	[SECOND_SET]: [MATCH, SECOND_SET],
 	[THIRD_SET]: [MATCH, THIRD_SET],
-	[HOMETEAM_FIRST_PLAYER_NAME]: [MATCH, HOMETEAM_FIRST_PLAYER_NAME],
-	[HOMETEAM_SECOND_PLAYER_NAME]: [MATCH, HOMETEAM_SECOND_PLAYER_NAME],
-	[HOMETEAM_COLOR]: [MATCH, HOMETEAM_COLOR],
-	[MATCH_IS_FINISED]: [MATCH, MATCH_IS_FINISED],
-	[ACTION_HISTORY]: ACTION_HISTORY
 });
+
+
+
+//	[FIRST_SET]: [MATCH, FIRST_SET],
+//	
+

@@ -142,12 +142,6 @@ export function isSetFinished(aSet, limit) {
 }
 
 export function isMatchFinished(score) {
-	console.log('hasHometeamWonThirdSet', hasHometeamWonThirdSet(score))
-	console.log('hasAwayteamWonThirdSet', hasAwayteamWonThirdSet(score))
-	console.log('hasHometeamWonSecondSet', hasHometeamWonSecondSet(score))
-	console.log('hasAwayteamWonSecondSet', hasAwayteamWonSecondSet(score))
-	console.log('hasHometeamWonFirstSet', hasHometeamWonFirstSet(score))
-	console.log('hasAwayteamWonFirstSet', hasAwayteamWonFirstSet(score))
 	return (
         hasHometeamWonThirdSet(score) ||
         hasAwayteamWonThirdSet(score) ||

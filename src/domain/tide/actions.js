@@ -218,7 +218,7 @@ class AllAction extends Actions {
   }
 
   showScoreboard = () => {
-    this.mutate([c.MATCH, c.SHOW_COMPONENT], c.SCOREBOARD_COMPONENT)
+    this.showComponent(c.SCOREBOARD_COMPONENT)
   }
 
   load = (state) => {
