@@ -58,7 +58,13 @@ class Scoreboard extends Component {
 			MATCH_IS_FINISED,			
 			ACTION_HISTORY,
 		 	SECOND_SET,
-		 	THIRD_SET,			
+		 	THIRD_SET,
+			 h1p,
+			 a1p,
+			 h2p,
+			 a2p,
+			 h3p,
+			 a3p
 		} = this.props;
 		
 		console.log('rendering:');
@@ -98,17 +104,17 @@ class Scoreboard extends Component {
 								<tbody>
 									<ScoreboardRow
 										addPoint={this.props.tide.actions.all.addPointHometeam}
-										score1={0}
-										score2={SECOND_SET[HOMETEAM_POINT]}
-										score3={THIRD_SET[HOMETEAM_POINT]}
+										score1={h1p}
+										score2={h2p}
+										score3={h3p}
 										TeamComponent={HomeTeam}
 										matchFinished={MATCH_IS_FINISED}
 										/>
 									<ScoreboardRow
 										addPoint={this.props.tide.actions.all.addPointAwayteam}
-										score1={0} 
-										score2={SECOND_SET[AWAYTEAM_POINT]}
-										score3={THIRD_SET[AWAYTEAM_POINT]}
+										score1={a1p} 
+										score2={a2p}
+										score3={a3p}
 										TeamComponent={AwayTeam}
 										matchFinished={MATCH_IS_FINISED}
 										/>
@@ -165,8 +171,12 @@ export default wrap(Scoreboard, {
 	[AWAYTEAM_SECOND_PLAYER_NAME]: [MATCH, AWAYTEAM_SECOND_PLAYER_NAME],
 	[MATCH_IS_FINISED]: [MATCH, MATCH_IS_FINISED],
 	[ACTION_HISTORY]: ACTION_HISTORY,
-	[SECOND_SET]: [MATCH, SECOND_SET],
-	[THIRD_SET]: [MATCH, THIRD_SET],
+	h3p: [MATCH, THIRD_SET, HOMETEAM_POINT],
+	a3p: [MATCH, THIRD_SET, AWAYTEAM_POINT],
+	h2p: [MATCH, SECOND_SET, HOMETEAM_POINT],
+	a2p: [MATCH, SECOND_SET, AWAYTEAM_POINT],	
+	h1p: [MATCH, c.FIRST_SET, c.HOMETEAM_POINT],
+	a1p: [MATCH, c.FIRST_SET, c.AWAYTEAM_POINT],
 });
 
 
