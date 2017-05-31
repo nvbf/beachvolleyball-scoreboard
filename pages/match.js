@@ -7,6 +7,7 @@ import createTide from './../src/domain/tide/tide';
 
 export default class Match extends React.Component {
 	render() {
+		console.log('rendering Match')
 		const tide = createTide();
 
 		return (<div>

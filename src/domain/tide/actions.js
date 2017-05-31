@@ -41,6 +41,7 @@ import {
 
 class AllAction extends Actions {
   mutateAndTrack(key, value) {
+      console.log('mutateAndTrack', key, value)
       this.mutate(key, (original) => original = value);
       this.mutate(HISTORY, (history) => {
         return history.push(
@@ -55,6 +56,7 @@ class AllAction extends Actions {
   }
 
   appendAndTrack(key, value) {
+      console.log('appendAndTrack', key, value)
       this.mutate(key, (original) => {
         console.log(original)
         return original.push(value)
@@ -72,6 +74,7 @@ class AllAction extends Actions {
   }
 
   track =(key, value)  => {
+      console.log('track')
       const state = this.getMatch();
       const index = getCurrentSetIndex(state)
       const action = new ActionHistory({
@@ -140,7 +143,7 @@ class AllAction extends Actions {
   }
 
   setNotificationsState(state, newScore, totalPoints) {
-    
+    console.log('setNotificationsState', state)
     const match = state[c.MATCH]
     const isLastSet = getCurrentSetIndex(match) === c.THIRD_SET
     const switchOnPoint = isLastSet ? match[c.LAST_SET_SWITCH_EVERY_X_POINT] : match[c.DEFAULT_SWITCH_EVERY_X_POINT];
@@ -154,6 +157,7 @@ class AllAction extends Actions {
     
     const pointsInSet = isLastSet ? match[c.LAST_SET_LENGTH] : match[c.DEFAULT_SET_LENGTH];
     if(isMatchFinished(newMatchState)) {
+
       this.mutate([c.MATCH, c.SHOW_COMPONENT], c.SHOW_MATCH_FINISHED)
       //TODO: should this be here?
       this.mutate([c.MATCH, c.MATCH_IS_FINISED], true)

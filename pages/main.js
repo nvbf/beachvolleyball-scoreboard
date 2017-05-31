@@ -1,7 +1,6 @@
 import React from 'react';
 import url from 'url';
 import {wrap} from 'tide';
-import Overdrive from 'react-overdrive';
 
 import AddHomeTeam from './../src/components/components/add-home-team';
 import AddAwayTeam from './../src/components/components/add-away-team';
@@ -81,6 +80,7 @@ class Main extends React.Component {
 	}
 
 	render() {
+		console.log('render main')
 		const {
 			HOMETEAM_FIRST_PLAYER_NAME,
 			HOMETEAM_SECOND_PLAYER_NAME,
@@ -96,126 +96,102 @@ class Main extends React.Component {
 		if (show === ADD_HOMETEAM_COMPONENT) {
 			return (
 				<main>
-					<Overdrive id="scoreboard-components" duration={400}>
-						<AddHomeTeam/>
-					</Overdrive>
+					<AddHomeTeam/>
 				</main>
 			);
 		} else if (show === ADD_AWAYTEAM_COMPONENT) {
 			return (
 				<main>
-					<Overdrive id="scoreboard-components" duration={400}>
-						<AddAwayTeam/>
-					</Overdrive>
+					<AddAwayTeam/>
 				</main>
 			);
 		} else if (show === LOADING_COMPONENT) {
 			return (
 				<main>
-					<Overdrive id="scoreboard-components" duration={400}>
-						<div>
-							Loading...
-						</div>
-					</Overdrive>
+					<div>
+						Loading...
+					</div>
 				</main>
 
 			);
 		} else if (show === SHOW_SERVICE_ORDER_DIALOG_TEAM) {
 			return (
 				<main>
-					<Overdrive id="scoreboard-components" duration={400}>
-						<div>
-							<ServiceOrderDialogTeam/>
-						</div>
-					</Overdrive>
+					<div>
+						<ServiceOrderDialogTeam/>
+					</div>
 				</main>
 			);
 		} else if (show === SHOW_SERVICE_ORDER_DIALOG_PLAYER_AWAYTEAM)	{
 			return (
 				<main>
-					<Overdrive id="scoreboard-components" duration={400}>
-						<div>
-							<ServiceOrderDialogPlayer
-								player1={AWAYTEAM_FIRST_PLAYER_NAME}
-								player2={AWAYTEAM_SECOND_PLAYER_NAME}
-								color={AWAYTEAM_COLOR}
-								action="playerOnAwayTeamToServe"
-								team="away team"
-								/>
-						</div>
-					</Overdrive>
+					<div>
+						<ServiceOrderDialogPlayer
+							player1={AWAYTEAM_FIRST_PLAYER_NAME}
+							player2={AWAYTEAM_SECOND_PLAYER_NAME}
+							color={AWAYTEAM_COLOR}
+							action="playerOnAwayTeamToServe"
+							team="away team"
+							/>
+					</div>
 				</main>
 			);
 		} else if (show === SHOW_SERVICE_ORDER_DIALOG_PLAYER_HOMETEAM)	{
 			return (
 				<main>
-					<Overdrive id="scoreboard-components" duration={400}>
-						<div>
-							<ServiceOrderDialogPlayer
-								player1={HOMETEAM_FIRST_PLAYER_NAME}
-								player2={HOMETEAM_SECOND_PLAYER_NAME}
-								color={HOMETEAM_COLOR}
-								action="playerOnHomeTeamToServe"
-								team="home team"
-								/>
-						</div>
-					</Overdrive>
+					<div>
+						<ServiceOrderDialogPlayer
+							player1={HOMETEAM_FIRST_PLAYER_NAME}
+							player2={HOMETEAM_SECOND_PLAYER_NAME}
+							color={HOMETEAM_COLOR}
+							action="playerOnHomeTeamToServe"
+							team="home team"
+							/>
+					</div>
 				</main>
 			);
 		} else if (show === c.SHOW_TTO)	{
 			return (
 				<main>
-					<Overdrive id="scoreboard-components" duration={0}>
-						<NotificationDialog>
-								Techinal Timeout
-							</NotificationDialog>
-					</Overdrive>
+					<NotificationDialog>
+							Techinal Timeout
+					</NotificationDialog>
 				</main>
 			);
 		} else if (show === c.SHOW_SWITCH)	{
 			return (
 				<main>
-					<Overdrive id="scoreboard-components" duration={0}>
-						<NotificationDialog>
-								Switch
-							</NotificationDialog>
-					</Overdrive>
+					<NotificationDialog>
+							Switch
+					</NotificationDialog>
 				</main>
 			);
 		} else if (show === c.SHOW_SET_FINISHED)	{
 			return (
 				<main>
-					<Overdrive id="scoreboard-components" duration={0}>
-						<NotificationDialog>
-								Set finished
-							</NotificationDialog>
-					</Overdrive>
+					<NotificationDialog>
+							Set finished
+					</NotificationDialog>
 				</main>
 			);
 		} else if (show === c.SHOW_MATCH_FINISHED)	{
 			return (
 				<main>
-					<Overdrive id="scoreboard-components" duration={0}>
-						<NotificationDialog>
-								Match Finished
-							</NotificationDialog>
-					</Overdrive>
+					<NotificationDialog>
+							Match Finished
+					</NotificationDialog>
 				</main>
 			);
 		} else if (show === c.SHOW_COMMENTS_DIALOG)	{
 			return (
 				<main>
-					<Overdrive id="scoreboard-components" duration={0}>
-						<AddCommentsDialog />
-					</Overdrive>
+					<AddCommentsDialog />
 				</main>
 			);
 		} else if (show === c.SHOW_EMAIL_DIALOG)	{
 			return (
 				<main>
-					<Overdrive id="scoreboard-components" duration={0}>
-						<AddEmailDialog />
-					</Overdrive>
+					<AddEmailDialog />
 				</main>
 			);
 		}
@@ -223,9 +199,7 @@ class Main extends React.Component {
 		return (
 			<section>
 				<main>
-					<Overdrive id="scoreboard-components" duration={0}>
-						<Scoreboard/>
-					</Overdrive>
+					<Scoreboard/>
 				</main>
 			</section>
 		);

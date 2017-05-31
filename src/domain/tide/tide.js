@@ -32,13 +32,13 @@ const personToServe = state => {
 	const serviceOrderAwayTeam = currentSet[c.SERVICE_ORDER_AWAYTEAM];
 	const actions = getHistory(state);
 
-	console.log('person to servce actions:', actions);
+	//console.log('person to servce actions:', actions);
 
 	const personToServeI = actions
       	.filter(action => {
 			if (action && action[c.ACTION] && action[c.ACTION] && action[c.ACTION].length > 2) {
 					const actionHistoryAction = action[c.ACTION][2];
-					console.log('actionHistoryState', actionHistoryAction);
+					//console.log('actionHistoryState', actionHistoryAction);
 					return actionHistoryAction === c.HOMETEAM_POINT || actionHistoryAction === c.AWAYTEAM_POINT;
 			}
 			return false;

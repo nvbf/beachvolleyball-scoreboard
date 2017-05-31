@@ -193,7 +193,7 @@ function hasHometeamWonSet(aSet, limit) {
 	const point2 = aSet.get(AWAYTEAM_POINT);
 	const hometeamHas21orMorePoints = point1 >= limit;
 	const hometeamHas2orMorePointThenAwayteam = point1 > (point2 + 1);
-	console.log('p1, p2, limit, ,', point1, point2, limit, hometeamHas21orMorePoints, hometeamHas2orMorePointThenAwayteam)
+	//console.log('p1, p2, limit, ,', point1, point2, limit, hometeamHas21orMorePoints, hometeamHas2orMorePointThenAwayteam)
 	return hometeamHas21orMorePoints && hometeamHas2orMorePointThenAwayteam;
 }
 

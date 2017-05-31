@@ -13,7 +13,7 @@ import {
 
 export class ServiceOrderButton extends Component {
 
-	showServiceOrderPicker =() => {
+	showServiceOrderPicker = () => {
 		this.props.tide.actions.all.mutate([c.MATCH, c.SHOW_COMPONENT], c.SHOW_SERVICE_ORDER_DIALOG_TEAM)
 	}
 
@@ -26,13 +26,12 @@ export class ServiceOrderButton extends Component {
 		} = this.props;
 
 		const player = playerToServe.name
+		//console.log('playerToServe', playerToServe)
 		const color = playerToServe.team === c.HOMETEAM ? hometeamColor : awayteamColor
 
 		if (isServiceOrderSet) {
 			return (
-				<div>
-					Player to serve: <Label color={color}/> {player}
-				</div>
+					<h4>Player to serve: <Label color={color}/> {player}</h4>
 			);
 		}
 
@@ -46,8 +45,8 @@ export class ServiceOrderButton extends Component {
 
 // ServiceOrderButton
 export default  wrap(ServiceOrderButton, {
-	awayteamColor: [c.MATCH, c.HOMETEAM_COLOR],
-	hometeamColor: [c.MATCH, c.AWAYTEAM_COLOR],
+	awayteamColor: [c.MATCH, c.AWAYTEAM_COLOR],
+	hometeamColor: [c.MATCH, c.HOMETEAM_COLOR],
 	playerToServe: [c.MATCH, c.PLAYER_TO_SERVE],
 	isServiceOrderSet: [c.MATCH, c.SERVICE_ORDER_IS_SET],
 });

@@ -8,7 +8,7 @@ class DetailsAndClock extends React.Component {
 	}
 
 	componentDidMount() {
-		this.interval = setInterval(this.updateClock, 1000)
+		// this.interval = setInterval(this.updateClock, 1000)
 	}
 
 	updateClock = () => {

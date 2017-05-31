@@ -57,6 +57,7 @@ class AddAwayTeam extends Component {
 						<PlayerInput/>
 						<ColorPicker color={this.state.color} onColorSelect={this.handleColorPicker.bind(this)}/>
 						<AddTeamButton handleClick={this.handleSubmit.bind(this)}/>
+						<Button onClick={this.handleUndo} bsStyle="warning">Undo</Button>
 					</div>
 				</div>
 				<InfoArea number="ℹ">

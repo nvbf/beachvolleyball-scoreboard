@@ -52,6 +52,8 @@ class Scoreboard extends Component {
 
 	
 	render() {
+		console.log('rendering scoreboard', this.props);
+		this.props
 		const newMatchUrl = "/match?id=" + (new Date().toDateString() + Math.floor((Math.random() * 10000)));
 		
 		return (
