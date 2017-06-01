@@ -32,7 +32,7 @@ export class AddCommentDialog extends Component	 {
 		return (
             <ServiceOrderDialog heading="Add Comments">
                 <FormGroup controlId="add-comments-textarea">
-                    <FormControl componentClass="textarea" placeholder="cards, how won the toos, and other remarks can be added here" />
+                    <FormControl componentClass="textarea" placeholder="Who won the toss, yellow/red cards, and other remarks can be added here." />
                     <StyledButton bsStyle="primary" onClick={this.addComment}>
                         Add Comment
                     </StyledButton>

@@ -154,7 +154,7 @@ class Main extends React.Component {
 			return (
 				<main>
 					<NotificationDialog>
-							Techinal Timeout - <SecondCounter />
+							Technical Timeout - <SecondCounter />
 					</NotificationDialog>
 				</main>
 			);
