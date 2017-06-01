@@ -13,13 +13,15 @@ import {
 	HOMETEAM_COLOR,
 	SHOW_COMPONENT,
 	ADD_AWAYTEAM_COMPONENT,
-	MATCH
+	MATCH,
+	constants as c
 } from '../../domain/tide/state';
 
 class AddHomeTeam extends Component {
 	constructor(props) {
 		super(props);
-		this.state = {color: '#0000ff'};
+		const color = this.props.color || '#ff0000';
+		this.state = {color};
 	}
 
 	handleColorPicker(colorObj) {
@@ -36,17 +38,25 @@ class AddHomeTeam extends Component {
 			return;
 		}
 
-		this.props.tide.actions.all.mutateAndTrack([MATCH, HOMETEAM_FIRST_PLAYER_NAME], player1);
-		this.props.tide.actions.all.mutateAndTrack([MATCH, HOMETEAM_SECOND_PLAYER_NAME], player2);
-		this.props.tide.actions.all.mutateAndTrack([MATCH, HOMETEAM_COLOR], this.state.color);
-		this.props.tide.actions.all.mutate([MATCH, SHOW_COMPONENT], ADD_AWAYTEAM_COMPONENT);
+		this.props.tide.actions.all.mutateAndTrack([c.MATCH, c.HOMETEAM_FIRST_PLAYER_NAME], player1);
+		this.props.tide.actions.all.mutateAndTrack([c.MATCH, c.HOMETEAM_SECOND_PLAYER_NAME], player2);
+		this.props.tide.actions.all.mutateAndTrack([c.MATCH, c.HOMETEAM_COLOR], this.state.color);
+		this.props.tide.actions.all.mutate([c.MATCH, c.SHOW_COMPONENT], c.ADD_AWAYTEAM_COMPONENT);
 	}
 
 	componentDidMount() {
+		const color = this.props.color || '#ff0000';
+		this.setState({color});
+		document.getElementById('player1').value = this.props.name1;
+		document.getElementById('player2').value = this.props.name2;
 		document.getElementById('player1').focus();
 	}
 
 	render() {
+		const {
+			name1,
+			name2
+		} = this.props
 		return (
 			<div>
 				<div className="panel panel-default">
@@ -54,7 +64,7 @@ class AddHomeTeam extends Component {
 						<h2>Home team</h2>
 					</div>
 					<div className="panel-body">
-						<PlayerInput/>
+						<PlayerInput name1 name2/>
 						<ColorPicker color={this.state.color} onColorSelect={this.handleColorPicker.bind(this)}/>
 						<AddTeamButton handleClick={this.handleSubmit.bind(this)}/>
 					</div>
@@ -72,7 +82,7 @@ class AddHomeTeam extends Component {
 }
 
 export default wrap(AddHomeTeam, {
-	[HOMETEAM_FIRST_PLAYER_NAME]: [MATCH, HOMETEAM_FIRST_PLAYER_NAME],
-	[HOMETEAM_SECOND_PLAYER_NAME]: [MATCH, HOMETEAM_SECOND_PLAYER_NAME],
-	 	[HOMETEAM_COLOR]: [MATCH, HOMETEAM_COLOR]
+	name1: [MATCH, HOMETEAM_FIRST_PLAYER_NAME],
+	name2: [MATCH, HOMETEAM_SECOND_PLAYER_NAME],
+	color: [MATCH, HOMETEAM_COLOR]
 });

@@ -93,13 +93,14 @@ class AllAction extends Actions {
   hometeamTakeTimeout = (proxy, event, state = this.getMatch()) => {
     const index  = getCurrentSetIndex(state)
     this.mutateAndTrack([MATCH, index, HOMETEAM_TIMEOUT_TAKEN], true)
+    this.showComponent(c.SHOW_TO)
   }
 
   awayteamTakeTimeout = (proxy, event, state = this.getMatch()) => {
     const index  = getCurrentSetIndex(state)
     this.mutateAndTrack([MATCH, index, AWAYTEAM_TIMEOUT_TAKEN], true)
+    this.showComponent(c.SHOW_TO)
   }
-  
 
   addPointHometeam = (proxy, event, state = this.getState())  => {
     const matchState = state[c.MATCH]
@@ -139,7 +140,11 @@ class AllAction extends Actions {
   }
 
   notificationOk = (proxy, event, state = this.getState()) => {
-    this.mutate([c.MATCH, c.SHOW_COMPONENT], c.SCOREBOARD_COMPONENT)
+    this.showScoreboard()
+  }
+
+  showAddHomeTeam = () => {
+    this.showComponent(c.ADD_HOMETEAM_COMPONENT);
   }
 
   setNotificationsState(state, newScore, totalPoints) {

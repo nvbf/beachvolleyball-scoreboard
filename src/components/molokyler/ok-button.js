@@ -14,7 +14,7 @@ const OkButton = () => {
 	return (
 		<div>
 
-			<BasicButton className="center-block" bsStyle="primary">Ok</BasicButton>
+			<BasicButton className="center-block" className='pull-right' bsStyle="primary">Ok</BasicButton>
 		</div>
 	);
 };

@@ -10,7 +10,7 @@ import ServiceOrderDialogPlayer from './../src/components/molokyler/service-orde
 import NotificationDialog from './../src/components/templates/notifications';
 import AddCommentsDialog from './../src/components/molokyler/add-comments-dialog';
 import AddEmailDialog from './../src/components/molokyler/add-email-dialog';
-
+import SecondCounter from './../src/components/molokyler/second-counter';
 
 import {
 	HOMETEAM_FIRST_PLAYER_NAME,
@@ -154,10 +154,18 @@ class Main extends React.Component {
 			return (
 				<main>
 					<NotificationDialog>
-							Techinal Timeout
+							Techinal Timeout - <SecondCounter />
 					</NotificationDialog>
 				</main>
 			);
+		} else if (show === c.SHOW_TO)	{
+			return (
+				<main>
+					<NotificationDialog>
+							Timeout - <SecondCounter />
+					</NotificationDialog>
+				</main>
+			);			
 		} else if (show === c.SHOW_SWITCH)	{
 			return (
 				<main>
