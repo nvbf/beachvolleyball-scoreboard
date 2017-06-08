@@ -20,6 +20,10 @@ class AddEmailDialog extends Component {
     this.props.tide.actions.all.addEmail(email);
   };
 
+  componentDidMount() {
+    const email = (document.getElementById("email").value = this.props.mail);
+  }
+
   render() {
     return (
       <ServiceOrderDialog heading="Add email address">
