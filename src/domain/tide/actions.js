@@ -1,7 +1,7 @@
 import { Map, List } from "immutable";
 import debug from "debug";
 import { Actions } from "tide";
-import sendMail from "../../util/sendMail";
+import sendMailClient from "../../util/sendMailClient";
 
 import {
   Match,
@@ -78,12 +78,12 @@ class AllAction extends Actions {
     const state = this.getMatch();
     const index = getCurrentSetIndex(state);
     const action = new ActionHistory({
-      [DATE]: new Date(),
-      [ACTION]: key,
+      [c.DATE]: new Date(),
+      [c.ACTION]: key,
       [VALUE]: value,
-      [HOMETEAM_POINT]: this.get([MATCH, index, HOMETEAM_POINT]),
-      [AWAYTEAM_POINT]: this.get([MATCH, index, AWAYTEAM_POINT]),
-      [CURRENT_SET]: index
+      [c.HOMETEAM_POINT]: this.get([MATCH, index, HOMETEAM_POINT]),
+      [c.AWAYTEAM_POINT]: this.get([MATCH, index, AWAYTEAM_POINT]),
+      [c.CURRENT_SET]: index
     });
     this.mutate(ACTION_HISTORY, history => history.push(action));
     const matchId = this.get([MATCH, MATCH_ID]);
@@ -146,7 +146,7 @@ class AllAction extends Actions {
     this.showComponent(c.ADD_HOMETEAM_COMPONENT);
   };
 
-  setNotificationsState(state, newScore, totalPoints) {
+  async setNotificationsState(state, newScore, totalPoints) {
     console.log("setNotificationsState", state);
     const match = state[c.MATCH];
     const isLastSet = getCurrentSetIndex(match) === c.THIRD_SET;
@@ -168,7 +168,8 @@ class AllAction extends Actions {
       ? match[c.LAST_SET_LENGTH]
       : match[c.DEFAULT_SET_LENGTH];
     if (isMatchFinished(newMatchState)) {
-      sendMail(state);
+      sendMailClient(state);
+
       this.mutate([c.MATCH, c.SHOW_COMPONENT], c.SHOW_MATCH_FINISHED);
       //TODO: should this be here?
       this.mutate([c.MATCH, c.MATCH_IS_FINISED], true);

@@ -1,49 +1,20 @@
-import {
-  getWinnerAsString,
-  getTeamVsString,
-  getMatch,
-  getId,
-  getSetResult,
-  getResult
-} from "../domain/tide/logic";
-
-var debug = require("debug");
-const helper = require("sendgrid").mail;
+const debug = require("debug");
 const log = debug("sendMail");
-const fromMail = new helper.Email("sinsvend@gmail.com");
 
-export default function(state) {
-  const matchState = getMatch(state);
-  const winner = getWinnerAsString(matchState);
-  const vsString = getTeamVsString(matchState);
-  const id = getId(matchState);
-  const setResult = getSetResult(matchState);
-  var result = {
-    id,
-    vsString,
-    setResult,
-    resultDetails: getResult(matchState),
-    winner,
-    details: `
-      asdfwe
-      epfnw
-      efpowmf`
-  };
-  sendMail(toMail);
-}
+function send(toMail, result) {
+  const sg = require("sendgrid")(process.env.SENDGRID_API_KEY);
+  const helper = require("sendgrid").mail;
+  const fromMail = new helper.Email("sinsvend@gmail.com");
 
-function sendMail(toMail, result) {
   if (typeof process.env.SENDGRID_API_KEY === "undefined") {
     log("SENDGRID_API_KEY was not set, not sending any mails");
     return;
   }
 
   const toEmail = new helper.Email(toMail);
-  const subject = `Results from match ${result.id} (${vsString})`;
+  const subject = `Results from match ${result.id} (${result.vsString})`;
   const content = new helper.Content("text/plain", bodyTemplate(result));
   const mail = new helper.Mail(fromMail, subject, toEmail, content);
-
-  const sg = require("sendgrid")(process.env.SENDGRID_API_KEY);
 
   const request = sg.emptyRequest({
     method: "POST",
@@ -52,6 +23,9 @@ function sendMail(toMail, result) {
   });
 
   sg.API(request, function(error, response) {
+    if (error) {
+      log("Error response received");
+    }
     log(response.statusCode);
     log(response.body);
     log(response.headers);
@@ -60,20 +34,21 @@ function sendMail(toMail, result) {
 
 function bodyTemplate({
   id,
-  hometeam,
-  awayteam,
+  vsString,
   winner,
   setResult,
   resultDetails,
   details
 }) {
   return `
-        id: ${id}
-        match: ${hometeam} - ${awayteam}
-        winner: ${winner}
-        sett Result: ${setResult}
-        result details: ${resultDetails}
+        Id: ${id}
+        Match: ${vsString}
+        Winner: ${winner}
+        Set Result: ${setResult}
+        Result details: ${resultDetails}
 
         details: ${details}
     `;
 }
+
+module.exports = send;

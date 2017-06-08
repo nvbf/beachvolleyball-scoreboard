@@ -1,3 +1,7 @@
+import List from "immutable";
+import moment from "moment";
+import printf from "printf";
+
 import {
   FIRST_SET,
   SECOND_SET,
@@ -23,8 +27,8 @@ export function getId(state) {
 
 // 2 - 1
 export function getSetResult(matchState) {
-  const homeTeamSets = 0;
-  const awayTeamSets = 0;
+  let homeTeamSets = 0;
+  let awayTeamSets = 0;
   if (hasHometeamWonFirstSet(matchState)) {
     homeTeamSets++;
   }
@@ -58,8 +62,54 @@ export function getResult(matchState) {
   return `${h1p} - ${b1p}, ${h2p} - ${b2p}, ${h3p} - ${h3p}`;
 }
 
-export function getDetailsAsString(state) {
-  return ``;
+const constantToText = {
+  [c.AWAYTEAM_COLOR]: "Away team has color %s",
+  [c.HOMETEAM_COLOR]: "Home team has color %s",
+  [c.AWAYTEAM_FIRST_PLAYER_NAME]:
+    "Name set to %s for Player 1 on the away team",
+  [c.AWAYTEAM_SECOND_PLAYER_NAME]:
+    "Name set to %s for Player 2 on the away team",
+  [c.HOMETEAM_FIRST_PLAYER_NAME]:
+    "Name set to %s for Player 2 on the home team",
+  [c.HOMETEAM_SECOND_PLAYER_NAME]:
+    "Name set to %s for Player 2 on the home team",
+  [c.AWAYTEAM_POINT]: "Away team got a point, they have now %s points",
+  [c.HOMETEAM_POINT]: "Home team got a point, they have now %s points",
+  [c.AWAYTEAM_TIMEOUT_TAKEN]: "Away team is taking a timout",
+  [c.HOMETEAM_TIMEOUT_TAKEN]: "Home team is taking a timout",
+  [c.COMMENTS]: "Comment: %s"
+};
+
+export function getDetailsAsAnArrayOfString(details = []) {
+  console.log("getDetailsAsAnArrayOfString", details);
+  const detailsString = details.map((actionHistory, index) => {
+    const actions = actionHistory.get(c.ACTION);
+    const lastKey = getKey(actions);
+    const isUndo = actions[0] === c.UNDO;
+    const tekstString = constantToText[lastKey];
+    const value = actionHistory.get(c.VALUE);
+    const date = actionHistory.get(c.DATE);
+    const relativeTime = moment(date).format("HH:mm:ss");
+    const undoInfo = isUndo ? "UNDO:" : "";
+    const homeScore = actionHistory.get(c.HOMETEAM_POINT);
+    const awayScore = actionHistory.get(c.AWAYTEAM_POINT);
+    if (tekstString === undefined) {
+      //console.log('Skipping', lastKey)
+      return "";
+    }
+    return printf(
+      `${undoInfo} ${relativeTime}, ${homeScore}-${awayScore}, ${tekstString}`,
+      value
+    );
+  });
+  return detailsString;
+}
+
+function getKey(actions) {
+  if (List.is(actions)) {
+    return actions.list();
+  }
+  return Array.isArray(actions) ? actions[actions.length - 1] : actions;
 }
 
 export function getFirstSet(match) {

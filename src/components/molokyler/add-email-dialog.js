@@ -37,5 +37,5 @@ class AddEmailDialog extends Component {
 }
 
 export default wrap(AddEmailDialog, {
-  mail: [MATCH, c.EMAIL]
+  mail: [c.MATCH, c.EMAIL]
 });
