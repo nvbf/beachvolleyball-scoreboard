@@ -1,22 +1,5 @@
-import {List, fromJS} from 'immutable';
-
-// import firebase from "firebase/app";
-// require("firebase/database");
-// require("firebase/auth");
-
-
-// Initialize Firebase
-// var config = {
-// 	apiKey: "AIzaSyAroBDj0Vw_4JdwKAWmB5Nq7ydjKq86mFM",
-// 	authDomain: "beachvolleyball-scoreboard.firebaseapp.com",
-// 	databaseURL: "https://beachvolleyball-scoreboard.firebaseio.com",
-// 	projectId: "beachvolleyball-scoreboard",
-// 	storageBucket: "beachvolleyball-scoreboard.appspot.com",
-// };
-// firebase.initializeApp(config);
-
-// const database = firebase.database();
-
+import { List, fromJS } from "immutable";
+import { save } from "../../firebase";
 
 import {
   ACTION_HISTORY,
@@ -31,76 +14,84 @@ import {
   SECOND_SET,
   ActionHistory,
   THIRD_SET,
-  ACTION
-} from './state';
+  ACTION,
+  constants as c
+} from "./state";
 
-export function update(matchId = 'Match-0', state) {
-	console.log('update', state);
-	const lastActionState = state.get(HISTORY).last();
-	const lastMatchState = lastActionState.get(MATCHSTATE);
+export function update(matchId = "Match-0", state) {
+  console.log("update", state);
+  const lastActionState = state.get(HISTORY).last();
+  const lastMatchState = lastActionState.get(MATCHSTATE);
+  console.log("matchId", matchId);
+
+  const tournamentId = state[c.MATCH][c.TOURNAMENT_PRIVATE_ID] || 0;
 
   // Simplified to not store to much!
-	const stateToStore = state
+  const stateToStore = state
     .setIn([MATCH], lastMatchState)
     .setIn([HISTORY], new List());
+  try {
+    save(tournamentId, matchId, JSON.stringify(stateToStore));
+  } catch (err) {
+    console.error("Error on storing match object, firebase", matchId);
+    console.error(err);
+  }
 
-	try {
-		localStorage.setItem(matchId, JSON.stringify(stateToStore));
-		// database
-
-	} catch (err) {
-		console.error('Error on storing match object', matchID, key, value);
-		console.error(err);
-	}
+  try {
+    localStorage.setItem(matchId, JSON.stringify(stateToStore));
+    // database
+  } catch (err) {
+    console.error("Error on storing match object, localStorage");
+    console.error(err);
+  }
 }
 
-export function get(matchId = 'Match-0') {
-	const stateString = localStorage.getItem(matchId);
-	const state = JSON.parse(stateString);
-	console.log('localstorage', state);
-	if (state === null) {
-		return false;
-	}
-	const immutablMatch = fromJS(state[MATCH], reciver);
+export function get(matchId = "Match-0") {
+  const stateString = localStorage.getItem(matchId);
+  const state = JSON.parse(stateString);
+  console.log("localstorage", state);
+  if (state === null) {
+    return false;
+  }
+  const immutablMatch = fromJS(state[MATCH], reciver);
 
-	const actionHistory = state[ACTION_HISTORY].reduce((agg, curr) => {
-		return agg.push(new ActionHistory(curr));
-	}, new List());
+  const actionHistory = state[ACTION_HISTORY].reduce((agg, curr) => {
+    return agg.push(new ActionHistory(curr));
+  }, new List());
 
-	const immutableState = new State({
-		[MATCH]: immutablMatch,
-		[HISTORY]: new List(),
-		[ACTION_HISTORY]: actionHistory
-	});
-	return immutableState;
+  const immutableState = new State({
+    [MATCH]: immutablMatch,
+    [HISTORY]: new List(),
+    [ACTION_HISTORY]: actionHistory
+  });
+  return immutableState;
 }
 
 /** Maps object to records  */
 function reciver(key, value) {
   // Console.log('key', key)
-	const matchKey = new RegExp('^' + key + '$');
-	if (''.match(matchKey)) {
-		console.log('matched on empty string, default to STATE');
-		return new Match(value);
-	}
-	if (FIRST_SET.match(matchKey)) {
-		return new BeachVolleyballSet(value);
-	}
-	if (SECOND_SET.match(matchKey)) {
-		return new BeachVolleyballSet(value);
-	}
-	if (THIRD_SET.match(matchKey)) {
-		return new BeachVolleyballSet(value);
-	}
+  const matchKey = new RegExp("^" + key + "$");
+  if ("".match(matchKey)) {
+    console.log("matched on empty string, default to STATE");
+    return new Match(value);
+  }
+  if (FIRST_SET.match(matchKey)) {
+    return new BeachVolleyballSet(value);
+  }
+  if (SECOND_SET.match(matchKey)) {
+    return new BeachVolleyballSet(value);
+  }
+  if (THIRD_SET.match(matchKey)) {
+    return new BeachVolleyballSet(value);
+  }
 
-	if (ACTION_HISTORY.match(matchKey)) {
-		return new List(value);
-	}
+  if (ACTION_HISTORY.match(matchKey)) {
+    return new List(value);
+  }
 
-	if (HISTORY.match(matchKey)) {
-		return new List(value);
-	}
+  if (HISTORY.match(matchKey)) {
+    return new List(value);
+  }
 
-	return value;
+  return value;
 }
-

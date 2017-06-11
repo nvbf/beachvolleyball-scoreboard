@@ -1,228 +1,269 @@
-import React from 'react';
-import url from 'url';
-import {wrap} from 'tide';
+import React from "react";
+import url from "url";
+import { wrap } from "tide";
 
-import AddHomeTeam from './../src/components/components/add-home-team';
-import AddAwayTeam from './../src/components/components/add-away-team';
-import Scoreboard from './../src/components/components/scoreboard';
-import ServiceOrderDialogTeam from './../src/components/molokyler/service-order-team-dialog';
-import ServiceOrderDialogPlayer from './../src/components/molokyler/service-order-player-dialog';
-import NotificationDialog from './../src/components/templates/notifications';
-import AddCommentsDialog from './../src/components/molokyler/add-comments-dialog';
-import AddEmailDialog from './../src/components/molokyler/add-email-dialog';
-import SecondCounter from './../src/components/molokyler/second-counter';
-
-import {
-	HOMETEAM_FIRST_PLAYER_NAME,
-	HOMETEAM_SECOND_PLAYER_NAME,
-	HOMETEAM_COLOR,
-
-	AWAYTEAM_FIRST_PLAYER_NAME,
-	AWAYTEAM_SECOND_PLAYER_NAME,
-	AWAYTEAM_COLOR,
-
-	MATCH,
-	SHOW_COMPONENT,
-	ADD_AWAYTEAM_COMPONENT,
-	ADD_HOMETEAM_COMPONENT,
-	SCOREBOARD_COMPONENT,
-	LOADING_COMPONENT,
-	SHOW_SERVICE_ORDER_DIALOG_TEAM,
-	SHOW_SERVICE_ORDER_DIALOG_PLAYER_AWAYTEAM,
-	SHOW_SERVICE_ORDER_DIALOG_PLAYER_HOMETEAM,
-	constants as c
-} from '../src/domain/tide/state';
+import AddHomeTeam from "./../src/components/components/add-home-team";
+import AddAwayTeam from "./../src/components/components/add-away-team";
+import Scoreboard from "./../src/components/components/scoreboard";
+import ServiceOrderDialogTeam from "./../src/components/molokyler/service-order-team-dialog";
+import ServiceOrderDialogPlayer from "./../src/components/molokyler/service-order-player-dialog";
+import NotificationDialog from "./../src/components/templates/notifications";
+import AddCommentsDialog from "./../src/components/molokyler/add-comments-dialog";
+import AddEmailDialog from "./../src/components/molokyler/add-email-dialog";
+import SecondCounter from "./../src/components/molokyler/second-counter";
+import AddTournamentIdDialog from "./../src/components/molokyler/add-tournamentid-dialog";
 
 import {
-  get as getStateFromLocalStorage
-} from './../src/domain/tide/storage';
+  HOMETEAM_FIRST_PLAYER_NAME,
+  HOMETEAM_SECOND_PLAYER_NAME,
+  HOMETEAM_COLOR,
+  AWAYTEAM_FIRST_PLAYER_NAME,
+  AWAYTEAM_SECOND_PLAYER_NAME,
+  AWAYTEAM_COLOR,
+  MATCH,
+  SHOW_COMPONENT,
+  ADD_AWAYTEAM_COMPONENT,
+  ADD_HOMETEAM_COMPONENT,
+  SCOREBOARD_COMPONENT,
+  LOADING_COMPONENT,
+  SHOW_SERVICE_ORDER_DIALOG_TEAM,
+  SHOW_SERVICE_ORDER_DIALOG_PLAYER_AWAYTEAM,
+  SHOW_SERVICE_ORDER_DIALOG_PLAYER_HOMETEAM,
+  constants as c
+} from "../src/domain/tide/state";
 
-import {
-	ButtonToolbar,
-	Button
-} from 'react-bootstrap';
+import { get as getStateFromLocalStorage } from "./../src/domain/tide/storage";
+
+import { ButtonToolbar, Button } from "react-bootstrap";
 
 class Main extends React.Component {
-	componentDidMount() {
-		const qs = url.parse(document.location.search, true).query;
-		if (qs.name1 && qs.name2 && qs.name3 && qs.name4) {
-			this.setStateFromQs(qs);
-			history.pushState({}, '', '/match');
-			return;
-		}
+  componentDidMount() {
+    const qs = url.parse(document.location.search, true).query;
+    if (qs.name1 && qs.name2 && qs.name3 && qs.name4) {
+      this.setStateFromQs(qs);
+      history.pushState({}, "", "/match");
+      return;
+    }
 
-		const state = getStateFromLocalStorage(qs.id);
-		if (state !== false) {
-			console.log('loading from state');
-			this.props.tide.actions.all.load(state);
-			return;
-		}
+    const state = getStateFromLocalStorage(qs.id);
+    if (state !== false) {
+      console.log("loading from state");
+      this.props.tide.actions.all.load(state);
+      return;
+    }
 
-		this.props.tide.actions.all.mutateAndTrack([MATCH, SHOW_COMPONENT], ADD_HOMETEAM_COMPONENT);
-	}
+    this.props.tide.actions.all.mutateAndTrack(
+      [MATCH, SHOW_COMPONENT],
+      ADD_HOMETEAM_COMPONENT
+    );
+  }
 
-	setStateFromQs(qs) {
-		this.props.tide.actions.all.mutateAndTrack([MATCH, HOMETEAM_FIRST_PLAYER_NAME], qs.name1);
-		this.props.tide.actions.all.mutateAndTrack([MATCH, HOMETEAM_SECOND_PLAYER_NAME], qs.name2);
-		this.props.tide.actions.all.mutateAndTrack([MATCH, HOMETEAM_COLOR], qs.color1 ? `#${qs.color1}` : '#ff0000');
+  setStateFromQs(qs) {
+    this.props.tide.actions.all.mutateAndTrack(
+      [MATCH, HOMETEAM_FIRST_PLAYER_NAME],
+      qs.name1
+    );
+    this.props.tide.actions.all.mutateAndTrack(
+      [MATCH, HOMETEAM_SECOND_PLAYER_NAME],
+      qs.name2
+    );
+    this.props.tide.actions.all.mutateAndTrack(
+      [MATCH, HOMETEAM_COLOR],
+      qs.color1 ? `#${qs.color1}` : "#ff0000"
+    );
 
-		this.props.tide.actions.all.mutateAndTrack([MATCH, AWAYTEAM_FIRST_PLAYER_NAME], qs.name3);
-		this.props.tide.actions.all.mutateAndTrack([MATCH, AWAYTEAM_SECOND_PLAYER_NAME], qs.name4);
-		this.props.tide.actions.all.mutateAndTrack([MATCH, AWAYTEAM_COLOR], qs.color2 ? `#${qs.color2}` : '#0000ff');
-		this.props.tide.actions.all.mutateAndTrack([MATCH, SHOW_COMPONENT], SCOREBOARD_COMPONENT);
+    this.props.tide.actions.all.mutateAndTrack(
+      [MATCH, AWAYTEAM_FIRST_PLAYER_NAME],
+      qs.name3
+    );
+    this.props.tide.actions.all.mutateAndTrack(
+      [MATCH, AWAYTEAM_SECOND_PLAYER_NAME],
+      qs.name4
+    );
+    this.props.tide.actions.all.mutateAndTrack(
+      [MATCH, AWAYTEAM_COLOR],
+      qs.color2 ? `#${qs.color2}` : "#0000ff"
+    );
+    this.props.tide.actions.all.mutateAndTrack(
+      [MATCH, SHOW_COMPONENT],
+      SCOREBOARD_COMPONENT
+    );
 
-		this.props.tide.actions.all.mutateAndTrack([MATCH, c.FIRST_SET, c.HOMETEAM_POINT], Number(qs.h1) || 0);
-		this.props.tide.actions.all.mutateAndTrack([MATCH, c.FIRST_SET, c.AWAYTEAM_POINT], Number(qs.b1) || 0);
-		this.props.tide.actions.all.mutateAndTrack([MATCH, c.SECOND_SET, c.HOMETEAM_POINT], Number(qs.h2) || 0);
-		this.props.tide.actions.all.mutateAndTrack([MATCH, c.SECOND_SET, c.AWAYTEAM_POINT], Number(qs.b2) || 0);
-		this.props.tide.actions.all.mutateAndTrack([MATCH, c.THIRD_SET, c.HOMETEAM_POINT], Number(qs.h3) || 0);
-		this.props.tide.actions.all.mutateAndTrack([MATCH, c.THIRD_SET, c.AWAYTEAM_POINT], Number(qs.b3) || 0);
-	}
+    this.props.tide.actions.all.mutateAndTrack(
+      [MATCH, c.FIRST_SET, c.HOMETEAM_POINT],
+      Number(qs.h1) || 0
+    );
+    this.props.tide.actions.all.mutateAndTrack(
+      [MATCH, c.FIRST_SET, c.AWAYTEAM_POINT],
+      Number(qs.b1) || 0
+    );
+    this.props.tide.actions.all.mutateAndTrack(
+      [MATCH, c.SECOND_SET, c.HOMETEAM_POINT],
+      Number(qs.h2) || 0
+    );
+    this.props.tide.actions.all.mutateAndTrack(
+      [MATCH, c.SECOND_SET, c.AWAYTEAM_POINT],
+      Number(qs.b2) || 0
+    );
+    this.props.tide.actions.all.mutateAndTrack(
+      [MATCH, c.THIRD_SET, c.HOMETEAM_POINT],
+      Number(qs.h3) || 0
+    );
+    this.props.tide.actions.all.mutateAndTrack(
+      [MATCH, c.THIRD_SET, c.AWAYTEAM_POINT],
+      Number(qs.b3) || 0
+    );
+  }
 
-	render() {
-		console.log('render main')
-		const {
-			HOMETEAM_FIRST_PLAYER_NAME,
-			HOMETEAM_SECOND_PLAYER_NAME,
-			HOMETEAM_COLOR,
-			AWAYTEAM_FIRST_PLAYER_NAME,
-			AWAYTEAM_SECOND_PLAYER_NAME,
-			AWAYTEAM_COLOR
-		} = this.props;
+  render() {
+    console.log("render main");
+    const {
+      HOMETEAM_FIRST_PLAYER_NAME,
+      HOMETEAM_SECOND_PLAYER_NAME,
+      HOMETEAM_COLOR,
+      AWAYTEAM_FIRST_PLAYER_NAME,
+      AWAYTEAM_SECOND_PLAYER_NAME,
+      AWAYTEAM_COLOR
+    } = this.props;
 
-		const show = this.props[SHOW_COMPONENT];
-		console.log('show:', show);
+    const show = this.props[SHOW_COMPONENT];
+    console.log("show:", show);
 
-		if (show === ADD_HOMETEAM_COMPONENT) {
-			return (
-				<main>
-					<AddHomeTeam/>
-				</main>
-			);
-		} else if (show === ADD_AWAYTEAM_COMPONENT) {
-			return (
-				<main>
-					<AddAwayTeam/>
-				</main>
-			);
-		} else if (show === LOADING_COMPONENT) {
-			return (
-				<main>
-					<div>
-						Loading...
-					</div>
-				</main>
+    if (show === ADD_HOMETEAM_COMPONENT) {
+      return (
+        <main>
+          <AddHomeTeam />
+        </main>
+      );
+    } else if (show === ADD_AWAYTEAM_COMPONENT) {
+      return (
+        <main>
+          <AddAwayTeam />
+        </main>
+      );
+    } else if (show === LOADING_COMPONENT) {
+      return (
+        <main>
+          <div>
+            Loading...
+          </div>
+        </main>
+      );
+    } else if (show === SHOW_SERVICE_ORDER_DIALOG_TEAM) {
+      return (
+        <main>
+          <div>
+            <ServiceOrderDialogTeam />
+          </div>
+        </main>
+      );
+    } else if (show === SHOW_SERVICE_ORDER_DIALOG_PLAYER_AWAYTEAM) {
+      return (
+        <main>
+          <div>
+            <ServiceOrderDialogPlayer
+              player1={AWAYTEAM_FIRST_PLAYER_NAME}
+              player2={AWAYTEAM_SECOND_PLAYER_NAME}
+              color={AWAYTEAM_COLOR}
+              action="playerOnAwayTeamToServe"
+              team="away team"
+            />
+          </div>
+        </main>
+      );
+    } else if (show === SHOW_SERVICE_ORDER_DIALOG_PLAYER_HOMETEAM) {
+      return (
+        <main>
+          <div>
+            <ServiceOrderDialogPlayer
+              player1={HOMETEAM_FIRST_PLAYER_NAME}
+              player2={HOMETEAM_SECOND_PLAYER_NAME}
+              color={HOMETEAM_COLOR}
+              action="playerOnHomeTeamToServe"
+              team="home team"
+            />
+          </div>
+        </main>
+      );
+    } else if (show === c.SHOW_TTO) {
+      return (
+        <main>
+          <NotificationDialog>
+            Technical Timeout - <SecondCounter />
+          </NotificationDialog>
+        </main>
+      );
+    } else if (show === c.SHOW_TO) {
+      return (
+        <main>
+          <NotificationDialog>
+            Timeout - <SecondCounter />
+          </NotificationDialog>
+        </main>
+      );
+    } else if (show === c.SHOW_SWITCH) {
+      return (
+        <main>
+          <NotificationDialog>
+            Switch
+          </NotificationDialog>
+        </main>
+      );
+    } else if (show === c.SHOW_SET_FINISHED) {
+      return (
+        <main>
+          <NotificationDialog>
+            Set finished
+          </NotificationDialog>
+        </main>
+      );
+    } else if (show === c.SHOW_MATCH_FINISHED) {
+      return (
+        <main>
+          <NotificationDialog>
+            Match Finished
+          </NotificationDialog>
+        </main>
+      );
+    } else if (show === c.SHOW_COMMENTS_DIALOG) {
+      return (
+        <main>
+          <AddCommentsDialog />
+        </main>
+      );
+    } else if (show === c.SHOW_EMAIL_DIALOG) {
+      return (
+        <main>
+          <AddEmailDialog />
+        </main>
+      );
+    } else if (show === c.SHOW_TOURNAMENT_COMPONENT) {
+      return (
+        <main>
+          <AddTournamentIdDialog />
+        </main>
+      );
+    }
 
-			);
-		} else if (show === SHOW_SERVICE_ORDER_DIALOG_TEAM) {
-			return (
-				<main>
-					<div>
-						<ServiceOrderDialogTeam/>
-					</div>
-				</main>
-			);
-		} else if (show === SHOW_SERVICE_ORDER_DIALOG_PLAYER_AWAYTEAM)	{
-			return (
-				<main>
-					<div>
-						<ServiceOrderDialogPlayer
-							player1={AWAYTEAM_FIRST_PLAYER_NAME}
-							player2={AWAYTEAM_SECOND_PLAYER_NAME}
-							color={AWAYTEAM_COLOR}
-							action="playerOnAwayTeamToServe"
-							team="away team"
-							/>
-					</div>
-				</main>
-			);
-		} else if (show === SHOW_SERVICE_ORDER_DIALOG_PLAYER_HOMETEAM)	{
-			return (
-				<main>
-					<div>
-						<ServiceOrderDialogPlayer
-							player1={HOMETEAM_FIRST_PLAYER_NAME}
-							player2={HOMETEAM_SECOND_PLAYER_NAME}
-							color={HOMETEAM_COLOR}
-							action="playerOnHomeTeamToServe"
-							team="home team"
-							/>
-					</div>
-				</main>
-			);
-		} else if (show === c.SHOW_TTO)	{
-			return (
-				<main>
-					<NotificationDialog>
-							Technical Timeout - <SecondCounter />
-					</NotificationDialog>
-				</main>
-			);
-		} else if (show === c.SHOW_TO)	{
-			return (
-				<main>
-					<NotificationDialog>
-							Timeout - <SecondCounter />
-					</NotificationDialog>
-				</main>
-			);			
-		} else if (show === c.SHOW_SWITCH)	{
-			return (
-				<main>
-					<NotificationDialog>
-							Switch
-					</NotificationDialog>
-				</main>
-			);
-		} else if (show === c.SHOW_SET_FINISHED)	{
-			return (
-				<main>
-					<NotificationDialog>
-							Set finished
-					</NotificationDialog>
-				</main>
-			);
-		} else if (show === c.SHOW_MATCH_FINISHED)	{
-			return (
-				<main>
-					<NotificationDialog>
-							Match Finished
-					</NotificationDialog>
-				</main>
-			);
-		} else if (show === c.SHOW_COMMENTS_DIALOG)	{
-			return (
-				<main>
-					<AddCommentsDialog />
-				</main>
-			);
-		} else if (show === c.SHOW_EMAIL_DIALOG)	{
-			return (
-				<main>
-					<AddEmailDialog />
-				</main>
-			);
-		}
-
-		return (
-			<section>
-				<main>
-					<Scoreboard/>
-				</main>
-			</section>
-		);
-	}
+    return (
+      <section>
+        <main>
+          <Scoreboard />
+        </main>
+      </section>
+    );
+  }
 }
 
 export default wrap(Main, {
-	[HOMETEAM_FIRST_PLAYER_NAME]: [MATCH, HOMETEAM_FIRST_PLAYER_NAME],
-	[HOMETEAM_SECOND_PLAYER_NAME]: [MATCH, HOMETEAM_SECOND_PLAYER_NAME],
-	[HOMETEAM_COLOR]: [MATCH, HOMETEAM_COLOR],
-	[AWAYTEAM_FIRST_PLAYER_NAME]: [MATCH, AWAYTEAM_FIRST_PLAYER_NAME],
-	[AWAYTEAM_SECOND_PLAYER_NAME]: [MATCH, AWAYTEAM_SECOND_PLAYER_NAME],
-	[AWAYTEAM_COLOR]: [MATCH, AWAYTEAM_COLOR],
-	[SHOW_COMPONENT]: [MATCH, SHOW_COMPONENT],
-	[ADD_AWAYTEAM_COMPONENT]: [MATCH, ADD_AWAYTEAM_COMPONENT],
-	[ADD_HOMETEAM_COMPONENT]: [MATCH, ADD_HOMETEAM_COMPONENT],
-	[SCOREBOARD_COMPONENT]: [MATCH, SCOREBOARD_COMPONENT]
+  [HOMETEAM_FIRST_PLAYER_NAME]: [MATCH, HOMETEAM_FIRST_PLAYER_NAME],
+  [HOMETEAM_SECOND_PLAYER_NAME]: [MATCH, HOMETEAM_SECOND_PLAYER_NAME],
+  [HOMETEAM_COLOR]: [MATCH, HOMETEAM_COLOR],
+  [AWAYTEAM_FIRST_PLAYER_NAME]: [MATCH, AWAYTEAM_FIRST_PLAYER_NAME],
+  [AWAYTEAM_SECOND_PLAYER_NAME]: [MATCH, AWAYTEAM_SECOND_PLAYER_NAME],
+  [AWAYTEAM_COLOR]: [MATCH, AWAYTEAM_COLOR],
+  [SHOW_COMPONENT]: [MATCH, SHOW_COMPONENT],
+  [ADD_AWAYTEAM_COMPONENT]: [MATCH, ADD_AWAYTEAM_COMPONENT],
+  [ADD_HOMETEAM_COMPONENT]: [MATCH, ADD_HOMETEAM_COMPONENT],
+  [SCOREBOARD_COMPONENT]: [MATCH, SCOREBOARD_COMPONENT]
 });

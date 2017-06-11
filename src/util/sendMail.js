@@ -8,7 +8,7 @@ function send(toMail, result) {
 
   if (typeof process.env.SENDGRID_API_KEY === "undefined") {
     log("SENDGRID_API_KEY was not set, not sending any mails");
-    return;
+    return 500;
   }
 
   const toEmail = new helper.Email(toMail);

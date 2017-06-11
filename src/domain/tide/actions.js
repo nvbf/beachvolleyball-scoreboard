@@ -23,7 +23,8 @@ import {
   ActionHistory,
   CURRENT_SET,
   BeachVolleyballSet,
-  constants as c
+  constants as c,
+  TOURNAMENT_PRIVATE_ID
 } from "./state";
 
 import { update as storeToLocalStorage } from "./storage";
@@ -304,6 +305,15 @@ class AllAction extends Actions {
   addEmail = email => {
     this.mutateAndTrack([c.MATCH, c.EMAIL], email);
     this.showScoreboard();
+  };
+
+  addTournamentId = tournamentId => {
+    this.mutateAndTrack([c.MATCH, c.TOURNAMENT_PRIVATE_ID], tournamentId);
+    this.showScoreboard();
+  };
+
+  addMatchId = matchId => {
+    this.mutateAndTrack([c.MATCH, c.MATCH_ID], matchId);
   };
 }
 

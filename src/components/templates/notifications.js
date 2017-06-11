@@ -1,21 +1,18 @@
-import React, {Component} from 'react';
-import {
-	Panel,
-	Button
-} from 'react-bootstrap';
+import React, { Component } from "react";
+import { Panel, Button } from "react-bootstrap";
 
-import OkButton from '../molokyler/ok-button';
+import OkButton from "../molokyler/ok-button";
 
-const NotificationsDialog = ({children, heading = 'Notification'}) => {
-	return (
-		<div>
+const NotificationsDialog = ({ children, heading = "Notification" }) => {
+  return (
+    <div>
 
-			<Panel header={heading} bsStyle="primary" footer={<OkButton/>}>
-				{children}
-			</Panel>
+      <Panel header={heading} bsStyle="primary" footer={<OkButton />}>
+        {children}
+      </Panel>
 
-		</div>
-	);
+    </div>
+  );
 };
 
 export default NotificationsDialog;
