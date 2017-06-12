@@ -32,20 +32,7 @@ export async function getTournament(slug) {
         const tournament = tournaments[key] || {};
         const id = tournament.privateId;
         console.log("tournament.privateId", tournament.privateId);
-        firebase
-          .database()
-          .ref(c.MATCH_PATH)
-          .orderByChild("tournamentId")
-          .equalTo(tournament.privateId)
-          .once("value")
-          .then(matches => {
-            console.log("matches", matches.val());
-            resolve({
-              tournament,
-              matches: matches.val()
-            });
-          })
-          .catch(err => reject(err));
+        resolve({ tournament });
       })
       .catch(err => reject(err));
   });

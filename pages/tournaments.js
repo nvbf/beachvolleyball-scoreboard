@@ -4,13 +4,20 @@ import Link from "next/link";
 
 import { getTournaments } from "../src/firebase";
 
-const TournamentsPage = ({ tournaments = [] }) =>
-  <main>
-    <h1>Tournaments</h1>
-    <ul>
-      {listTournaments(tournaments)}
-    </ul>
-  </main>;
+class TournamentsPage extends React.Component {
+  render() {
+    const { tournaments } = this.props;
+
+    return (
+      <main>
+        <h1>Tournaments</h1>
+        <ul>
+          {listTournaments(tournaments)}
+        </ul>
+      </main>
+    );
+  }
+}
 
 TournamentsPage.getInitialProps = async () => {
   const tournaments = await getTournaments();

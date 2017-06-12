@@ -1,18 +1,48 @@
 import React from "react";
+import firebase from "firebase";
+import { init } from "../src/util/auth";
 import { getTournament } from "../src/firebase";
+
 import {
   constants as c,
   HOMETEAM_FIRST_PLAYER_NAME
 } from "../src/domain/tide/state";
 
-const Tournament = ({ tournament, matches = {} }) =>
-  <div>
-    <h1>{tournament.name}</h1>
-    <h3> Matches </h3>
-    <ul>
-      <ul>{listMatches(matches)}</ul>
-    </ul>
-  </div>;
+class Tournament extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      matches: {}
+    };
+  }
+
+  componentDidMount() {
+    init();
+    firebase
+      .database()
+      .ref(c.MATCH_PATH)
+      .orderByChild("tournamentId")
+      .equalTo(this.props.tournament.privateId)
+      .on("value", matches => {
+        this.setState({
+          matches: matches.val()
+        });
+      });
+  }
+
+  render() {
+    const { tournament } = this.props;
+    return (
+      <div>
+        <h1>{tournament.name}</h1>
+        <h3> Matches </h3>
+        <ul>
+          <ul>{listMatches(this.state.matches)}</ul>
+        </ul>
+      </div>
+    );
+  }
+}
 
 Tournament.getInitialProps = async params => {
   const slug = params.asPath.split("/")[2];
@@ -37,7 +67,7 @@ function listMatches(matches = {}) {
     const h3Points = match[c.MATCH][c.THIRD_SET][c.HOMETEAM_POINT];
     const b3Points = match[c.MATCH][c.THIRD_SET][c.AWAYTEAM_POINT];
     return (
-      <li>
+      <li key={matchKey}>
         {h1Player} and {h2Player} vs {b1Player} and
         {" "}{h2Player}, {h1Points}
         {" "}- {b1Points},
