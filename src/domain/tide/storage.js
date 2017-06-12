@@ -18,7 +18,7 @@ import {
   constants as c
 } from "./state";
 
-export function update(matchId = "Match-0", state) {
+export function update(matchId, state) {
   console.log("update", state);
   const lastActionState = state.get(HISTORY).last();
   const lastMatchState = lastActionState.get(MATCHSTATE);
@@ -31,7 +31,10 @@ export function update(matchId = "Match-0", state) {
     .setIn([MATCH], lastMatchState)
     .setIn([HISTORY], new List());
   try {
-    save(tournamentId, matchId, JSON.stringify(stateToStore));
+    save(tournamentId, matchId, {
+      match: JSON.stringify(stateToStore),
+      tournamentId: tournamentId
+    });
   } catch (err) {
     console.error("Error on storing match object, firebase", matchId);
     console.error(err);

@@ -1,6 +1,9 @@
 import { Record, List } from "immutable";
 
+export const TOURNAMENT_PATH = "/tournaments/";
+export const MATCH_PATH = "/matches/";
 export const TOURNAMENT_PRIVATE_ID = "TOURNAMENT_PRIVATE_ID";
+export const MATCH_FIREBASE_KEY = "MATCH_FIREBASE_KEY";
 export const SHOW_TO = "SHOW_TO";
 export const SHOW_TOURNAMENT_COMPONENT = "SHOW_TOURNAMENT_COMPONENT";
 export const EMAIL = "EMAIL";
@@ -101,6 +104,8 @@ export const ActionHistory = Record({
 });
 
 export const Match = Record({
+  [MATCH_FIREBASE_KEY]: "",
+  [MATCH_ID]: "",
   [TOURNAMENT_PRIVATE_ID]: "",
   [EMAIL]: "",
   [FIRST_SET]: new BeachVolleyballSet(),
@@ -136,6 +141,8 @@ export const State = Record({
 });
 
 export const constants = {
+  MATCH_PATH,
+  TOURNAMENT_PATH,
   TOURNAMENT_PRIVATE_ID,
   SHOW_TOURNAMENT_COMPONENT,
   SHOW_TO,
@@ -199,7 +206,8 @@ export const constants = {
   SHOW_MATCH_FINISHED,
   SERVICE_ORDER_AWAYTEAM,
   SHOW_SWITCH,
-  SHOW_SET_FINISHED
+  SHOW_SET_FINISHED,
+  MATCH_FIREBASE_KEY
 };
 
 export default State;

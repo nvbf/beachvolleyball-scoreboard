@@ -5,9 +5,9 @@ import {
   HOMETEAM_FIRST_PLAYER_NAME
 } from "../src/domain/tide/state";
 
-const Tournament = ({ name, slug, matches = [] }) =>
+const Tournament = ({ tournament, matches = {} }) =>
   <div>
-    <h1>{name}</h1>
+    <h1>{tournament.name}</h1>
     <h3> Matches </h3>
     <ul>
       <ul>{listMatches(matches)}</ul>
@@ -21,7 +21,7 @@ Tournament.getInitialProps = async params => {
   return tournamentInfo;
 };
 
-function listMatches(matches = []) {
+function listMatches(matches = {}) {
   console.log("matches", matches);
   return Object.keys(matches).map(matchKey => {
     const match = JSON.parse(matches[matchKey].match);
@@ -32,14 +32,14 @@ function listMatches(matches = []) {
 
     const h1Points = match[c.MATCH][c.FIRST_SET][c.HOMETEAM_POINT];
     const b1Points = match[c.MATCH][c.FIRST_SET][c.AWAYTEAM_POINT];
-    const h2Points = match[c.MATCH][c.FIRST_SET][c.HOMETEAM_POINT];
-    const b2Points = match[c.MATCH][c.FIRST_SET][c.AWAYTEAM_POINT];
-    const h3Points = match[c.MATCH][c.FIRST_SET][c.HOMETEAM_POINT];
-    const b3Points = match[c.MATCH][c.FIRST_SET][c.AWAYTEAM_POINT];
+    const h2Points = match[c.MATCH][c.SECOND_SET][c.HOMETEAM_POINT];
+    const b2Points = match[c.MATCH][c.SECOND_SET][c.AWAYTEAM_POINT];
+    const h3Points = match[c.MATCH][c.THIRD_SET][c.HOMETEAM_POINT];
+    const b3Points = match[c.MATCH][c.THIRD_SET][c.AWAYTEAM_POINT];
     return (
       <li>
         {h1Player} and {h2Player} vs {b1Player} and
-        {" "}{h2Player}}, {h1Points}
+        {" "}{h2Player}, {h1Points}
         {" "}- {b1Points},
         {" "}{h2Points} - {b2Points},
         {" "}{h3Points} - {b3Points}

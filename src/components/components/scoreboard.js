@@ -69,9 +69,7 @@ class Scoreboard extends Component {
 
     console.log("rendering:");
 
-    const newMatchUrl =
-      "/match?id=" +
-      (new Date().toDateString() + Math.floor(Math.random() * 10000));
+    const newMatchUrl = "/match?new=true";
 
     return (
       <div>

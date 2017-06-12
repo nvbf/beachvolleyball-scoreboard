@@ -1,6 +1,8 @@
 import React from "react";
 import url from "url";
 import { wrap } from "tide";
+import firebase from "firebase";
+import { init } from "../src/util/auth";
 
 import AddHomeTeam from "./../src/components/components/add-home-team";
 import AddAwayTeam from "./../src/components/components/add-away-team";
@@ -41,24 +43,47 @@ class Main extends React.Component {
     const qs = url.parse(document.location.search, true).query;
     if (qs.name1 && qs.name2 && qs.name3 && qs.name4) {
       this.setStateFromQs(qs);
-      history.pushState({}, "", "/match");
+      removeQueryString();
       return;
     }
 
-    const state = getStateFromLocalStorage(qs.id);
-    if (state !== false) {
-      console.log("loading from state");
-      this.props.tide.actions.all.load(state);
-      return;
+    if (qs.new !== true) {
+      const state = getStateFromLocalStorage(qs.id);
+      if (state !== false) {
+        console.log("loading from state");
+        this.props.tide.actions.all.load(state);
+        return;
+      }
     }
 
+    this.initMatch();
+    removeQueryString();
     this.props.tide.actions.all.mutateAndTrack(
       [MATCH, SHOW_COMPONENT],
       ADD_HOMETEAM_COMPONENT
     );
   }
 
+  initMatch = (qs = {}) => {
+    init();
+    this.props.tide.actions.all.mutateAndTrack(
+      [c.MATCH, c.MATCH_FIREBASE_KEY],
+      firebase.database().ref(`${c.MATCH_PATH}`).push().key
+    );
+
+    this.props.tide.actions.all.mutateAndTrack(
+      [c.MATCH, c.MATCH_ID],
+      qs.matchid || `${Math.random() * 100000000000000000}`
+    );
+
+    this.props.tide.actions.all.mutateAndTrack(
+      [c.MATCH, c.TOURNAMENT_PRIVATE_ID],
+      qs.tournamentid || 0
+    );
+  };
+
   setStateFromQs(qs) {
+    initMatch(qs);
     this.props.tide.actions.all.mutateAndTrack(
       [MATCH, HOMETEAM_FIRST_PLAYER_NAME],
       qs.name1
@@ -253,6 +278,10 @@ class Main extends React.Component {
       </section>
     );
   }
+}
+
+function removeQueryString() {
+  history.pushState({}, "", "/match");
 }
 
 export default wrap(Main, {

@@ -24,7 +24,8 @@ import {
   CURRENT_SET,
   BeachVolleyballSet,
   constants as c,
-  TOURNAMENT_PRIVATE_ID
+  TOURNAMENT_PRIVATE_ID,
+  MATCH_FIREBASE_KEY
 } from "./state";
 
 import { update as storeToLocalStorage } from "./storage";
@@ -87,7 +88,7 @@ class AllAction extends Actions {
       [c.CURRENT_SET]: index
     });
     this.mutate(ACTION_HISTORY, history => history.push(action));
-    const matchId = this.get([MATCH, MATCH_ID]);
+    const matchId = this.get([MATCH, MATCH_FIREBASE_KEY]);
     storeToLocalStorage(matchId, this.getState());
   };
 

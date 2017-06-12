@@ -2,8 +2,7 @@ import { init } from "../util/auth";
 import firebase from "firebase";
 import AllAction from "../../src/domain/tide/actions";
 
-const TOURNAMENT_PATH = "/tournaments/";
-const MATCH_PATH = "/matches/";
+import { constants as c } from "../domain/tide/state";
 
 export function save(tournamentId = 0, matchId, match) {
   init();
@@ -12,13 +11,9 @@ export function save(tournamentId = 0, matchId, match) {
     tournamentId,
     matchId
   };
-  if (matchId) {
-    const response = firebase.database().ref(`${MATCH_PATH}`).push(matchData);
-  } else {
-    let updates = {};
-    updates[MATCH_PATH + matchId] = match;
-    return firebase.database().ref().update(updates);
-  }
+  let updates = {};
+  updates[c.MATCH_PATH + matchId] = match;
+  return firebase.database().ref().update(updates);
 }
 
 export async function getTournament(slug) {
@@ -26,7 +21,7 @@ export async function getTournament(slug) {
   return new Promise((resolve, reject) => {
     firebase
       .database()
-      .ref(TOURNAMENT_PATH)
+      .ref(c.TOURNAMENT_PATH)
       .orderByChild("name")
       .equalTo(slug)
       .once("value")
@@ -39,7 +34,7 @@ export async function getTournament(slug) {
         console.log("tournament.privateId", tournament.privateId);
         firebase
           .database()
-          .ref(MATCH_PATH)
+          .ref(c.MATCH_PATH)
           .orderByChild("tournamentId")
           .equalTo(tournament.privateId)
           .once("value")
@@ -61,7 +56,7 @@ export async function getTournaments() {
   return new Promise((resolve, reject) => {
     firebase
       .database()
-      .ref(TOURNAMENT_PATH)
+      .ref(c.TOURNAMENT_PATH)
       .once("value")
       .then(dataSnapshot => resolve(dataSnapshot.val()))
       .catch(err => reject(err));
@@ -77,6 +72,6 @@ export function saveTournament(tournamentName) {
     privateId: `${Math.random() * 100000000000000000}`
   };
 
-  firebase.database().ref(TOURNAMENT_PATH).push(tournamentData);
+  firebase.database().ref(c.TOURNAMENT_PATH).push(tournamentData);
   return tournamentData;
 }
