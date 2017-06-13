@@ -83,7 +83,7 @@ class Main extends React.Component {
   };
 
   setStateFromQs(qs) {
-    initMatch(qs);
+    this.initMatch(qs);
     this.props.tide.actions.all.mutateAndTrack(
       [MATCH, HOMETEAM_FIRST_PLAYER_NAME],
       qs.name1
@@ -281,7 +281,7 @@ class Main extends React.Component {
 }
 
 function removeQueryString() {
-  history.pushState({}, "", "/match");
+  window.history.pushState({}, "", "/match");
 }
 
 export default wrap(Main, {
