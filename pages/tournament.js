@@ -139,6 +139,8 @@ function listMatches(matches) {
     const h3Points = match[c.THIRD_SET][c.HOMETEAM_POINT];
     const b3Points = match[c.THIRD_SET][c.AWAYTEAM_POINT];
 
+    const matchId = match[c.MATCH_ID];
+
     const cardTextStyle = {
       display: "flex",
       justifyContent: "space-between",
@@ -171,6 +173,7 @@ function listMatches(matches) {
             <div>{b1Player}</div>
             <div>{b2Player}</div>
           </div>
+          <div>matchid: {matchId}</div>
         </CardText>
       </Card>
     );
