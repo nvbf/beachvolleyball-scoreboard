@@ -18,12 +18,14 @@ import {
   getPointsInCurrentSetAsString,
   getScoreForCompletedSets
 } from "../src/domain/tide/logic";
+import component from "react-toggle";
 
 class Tournament extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      matches: {}
+      matches: {},
+      loading: true
     };
   }
 
@@ -36,27 +38,33 @@ class Tournament extends React.Component {
       .equalTo(this.props.tournament.privateId)
       .on("value", matches => {
         this.setState({
-          matches: matches.val()
+          matches: matches.val(),
+          loading: false
         });
       });
   }
 
   render() {
     const { tournament } = this.props;
+    const matchesHtml = this.state.matches
+      ? <div>{listMatches(this.state.matches)}</div>
+      : <div>No Matches in tournament</div>;
+    const componentToShow = this.state.loading
+      ? <div>Loading ... </div>
+      : matchesHtml;
     return (
       <MuiThemeProvider>
         <div>
           <h1>{tournament.name}</h1>
-          <h3> Matches </h3>
-          <div>{listMatches(this.state.matches)}</div>
+          {componentToShow}
         </div>
       </MuiThemeProvider>
     );
   }
 }
 
-Tournament.getInitialProps = async params => {
-  const slug = params.asPath.split("/")[2];
+Tournament.getInitialProps = async context => {
+  const slug = context.query.slug;
   const tournamentInfo = await getTournament(slug);
   console.log("tournamentInfo", tournamentInfo);
   return tournamentInfo;

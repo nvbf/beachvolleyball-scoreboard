@@ -30,8 +30,11 @@ function listTournaments(tournaments = []) {
     const tournament = tournaments[tournamentKey];
     console.log("tournament", tournament);
     return (
-      <li>
-        <Link href={`/tournament/${tournament.publicId}`}>
+      <li key={tournamentKey}>
+        <Link
+          href={`/tournament/?slug=${tournament.publicId}`}
+          as={`/tournament/${tournament.publicId}`}
+        >
           <a>{tournament.name}</a>
         </Link>
       </li>

@@ -62,7 +62,7 @@
     "start": "node app.js",
     "url": "^0.11.0",
     "vinyl-source-stream": "1.1.0",
-    "dev": "next",
+    "dev": "node app.js",
     "build": "next build",
     "test": "jest",
     "jest:watch": "npm test -- --watch",

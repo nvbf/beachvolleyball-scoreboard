@@ -113,31 +113,6 @@ class Main extends React.Component {
       [MATCH, SHOW_COMPONENT],
       SCOREBOARD_COMPONENT
     );
-
-    this.props.tide.actions.all.mutateAndTrack(
-      [MATCH, c.FIRST_SET, c.HOMETEAM_POINT],
-      Number(qs.h1) || 0
-    );
-    this.props.tide.actions.all.mutateAndTrack(
-      [MATCH, c.FIRST_SET, c.AWAYTEAM_POINT],
-      Number(qs.b1) || 0
-    );
-    this.props.tide.actions.all.mutateAndTrack(
-      [MATCH, c.SECOND_SET, c.HOMETEAM_POINT],
-      Number(qs.h2) || 0
-    );
-    this.props.tide.actions.all.mutateAndTrack(
-      [MATCH, c.SECOND_SET, c.AWAYTEAM_POINT],
-      Number(qs.b2) || 0
-    );
-    this.props.tide.actions.all.mutateAndTrack(
-      [MATCH, c.THIRD_SET, c.HOMETEAM_POINT],
-      Number(qs.h3) || 0
-    );
-    this.props.tide.actions.all.mutateAndTrack(
-      [MATCH, c.THIRD_SET, c.AWAYTEAM_POINT],
-      Number(qs.b3) || 0
-    );
   }
 
   render() {

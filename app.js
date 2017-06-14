@@ -16,39 +16,44 @@ const match = route("/tournament/:id");
 
 const handle = app.getRequestHandler();
 
-app.prepare().then(() => {
-  const server = express();
-  server.use(bodyParser.json());
+app
+  .prepare()
+  .then(() => {
+    const server = express();
+    server.use(bodyParser.json());
 
-  server.post("/send/mail", (req, res) => {
-    const result = req.body.result;
-    const mail = req.body.mail;
-    if (!(mail && result)) {
-      return res.status(500).send("feil data");
-    }
+    server.post("/send/mail", (req, res) => {
+      const result = req.body.result;
+      const mail = req.body.mail;
+      if (!(mail && result)) {
+        return res.status(500).send("feil data");
+      }
 
-    const mailStatusCode = send(mail, result);
-    if (mailStatusCode == 500) {
-      res.status(500).send(":\\ ");
-    } else {
-      res.send(":)");
-    }
+      const mailStatusCode = send(mail, result);
+      if (mailStatusCode == 500) {
+        res.status(500).send(":\\ ");
+      } else {
+        res.send(":)");
+      }
+    });
+
+    server.get("/tournament/:slug", (req, res) => {
+      const parsedUrl = parse(req.url, true);
+      const queryParams = { slug: req.params.slug };
+      app.render(req, res, "/tournament", queryParams);
+    });
+
+    server.get("*", (req, res) => {
+      return handle(req, res);
+    });
+
+    server.listen(process.env.PORT || 3000, err => {
+      if (err) {
+        throw err;
+      }
+    });
+  })
+  .catch(ex => {
+    console.error(ex.stack);
+    process.exit(1);
   });
-
-  server.get("/tournament/:tournamentSlug", (req, res) => {
-    const parsedUrl = parse(req.url, true);
-    const { pathname, query } = parsedUrl;
-    console.log("1", query);
-    app.render(req, res, "/tournament", pathname);
-  });
-
-  server.get("*", (req, res) => {
-    return handle(req, res);
-  });
-
-  server.listen(process.env.PORT || 3000, err => {
-    if (err) {
-      throw err;
-    }
-  });
-});
