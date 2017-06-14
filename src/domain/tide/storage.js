@@ -29,7 +29,7 @@ export function update(matchId, state) {
   // Simplified to not store to much!
   const stateToStore = state
     .setIn([MATCH], lastMatchState)
-    .setIn([HISTORY], new List());
+    .setIn([HISTORY], List());
   try {
     save(tournamentId, matchId, {
       match: JSON.stringify(stateToStore),
@@ -56,15 +56,19 @@ export function get(matchId = "Match-0") {
   if (state === null) {
     return false;
   }
+  return transformToCorrectState(state);
+}
+
+export function transformToCorrectState(state) {
   const immutablMatch = fromJS(state[MATCH], reciver);
 
   const actionHistory = state[ACTION_HISTORY].reduce((agg, curr) => {
     return agg.push(new ActionHistory(curr));
-  }, new List());
+  }, List());
 
   const immutableState = new State({
     [MATCH]: immutablMatch,
-    [HISTORY]: new List(),
+    [HISTORY]: List(),
     [ACTION_HISTORY]: actionHistory
   });
   return immutableState;
@@ -89,11 +93,11 @@ function reciver(key, value) {
   }
 
   if (ACTION_HISTORY.match(matchKey)) {
-    return new List(value);
+    return List(value);
   }
 
   if (HISTORY.match(matchKey)) {
-    return new List(value);
+    return List(value);
   }
 
   return value;

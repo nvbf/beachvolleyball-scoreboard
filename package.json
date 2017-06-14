@@ -38,6 +38,7 @@
     "express": "4.15.2",
     "firebase": "^4.1.1",
     "immutable": "3.8.1",
+    "material-ui": "^0.18.3",
     "moment": "^2.18.1",
     "next": "latest",
     "preact": "^8.1.0",

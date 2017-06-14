@@ -26,40 +26,66 @@ export function getId(state) {
 }
 
 // 2 - 1
-export function getSetResult(matchState) {
-  let homeTeamSets = 0;
+export function getAwayTeamSetsWon(matchState) {
   let awayTeamSets = 0;
-  if (hasHometeamWonFirstSet(matchState)) {
-    homeTeamSets++;
-  }
+
   if (hasAwayteamWonFirstSet(matchState)) {
     awayTeamSets++;
-  }
-  if (hasHometeamWonSecondSet(matchState)) {
-    homeTeamSets++;
   }
   if (hasAwayteamWonSecondSet(matchState)) {
     awayTeamSets++;
   }
-  if (hasHometeamWonThirdSet(matchState)) {
-    homeTeamSets++;
-  }
+
   if (hasAwayteamWonThirdSet(matchState)) {
     awayTeamSets++;
   }
+  return awayTeamSets;
+}
 
-  return `${homeTeamSets} - ${awayTeamSets}`;
+export function getSetResult(matchState) {
+  return `${getHomeTeamSetsWon(matchState)} - ${getAwayTeamSetsWon(
+    matchState
+  )}`;
+}
+
+export function getHomeTeamSetsWon(matchState) {
+  let homeTeamSets = 0;
+  if (hasHometeamWonFirstSet(matchState)) {
+    homeTeamSets++;
+  }
+  if (hasHometeamWonSecondSet(matchState)) {
+    homeTeamSets++;
+  }
+  if (hasHometeamWonThirdSet(matchState)) {
+    homeTeamSets++;
+  }
+  return homeTeamSets;
 }
 
 // 19-21, 21-19, 15-13
 export function getResult(matchState) {
-  const h1p = getHomeTeamPointInFirstSet(matchState);
-  const h2p = getHomeTeamPointInSecondSet(matchState);
-  const h3p = getHomeTeamPointInThirdSet(matchState);
-  const b1p = getAwayTeamPointInFirstSet(matchState);
-  const b2p = getAwayTeamPointInSecondSet(matchState);
-  const b3p = getAwayTeamPointInThirdSet(matchState);
-  return `${h1p} - ${b1p}, ${h2p} - ${b2p}, ${h3p} - ${h3p}`;
+  const s1 = getScoreFromFirstSet(matchState);
+  const s2 = getScoreFromSecondSet(matchState);
+  const s3 = getScoreFromThirdSet(matchState);
+  return `${s1}, ${s2}, ${s3}`;
+}
+
+export function getScoreFromFirstSet(matchState) {
+  const h = getHomeTeamPointInFirstSet(matchState);
+  const b = getAwayTeamPointInFirstSet(matchState);
+  return `${h} - ${b}`;
+}
+
+export function getScoreFromSecondSet(matchState) {
+  const h = getHomeTeamPointInSecondSet(matchState);
+  const b = getAwayTeamPointInSecondSet(matchState);
+  return `${h} - ${b}`;
+}
+
+export function getScoreFromThirdSet(matchState) {
+  const h = getHomeTeamPointInThirdSet(matchState);
+  const b = getAwayTeamPointInThirdSet(matchState);
+  return `${h} - ${b}`;
 }
 
 const constantToText = {
@@ -285,6 +311,32 @@ export function getCurrentSetIndex(match) {
   }
   console.log("Is game finished? returning third set");
   return THIRD_SET;
+}
+
+export function getPointsInCurrentSet(match) {
+  return [
+    getHometeamPointsInCurrentSet(match),
+    getAwayteamPointsInCurrentSet(match)
+  ];
+}
+
+export function getScoreForCompletedSets(match) {
+  let completedSets = [];
+  if (isFirstSetFinished(match)) {
+    completedSets.push(getScoreFromFirstSet(match));
+  }
+  if (isSecondSetFinished(match)) {
+    completedSets.push(getScoreFromSecondSet(match));
+  }
+  if (isThirdSetFinished(match)) {
+    completedSets.push(getScoreFromThirdSet(match));
+  }
+  return completedSets.join(", ");
+}
+
+export function getPointsInCurrentSetAsString(match) {
+  const points = getPointsInCurrentSet(match);
+  return `${points[0]} - ${points[1]}`;
 }
 
 export function getHometeamPointsInCurrentSet(score) {
