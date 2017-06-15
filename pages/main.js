@@ -40,24 +40,27 @@ import { ButtonToolbar, Button } from "react-bootstrap";
 
 class Main extends React.Component {
   componentDidMount() {
+    console.log("componentDidMount");
     const qs = url.parse(document.location.search, true).query;
     if (qs.name1 && qs.name2 && qs.name3 && qs.name4) {
-      this.setStateFromQs(qs);
-      removeQueryString();
+      const matchKey = this.setStateFromQs(qs);
+      createCorrectQueryString(matchId);
       return;
     }
 
     if (qs.new !== true) {
-      const state = getStateFromLocalStorage(qs.id);
+      console.log("qs.key", qs.key);
+      const state = getStateFromLocalStorage(qs.key);
       if (state !== false) {
         console.log("loading from state");
         this.props.tide.actions.all.load(state);
         return;
+      } else {
       }
     }
 
-    this.initMatch();
-    removeQueryString();
+    const matchKey = this.initMatch();
+    createCorrectQueryString(matchKey);
     this.props.tide.actions.all.mutateAndTrack(
       [MATCH, SHOW_COMPONENT],
       ADD_HOMETEAM_COMPONENT
@@ -66,24 +69,24 @@ class Main extends React.Component {
 
   initMatch = (qs = {}) => {
     init();
+    const key = firebase.database().ref(`${c.MATCH_PATH}`).push().key;
     this.props.tide.actions.all.mutateAndTrack(
       [c.MATCH, c.MATCH_FIREBASE_KEY],
-      firebase.database().ref(`${c.MATCH_PATH}`).push().key
+      key
     );
 
-    this.props.tide.actions.all.mutateAndTrack(
-      [c.MATCH, c.MATCH_ID],
-      qs.matchid || `${Math.random() * 100000000000000000}`
-    );
+    const matchId = qs.matchid || `${Math.random() * 100000000000000000}`;
+    this.props.tide.actions.all.mutateAndTrack([c.MATCH, c.MATCH_ID], matchId);
 
     this.props.tide.actions.all.mutateAndTrack(
       [c.MATCH, c.TOURNAMENT_PRIVATE_ID],
       qs.tournamentid || 0
     );
+    return key;
   };
 
   setStateFromQs(qs) {
-    this.initMatch(qs);
+    const matchKey = this.initMatch(qs);
     this.props.tide.actions.all.mutateAndTrack(
       [MATCH, HOMETEAM_FIRST_PLAYER_NAME],
       qs.name1
@@ -113,6 +116,7 @@ class Main extends React.Component {
       [MATCH, SHOW_COMPONENT],
       SCOREBOARD_COMPONENT
     );
+    return matchKey;
   }
 
   render() {
@@ -255,8 +259,8 @@ class Main extends React.Component {
   }
 }
 
-function removeQueryString() {
-  window.history.pushState({}, "", "/match");
+function createCorrectQueryString(matchKey) {
+  window.history.pushState({}, "", `/match?key=${matchKey}`);
 }
 
 export default wrap(Main, {
