@@ -44,7 +44,7 @@ class Main extends React.Component {
     const qs = url.parse(document.location.search, true).query;
     if (qs.name1 && qs.name2 && qs.name3 && qs.name4) {
       const matchKey = this.setStateFromQs(qs);
-      createCorrectQueryString(matchId);
+      createCorrectQueryString(matchKey);
       return;
     }
 
