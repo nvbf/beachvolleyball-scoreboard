@@ -5,7 +5,7 @@ import { getTournament } from "../src/firebase";
 import { transformToCorrectState } from "../src/domain/tide/storage";
 
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
-import { Card, CardActions, CardHeader, CardText } from "material-ui/Card";
+import { Card, CardActions, CardHeader, CardText } from "material-ui";
 
 import { constants as c, Match } from "../src/domain/tide/state";
 
