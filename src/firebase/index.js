@@ -56,7 +56,9 @@ export function saveTournament(tournamentName) {
   const tournamentData = {
     name: tournamentName,
     publicId: tournamentName,
-    privateId: `${Math.random() * 100000000000000000}`.slice(-6)
+    privateId: parseInt(
+      (Math.random() * 100000000000000000).toString().slice(-6)
+    )
   };
 
   firebase.database().ref(c.TOURNAMENT_PATH).push(tournamentData);
