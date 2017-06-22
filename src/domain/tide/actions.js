@@ -195,17 +195,8 @@ class AllAction extends Actions {
       ? this.getMatch()[c.HOMETEAM_FIRST_PLAYER_NAME]
       : this.getMatch()[c.HOMETEAM_SECOND_PLAYER_NAME];
     const serviceOrder = new List([firstServer, secondServer]);
-    console.log(
-      "hometeam serviceorder",
-      firstServer,
-      secondServer,
-      serviceOrder
-    );
     this.mutateAndTrack([MATCH, index, c.SERVICE_ORDER_HOMETEAM], serviceOrder);
-    this.mutateAndTrack(
-      [c.MATCH, c.SHOW_COMPONENT],
-      c.SHOW_SERVICE_ORDER_DIALOG_PLAYER_AWAYTEAM
-    );
+    this.handleServiceOrderDialogPath(c.HOMETEAM);
   };
 
   playerOnAwayTeamToServe = player => {
@@ -223,11 +214,30 @@ class AllAction extends Actions {
       [MATCH, currentSetIndex, c.SERVICE_ORDER_AWAYTEAM],
       serviceOrder
     );
-    const currentSet = this.getMatch()[currentSetIndex];
-    this.mutateAndTrack([MATCH, c.SERVICE_ORDER_IS_SET], true);
-    this.mutateAndTrack([MATCH, currentSetIndex, c.SERVICE_ORDER_IS_SET], true);
-    this.mutateAndTrack([c.MATCH, c.SHOW_COMPONENT], c.SCOREBOARD_COMPONENT);
+    this.handleServiceOrderDialogPath(c.AWAYTEAM);
   };
+
+  handleServiceOrderDialogPath(team) {
+    const state = this.getMatch();
+    const currentSetIndex = getCurrentSetIndex(state);
+    const currentSet = this.getMatch()[currentSetIndex];
+
+    console.log('currentSet[c.FIRST_TEAM_TO_SERVE]', currentSet[c.FIRST_TEAM_TO_SERVE], team)
+    if (currentSet[c.FIRST_TEAM_TO_SERVE] === team) {
+      const nextDialog = team === c.HOMETEAM
+        ? c.SHOW_SERVICE_ORDER_DIALOG_PLAYER_AWAYTEAM
+        : c.SHOW_SERVICE_ORDER_DIALOG_PLAYER_HOMETEAM;
+      console.log('nextDialog', nextDialog)
+      this.mutateAndTrack([c.MATCH, c.SHOW_COMPONENT], nextDialog);
+    } else {
+      this.mutateAndTrack([MATCH, c.SERVICE_ORDER_IS_SET], true);
+      this.mutateAndTrack(
+        [MATCH, currentSetIndex, c.SERVICE_ORDER_IS_SET],
+        true
+      );
+      this.mutateAndTrack([c.MATCH, c.SHOW_COMPONENT], c.SCOREBOARD_COMPONENT);
+    }
+  }
 
   cancelSetServiceOrder() {
     const state = this.getMatch();
@@ -248,10 +258,17 @@ class AllAction extends Actions {
     );
     const index = getCurrentSetIndex(state);
     this.mutateAndTrack([MATCH, index, c.FIRST_TEAM_TO_SERVE], team);
-    this.mutateAndTrack(
-      [c.MATCH, c.SHOW_COMPONENT],
-      c.SHOW_SERVICE_ORDER_DIALOG_PLAYER_HOMETEAM
-    );
+    if (team === c.HOMETEAM) {
+      this.mutateAndTrack(
+        [c.MATCH, c.SHOW_COMPONENT],
+        c.SHOW_SERVICE_ORDER_DIALOG_PLAYER_HOMETEAM
+      );
+    } else {
+      this.mutateAndTrack(
+        [c.MATCH, c.SHOW_COMPONENT],
+        c.SHOW_SERVICE_ORDER_DIALOG_PLAYER_AWAYTEAM
+      );
+    }
   };
 
   showComponent = component => {
