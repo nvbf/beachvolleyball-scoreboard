@@ -4,8 +4,8 @@ import { init } from "../src/util/auth";
 import { getTournament } from "../src/firebase";
 import { transformToCorrectState } from "../src/domain/tide/storage";
 
-import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
-import { Card, CardActions, CardHeader, CardText } from "material-ui";
+// import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
+// import { Card, CardActions, CardHeader, CardText } from "material-ui";
 
 import { constants as c, Match } from "../src/domain/tide/state";
 
@@ -53,12 +53,12 @@ class Tournament extends React.Component {
       ? <div>Loading ... </div>
       : matchesHtml;
     return (
-      <MuiThemeProvider>
-        <div>
-          <h1>{tournament.name}</h1>
-          {componentToShow}
-        </div>
-      </MuiThemeProvider>
+      // <MuiThemeProvider>
+      <div>
+        <h1>{tournament.name}</h1>
+        {componentToShow}
+      </div>
+      //</MuiThemeProvider>
     );
   }
 }
@@ -167,23 +167,25 @@ function listMatches(matches) {
     };
 
     return (
-      <Card key={matchKey}>
-        <CardText style={cardTextStyle}>
-          <div style={homeContainer}>
-            <div>{h1Player}</div>
-            <div>{h2Player}</div>
-          </div>
-          <div style={scoreStyle}>
-            {showScore(match)}
+      <div>
+        {/*<Card key={matchKey}>
+          <CardText style={cardTextStyle}>*/}
+        <div style={homeContainer}>
+          <div>{h1Player}</div>
+          <div>{h2Player}</div>
+        </div>
+        <div style={scoreStyle}>
+          {showScore(match)}
 
-          </div>
-          <div style={homeContainer}>
-            <div>{b1Player}</div>
-            <div>{b2Player}</div>
-          </div>
-          <div>matchid: {matchId}</div>
-        </CardText>
-      </Card>
+        </div>
+        <div style={homeContainer}>
+          <div>{b1Player}</div>
+          <div>{b2Player}</div>
+        </div>
+        <div>matchid: {matchId}</div>
+        {/*</CardText>
+        </Card>*/}
+      </div>
     );
   });
 }
