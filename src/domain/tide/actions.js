@@ -222,12 +222,16 @@ class AllAction extends Actions {
     const currentSetIndex = getCurrentSetIndex(state);
     const currentSet = this.getMatch()[currentSetIndex];
 
-    console.log('currentSet[c.FIRST_TEAM_TO_SERVE]', currentSet[c.FIRST_TEAM_TO_SERVE], team)
+    console.log(
+      "currentSet[c.FIRST_TEAM_TO_SERVE]",
+      currentSet[c.FIRST_TEAM_TO_SERVE],
+      team
+    );
     if (currentSet[c.FIRST_TEAM_TO_SERVE] === team) {
       const nextDialog = team === c.HOMETEAM
         ? c.SHOW_SERVICE_ORDER_DIALOG_PLAYER_AWAYTEAM
         : c.SHOW_SERVICE_ORDER_DIALOG_PLAYER_HOMETEAM;
-      console.log('nextDialog', nextDialog)
+      console.log("nextDialog", nextDialog);
       this.mutateAndTrack([c.MATCH, c.SHOW_COMPONENT], nextDialog);
     } else {
       this.mutateAndTrack([MATCH, c.SERVICE_ORDER_IS_SET], true);
@@ -237,16 +241,6 @@ class AllAction extends Actions {
       );
       this.mutateAndTrack([c.MATCH, c.SHOW_COMPONENT], c.SCOREBOARD_COMPONENT);
     }
-  }
-
-  cancelSetServiceOrder() {
-    const state = this.getMatch();
-    const currentSetIndex = getCurrentSetIndex(state);
-    this.mutateAndTrack([c.MATCH, c.SHOW_COMPONENT], c.SCOREBOARD_COMPONENT);
-    this.mutateAndTrack(
-      [MATCH, currentSetIndex, c.SERVICE_ORDER_IS_SET],
-      false
-    );
   }
 
   teamToServe = team => {
