@@ -439,19 +439,29 @@ function hasAwayteamWonThirdSet(score) {
   return hasAwayteamWonSet(score.get(THIRD_SET), 15);
 }
 
+export function hasHometeamWonSetPure(hometeamPoints, awayteamPoints, limit) {
+  const hometeamHas21orMorePoints = hometeamPoints >= limit;
+  const hometeamHas2orMorePointThenAwayteam =
+    hometeamPoints > awayteamPoints + 1;
+  //console.log('p1, p2, limit, ,', point1, point2, limit, hometeamHas21orMorePoints, hometeamHas2orMorePointThenAwayteam)
+  return hometeamHas21orMorePoints && hometeamHas2orMorePointThenAwayteam;
+}
+
+export function hasAwayteamWonSetPure(hometeamPoints, awayteamPoints, limit) {
+  const awayteamHas21orMorePoints = awayteamPoints >= limit;
+  const awayteamHas2orMorePointThenHometeam =
+    awayteamPoints > hometeamPoints + 1;
+  return awayteamHas21orMorePoints && awayteamHas2orMorePointThenHometeam;
+}
+
 function hasAwayteamWonSet(aSet, limit) {
   const point1 = aSet.get(HOMETEAM_POINT);
   const point2 = aSet.get(AWAYTEAM_POINT);
-  const awayteamHas21orMorePoints = point2 >= limit;
-  const awayteamHas2orMorePointThenHometeam = point2 > point1 + 1;
-  return awayteamHas21orMorePoints && awayteamHas2orMorePointThenHometeam;
+  return hasAwayteamWonSetPure(point1, point2, limit);
 }
 
 function hasHometeamWonSet(aSet, limit) {
   const point1 = aSet.get(HOMETEAM_POINT);
   const point2 = aSet.get(AWAYTEAM_POINT);
-  const hometeamHas21orMorePoints = point1 >= limit;
-  const hometeamHas2orMorePointThenAwayteam = point1 > point2 + 1;
-  //console.log('p1, p2, limit, ,', point1, point2, limit, hometeamHas21orMorePoints, hometeamHas2orMorePointThenAwayteam)
-  return hometeamHas21orMorePoints && hometeamHas2orMorePointThenAwayteam;
+  return hasHometeamWonSetPure(point1, point2, limit);
 }

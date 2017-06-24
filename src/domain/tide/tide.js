@@ -1,5 +1,5 @@
 import { Tide, initActions } from "tide";
-
+import lodash from "lodash";
 import State from "./state";
 import AllAction from "./actions";
 
@@ -10,7 +10,10 @@ import {
   getCurrentSet,
   getHistory,
   calculateNextPersonToServe,
-  getFirstTeamToServe
+  getFirstTeamToServe,
+  getMatch,
+  hasHometeamWonSetPure,
+  hasAwayteamWonSetPure
 } from "./logic";
 
 export default function create() {
@@ -24,9 +27,14 @@ export default function create() {
 
 const personToServe = state => {
   const currentSet = getCurrentSet(state);
+  const index = getCurrentSetIndex(getMatch(state));
+  console.log("CURRENT SET index:", index);
   const firstTeamToServe = getFirstTeamToServe(currentSet);
+  console.log("firstTeamToServe", firstTeamToServe);
   const serviceOrderHomeTeam = currentSet[c.SERVICE_ORDER_HOMETEAM];
+  console.log("serviceOrderHomeTeam", currentSet[c.SERVICE_ORDER_HOMETEAM]);
   const serviceOrderAwayTeam = currentSet[c.SERVICE_ORDER_AWAYTEAM];
+  console.log("serviceOrderAwayTeam", currentSet[c.SERVICE_ORDER_AWAYTEAM]);
   const actions = getHistory(state);
 
   //console.log('person to servce actions:', actions);
@@ -40,7 +48,7 @@ const personToServe = state => {
         action[c.ACTION].length > 2
       ) {
         const actionHistoryAction = action[c.ACTION][2];
-        //console.log('actionHistoryState', actionHistoryAction);
+        console.log("actionHistoryState", actionHistoryAction);
         return (
           actionHistoryAction === c.HOMETEAM_POINT ||
           actionHistoryAction === c.AWAYTEAM_POINT
@@ -51,15 +59,61 @@ const personToServe = state => {
     .map(action => action[c.ACTION][2])
     .reduce(
       (agg, action) => {
+        // console.log("action loop");
+        if (action === c.HOMETEAM_POINT) {
+          // console.log("Hometeam ++", agg.hometeamPoints++);
+          if (
+            hasHometeamWonSetPure(agg.hometeamPoints, agg.awayteamPoints, 21)
+          ) {
+            // console.log("Hometeam finished with the set");
+            agg.serving = firstTeamToServe;
+            agg.number = 0;
+            agg.hometeamPoints = 0;
+            agg.awayteamPoints = 0;
+            agg.name = calculateNextPersonToServe(
+              firstTeamToServe,
+              serviceOrderHomeTeam,
+              serviceOrderAwayTeam,
+              0
+            );
+            return agg;
+          }
+        }
+
+        if (action === c.AWAYTEAM_POINT) {
+          // console.log("Awayteam ++", agg.awayteamPoints++);
+          if (
+            hasAwayteamWonSetPure(agg.hometeamPoints, agg.awayteamPoints, 21)
+          ) {
+            // console.log("Awayteam finished with the set");
+            agg.serving = firstTeamToServe;
+            agg.number = 0;
+            agg.hometeamPoints = 0;
+            agg.awayteamPoints = 0;
+            agg.name = calculateNextPersonToServe(
+              firstTeamToServe,
+              serviceOrderHomeTeam,
+              serviceOrderAwayTeam,
+              0
+            );
+            return agg;
+          }
+        }
+
         if (
           (action === c.HOMETEAM_POINT && agg.serving === c.HOMETEAM) ||
           (action === c.AWAYTEAM_POINT && agg.serving === c.AWAYTEAM)
         ) {
+          // console.log("Same server!!!");
           return agg;
         }
+
         const newNumber = agg.number + 1;
+        // console.log("next server", newNumber);
         const serving = agg.serving === c.HOMETEAM ? c.AWAYTEAM : c.HOMETEAM;
         return {
+          hometeamPoints: agg.hometeamPoints,
+          awayteamPoints: agg.awayteamPoints,
           serving,
           name: calculateNextPersonToServe(
             firstTeamToServe,
@@ -78,6 +132,8 @@ const personToServe = state => {
           serviceOrderAwayTeam,
           0
         ),
+        hometeamPoints: 0,
+        awayteamPoints: 0,
         number: 0
       }
     );
@@ -106,6 +162,7 @@ function mutateSignals() {
   );
 
   if (currentSet[c.SERVICE_ORDER_IS_SET]) {
+    console.log("index", index);
     update([c.MATCH, index, c.PLAYER_TO_SERVE], personToServe(state));
     update([c.MATCH, c.PLAYER_TO_SERVE], personToServe(state));
   }
@@ -113,8 +170,39 @@ function mutateSignals() {
 
 function mutateIfNotEqual(key, value) {
   const current = this.get(key);
-  if (current == value) {
+  console.log("key, current, value", key, current, value);
+  if (
+    current == value ||
+    (typeof current === "object" && isEquivalent(current, value))
+  ) {
     return;
   }
+  console.log("diff, lets change it", key, current, value);
   this.mutate(key, original => (original = value));
+}
+
+function isEquivalent(a, b) {
+  // Create arrays of property names
+  var aProps = Object.getOwnPropertyNames(a);
+  var bProps = Object.getOwnPropertyNames(b);
+
+  // If number of properties is different,
+  // objects are not equivalent
+  if (aProps.length != bProps.length) {
+    return false;
+  }
+
+  for (var i = 0; i < aProps.length; i++) {
+    var propName = aProps[i];
+
+    // If values of same property are not equal,
+    // objects are not equivalent
+    if (a[propName] !== b[propName]) {
+      return false;
+    }
+  }
+
+  // If we made it this far, objects
+  // are considered equivalent
+  return true;
 }
