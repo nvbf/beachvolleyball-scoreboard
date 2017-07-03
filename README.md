@@ -31,6 +31,12 @@ To run the test, run `npm test`
 
 It will run checkstyle before it run test.
 
+# GUI test.
+
+1. run `npm start`
+2. in a new termainal run `nighwatch` (is installed in `./node_modules/.bin/nightwatch` if `./node_modules/.bin` is not in your _$PATH_)
+
+(from the repos folder)
 
 ## Development
 
