@@ -61,7 +61,7 @@ const personToServe = state => {
       (agg, action) => {
         // console.log("action loop");
         if (action === c.HOMETEAM_POINT) {
-          // console.log("Hometeam ++", agg.hometeamPoints++);
+          agg.hometeamPoints++;
           if (
             hasHometeamWonSetPure(agg.hometeamPoints, agg.awayteamPoints, 21)
           ) {
@@ -81,7 +81,7 @@ const personToServe = state => {
         }
 
         if (action === c.AWAYTEAM_POINT) {
-          // console.log("Awayteam ++", agg.awayteamPoints++);
+          agg.awayteamPoints++;
           if (
             hasAwayteamWonSetPure(agg.hometeamPoints, agg.awayteamPoints, 21)
           ) {

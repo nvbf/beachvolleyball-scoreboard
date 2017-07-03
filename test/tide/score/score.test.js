@@ -1,28 +1,14 @@
-import { List, Map, toJS, fromJS } from 'immutable';
-import {
-    isSetFinished,
-    isMatchFinished,
-} from '../../../src/domain/tide/logic';
+import { List, Map, toJS, fromJS } from "immutable";
+import { isSetFinished, isMatchFinished } from "../../../src/domain/tide/logic";
 
-import {
-    FIRST_SET,
-    SECOND_SET,
-    THIRD_SET,
-    ADD_POINT,
-    REMOVE_POINT,
-    HOMETEAM,
-    AWAYTEAM,
-    TEAM,
-    SCORE,
-    BeachVolleyballSet
-} from '../../../src/domain/tide/state';
+import { BeachVolleyballSet } from "../../../src/domain/tide/state";
 
-describe('BeachVolleyballSet', () => {
-  it('Is BeachVolleyballSet finished', () => {
-    const score = new BeachVolleyballSet()
-    expect(isSetFinished(score)).toEqual(true)
-  })
-})
+describe("BeachVolleyballSet", () => {
+  it("Is BeachVolleyballSet finished", () => {
+    const score = new BeachVolleyballSet();
+    expect(isSetFinished(score)).toEqual(false);
+  });
+});
 //   it('Both have 21 points', () => {
 //     const score = List([21, 21])
 //     expect(isSetFinished(score)).toEqual(false)
@@ -31,13 +17,12 @@ describe('BeachVolleyballSet', () => {
 //   it('Awayteam wins', () => {
 //     const score = List([19, 21])
 //     expect(isSetFinished(score)).toEqual(true)
-//   })  
+//   })
 
 //   it('Hometeam wins close match', () => {
 //     const score = List([26, 28])
 //     expect(isSetFinished(score)).toEqual(true)
-//   })    
-
+//   })
 
 //   it('Not over yet', () => {
 //     const score = List([27, 28])
@@ -47,10 +32,9 @@ describe('BeachVolleyballSet', () => {
 //   it('Not over yet - 2', () => {
 //     const score = List([29, 28])
 //     expect(isSetFinished(score)).toEqual(false)
-//   })  
+//   })
 
 // })
-
 
 // describe('Match is over ', () => {
 //   it('Hometeam wins', () => {
@@ -113,7 +97,7 @@ describe('BeachVolleyballSet', () => {
 //           [SECOND_SET]: score2,
 //           [THIRD_SET]: score3
 //         }
-//     })    
+//     })
 //     const action = Map({
 //       'type': ADD_POINT,
 //       [TEAM]: HOMETEAM
@@ -124,7 +108,6 @@ describe('BeachVolleyballSet', () => {
 //     console.log(expected);
 //     expect(result).toEqual(expected)
 //   })
-
 
 //  it('Reducer - removePoint', () => {
 //     const score1 = [19, 21];
@@ -146,7 +129,7 @@ describe('BeachVolleyballSet', () => {
 //           [THIRD_SET]: score3
 //         }
 //     })
-            
+
 //     const action = Map({
 //       'type': REMOVE_POINT,
 //       [TEAM]: AWAYTEAM

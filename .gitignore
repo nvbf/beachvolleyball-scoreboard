@@ -6,3 +6,5 @@ coverage
 .c9
 
 .next
+reports/
+selenium-debug.log
