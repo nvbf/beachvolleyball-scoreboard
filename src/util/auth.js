@@ -6,16 +6,18 @@ const log = debug("auth");
 
 let authUser = null;
 
-export function getAuthUser() {
-  log("authUser", authUser);
+export async function getAuthUser() {
+  if (!authUser) {
+    await startAnonymousAuth();
+  }
   return authUser;
 }
 
-export function getUID() {
-  if (authUser) {
-    return authUser.uid;
+export async function getUID() {
+  if (!authUser) {
+    await getAuthUser();
   }
-  return null;
+  return authUser.uid;
 }
 
 // Initia|ze Firebase
@@ -33,69 +35,66 @@ export function init() {
   }
 }
 
-export default function startAuth() {
-  init();
-  var provider = new firebase.auth.FacebookAuthProvider();
-
-  firebase
-    .auth()
-    .signInWithPopup(provider)
-    .then(function(result) {
-      // This gives you a Facebook Access Token. You can use it to access the Facebook API.
-      var token = result.credential.accessToken;
-      // The signed-in user info.
-      var user = result.user;
-      console.log(result.user);
-      // ...
-    })
-    .catch(function(err) {
-      // Handle Errors here.
-      var errorCode = err.code;
-      var errorMessage = err.message;
-      // The email of the user's account used.
-      var email = err.email;
-      // The firebase.auth.AuthCredential type that was used.
-      var credential = err.credential;
-      // ...
-    });
-}
-
-export function startAnonymousAuth() {
-  init();
-  if (authUser) {
-    console.log("authUser exist", authUser);
-    return;
-  }
-  firebase
-    .auth()
-    .signInAnonymously()
-    .then(() => console.log("signed in."))
-    .catch(function(error) {
-      // Handle Errors here.
-      var errorCode = error.code;
-      var errorMessage = error.message;
-      log("Error in signInAnonymously", errorCode, errorMessage);
-      throw "error";
-    });
-  firebase.auth().onAuthStateChanged(authStateChangedHandler);
+export default async function startAuth() {
+  return new Promise((resolve, reject) => {
+    init();
+    var provider = new firebase.auth.FacebookAuthProvider();
+    firebase
+      .auth()
+      .signInWithPopup(provider)
+      .then(function(result) {
+        var token = result.credential.accessToken;
+        var user = result.user;
+        resolve(user);
+      })
+      .catch(function(err) {
+        var errorCode = err.code;
+        var errorMessage = err.message;
+        var email = err.email;
+        var credential = err.credential;
+        reject(err);
+      });
+  });
 }
 
 let obsersvers = [];
 
-function authStateChangedHandler(user) {
-  if (user != null || typeof user !== "undefined") {
-    log("authStateChangedHandler, we now have a user", user);
-    authUser = user;
-    obsersvers.forEach(observer => observer(user));
-  } else {
-    authUser = null;
-    log("no user returned from authStateChangedHandler!", user);
-  }
+export async function startAnonymousAuth() {
+  return new Promise((resolve, reject) => {
+    init();
+    firebase
+      .auth()
+      .signInAnonymously()
+      .then(() => console.log("signed in."))
+      .catch(function(error) {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        log("Error in signInAnonymously", errorCode, errorMessage);
+        throw "error";
+      });
+    firebase.auth().onAuthStateChanged((user, err) => {
+      if (err) {
+        log("Error on login");
+        reject(err);
+      }
+      if (user != null || typeof user !== "undefined") {
+        log("authStateChangedHandler, we now have a user", user);
+        authUser = user;
+        obsersvers.forEach(observer => observer(user));
+        resolve(user);
+      } else {
+        authUser = null;
+        log("no user returned from authStateChangedHandler!", user);
+        resolve(authUser);
+      }
+    });
+  });
 }
 
 /**
  *  Observer is a function that takes inn a user object
- * 
+ *
  */
 export function addObserverOnLoginStatus(observer) {
   obsersvers.push(observer);

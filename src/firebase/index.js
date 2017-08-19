@@ -1,11 +1,11 @@
 import firebase from "firebase";
 import slugify2 from "slugify2";
-import { init, startAnonymousAuth, getAuthUser } from "../util/auth";
+import { getUID } from "../util/auth";
 import AllAction from "../../src/domain/tide/actions";
 import { constants as c } from "../domain/tide/state";
 
-export function save(tournamentId = 0, matchId, match) {
-  init();
+export async function save(tournamentId = 0, matchId, match) {
+  const uid = await getUID();
   const matchData = {
     match,
     tournamentId,
@@ -17,50 +17,35 @@ export function save(tournamentId = 0, matchId, match) {
 }
 
 export async function getTournament(slug) {
-  init();
-  startAnonymousAuth();
-  const user = getAuthUser();
-  if (!user) {
-    return {};
-  }
-  const promise = new Promise((resolve, reject) => {
-    firebase
-      .database()
-      .ref(c.TOURNAMENT_PATH)
-      .orderByChild("name")
-      .equalTo(slug)
-      .once("value")
-      .then(dataSnapshot => {
-        const tournaments = dataSnapshot.val();
-        const keys = Object.keys(tournaments);
-        const key = keys[0];
-        const tournament = tournaments[key] || {};
-        const id = tournament.privateId;
-        console.log("tournament.privateId", tournament.privateId);
-        resolve({ tournament });
-      })
-      .catch(err => reject(err));
-  });
-  return await promise;
-}
-
-export async function getMyTournaments() {
-  init();
-  startAnonymousAuth();
-  const user = getAuthUser();
-  if (!user || !firebase.apps.length) {
-    return Promise.resolved({});
-  }
-
+  const uid = await getUID();
   return new Promise((resolve, reject) => {
     firebase
       .database()
-      .ref(myActiveTournamentsPath())
+      .ref(myTournamentPath(uid, slug))
       .once("value")
       .then(dataSnapshot => {
-        console.log('dataSnapshot', dataSnapshot)
-        console.log('val', dataSnapshot.val())
-        resolve(dataSnapshot.val() || {} )
+        const tournaments = dataSnapshot.val();
+        console.log("tournaments", tournaments);
+        if (!tournaments) {
+          resolve({});
+        }
+        resolve({ tournament: tournaments });
+      })
+      .catch(err => reject(err));
+  });
+}
+
+export async function getMyTournaments() {
+  const uid = await getUID();
+  return new Promise((resolve, reject) => {
+    firebase
+      .database()
+      .ref(myActiveTournamentsPath(uid))
+      .once("value")
+      .then(dataSnapshot => {
+        console.log("dataSnapshot", dataSnapshot);
+        console.log("val", dataSnapshot.val());
+        resolve(dataSnapshot.val() || {});
       })
       .catch(err => {
         console.log("rejected - getMyTournaments", err);
@@ -69,41 +54,40 @@ export async function getMyTournaments() {
   });
 }
 
-export function saveTournament(tournamentName) {
-  const user = getAuthUser();
-  if (!user) {
-    return console.log("Could not save tournament, user is not logged in");
-  }
-  console.log("userid", user.uid);
+export async function saveTournament(tournamentName) {
+  const uid = await getUID();
+  console.log("uid", uid);
   const tournamentData = {
-    userId: user.uid,
+    userId: uid,
     name: tournamentName,
-    publicId: slugify2(tournamentName),
+    slug: slugify2(tournamentName),
     privateId: parseInt(
       (Math.random() * 100000000000000000).toString().slice(-6)
     )
   };
 
-  firebase.database().ref(myActiveTournamentsPath()).push(tournamentData);
-  return tournamentData;
+  return new Promise((resolve, reject) => {
+    firebase
+      .database()
+      .ref(myTournamentPath(uid, tournamentData.slug))
+      .set(tournamentData, (value, err) => {
+        if (err) {
+          return reject(err);
+        }
+        resolve(tournamentData);
+      });
+  });
 }
 
-function myTournamentPath() {
-  const user = getAuthUser();
-  if (!user) {
-    throw new Error("User do not exist");
-  }
-  return `${c.TOURNAMENT_PATH}/${user.uid}`;
+function myTournamentsPath(uid) {
+  return `${c.TOURNAMENT_PATH}/${uid}`;
 }
 
-function myTournamentPath() {
-  const user = getAuthUser();
-  if (!user) {
-    throw new Error("User do not exist");
-  }
-  return `${c.TOURNAMENT_PATH}/${user.uid}`;
+function myTournamentPath(uid, slug) {
+  console.log(`${myActiveTournamentsPath(uid)}/${slug}`);
+  return `${myActiveTournamentsPath(uid)}/${slug}`;
 }
 
-function myActiveTournamentsPath() {
-  return `${myTournamentPath()}/active`;
+function myActiveTournamentsPath(uid) {
+  return `${myTournamentsPath(uid)}/active`;
 }

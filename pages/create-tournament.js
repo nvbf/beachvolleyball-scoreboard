@@ -1,8 +1,8 @@
 import React from "react";
 
-import { saveTournament } from "../../src/firebase";
+import { saveTournament } from "../src/firebase";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
-import AppBar from "../../src/components/components/appbar";
+import AppBar from "../src/components/components/appbar";
 import {
   Card,
   CardActions,
@@ -16,37 +16,42 @@ import { List, ListItem } from "material-ui/List";
 import Divider from "material-ui/Divider";
 
 import src from "debug";
-import { startAnonymousAuth } from "../../src/util/auth";
+import { startAnonymousAuth } from "../src/util/auth";
 
 class CreateTournamentsPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       created: false,
-      publicId: 0,
+      slug: 0,
       privateId: 0,
       failed: false
     };
+    this.setStateAsync = this.setStateAsync.bind(this);
+    this.createTournament = this.createTournament.bind(this);
   }
 
-  createTournament = () => {
+  setStateAsync(state) {
+    return new Promise(resolve => {
+      this.setState(state, resolve);
+    });
+  }
+
+  async createTournament() {
     const name = document.getElementById("name").value;
-    const result = saveTournament(name);
+    const result = await saveTournament(name);
+    console.log("result of saveTournament", result);
     if (result) {
-      this.setState({
+      this.setStateAsync({
         created: true,
-        publicId: result.publicId,
+        slug: result.slug,
         privateId: result.privateId
       });
     } else {
-      this.setState({
+      this.setStateAsync({
         failed: true
       });
     }
-  };
-
-  componentDidMount() {
-    startAnonymousAuth();
   }
 
   render() {
@@ -70,7 +75,7 @@ class CreateTournamentsPage extends React.Component {
             />
           </CardActions>
           {tournamentInfo(
-            this.state.publicId,
+            this.state.slug,
             this.state.privateId,
             this.state.failed
           )}
@@ -80,12 +85,13 @@ class CreateTournamentsPage extends React.Component {
   }
 }
 
-function tournamentInfo(publicId, privateId, failed) {
+function tournamentInfo(slug, privateId, failed) {
+  console.log("failed", failed);
   if (failed) {
     <h2>Failed to create tournaments, try with another name.</h2>;
   }
 
-  if (!(publicId && privateId)) {
+  if (!(slug && privateId)) {
     return;
   }
   return (
@@ -93,13 +99,13 @@ function tournamentInfo(publicId, privateId, failed) {
       <CardTitle>Tournament ID's</CardTitle>
       <CardText>
         <List>
-          <ListItem primaryText={publicId} secondaryText="publicId" />
+          <ListItem primaryText={slug} secondaryText="slug" />
           <ListItem primaryText={privateId} secondaryText="privateId" />
         </List>
         <Divider inset={true} />
         <h4>
           To see all matches in your tournament go to{" "}
-          <a href={`/tournament/${publicId}`}>/tournaments/{publicId}</a>
+          <a href={`/tournament/${slug}`}>/tournaments/{slug}</a>
         </h4>
         <h4>
           To create a match that appears on the tournament page. Add the private

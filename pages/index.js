@@ -18,7 +18,7 @@ import styled from "styled-components";
 
 const StyledCard = styled(Card)`
   margin: 1rem;
-   cursor: pointer; 
+   cursor: pointer;
 `;
 
 export default () => {
@@ -60,7 +60,7 @@ export default () => {
             </Link>
           </StyledCard>
           <StyledCard>
-            <Link href="/tournament/create">
+            <Link href="/create-tournament">
               <CardMedia
                 overlay={
                   <CardTitle

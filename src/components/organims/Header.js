@@ -8,7 +8,7 @@ import {
   DEFAULT_SET_LENGTH
 } from "../../domain/tide/state";
 
-import { List } from "material-ui";
+import List from "material-ui/List";
 import styled from "styled-components";
 import index from "preact-compat";
 
@@ -16,15 +16,15 @@ const MainMenu = styled.div`
   z-index: 3;
   height: 56px;
   line-height: 56px;
-  background-color: #09c; 
+  background-color: #09c;
 `;
 
 const MenuLink = styled.a`
   color: white;
   text-decoration: none;
-  font-size: 24px; 
+  font-size: 24px;
   &:hover a {
-      color: white; 
+      color: white;
   }
 `;
 
@@ -49,9 +49,9 @@ const MainMenuElement = styled.ul`
     padding-right: 5px;
     padding-left: 10px;
     border-right: 1px solid #0489b5;
-    vertical-align: top; 
+    vertical-align: top;
     &:hover {
-         background-color: #555; 
+         background-color: #555;
     }
 
 `;
@@ -92,8 +92,8 @@ function listTournaments(tournaments = []) {
     return (
       <li key={tournamentKey}>
         <Link
-          href={`/tournament/?slug=${tournament.publicId}`}
-          as={`/tournament/${tournament.publicId}`}
+          href={`/tournament/?slug=${tournament.slug}`}
+          as={`/tournament/${tournament.slug}`}
         >
           <a>{tournament.name}</a>
         </Link>

@@ -1,6 +1,6 @@
 import { Record, List } from "immutable";
 
-export const TOURNAMENT_PATH = "/tournaments/";
+export const TOURNAMENT_PATH = "/tournaments";
 export const MATCH_PATH = "/matches/";
 export const TOURNAMENT_PRIVATE_ID = "TOURNAMENT_PRIVATE_ID";
 export const MATCH_FIREBASE_KEY = "MATCH_FIREBASE_KEY";

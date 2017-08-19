@@ -1,18 +1,18 @@
 import React from "react";
 import firebase from "firebase";
-import { init } from "../../src/util/auth";
-import { getTournament } from "../../src/firebase";
-import { transformToCorrectState } from "../../src/domain/tide/storage";
+import { init } from "../src/util/auth";
+import { getTournament } from "../src/firebase";
+import { transformToCorrectState } from "../src/domain/tide/storage";
 
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
-import { Card, CardActions, CardHeader, CardText } from "material-ui";
+import { Card, CardActions, CardHeader, CardText } from "material-ui/Card";
 
 import {
   constants as c,
   Match,
   MATCH_FIREBASE_KEY,
   WINNER
-} from "../../src/domain/tide/state";
+} from "../src/domain/tide/state";
 
 import {
   isMatchFinished,
@@ -22,63 +22,53 @@ import {
   getSetResult,
   getPointsInCurrentSetAsString,
   getScoreForCompletedSets
-} from "../../src/domain/tide/logic";
+} from "../src/domain/tide/logic";
 import component from "react-toggle";
 
 // TODO; put into head     <meta name="viewport" content="width=device-width, initial-scale=1">
 
 class Tournament extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      loading: true
-    };
-  }
+  state = {
+    loading: true
+  };
 
-  componentDidMount() {
-    // init();
-    // firebase
-    //   .database()
-    //   .ref(c.MATCH_PATH)
-    //   .orderByChild("tournamentId")
-    //   .equalTo(this.props.tournament.privateId)
-    //   .once("value", matches => {
-    //     this.setState({
-    //       matches: matches.val(),
-    //       loading: false
-    //     });
-    //   });
+  async componentDidMount() {
+    const slug = document.location.pathname.split("/")[2];
+    const result = await getTournament(slug);
+    this.setState({
+      tournament: result.tournament,
+      loading: false
+    });
   }
 
   render() {
-    const { tournament } = this.props;
-    if(!tournament) {
-      return <p>Turnering ikke funnet</p>
+    const { tournament, loading } = this.state;
+    if (!tournament && loading === false) {
+      console.log("tournament er tom?", this.state);
+      return <p>Turnering ikke funnet</p>;
     }
+
+    const TournamentName = tournament
+      ? <h1>
+          {tournament.name}
+        </h1>
+      : null;
+
     const matchesHtml = this.state.matches
       ? <div>
           {listMatches(this.state.matches)}
         </div>
       : <div>No Matches in tournament</div>;
     const componentToShow = this.state.loading
-      ? <div>Loading ... </div>
+      ? <div>
+          <p>Loading ... </p>
+        </div>
       : matchesHtml;
     return (
       <MuiThemeProvider>
         <div>
-          <div className="main-menu">
-            <ul>
-              <li>
-                <a href="">
-                  {tournament.name}
-                </a>
-              </li>
-            </ul>
-          </div>
+          {TournamentName}
           <div className="tournament-container">
-            <p>
-              {tournament.description}
-            </p>
             {componentToShow}
           </div>
         </div>
@@ -86,13 +76,6 @@ class Tournament extends React.Component {
     );
   }
 }
-
-Tournament.getInitialProps = async context => {
-  const slug = context.query.slug;
-  const tournamentInfo = await getTournament(slug);
-  console.log("tournamentInfo", tournamentInfo);
-  return tournamentInfo;
-};
 
 function showScore(match = {}) {
   const complete = false;
