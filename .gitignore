@@ -8,3 +8,4 @@ coverage
 .next
 reports/
 selenium-debug.log
+yarn-error.log

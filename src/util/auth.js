@@ -10,7 +10,15 @@ export function getAuthUser() {
   log("authUser", authUser);
   return authUser;
 }
-// Initialize Firebase
+
+export function getUID() {
+  if (authUser) {
+    return authUser.uid;
+  }
+  return null;
+}
+
+// Initia|ze Firebase
 var config = {
   apiKey: "AIzaSyAroBDj0Vw_4JdwKAWmB5Nq7ydjKq86mFM",
   authDomain: "beachvolleyball-scoreboard.firebaseapp.com",
@@ -37,6 +45,7 @@ export default function startAuth() {
       var token = result.credential.accessToken;
       // The signed-in user info.
       var user = result.user;
+      console.log(result.user);
       // ...
     })
     .catch(function(err) {
@@ -53,6 +62,10 @@ export default function startAuth() {
 
 export function startAnonymousAuth() {
   init();
+  if (authUser) {
+    console.log("authUser exist", authUser);
+    return;
+  }
   firebase
     .auth()
     .signInAnonymously()
@@ -67,11 +80,23 @@ export function startAnonymousAuth() {
   firebase.auth().onAuthStateChanged(authStateChangedHandler);
 }
 
+let obsersvers = [];
+
 function authStateChangedHandler(user) {
   if (user != null || typeof user !== "undefined") {
     log("authStateChangedHandler, we now have a user", user);
     authUser = user;
+    obsersvers.forEach(observer => observer(user));
   } else {
-    log("no user returned from authStateChangedHandler!", user, "-");
+    authUser = null;
+    log("no user returned from authStateChangedHandler!", user);
   }
+}
+
+/**
+ *  Observer is a function that takes inn a user object
+ * 
+ */
+export function addObserverOnLoginStatus(observer) {
+  obsersvers.push(observer);
 }

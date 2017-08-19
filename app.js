@@ -38,6 +38,7 @@ app
     });
 
     server.get("/tournament/:slug", (req, res) => {
+      console.log('TEST')
       const parsedUrl = parse(req.url, true);
       const queryParams = { slug: req.params.slug };
       app.render(req, res, "/tournament", queryParams);

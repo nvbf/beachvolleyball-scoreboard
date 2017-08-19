@@ -1,7 +1,7 @@
-import { init } from "../util/auth";
 import firebase from "firebase";
+import slugify2 from "slugify2";
+import { init, startAnonymousAuth, getAuthUser } from "../util/auth";
 import AllAction from "../../src/domain/tide/actions";
-
 import { constants as c } from "../domain/tide/state";
 
 export function save(tournamentId = 0, matchId, match) {
@@ -18,7 +18,12 @@ export function save(tournamentId = 0, matchId, match) {
 
 export async function getTournament(slug) {
   init();
-  return new Promise((resolve, reject) => {
+  startAnonymousAuth();
+  const user = getAuthUser();
+  if (!user) {
+    return {};
+  }
+  const promise = new Promise((resolve, reject) => {
     firebase
       .database()
       .ref(c.TOURNAMENT_PATH)
@@ -36,31 +41,69 @@ export async function getTournament(slug) {
       })
       .catch(err => reject(err));
   });
+  return await promise;
 }
 
-export async function getTournaments() {
+export async function getMyTournaments() {
   init();
+  startAnonymousAuth();
+  const user = getAuthUser();
+  if (!user || !firebase.apps.length) {
+    return Promise.resolved({});
+  }
+
   return new Promise((resolve, reject) => {
     firebase
       .database()
-      .ref(c.TOURNAMENT_PATH)
+      .ref(myActiveTournamentsPath())
       .once("value")
-      .then(dataSnapshot => resolve(dataSnapshot.val()))
-      .catch(err => reject(err));
+      .then(dataSnapshot => {
+        console.log('dataSnapshot', dataSnapshot)
+        console.log('val', dataSnapshot.val())
+        resolve(dataSnapshot.val() || {} )
+      })
+      .catch(err => {
+        console.log("rejected - getMyTournaments", err);
+        reject(err);
+      });
   });
 }
 
 export function saveTournament(tournamentName) {
-  init();
-
+  const user = getAuthUser();
+  if (!user) {
+    return console.log("Could not save tournament, user is not logged in");
+  }
+  console.log("userid", user.uid);
   const tournamentData = {
+    userId: user.uid,
     name: tournamentName,
-    publicId: tournamentName,
+    publicId: slugify2(tournamentName),
     privateId: parseInt(
       (Math.random() * 100000000000000000).toString().slice(-6)
     )
   };
 
-  firebase.database().ref(c.TOURNAMENT_PATH).push(tournamentData);
+  firebase.database().ref(myActiveTournamentsPath()).push(tournamentData);
   return tournamentData;
+}
+
+function myTournamentPath() {
+  const user = getAuthUser();
+  if (!user) {
+    throw new Error("User do not exist");
+  }
+  return `${c.TOURNAMENT_PATH}/${user.uid}`;
+}
+
+function myTournamentPath() {
+  const user = getAuthUser();
+  if (!user) {
+    throw new Error("User do not exist");
+  }
+  return `${c.TOURNAMENT_PATH}/${user.uid}`;
+}
+
+function myActiveTournamentsPath() {
+  return `${myTournamentPath()}/active`;
 }

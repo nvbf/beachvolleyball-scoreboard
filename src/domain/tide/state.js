@@ -74,6 +74,10 @@ export const SHOW_TTO = "SHOW_TTO";
 export const SHOW_MATCH_FINISHED = "SHOW_MATCH_FINISHED";
 export const SHOW_SET_FINISHED = "SHOW_SET_FINISHED";
 export const SHOW_COMMENTS_DIALOG = "SHOW_COMMENTS_DIALOG";
+export const WINNER = "WINNER";
+export const SETS_HOMETEAM = "SETS_HOMETEAM";
+export const SETS_AWAYTEAM = "SETS_AWAYTEAM";
+export const POINTS_IN_SETS = "POINTS_IN_SETS";
 
 export const BeachVolleyballSet = Record({
   [HOMETEAM_POINT]: 0,
@@ -141,6 +145,10 @@ export const State = Record({
 });
 
 export const constants = {
+  SETS_AWAYTEAM,
+  SETS_HOMETEAM,
+  POINTS_IN_SETS,
+  WINNER,
   MATCH_PATH,
   TOURNAMENT_PATH,
   TOURNAMENT_PRIVATE_ID,
