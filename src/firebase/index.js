@@ -12,11 +12,11 @@ export async function save(tournamentId = 0, matchId, match) {
     matchId
   };
   let updates = {};
-  updates[c.MATCH_PATH + matchId] = match;
+  updates[getMatchPath(matchId)] = match;
   return firebase.database().ref().update(updates);
 }
 
-export async function getTournament(slug) {
+export async function observeTournament(slug, observer) {
   const uid = await getUID();
   return new Promise((resolve, reject) => {
     firebase
@@ -24,14 +24,17 @@ export async function getTournament(slug) {
       .ref(myTournamentPath(uid, slug))
       .once("value")
       .then(dataSnapshot => {
-        const tournaments = dataSnapshot.val();
-        console.log("tournaments", tournaments);
-        if (!tournaments) {
-          resolve({});
-        }
-        resolve({ tournament: tournaments });
+        const tournament = dataSnapshot.val();
+        observer(tournament);
       })
-      .catch(err => reject(err));
+      .catch(err => console.error("Error in observeTournament", err));
+  });
+}
+
+export async function getMatches(matches) {
+  const keys = Object.keys(matches) || [];
+  keys.forEach(key => {
+    const match = matches[key];
   });
 }
 
@@ -84,8 +87,23 @@ function myTournamentsPath(uid) {
 }
 
 function myTournamentPath(uid, slug) {
-  console.log(`${myActiveTournamentsPath(uid)}/${slug}`);
   return `${myActiveTournamentsPath(uid)}/${slug}`;
+}
+
+function myActiveMatchesInTournamentPath(uid, slug) {
+  return myTournamentPath(uid, slug) + "/active";
+}
+
+function myActiveMatchesInTournamentPathConn(uid, slug) {
+  return firebase.database().ref(myActiveTournamentsPath(uid));
+}
+
+function getMatchPath(key) {
+  return `${c.MATCH_PATH}/${key}`;
+}
+
+function myMatcheConn(matchKey) {
+  return firebase.database().ref(getMatchPath(matchKey));
 }
 
 function myActiveTournamentsPath(uid) {

@@ -68,6 +68,7 @@ function listTournaments(tournaments = {}) {
         <ListItem primaryText={tournamentName} rightIcon={toMatches}>
           <ActionDelete />
           {/* TODO: how to get this on the same line, or get a good UX on this, delete button does not work*/}
+          privateId: {tournament.privateId}
         </ListItem>
       </Link>
     );

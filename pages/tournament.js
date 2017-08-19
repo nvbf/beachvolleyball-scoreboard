@@ -1,7 +1,7 @@
 import React from "react";
 import firebase from "firebase";
 import { init } from "../src/util/auth";
-import { getTournament } from "../src/firebase";
+import { observeTournament } from "../src/firebase";
 import { transformToCorrectState } from "../src/domain/tide/storage";
 
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
@@ -28,17 +28,28 @@ import component from "react-toggle";
 // TODO; put into head     <meta name="viewport" content="width=device-width, initial-scale=1">
 
 class Tournament extends React.Component {
+  constructor(props) {
+    super(props);
+    this.loadTournamentData = this.loadTournamentData.bind(this);
+  }
+
   state = {
     loading: true
   };
 
-  async componentDidMount() {
+  componentDidMount() {
+    this.loadTournamentData();
+  }
+
+  loadTournamentData() {
     const slug = document.location.pathname.split("/")[2];
-    const result = await getTournament(slug);
-    this.setState({
-      tournament: result.tournament,
-      loading: false
-    });
+    const observe = value => {
+      this.setState({
+        tournament: value,
+        loading: false
+      });
+    };
+    observeTournament(slug, observe);
   }
 
   render() {

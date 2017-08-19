@@ -2,7 +2,7 @@ import React from "react";
 import url from "url";
 import { wrap } from "tide";
 import firebase from "firebase";
-import { init } from "../src/util/auth";
+import { getUID } from "../src/util/auth";
 
 import AddHomeTeam from "./../src/components/components/add-home-team";
 import AddAwayTeam from "./../src/components/components/add-away-team";
@@ -39,11 +39,11 @@ import { get as getStateFromLocalStorage } from "./../src/domain/tide/storage";
 import { ButtonToolbar, Button } from "react-bootstrap";
 
 class Main extends React.Component {
-  componentDidMount() {
+  async componentDidMount() {
     console.log("componentDidMount");
     const qs = url.parse(document.location.search, true).query;
     if (qs.name1 && qs.name2 && qs.name3 && qs.name4) {
-      const matchKey = this.setStateFromQs(qs);
+      const matchKey = await this.setStateFromQs(qs);
       createCorrectQueryString(matchKey);
       return;
     }
@@ -59,7 +59,7 @@ class Main extends React.Component {
       }
     }
 
-    const matchKey = this.initMatch();
+    const matchKey = await this.initMatch();
     createCorrectQueryString(matchKey);
     this.props.tide.actions.all.mutateAndTrack(
       [MATCH, SHOW_COMPONENT],
@@ -67,9 +67,11 @@ class Main extends React.Component {
     );
   }
 
-  initMatch = (qs = {}) => {
-    init();
-    const key = firebase.database().ref(`${c.MATCH_PATH}`).push().key;
+  initMatch = async (qs = {}) => {
+    const uid = await getUID();
+    const key = firebase.database().ref(`${c.MATCH_PATH}`).push({
+      userId: uid
+    }).key;
     this.props.tide.actions.all.mutateAndTrack(
       [c.MATCH, c.MATCH_FIREBASE_KEY],
       key
@@ -148,9 +150,7 @@ class Main extends React.Component {
     } else if (show === LOADING_COMPONENT) {
       return (
         <main>
-          <div>
-            Loading...
-          </div>
+          <div>Loading...</div>
         </main>
       );
     } else if (show === SHOW_SERVICE_ORDER_DIALOG_TEAM) {
@@ -208,25 +208,19 @@ class Main extends React.Component {
     } else if (show === c.SHOW_SWITCH) {
       return (
         <main>
-          <NotificationDialog>
-            Switch
-          </NotificationDialog>
+          <NotificationDialog>Switch</NotificationDialog>
         </main>
       );
     } else if (show === c.SHOW_SET_FINISHED) {
       return (
         <main>
-          <NotificationDialog>
-            Set finished
-          </NotificationDialog>
+          <NotificationDialog>Set finished</NotificationDialog>
         </main>
       );
     } else if (show === c.SHOW_MATCH_FINISHED) {
       return (
         <main>
-          <NotificationDialog>
-            Match Finished
-          </NotificationDialog>
+          <NotificationDialog>Match Finished</NotificationDialog>
         </main>
       );
     } else if (show === c.SHOW_COMMENTS_DIALOG) {
