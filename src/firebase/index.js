@@ -11,8 +11,10 @@ import {
   getScoreFromSecondSet,
   getScoreFromThirdSet,
   getSetResult,
-  getPointsInCurrentSetAsString,
-  getScoreForCompletedSets
+  getPointsInCurrentSet,
+  getScoreForCompletedSets,
+  getAwayTeamSetsWon,
+  getHomeTeamSetsWon
 } from "../domain/tide/logic";
 
 function extractDataMatchToTournament(match) {
@@ -21,10 +23,12 @@ function extractDataMatchToTournament(match) {
   const b1Player = match[c.AWAYTEAM_FIRST_PLAYER_NAME];
   const b2Player = match[c.AWAYTEAM_SECOND_PLAYER_NAME];
 
+  console.log("match???", match);
   const isFinished = isMatchFinished(match);
-  const pointsInCurrentSet = getPointsInCurrentSetAsString(match);
+  const pointsInCurrentSet = getPointsInCurrentSet(match);
   const scoreInCompletedSet = getScoreForCompletedSets(match);
-  const currentPoints = getPointsInCurrentSetAsString;
+  const setsWonByHomeTeam = getHomeTeamSetsWon(match);
+  const setsWonByAwayTeam = getAwayTeamSetsWon(match);
 
   return {
     h1Player,
@@ -34,38 +38,31 @@ function extractDataMatchToTournament(match) {
     isFinished,
     pointsInCurrentSet,
     scoreInCompletedSet,
-    currentPoints
+    setsWonByHomeTeam,
+    setsWonByAwayTeam
   };
 }
 
-export async function save(tournamentId = 0, matchId, match) {
+export async function save(tournamentId = 0, matchKey, match) {
   const uid = await getUID();
   match.userId = uid;
+  const matchId = match.match.get(c.MATCH)[c.MATCH_ID];
   const matchState = JSON.stringify(match.match);
   let updates = {};
 
   // need to get slug from TournamentId
   if (tournamentId !== 0) {
     console.log("tournamentId", tournamentId);
-    const slug = getSlugFromTournamentId(tournamentId);
-    const matchInfo = extractDataMatchToTournament(match);
-    console.log("matchID", matchId);
-    updates[matchInTournamentPath(uid, slug, matchId)] = matchInfo;
+    const matchInfo = extractDataMatchToTournament(match.match.get(c.MATCH));
+    matchInfo.userId = uid;
+    console.log("matchId", matchId);
+    updates[matchInTournamentPath(tournamentId, matchId)] = matchInfo;
   }
   match.match = matchState;
-  console.log("path", getMatchPath(matchId));
+  console.log("path", getMatchPath(matchKey));
   console.log("matchState", match);
-  updates[getMatchPath(matchId)] = match;
+  updates[getMatchPath(matchKey)] = match;
   return firebase.database().ref().update(updates);
-}
-
-let slugFromId = {};
-export async function getSlugFromTournamentId(tournamentId) {
-  if (slugFromId[tournamentId]) {
-    const tournament = await getTournament(tournamentId);
-    slugFromId[tournamentId] = tournament.slug;
-  }
-  return slugFromId[tournamentId];
 }
 
 export async function observeTournament(slug, observer) {
@@ -167,8 +164,8 @@ function myActiveMatchesInTournamentPath(uid, slug) {
   return myTournamentPath(uid, slug) + "/active";
 }
 
-function matchInTournamentPath(uid, slug, matchId) {
-  return `${myActiveMatchesInTournamentPath(uid, slug)}/${matchId}`;
+function matchInTournamentPath(tournamentId, matchId) {
+  return `tournament_matches/${tournamentId}/${matchId}`;
 }
 
 function myActiveMatchesInTournamentPathConn(uid, slug) {
