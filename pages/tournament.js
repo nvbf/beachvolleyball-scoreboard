@@ -1,11 +1,12 @@
 import React from "react";
 import firebase from "firebase";
+import component from "react-toggle";
+import { Card, CardActions, CardHeader, CardText } from "material-ui/Card";
+import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
+
 import { init } from "../src/util/auth";
 import { observeTournament } from "../src/firebase";
 import { transformToCorrectState } from "../src/domain/tide/storage";
-
-import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
-import { Card, CardActions, CardHeader, CardText } from "material-ui/Card";
 
 import {
   constants as c,
@@ -23,7 +24,6 @@ import {
   getPointsInCurrentSetAsString,
   getScoreForCompletedSets
 } from "../src/domain/tide/logic";
-import component from "react-toggle";
 
 // TODO; put into head     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -95,9 +95,6 @@ function showScore(match = {}) {
   const secondSet = getScoreFromSecondSet(match);
   const thirdSet = getScoreFromThirdSet(match);
   const setResult = getSetResult(match);
-  const isFinished = isMatchFinished(match);
-  const pointsInCurrentSet = getPointsInCurrentSetAsString(match);
-  const scoreInCompletedSet = getScoreForCompletedSets(match);
 
   return (
     <span>

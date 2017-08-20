@@ -32,7 +32,7 @@ export function update(matchId, state) {
     .setIn([HISTORY], List());
   try {
     save(tournamentId, matchId, {
-      match: JSON.stringify(stateToStore),
+      match: stateToStore,
       tournamentId: tournamentId
     });
   } catch (err) {

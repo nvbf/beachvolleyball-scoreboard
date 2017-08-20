@@ -72,6 +72,7 @@ class Main extends React.Component {
     const key = firebase.database().ref(`${c.MATCH_PATH}`).push({
       userId: uid
     }).key;
+    console.log("key?????", key);
     this.props.tide.actions.all.mutateAndTrack(
       [c.MATCH, c.MATCH_FIREBASE_KEY],
       key

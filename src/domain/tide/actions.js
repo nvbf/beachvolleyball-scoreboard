@@ -156,15 +156,18 @@ class AllAction extends Actions {
       ? match[c.LAST_SET_SWITCH_EVERY_X_POINT]
       : match[c.DEFAULT_SWITCH_EVERY_X_POINT];
     const newMatchState = Match({
-      [c.FIRST_SET]: getCurrentSetIndex(match) === c.FIRST_SET
-        ? newScore
-        : match[c.FIRST_SET],
-      [c.SECOND_SET]: getCurrentSetIndex(match) === c.SECOND_SET
-        ? newScore
-        : match[c.SECOND_SET],
-      [c.THIRD_SET]: getCurrentSetIndex(match) === c.THIRD_SET
-        ? newScore
-        : match[c.THIRD_SET]
+      [c.FIRST_SET]:
+        getCurrentSetIndex(match) === c.FIRST_SET
+          ? newScore
+          : match[c.FIRST_SET],
+      [c.SECOND_SET]:
+        getCurrentSetIndex(match) === c.SECOND_SET
+          ? newScore
+          : match[c.SECOND_SET],
+      [c.THIRD_SET]:
+        getCurrentSetIndex(match) === c.THIRD_SET
+          ? newScore
+          : match[c.THIRD_SET]
     });
     const pointsInSet = isLastSet
       ? match[c.LAST_SET_LENGTH]
@@ -188,12 +191,14 @@ class AllAction extends Actions {
     assert(player === 1 || player === 2, "player should be one of 1 or 2.");
     const state = this.getMatch();
     const index = getCurrentSetIndex(state);
-    const firstServer = player === 1
-      ? this.getMatch()[c.HOMETEAM_FIRST_PLAYER_NAME]
-      : this.getMatch()[c.HOMETEAM_SECOND_PLAYER_NAME];
-    const secondServer = player === 2
-      ? this.getMatch()[c.HOMETEAM_FIRST_PLAYER_NAME]
-      : this.getMatch()[c.HOMETEAM_SECOND_PLAYER_NAME];
+    const firstServer =
+      player === 1
+        ? this.getMatch()[c.HOMETEAM_FIRST_PLAYER_NAME]
+        : this.getMatch()[c.HOMETEAM_SECOND_PLAYER_NAME];
+    const secondServer =
+      player === 2
+        ? this.getMatch()[c.HOMETEAM_FIRST_PLAYER_NAME]
+        : this.getMatch()[c.HOMETEAM_SECOND_PLAYER_NAME];
     const serviceOrder = new List([firstServer, secondServer]);
     this.mutateAndTrack([MATCH, index, c.SERVICE_ORDER_HOMETEAM], serviceOrder);
     this.handleServiceOrderDialogPath(c.HOMETEAM);
@@ -203,12 +208,14 @@ class AllAction extends Actions {
     assert(player === 1 || player === 2, "player should be one of 1 or 2.");
     const state = this.getMatch();
     const currentSetIndex = getCurrentSetIndex(state);
-    const firstServer = player === 1
-      ? this.getMatch()[c.AWAYTEAM_FIRST_PLAYER_NAME]
-      : this.getMatch()[c.AWAYTEAM_SECOND_PLAYER_NAME];
-    const secondServer = player === 2
-      ? this.getMatch()[c.AWAYTEAM_FIRST_PLAYER_NAME]
-      : this.getMatch()[c.AWAYTEAM_SECOND_PLAYER_NAME];
+    const firstServer =
+      player === 1
+        ? this.getMatch()[c.AWAYTEAM_FIRST_PLAYER_NAME]
+        : this.getMatch()[c.AWAYTEAM_SECOND_PLAYER_NAME];
+    const secondServer =
+      player === 2
+        ? this.getMatch()[c.AWAYTEAM_FIRST_PLAYER_NAME]
+        : this.getMatch()[c.AWAYTEAM_SECOND_PLAYER_NAME];
     const serviceOrder = new List([firstServer, secondServer]);
     this.mutateAndTrack(
       [MATCH, currentSetIndex, c.SERVICE_ORDER_AWAYTEAM],
@@ -228,9 +235,10 @@ class AllAction extends Actions {
       team
     );
     if (currentSet[c.FIRST_TEAM_TO_SERVE] === team) {
-      const nextDialog = team === c.HOMETEAM
-        ? c.SHOW_SERVICE_ORDER_DIALOG_PLAYER_AWAYTEAM
-        : c.SHOW_SERVICE_ORDER_DIALOG_PLAYER_HOMETEAM;
+      const nextDialog =
+        team === c.HOMETEAM
+          ? c.SHOW_SERVICE_ORDER_DIALOG_PLAYER_AWAYTEAM
+          : c.SHOW_SERVICE_ORDER_DIALOG_PLAYER_HOMETEAM;
       console.log("nextDialog", nextDialog);
       this.mutateAndTrack([c.MATCH, c.SHOW_COMPONENT], nextDialog);
     } else {
