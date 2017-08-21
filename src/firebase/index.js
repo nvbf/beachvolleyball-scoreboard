@@ -14,7 +14,8 @@ import {
   getPointsInCurrentSet,
   getScoreForCompletedSets,
   getAwayTeamSetsWon,
-  getHomeTeamSetsWon
+  getHomeTeamSetsWon,
+  hasHomeTeamWonMatch
 } from "../domain/tide/logic";
 
 function extractDataMatchToTournament(match) {
@@ -22,6 +23,7 @@ function extractDataMatchToTournament(match) {
   const h2Player = match[c.HOMETEAM_SECOND_PLAYER_NAME];
   const b1Player = match[c.AWAYTEAM_FIRST_PLAYER_NAME];
   const b2Player = match[c.AWAYTEAM_SECOND_PLAYER_NAME];
+  const matchId = match[c.MATCH_ID];
 
   console.log("match???", match);
   const isFinished = isMatchFinished(match);
@@ -29,6 +31,11 @@ function extractDataMatchToTournament(match) {
   const scoreInCompletedSet = getScoreForCompletedSets(match);
   const setsWonByHomeTeam = getHomeTeamSetsWon(match);
   const setsWonByAwayTeam = getAwayTeamSetsWon(match);
+
+  let winner = "";
+  if (isFinished) {
+    winner = hasHomeTeamWonMatch(match) ? c.HOMETEAM : c.AWAYTEAM;
+  }
 
   return {
     h1Player,
@@ -39,7 +46,9 @@ function extractDataMatchToTournament(match) {
     pointsInCurrentSet,
     scoreInCompletedSet,
     setsWonByHomeTeam,
-    setsWonByAwayTeam
+    setsWonByAwayTeam,
+    winner,
+    matchId
   };
 }
 
@@ -65,26 +74,26 @@ export async function save(tournamentId = 0, matchKey, match) {
   return firebase.database().ref().update(updates);
 }
 
-export async function observeTournament(slug, observer) {
+export async function getTournament(slug) {
   const uid = await getUID();
   return new Promise((resolve, reject) => {
     firebase
       .database()
       .ref(myTournamentPath(uid, slug))
       .once("value")
-      .then(dataSnapshot => {
-        const tournament = dataSnapshot.val();
-        observer(tournament);
-      })
-      .catch(err => console.error("Error in observeTournament", err));
+      .then(dataSnapshot => resolve(dataSnapshot.val()))
+      .catch(err => reject(err));
   });
 }
 
-export async function getMatches(matches) {
-  const keys = Object.keys(matches) || [];
-  keys.forEach(key => {
-    const match = matches[key];
-  });
+export async function matchesFromTournament(tournamentPrivateId, setState) {
+  tournamentPrivateId;
+  firebase
+    .database()
+    .ref(`tournament_matches/${tournamentPrivateId}`)
+    .on("value", function(snapshot) {
+      setState({ matches: snapshot.val() });
+    });
 }
 
 export async function getMyTournaments() {

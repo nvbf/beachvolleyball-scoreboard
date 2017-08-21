@@ -5,7 +5,7 @@ import { Card, CardActions, CardHeader, CardText } from "material-ui/Card";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 
 import { init } from "../src/util/auth";
-import { observeTournament } from "../src/firebase";
+import { getTournament, matchesFromTournament } from "../src/firebase";
 import { transformToCorrectState } from "../src/domain/tide/storage";
 
 import {
@@ -14,16 +14,6 @@ import {
   MATCH_FIREBASE_KEY,
   WINNER
 } from "../src/domain/tide/state";
-
-import {
-  isMatchFinished,
-  getScoreFromFirstSet,
-  getScoreFromSecondSet,
-  getScoreFromThirdSet,
-  getSetResult,
-  getPointsInCurrentSetAsString,
-  getScoreForCompletedSets
-} from "../src/domain/tide/logic";
 
 // TODO; put into head     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -41,15 +31,15 @@ class Tournament extends React.Component {
     this.loadTournamentData();
   }
 
-  loadTournamentData() {
+  async loadTournamentData() {
     const slug = document.location.pathname.split("/")[2];
-    const observe = value => {
-      this.setState({
-        tournament: value,
-        loading: false
-      });
-    };
-    observeTournament(slug, observe);
+    const tournament = await getTournament(slug);
+    this.setState({
+      tournament: tournament,
+      loading: false
+    });
+
+    matchesFromTournament(tournament.privateId, this.setState.bind(this));
   }
 
   render() {
@@ -88,17 +78,10 @@ class Tournament extends React.Component {
   }
 }
 
-function showScore(match = {}) {
-  const complete = false;
-
-  const firstSet = getScoreFromFirstSet(match);
-  const secondSet = getScoreFromSecondSet(match);
-  const thirdSet = getScoreFromThirdSet(match);
-  const setResult = getSetResult(match);
-
+function showScore(scoreInCompletedSet) {
   return (
     <span>
-      {firstSet}, {secondSet}, {thirdSet}
+      {scoreInCompletedSet}
     </span>
   );
 }
@@ -109,6 +92,23 @@ function compare(a, b) {
   return 0;
 }
 
+const cardTextStyle = {
+  display: "flex",
+  justifyContent: "space-between",
+  flexDirection: "row",
+  color: "#333"
+};
+
+const homeContainer = {
+  fontWeight: "bold",
+  fontSize: "1.5em",
+  flexGrow: "1"
+};
+
+const scoreStyle = {
+  flexGrow: "2"
+};
+
 function listMatches(matches) {
   if (matches === undefined || matches === null) {
     return;
@@ -116,61 +116,16 @@ function listMatches(matches) {
   const liveMatches = Object.keys(matches)
     .filter(matchIsLive)
     .map(matchKey => {
-      console.log("matchKey", matchKey);
-      console.log("matches[matchKey]", matches[matchKey]);
-      const asJson = JSON.parse(matches[matchKey].match);
-      console.log("asJson", asJson);
-      const state = transformToCorrectState(asJson);
-      console.log("state", state);
-      const match = state[c.MATCH];
-      console.log("match", match);
-
-      const h1Player = match[c.HOMETEAM_FIRST_PLAYER_NAME];
-      const h2Player = match[c.HOMETEAM_SECOND_PLAYER_NAME];
-      const b1Player = match[c.AWAYTEAM_FIRST_PLAYER_NAME];
-      const b2Player = match[c.AWAYTEAM_SECOND_PLAYER_NAME];
-
-      const h1Points = match[c.FIRST_SET][c.HOMETEAM_POINT];
-      const b1Points = match[c.FIRST_SET][c.AWAYTEAM_POINT];
-      const h2Points = match[c.SECOND_SET][c.HOMETEAM_POINT];
-      const b2Points = match[c.SECOND_SET][c.AWAYTEAM_POINT];
-      const h3Points = match[c.THIRD_SET][c.HOMETEAM_POINT];
-      const b3Points = match[c.THIRD_SET][c.AWAYTEAM_POINT];
-
-      const matchId = match[c.MATCH_ID];
-
-      const cardTextStyle = {
-        display: "flex",
-        justifyContent: "space-between",
-        flexDirection: "row",
-        color: "#333"
-      };
-
-      const homeContainer = {
-        fontWeight: "bold",
-        fontSize: "1.5em",
-        flexGrow: "1"
-      };
-
-      const scoreStyle = {
-        flexGrow: "2"
-      };
-      return {
-        matchId,
-        h1Player,
-        h2Player,
-        b1Player,
-        b2Player,
-        match,
-        matchKey
-      };
+      const match = matches[matchKey];
+      return match;
     })
     .sort(compare)
     .map(match => {
       return (
-        <div>
+        <div key={match.matchId}>
           {match.matchId}: {match.h1Player} / {match.h2Player} -{" "}
-          {match.b1Player} / {match.b2Player}: {showScore(match.match)} ({match.matchKey})
+          {match.b1Player} / {match.b2Player}:{" "}
+          {showScore(match.scoreInCompletedSet)} ({match.matchKey})
         </div>
       );
     });
@@ -182,36 +137,29 @@ function listMatches(matches) {
       console.log("c", c);
       console.log("match", match);
       const rowClassName =
-        match[c.WINNER] == c.HOMETEAM ? "winner-home" : "winner-away";
-      const player1 = match[c.HOMETEAM_FIRST_PLAYER_NAME];
-      const player2 = match[c.HOMETEAM_SECOND_PLAYER_NAME];
-      const player3 = match[c.AWAYTEAM_FIRST_PLAYER_NAME];
-      const player4 = match[c.AWAYTEAM_SECOND_PLAYER_NAME];
-      const setsAway = match[c.SETS_AWAYTEAM];
-      const setsHome = match[c.HOMETEAM];
-      const sets = match[c.POINTS_IN_SETS];
+        match.winner == c.HOMETEAM ? "winner-home" : "winner-away";
       return (
-        <tr className={rowClassName}>
+        <tr key={match.matchId} className={rowClassName}>
           <td class="teams">
             <span class="home-team">
-              {player1}/{player2}
+              {match.h1Player}/{match.h2Player}
             </span>
             vs
             <span class="away-team">
-              {player3}/{player4}
+              {match.b1Player}/{match.b2Player}
             </span>
           </td>
           <td class="sets">
             <span class="home-team">
-              {setsHome}
+              {match.setsWonByHomeTeam}
             </span>
             <span class="away-team">
-              {setsAway}
+              {match.setsWonByAwayTeam}
             </span>
           </td>
           <td class="score">
             <span>
-              {sets}
+              {match.scoreInCompletedSet}
             </span>
           </td>
         </tr>
@@ -240,12 +188,12 @@ function listMatches(matches) {
   );
 }
 
-function matchIsLive(math) {
-  return false;
+function matchIsLive(match) {
+  return !match.IsFinished;
 }
 
-function matchIsFinished(math) {
-  return true;
+function matchIsFinished(match) {
+  return match.IsFinished;
 }
 
 export default Tournament;
