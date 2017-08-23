@@ -49,7 +49,7 @@ function listTournaments(tournaments = {}) {
   console.log("listTournaments", tournaments);
   const formattedList = Object.keys(tournaments).map(tournamentKey => {
     const tournament = tournaments[tournamentKey];
-    const toMatches = <ActionAssignment style={iconStyles} />;
+    const toMatches = <ActionAssignment style="" />;
     const tournamentName = (
       <h2>
         {tournament.name}
