@@ -18,7 +18,7 @@ const log = debug("sendMailClient");
 
 export default function sendMailClient(state) {
   const matchState = getMatch(state);
-  const mail = matchState[c.EMAIL];
+  const mail = matchState[EMAIL];
   if (!mail) {
     log("No email set, skipping!");
     return;

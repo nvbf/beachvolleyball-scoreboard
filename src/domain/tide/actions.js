@@ -174,7 +174,7 @@ class AllAction extends Actions {
       : match[c.DEFAULT_SET_LENGTH];
     if (isMatchFinished(newMatchState)) {
       sendMailClient(state);
-
+      this.mutate([c.MATCH, c.MATCH_FINISHED_TIMESTAMP], new Date().getTime());
       this.mutate([c.MATCH, c.SHOW_COMPONENT], c.SHOW_MATCH_FINISHED);
       //TODO: should this be here?
       this.mutate([c.MATCH, c.MATCH_IS_FINISED], true);

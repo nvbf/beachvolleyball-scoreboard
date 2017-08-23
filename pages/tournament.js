@@ -169,7 +169,7 @@ class Tournament extends React.Component {
           .matches-table .sets {
             text-align: center;
             white-space: nowrap;
-            /*min-width: 170px;*/
+            margin: 0.8em;
           }
           .matches-table .score {
             font-size: 14px;
@@ -177,8 +177,9 @@ class Tournament extends React.Component {
           }
           .matches-table .score span {
             width: 33%;
-            display: inline-block;
+            padding-right: 0.4em;
             text-align: center;
+
           }
           .matches-table .teams {
             max-width: 60%;
@@ -293,12 +294,6 @@ class Tournament extends React.Component {
   }
 }
 
-function compare(a, b) {
-  if (a.matchId < b.matchId) return -1;
-  if (a.matchId > b.matchId) return 1;
-  return 0;
-}
-
 function listMatches(matches) {
   if (matches === undefined || matches === null) {
     return;
@@ -307,12 +302,12 @@ function listMatches(matches) {
   const liveMatches = Object.keys(matches)
     .map(matchKey => matches[matchKey])
     .filter(match => !match.isFinished)
-    .sort(compare);
+    .sort(compareMatchId);
 
   const finshedMatchesHtml = Object.keys(matches)
     .map(matchKey => matches[matchKey])
     .filter(match => match.isFinished)
-    .sort(compare);
+    .sort(compareTimeFinished);
 
   return (
     <section>
@@ -320,6 +315,18 @@ function listMatches(matches) {
       <FinishedMatches matches={finshedMatchesHtml} />
     </section>
   );
+}
+
+function compareMatchId(a, b) {
+  if (a.matchId < b.matchId) return -1;
+  if (a.matchId > b.matchId) return 1;
+  return 0;
+}
+
+function compareTimeFinished(a, b) {
+  if (a.timeFinished < b.timeFinished) return 1;
+  if (a.timeFinished > b.timeFinished) return -1;
+  return 0;
 }
 
 export default Tournament;

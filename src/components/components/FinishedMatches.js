@@ -7,7 +7,7 @@ export default function({ matches = [] }) {
   }
   return (
     <section>
-      <h2 className="md-title">Ferdigspilte kamper</h2>
+      <h2 className="md-title">Results</h2>
       <div className="older-games">
         <table className="matches-table" cellSpacing="0">
           <thead>
