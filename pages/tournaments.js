@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+
 import { List, ListItem } from "material-ui/List";
 
 import ActionAssignment from "material-ui/svg-icons/action/assignment";
@@ -27,7 +28,6 @@ class TournamentsPage extends React.Component {
       return (
         <MuiThemeProvider>
           <main>
-            <h1>Tournaments</h1>
             <CircularProgress mode="indeterminate" />
           </main>
         </MuiThemeProvider>
@@ -44,10 +44,6 @@ class TournamentsPage extends React.Component {
     );
   }
 }
-
-const iconStyles = {
-  marginRight: 24
-};
 
 function listTournaments(tournaments = {}) {
   console.log("listTournaments", tournaments);
@@ -84,7 +80,7 @@ function listTournaments(tournaments = {}) {
   return (
     <p>
       No tournaments found.{" "}
-      <Link href="/tournament/create" as="/tournament/create">
+      <Link href="/create-tournament" as="/create-tournament">
         <a href="">Create a tournament</a>
       </Link>
     </p>
