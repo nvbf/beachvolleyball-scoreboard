@@ -1,22 +1,19 @@
-"use strict";
+import React from "react";
+import PropTypes from "prop-types";
 
-const React = require("react");
-
-const EventList = React.createClass({
-  propTypes: {
-    eventList: React.PropTypes.string.isRequired
-  },
-
+class EventList extends React.Component {
   render() {
     return (
       <section>
         <Label>Match events</Label>
-        <Alert bsStyle="info">
-          {this.props.eventList}
-        </Alert>
+        <Alert bsStyle="info">{this.props.eventList}</Alert>
       </section>
     );
   }
-});
+}
+
+EventList.propTypes = {
+  eventList: PropTypes.string.isRequired
+};
 
 module.exports = EventList;

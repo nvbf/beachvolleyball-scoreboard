@@ -8,14 +8,16 @@ let authUser = null;
 
 export async function getAuthUser() {
   if (!authUser) {
-    await startAnonymousAuth();
+    const aUser = await startAnonymousAuth();
+    log("aUser", aUser);
   }
   return authUser;
 }
 
 export async function getUID() {
   if (!authUser) {
-    await getAuthUser();
+    const aUser = await getAuthUser();
+    log("aUser", aUser);
   }
   return authUser.uid;
 }

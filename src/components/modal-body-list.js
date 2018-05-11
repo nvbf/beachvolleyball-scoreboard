@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 import hexToRGBA from "./utils/rgba";
 
@@ -53,14 +54,14 @@ function styleLGI(color, onClickHandler, text, number) {
   const rgba = hexToRGBA(color);
   console.log(rgba);
   const StyleLGI = styled(ListGroupItem)`
-		background-color: ${rgba};
-	`;
+    background-color: ${rgba};
+  `;
 
   if (number) {
     return (
       <StyleLGI onClick={onClickHandler}>
-        {" "}<span>{number}</span> {text}
         {" "}
+        <span>{number}</span> {text}{" "}
       </StyleLGI>
     );
   }
@@ -69,16 +70,16 @@ function styleLGI(color, onClickHandler, text, number) {
 }
 
 ModalBodyList.propTypes = {
-  chosenFirstItem: React.PropTypes.func.isRequired,
-  chosenSecondItem: React.PropTypes.func.isRequired,
-  firstItemText: React.PropTypes.string.isRequired,
-  secondItemText: React.PropTypes.string.isRequired,
-  footerText: React.PropTypes.string,
-  firstDisabled: React.PropTypes.bool,
-  secondDisabled: React.PropTypes.bool,
-  firstColor: React.PropTypes.string.isRequired,
-  secondColor: React.PropTypes.string.isRequired,
-  showNumber: React.PropTypes.bool
+  chosenFirstItem: PropTypes.func.isRequired,
+  chosenSecondItem: PropTypes.func.isRequired,
+  firstItemText: PropTypes.string.isRequired,
+  secondItemText: PropTypes.string.isRequired,
+  footerText: PropTypes.string,
+  firstDisabled: PropTypes.bool,
+  secondDisabled: PropTypes.bool,
+  firstColor: PropTypes.string.isRequired,
+  secondColor: PropTypes.string.isRequired,
+  showNumber: PropTypes.bool
 };
 
 export default ModalBodyList;

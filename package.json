@@ -5,27 +5,19 @@
   "private": true,
   "main": "app.js",
   "engines": {
-    "node": "8"
+    "node": "10"
   },
   "xo": {
-    "global": [
-      "describe",
-      "it"
-    ],
-    "ignores": [
-      "test/**"
-    ],
-    "extends": [
-      "xo/esnext",
-      "xo-react"
-    ],
+    "global": ["describe", "it"],
+    "ignores": ["test/**"],
+    "extends": ["xo/esnext", "xo-react"],
     "rules": {
       "jsx-sort-props": 0
     }
   },
   "dependencies": {
     "async-reactor": "1.2.1",
-    "babel-preset-stage-0": "6.24.1",
+    "babel-preset-env": "^1.7.0",
     "babelify": "7.3.0",
     "bluebird": "3.5.0",
     "body-parser": "1.17.2",
