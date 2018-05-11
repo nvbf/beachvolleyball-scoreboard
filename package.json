@@ -8,9 +8,17 @@
     "node": "8"
   },
   "xo": {
-    "global": ["describe", "it"],
-    "ignores": ["test/**"],
-    "extends": ["xo/esnext", "xo-react"],
+    "global": [
+      "describe",
+      "it"
+    ],
+    "ignores": [
+      "test/**"
+    ],
+    "extends": [
+      "xo/esnext",
+      "xo-react"
+    ],
     "rules": {
       "jsx-sort-props": 0
     }
@@ -72,6 +80,7 @@
     "nightwatch": "0.9.16",
     "prettier-check": "1.0.0",
     "storybook": "0.0.1",
+    "webpack-bundle-analyzer": "^2.9.0",
     "xo": "0.18.2"
   }
 }
