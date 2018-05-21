@@ -6,11 +6,13 @@ import OkButton from "../molokyler/ok-button";
 const NotificationsDialog = ({ children, heading = "Notification" }) => {
   return (
     <div>
-
-      <Panel header={heading} bsStyle="primary" footer={<OkButton />}>
-        {children}
+      <Panel bsStyle="primary">
+        <Panel.Heading>{heading}</Panel.Heading>
+        <Panel.Body>{children}</Panel.Body>
+        <Panel.Footer>
+          <OkButton />
+        </Panel.Footer>
       </Panel>
-
     </div>
   );
 };

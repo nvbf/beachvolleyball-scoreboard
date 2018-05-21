@@ -388,6 +388,8 @@ export function isSetStarted(aSet) {
 }
 
 export function isSetFinished(aSet, limit) {
+  console.log(hasHometeamWonSet(aSet, limit));
+  console.log(hasAwayteamWonSet(aSet, limit));
   return hasHometeamWonSet(aSet, limit) || hasAwayteamWonSet(aSet, limit);
 }
 
@@ -455,8 +457,11 @@ export function hasAwayteamWonSetPure(hometeamPoints, awayteamPoints, limit) {
 }
 
 function hasAwayteamWonSet(aSet, limit) {
+  console.log(aSet);
   const point1 = aSet.get(HOMETEAM_POINT);
+  console.log("home", aSet.get(HOMETEAM_POINT));
   const point2 = aSet.get(AWAYTEAM_POINT);
+  console.log("away", aSet.get(AWAYTEAM_POINT));
   return hasAwayteamWonSetPure(point1, point2, limit);
 }
 

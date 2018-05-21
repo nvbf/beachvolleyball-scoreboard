@@ -4,6 +4,24 @@
   "version": "0.0.1",
   "private": true,
   "main": "app.js",
+  "scripts": {
+    "start": "DEBUG='*,-babel' node app.js",
+    "url": "0.11.0",
+    "vinyl-source-stream": "1.1.0",
+    "dev": "node app.js",
+    "build": "next build",
+    "lint": "prettier-check src/**/*.js",
+    "test": "yarn lint && jest test/tide",
+    "jest:watch": "yarn test -- --watch",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook",
+    "nightwatch": "nightwatch",
+    "heroku-postbuild": "next build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/nvbf/beachvollleyball-scoreboard"
+  },
   "engines": {
     "node": "10"
   },
@@ -42,24 +60,6 @@
     "styled-components": "3.2.6",
     "superagent": "3.8.3",
     "tide": "2.2.0"
-  },
-  "scripts": {
-    "start": "DEBUG='*,-babel' node app.js",
-    "url": "0.11.0",
-    "vinyl-source-stream": "1.1.0",
-    "dev": "node app.js",
-    "build": "next build",
-    "lint": "prettier-check src/**/*.js",
-    "test": "yarn lint && jest",
-    "jest:watch": "yarn test -- --watch",
-    "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook",
-    "nightwatch": "nightwatch",
-    "heroku-postbuild": "next build"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/nvbf/beachvollleyball-scoreboard"
   },
   "devDependencies": {
     "@storybook/react": "3.4.5",

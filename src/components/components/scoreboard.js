@@ -66,9 +66,6 @@ class Scoreboard extends Component {
       h3p,
       a3p
     } = this.props;
-
-    console.log("rendering:");
-
     const newMatchUrl = "/match?new=true";
 
     return (
@@ -79,7 +76,6 @@ class Scoreboard extends Component {
               <h2 className="panel-title">Match standing</h2>
             </div>
             <div className="panel-body">
-
               <table className="table table-striped">
                 <thead>
                   <tr>
@@ -109,7 +105,6 @@ class Scoreboard extends Component {
                   />
                 </tbody>
               </table>
-
             </div>
             <div className="panel-footer">
               <TimeoutButtons />
@@ -124,31 +119,43 @@ class Scoreboard extends Component {
             </Alert>
           </section>
 
-          <PanelGroup accordion>
-            <Panel header="Details ⭢" eventKey="1">
-              <MatchDetails
-                events={ACTION_HISTORY}
-                showDetails={this.state.showDetails}
-                handleDetailToogle={this.handleDetailToogle.bind(this)}
-              />
+          <PanelGroup
+            accordion
+            id="accordion-uncontrolled"
+            defaultActiveKey="1"
+          >
+            <Panel eventKey="1">
+              <Panel.Heading> Details ⭢ </Panel.Heading>
+              <Panel.Body>
+                <MatchDetails
+                  events={ACTION_HISTORY}
+                  showDetails={this.state.showDetails}
+                  handleDetailToogle={this.handleDetailToogle.bind(this)}
+                />
+              </Panel.Body>
             </Panel>
-            <Panel header="Settings ⭢" eventKey="2">
-              <a href={newMatchUrl}>New match</a>
-              <AddEmailButton />
-              <AddTournamentIdButton />
+            <Panel eventKey="2">
+              <Panel.Heading> Settings ⭢ </Panel.Heading>
+              <Panel.Body>
+                <a href={newMatchUrl}>New match</a>
+                <AddEmailButton />
+                <AddTournamentIdButton />
+              </Panel.Body>
             </Panel>
-            <Panel header="Notes for first time users ⭢" eventKey="3">
-              <InfoArea number={"?"}>
-                This scoreboard should be so easy to use and help you in all the
-                parts of the scoreboard
-                process so that it's no need for more people then the referee
-              </InfoArea>
-              <InfoArea number={"?"}>
-                You can set the service order by clicking the "Set service
-                order" button above. (Optional)
-                When you have set the service order, we will help you keep track
-                of how is serving.
-              </InfoArea>
+            <Panel eventKey="3">
+              <Panel.Heading>Notes for first time users ⭢</Panel.Heading>
+              <Panel.Body>
+                <InfoArea number={"?"}>
+                  This scoreboard should be so easy to use and help you in all
+                  the parts of the scoreboard process so that it's no need for
+                  more people then the referee
+                </InfoArea>
+                <InfoArea number={"?"}>
+                  You can set the service order by clicking the "Set service
+                  order" button above. (Optional) When you have set the service
+                  order, we will help you keep track of how is serving.
+                </InfoArea>
+              </Panel.Body>
             </Panel>
           </PanelGroup>
         </div>

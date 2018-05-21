@@ -8,16 +8,22 @@ let authUser = null;
 
 export async function getAuthUser() {
   if (!authUser) {
-    await startAnonymousAuth();
+    return new Promise((resolve, reject) => {
+      function onLogin(user) {
+        resolve(user);
+      }
+      addObserverOnLoginStatus(onLogin);
+      startAnonymousAuth()
+        .then(console.log.bind(console))
+        .catch(console.log.bind(console));
+    });
+  } else {
+    return authUser;
   }
-  return authUser;
 }
 
 export async function getUID() {
-  if (!authUser) {
-    await getAuthUser();
-  }
-  return authUser.uid;
+  return (await getAuthUser()).uid;
 }
 
 // Initia|ze Firebase
@@ -78,7 +84,7 @@ export async function startAnonymousAuth() {
         log("Error on login");
         reject(err);
       }
-      if (user != null || typeof user !== "undefined") {
+      if (user != null && typeof user !== "undefined") {
         log("authStateChangedHandler, we now have a user", user);
         authUser = user;
         obsersvers.forEach(observer => observer(user));

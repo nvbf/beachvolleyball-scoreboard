@@ -1,28 +1,29 @@
-import React, {Component} from 'react';
-import {Alert} from 'react-bootstrap';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { Alert } from "react-bootstrap";
 
 export default class AlertInfo extends Component {
-	constructor() {
-		super();
-		this.state = {showInfo: true};
-	}
+  constructor(props) {
+    super(props);
+    this.state = { showInfo: true };
+  }
 
-	remove() {
-		this.setState({showInfo: false});
-	}
+  remove() {
+    this.setState({ showInfo: false });
+  }
 
-	render() {
-		if (this.state.showInfo) {
-			return (
-				<Alert bsStyle="info" onDismiss={this.remove}>
-					{this.props.message}
-				</Alert>
-			);
-		}
-		return null;
-	}
+  render() {
+    if (this.state.showInfo) {
+      return (
+        <Alert bsStyle="info" onDismiss={this.remove}>
+          {this.props.message}
+        </Alert>
+      );
+    }
+    return null;
+  }
 }
 
 AlertInfo.propTypes = {
-	message: React.PropTypes.string.isRequired
+  message: PropTypes.string.isRequired
 };
