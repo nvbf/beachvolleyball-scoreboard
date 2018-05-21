@@ -5,56 +5,43 @@
   "private": true,
   "main": "app.js",
   "engines": {
-    "node": "8"
-  },
-  "xo": {
-    "global": [
-      "describe",
-      "it"
-    ],
-    "ignores": [
-      "test/**"
-    ],
-    "extends": [
-      "xo/esnext",
-      "xo-react"
-    ],
-    "rules": {
-      "jsx-sort-props": 0
-    }
+    "node": "10"
   },
   "dependencies": {
-    "async-reactor": "1.2.1",
-    "babel-preset-stage-0": "6.24.1",
-    "babelify": "7.3.0",
-    "bluebird": "3.5.0",
-    "body-parser": "1.17.2",
-    "bootstrap": "3.3.7",
-    "bulma": "0.5.1",
-    "chrome-remote-interface": "0.24.4",
+    "async-reactor": "1.2.2",
+    "babel-loader": "7",
+    "babel-preset-env": "2.0.0-alpha.20",
+    "babelify": "8.0.0",
+    "bluebird": "3.5.1",
+    "body-parser": "1.18.3",
+    "bootstrap": "4.1.1",
+    "bulma": "0.7.1",
+    "chromedriver": "^2.38.3",
     "const": "1.0.0",
-    "debug": "3.0.0",
-    "express": "4.15.4",
-    "firebase": "4.3.0",
-    "immutable": "3.8.1",
+    "debug": "3.1.0",
+    "express": "4.16.3",
+    "firebase": "5.0.3",
+    "immutable": "3.8.2",
     "isomorphic-parse": "0.0.3",
-    "material-ui": "0.19.0",
-    "moment": "2.19.3",
-    "next": "4.2.3",
-    "preact": "8.2.1",
-    "preact-compat": "3.17.0",
-    "printf": "0.2.5",
-    "react": "16.0.0",
-    "react-bootstrap": "0.31.2",
-    "react-color": "2.13.4",
-    "react-dom": "16.0.0",
-    "react-overdrive": "0.0.8",
-    "react-toggle": "4.0.1",
-    "sendgrid": "5.2.2",
+    "material-ui": "0.20.1",
+    "moment": "2.22.1",
+    "next": "6.0.3",
+    "path-match": "^1.2.4",
+    "preact": "8.2.9",
+    "preact-compat": "3.18.0",
+    "prettier": "^1.12.1",
+    "printf": "0.3.0",
+    "react": "16.3.2",
+    "react-bootstrap": "0.32.1",
+    "react-color": "2.14.1",
+    "react-dom": "16.3.2",
+    "react-overdrive": "0.0.10",
+    "react-toggle": "4.0.2",
+    "sendgrid": "5.2.3",
     "slugify2": "0.0.2",
-    "styled-components": "2.1.2",
-    "superagent": "3.5.2",
-    "tide": "2.0.0"
+    "styled-components": "3.2.6",
+    "superagent": "3.8.3",
+    "tide": "2.2.0"
   },
   "scripts": {
     "start": "DEBUG='*,-babel' node app.js",
@@ -62,10 +49,12 @@
     "vinyl-source-stream": "1.1.0",
     "dev": "node app.js",
     "build": "next build",
-    "test": "jest",
-    "jest:watch": "npm test -- --watch",
+    "lint": "prettier-check src/**/*.js",
+    "test": "yarn lint && jest",
+    "jest:watch": "yarn test -- --watch",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
+    "nightwatch": "nightwatch",
     "heroku-postbuild": "next build"
   },
   "repository": {
@@ -73,14 +62,14 @@
     "url": "git://github.com/nvbf/beachvollleyball-scoreboard"
   },
   "devDependencies": {
-    "@storybook/react": "3.2.5",
-    "eslint-config-xo-react": "0.13.0",
-    "eslint-plugin-react": "7.2.1",
-    "jest": "20.0.4",
-    "nightwatch": "0.9.16",
-    "prettier-check": "1.0.0",
-    "storybook": "0.0.1",
-    "webpack-bundle-analyzer": "^2.9.0",
-    "xo": "0.18.2"
+    "@storybook/react": "3.4.5",
+    "babel-core": "7.0.0-bridge.0",
+    "babel-jest": "^22.4.4",
+    "jest": "22.4.4",
+    "nightwatch": "^0.9.21",
+    "prettier-check": "2.0.0",
+    "regenerator-runtime": "^0.11.1",
+    "storybook": "1.0.0",
+    "webpack-bundle-analyzer": "^2.9.0"
   }
 }

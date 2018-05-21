@@ -36,9 +36,9 @@ export default function MatchDetails({
   handleDetailToogle
 }) {
   const details = getDetailsAsAnArrayOfString(events);
-  const eventsComponent = details.map((detail, index) =>
+  const eventsComponent = details.map((detail, index) => (
     <p key={index}>{detail}</p>
-  );
+  ));
 
   return (
     <Alert bsStyle="info">

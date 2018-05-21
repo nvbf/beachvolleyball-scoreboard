@@ -1,3 +1,7 @@
 {
-  "presets": ["next/babel", "stage-0"]
+  "env": {
+    "test": {
+      "presets": [["env", { "modules": "commonjs" }], "next/babel"]
+    }
+  }
 }

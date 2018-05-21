@@ -9,6 +9,7 @@ describe("BeachVolleyballSet", () => {
     expect(isSetFinished(score)).toEqual(false);
   });
 });
+
 //   it('Both have 21 points', () => {
 //     const score = List([21, 21])
 //     expect(isSetFinished(score)).toEqual(false)

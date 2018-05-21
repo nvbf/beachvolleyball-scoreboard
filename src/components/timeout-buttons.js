@@ -31,7 +31,9 @@ class TimeoutMenu extends React.Component {
       HOMETEAM_TIMEOUT_TAKEN,
       AWAYTEAM_TIMEOUT_TAKEN,
       HISTORY,
-      tide: { actions: { all } }
+      tide: {
+        actions: { all }
+      }
     } = this.props;
     return (
       <div>

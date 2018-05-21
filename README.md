@@ -9,32 +9,31 @@
 
 ## Prerequisit
 
-You need to have [Node](http://nodejs.org/) and npm installed.
-NPM, the node package manager, is installed when you install node.
+You need to have [Node](http://nodejs.org/) and [yarn](https://yarnpkg.com/lang/en/) installed.
 
 ## Install
 
 `npm install`
 
 ### Run
+
 Prerequisit: Install
 
-`NODE_ENV=development DEBUG="*,-babel" API="http://localhost:3000/api/matches/" PORT=4000 npm start`
+`NODE_ENV=development DEBUG="*,-babel" API="http://localhost:3000/api/matches/" yarn start`
 
-You can then reach the app on on http://localhost:4000
-
-if port is not specified, it will open on port 3000.
+if PORT is not specified, it will open on port 3000.
 
 ### Test
+
 Prerequisit: Install
-To run the test, run `npm test`
+To run the test, run `yarn test`
 
 It will run checkstyle before it run test.
 
 # GUI test.
 
-1. run `npm start`
-2. in a new termainal run `nighwatch` (is installed in `./node_modules/.bin/nightwatch` if `./node_modules/.bin` is not in your _$PATH_)
+1.  run `yarn start`
+2.  in a new termainal run `nighwatch` (is installed in `./node_modules/.bin/nightwatch` if `./node_modules/.bin` is not in your _$PATH_)
 
 (from the repos folder)
 

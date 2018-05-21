@@ -34,14 +34,19 @@ export default function sendMailClient(state) {
     setResult,
     resultDetails: getResult(matchState),
     winner,
-    details: getDetailsAsAnArrayOfString(detailsList).reverse().join("\n")
+    details: getDetailsAsAnArrayOfString(detailsList)
+      .reverse()
+      .join("\n")
   };
 
-  superagent.post("/send/mail").send({ result, mail }).end(function(err, res) {
-    if (err || !res.ok) {
-      log("mail failed", err);
-    } else {
-      log("mail sendt");
-    }
-  });
+  superagent
+    .post("/send/mail")
+    .send({ result, mail })
+    .end(function(err, res) {
+      if (err || !res.ok) {
+        log("mail failed", err);
+      } else {
+        log("mail sendt");
+      }
+    });
 }

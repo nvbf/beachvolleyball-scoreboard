@@ -11,9 +11,7 @@ const EventList = React.createClass({
     return (
       <section>
         <Label>Match events</Label>
-        <Alert bsStyle="info">
-          {this.props.eventList}
-        </Alert>
+        <Alert bsStyle="info">{this.props.eventList}</Alert>
       </section>
     );
   }

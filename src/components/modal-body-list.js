@@ -53,14 +53,14 @@ function styleLGI(color, onClickHandler, text, number) {
   const rgba = hexToRGBA(color);
   console.log(rgba);
   const StyleLGI = styled(ListGroupItem)`
-		background-color: ${rgba};
-	`;
+    background-color: ${rgba};
+  `;
 
   if (number) {
     return (
       <StyleLGI onClick={onClickHandler}>
-        {" "}<span>{number}</span> {text}
         {" "}
+        <span>{number}</span> {text}{" "}
       </StyleLGI>
     );
   }

@@ -33,7 +33,7 @@ function extractDataMatchToTournament(match) {
   const setsWonByAwayTeam = getAwayTeamSetsWon(match);
 
   let winner = "";
-  let timeFinished = ""
+  let timeFinished = "";
   if (isFinished) {
     winner = hasHomeTeamWonMatch(match) ? c.HOMETEAM : c.AWAYTEAM;
     timeFinished = match[c.MATCH_FINISHED_TIMESTAMP];
@@ -74,7 +74,10 @@ export async function save(tournamentId = 0, matchKey, match) {
   console.log("path", getMatchPath(matchKey));
   console.log("matchState", match);
   updates[getMatchPath(matchKey)] = match;
-  return firebase.database().ref().update(updates);
+  return firebase
+    .database()
+    .ref()
+    .update(updates);
 }
 
 export async function getTournament(slug) {
@@ -82,7 +85,7 @@ export async function getTournament(slug) {
   return new Promise((resolve, reject) => {
     firebase
       .database()
-      .ref('/tournament_slugs/' + slug)
+      .ref("/tournament_slugs/" + slug)
       .once("value")
       .then(dataSnapshot => resolve(dataSnapshot.val()))
       .catch(err => reject(err));
@@ -130,7 +133,7 @@ export async function saveTournament(tournamentName) {
     )
   };
 
-  setTournamentSlugData(tournamentData.slug, tournamentData)
+  setTournamentSlugData(tournamentData.slug, tournamentData);
 
   return new Promise((resolve, reject) => {
     firebase
@@ -142,23 +145,20 @@ export async function saveTournament(tournamentName) {
         }
         resolve(tournamentData);
       });
-
-      
   });
-
 }
-
 
 function setTournamentSlugData(slug, data) {
-  return firebase.database().ref('/tournament_slugs/' +  slug)
+  return firebase
+    .database()
+    .ref("/tournament_slugs/" + slug)
     .set(data, (value, err) => {
-        if (err) {
-          console.log(err);
-        }
-        console.log('setTournamentSlugData ok ');
-    })
+      if (err) {
+        console.log(err);
+      }
+      console.log("setTournamentSlugData ok ");
+    });
 }
-
 
 function myTournamentsPath(uid) {
   return `${c.TOURNAMENT_PATH}/${uid}`;

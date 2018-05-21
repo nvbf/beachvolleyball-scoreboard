@@ -336,6 +336,7 @@ function testTournament(browser) {
     .assert.containsText("h1", "NT Oslo Master")
     .end();
 }
+
 module.exports = {
   match: testMatch
 };
