@@ -1,3 +1,4 @@
+/* @flow */
 import { Tide, initActions } from "tide";
 import lodash from "lodash";
 import State from "./state";

@@ -1,4 +1,4 @@
-import { Record, List } from "immutable";
+/* @flow */
 
 export const TOURNAMENT_PATH = "/tournaments";
 export const MATCH_PATH = "/matches/";
@@ -80,71 +80,141 @@ export const SETS_AWAYTEAM = "SETS_AWAYTEAM";
 export const POINTS_IN_SETS = "POINTS_IN_SETS";
 export const MATCH_FINISHED_TIMESTAMP = "MATCH_FINISHED_TIMESTAMP";
 
-export const BeachVolleyballSet = Record({
-  [HOMETEAM_POINT]: 0,
-  [AWAYTEAM_POINT]: 0,
-  [HOMETEAM_TIMEOUT_TAKEN]: false,
-  [AWAYTEAM_TIMEOUT_TAKEN]: false,
-  [PLAYER_TO_SERVE]: "",
-  [SERVICE_ORDER_IS_SET]: false,
-  [FIRST_TEAM_TO_SERVE]: "",
-  [SERVICE_ORDER_HOMETEAM]: List(),
-  [SERVICE_ORDER_AWAYTEAM]: List()
-});
+export type BeachVolleyballSetType = {
+  HOMETEAM_POINT: number,
+  AWAYTEAM_POINT: number,
+  HOMETEAM_TIMEOUT_TAKEN: boolean,
+  AWAYTEAM_TIMEOUT_TAKEN: boolean,
+  PLAYER_TO_SERVE: string,
+  SERVICE_ORDER_IS_SET: boolean,
+  FIRST_TEAM_TO_SERVE: string,
+  SERVICE_ORDER_HOMETEAM: ServiceOrderType,
+  SERVICE_ORDER_AWAYTEAM: ServiceOrderType
+};
 
-export const Action = Record({
-  [DATE]: new Date(),
-  [ACTION]: "",
-  [VALUE]: "",
-  [MATCHSTATE]: Match
-});
+export type ServiceOrderType = Array<1 | 2>;
+export type TeamToServeType = "HOMETEAM" | "AWAYTEAM";
 
-export const ActionHistory = Record({
-  [DATE]: new Date(),
-  [ACTION]: "",
-  [VALUE]: "",
-  [HOMETEAM_POINT]: "",
-  [AWAYTEAM_POINT]: "",
-  [CURRENT_SET]: ""
-});
+export const BeachVolleyballSet: BeachVolleyballSetType = {
+  HOMETEAM_POINT: 0,
+  AWAYTEAM_POINT: 0,
+  HOMETEAM_TIMEOUT_TAKEN: false,
+  AWAYTEAM_TIMEOUT_TAKEN: false,
+  PLAYER_TO_SERVE: "",
+  SERVICE_ORDER_IS_SET: false,
+  FIRST_TEAM_TO_SERVE: "",
+  SERVICE_ORDER_HOMETEAM: [],
+  SERVICE_ORDER_AWAYTEAM: []
+};
 
-export const Match = Record({
-  [MATCH_FINISHED_TIMESTAMP]: "",
-  [MATCH_FIREBASE_KEY]: "",
-  [MATCH_ID]: "",
-  [TOURNAMENT_PRIVATE_ID]: "",
-  [EMAIL]: "",
-  [FIRST_SET]: new BeachVolleyballSet(),
-  [SECOND_SET]: new BeachVolleyballSet(),
-  [THIRD_SET]: new BeachVolleyballSet(),
-  [SWITCH_NOW]: false,
-  [SET_HAS_STARTED]: false,
-  [DEFAULT_SET_LENGTH]: 21,
-  [LAST_SET_LENGTH]: 15,
-  [DEFAULT_SWITCH_EVERY_X_POINT]: 7,
-  [LAST_SET_SWITCH_EVERY_X_POINT]: 5,
-  [HOMETEAM_FIRST_PLAYER_NAME]: "",
-  [HOMETEAM_SECOND_PLAYER_NAME]: "",
-  [HOMETEAM_COLOR]: "#004499",
-  [SERVICE_ORDER_IS_SET]: false,
-  [AWAYTEAM_FIRST_PLAYER_NAME]: "",
-  [AWAYTEAM_SECOND_PLAYER_NAME]: "",
-  [AWAYTEAM_COLOR]: "#44ff00",
-  [FIRST_TEAM_TO_SERVE]: "",
-  [SERVICE_ORDER]: List(),
-  [PLAYER_TO_SERVE]: "",
-  [SHOW_COMPONENT]: LOADING_COMPONENT,
-  [MATCH_IS_FINISED]: false,
-  [HOMETEAM_TIMEOUT_TAKEN]: false,
-  [AWAYTEAM_TIMEOUT_TAKEN]: false,
-  [COMMENTS]: List()
-});
+export type MatchType = {
+  MATCH_FINISHED_TIMESTAMP: string,
+  MATCH_FIREBASE_KEY: string,
+  MATCH_ID: string,
+  TOURNAMENT_PRIVATE_ID: string,
+  EMAIL: string,
+  FIRST_SET: BeachVolleyballSetType,
+  SECOND_SET: BeachVolleyballSetType,
+  THIRD_SET: BeachVolleyballSetType,
+  SWITCH_NOW: boolean,
+  SET_HAS_STARTED: boolean,
+  DEFAULT_SET_LENGTH: number,
+  LAST_SET_LENGTH: number,
+  DEFAULT_SWITCH_EVERY_X_POINT: number,
+  LAST_SET_SWITCH_EVERY_X_POINT: number,
+  HOMETEAM_FIRST_PLAYER_NAME: string,
+  HOMETEAM_SECOND_PLAYER_NAME: string,
+  HOMETEAM_COLOR: string,
+  SERVICE_ORDER_IS_SET: boolean,
+  AWAYTEAM_FIRST_PLAYER_NAME: string,
+  AWAYTEAM_SECOND_PLAYER_NAME: string,
+  AWAYTEAM_COLOR: string,
+  FIRST_TEAM_TO_SERVE: string,
+  SERVICE_ORDER: Array<number>,
+  PLAYER_TO_SERVE: string,
+  SHOW_COMPONENT: string,
+  MATCH_IS_FINISED: boolean,
+  HOMETEAM_TIMEOUT_TAKEN: boolean,
+  AWAYTEAM_TIMEOUT_TAKEN: boolean,
+  COMMENTS: Array<string>
+};
 
-export const State = Record({
-  [MATCH]: new Match(),
-  [ACTION_HISTORY]: List(),
-  [HISTORY]: List()
-});
+export const Match: MatchType = {
+  MATCH_FINISHED_TIMESTAMP: "",
+  MATCH_FIREBASE_KEY: "",
+  MATCH_ID: "",
+  TOURNAMENT_PRIVATE_ID: "",
+  EMAIL: "",
+  FIRST_SET: Object.assign({}, BeachVolleyballSet),
+  SECOND_SET: Object.assign({}, BeachVolleyballSet),
+  THIRD_SET: Object.assign({}, BeachVolleyballSet),
+  SWITCH_NOW: false,
+  SET_HAS_STARTED: false,
+  DEFAULT_SET_LENGTH: 21,
+  LAST_SET_LENGTH: 15,
+  DEFAULT_SWITCH_EVERY_X_POINT: 7,
+  LAST_SET_SWITCH_EVERY_X_POINT: 5,
+  HOMETEAM_FIRST_PLAYER_NAME: "",
+  HOMETEAM_SECOND_PLAYER_NAME: "",
+  HOMETEAM_COLOR: "#004499",
+  SERVICE_ORDER_IS_SET: false,
+  AWAYTEAM_FIRST_PLAYER_NAME: "",
+  AWAYTEAM_SECOND_PLAYER_NAME: "",
+  AWAYTEAM_COLOR: "#44ff00",
+  FIRST_TEAM_TO_SERVE: "",
+  SERVICE_ORDER: [],
+  PLAYER_TO_SERVE: "",
+  SHOW_COMPONENT: LOADING_COMPONENT,
+  MATCH_IS_FINISED: false,
+  HOMETEAM_TIMEOUT_TAKEN: false,
+  AWAYTEAM_TIMEOUT_TAKEN: false,
+  COMMENTS: []
+};
+
+export type ActionType = {
+  DATE: Date,
+  ACTION: string,
+  VALUE: string,
+  MATCHSTATE: MatchType
+};
+
+export const Action: ActionType = {
+  DATE: new Date(),
+  ACTION: "",
+  VALUE: "",
+  MATCHSTATE: Object.assign({}, Match)
+};
+
+export type ActionHistoryType = {
+  DATE: Date,
+  ACTION: string,
+  VALUE: string,
+  HOMETEAM_POINT: string,
+  AWAYTEAM_POINT: string,
+  CURRENT_SET: string
+};
+
+export const ActionHistory: ActionHistoryType = {
+  DATE: new Date(),
+  ACTION: "",
+  VALUE: "",
+  HOMETEAM_POINT: "",
+  AWAYTEAM_POINT: "",
+  CURRENT_SET: ""
+};
+
+export type StateType = {
+  MATCH: MatchType,
+  ACTION_HISTORY: Array<ActionType>,
+  //TODO: is this true? or string?
+  HISTORY: Array<ActionType>
+};
+
+export const State = {
+  MATCH: Object.assign({}, Match),
+  ACTION_HISTORY: [],
+  HISTORY: []
+};
 
 export const constants = {
   MATCH_FINISHED_TIMESTAMP,
@@ -214,8 +284,8 @@ export const constants = {
   UNDO,
   CURRENT_SET,
   SERVICE_ORDER_HOMETEAM,
-  SHOW_MATCH_FINISHED,
   SERVICE_ORDER_AWAYTEAM,
+  SHOW_MATCH_FINISHED,
   SHOW_SWITCH,
   SHOW_SET_FINISHED,
   MATCH_FIREBASE_KEY

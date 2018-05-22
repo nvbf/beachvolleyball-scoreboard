@@ -1,3 +1,5 @@
+/* @flow */
+
 import { List, fromJS } from "immutable";
 import { save } from "../../firebase";
 

@@ -39,6 +39,7 @@
     "debug": "3.1.0",
     "express": "4.16.3",
     "firebase": "5.0.3",
+    "flow-bin": "^0.72.0",
     "immutable": "3.8.2",
     "isomorphic-parse": "0.0.3",
     "material-ui": "0.20.1",

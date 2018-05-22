@@ -1,8 +1,8 @@
 {
-  "presets": ["next/babel"],
+  "presets": ["next/babel", "flow"],
   "env": {
     "test": {
-      "presets": [["env", { "modules": "commonjs" }], "next/babel"]
+      "presets": [["env", { "modules": "commonjs" }], "next/babel", "flow"]
     }
   }
 }

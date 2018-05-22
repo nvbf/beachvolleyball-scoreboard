@@ -1,3 +1,5 @@
+/* @flow */
+
 import { Map, List } from "immutable";
 import debug from "debug";
 import { Actions } from "tide";
