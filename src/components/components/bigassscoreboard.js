@@ -77,7 +77,10 @@ const PointList = styled.ul`
 
 const getCountryFromPlayer = (player) => {
   const re = player.match(/^([^(\[]+)\[([^(\]]+)/);
-  return [re[1], re[2]]
+  if (re) {
+    return [re[1], re[2]]
+  }
+  return [player, 'NA'];
 }
 
 export default ({match, exitScoreBoard}) => {
@@ -100,8 +103,8 @@ export default ({match, exitScoreBoard}) => {
   homePoints.push(match.pointsInCurrentSet[0]);
   awayPoints.push(match.pointsInCurrentSet[1]);
 
-  const [h1Player, homeCountry] = getCountryFromPlayer(match.h1Player + "[NOR]")
-  const [b1Player, awayCountry] = getCountryFromPlayer(match.b1Player + "[SWE]")
+  const [h2Player, homeCountry] = getCountryFromPlayer(match.h2Player)
+  const [b2Player, awayCountry] = getCountryFromPlayer(match.b2Player)
 
   const maxNameSize = 110;
 
@@ -110,8 +113,8 @@ export default ({match, exitScoreBoard}) => {
       <TeamContainer>
         <Flag country={homeCountry} />
         <PlayerContainer>
-          <Player><Textfit mode="single" max={maxNameSize}>{h1Player}</Textfit></Player>
-          <Player><Textfit mode="single" max={maxNameSize}>{match.h2Player}</Textfit></Player>
+          <Player><Textfit mode="single" max={maxNameSize}>{match.h1Player}</Textfit></Player>
+          <Player><Textfit mode="single" max={maxNameSize}>{h2Player}</Textfit></Player>
         </PlayerContainer>
         <Sets  points={homePoints}/>
       </TeamContainer>
@@ -119,10 +122,10 @@ export default ({match, exitScoreBoard}) => {
       <TeamContainer>
         <Flag country={awayCountry} />
         <PlayerContainer>
-          <Player><Textfit mode="single" max={maxNameSize}>{b1Player}</Textfit></Player>
-          <Player><Textfit mode="single" max={maxNameSize}>{match.b2Player}</Textfit></Player>
+          <Player><Textfit mode="single" max={maxNameSize}>{match.b1Player}</Textfit></Player>
+          <Player><Textfit mode="single" max={maxNameSize}>{b2Player}</Textfit></Player>
         </PlayerContainer>
-        <Sets  points={awayPoints}/>
+        <Sets  points={awayPoints} />
       </TeamContainer>
   </ScoreBoard>)
 }
