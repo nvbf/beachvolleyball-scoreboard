@@ -18,6 +18,8 @@ import {
   WINNER
 } from "../src/domain/tide/state";
 import FinishedMatches from "../src/components/components/FinishedMatches";
+import Scoreboard from "../src/components/components/scoreboard";
+import BigAssScoreBoard from "../src/components/components/bigassscoreboard";
 
 class Tournament extends React.Component {
   constructor(props) {
@@ -26,7 +28,9 @@ class Tournament extends React.Component {
   }
 
   state = {
-    loading: true
+    loading: true,
+    matches: [],
+    showBigAssMatch: null
   };
 
   componentDidMount() {
@@ -38,10 +42,15 @@ class Tournament extends React.Component {
     const tournament = await getTournament(slug);
     this.setState({
       tournament: tournament,
-      loading: false
+      loading: false,
     });
 
     matchesFromTournament(tournament.privateId, this.setState.bind(this));
+  }
+
+  onSelectMatch = (match) => {
+    console.log('Selected match', match);
+    this.setState({showBigAssMatch: match})
   }
 
   render() {
@@ -271,9 +280,15 @@ class Tournament extends React.Component {
         </div>
       : null;
 
+    let bigAssMatch = null;
+    if (this.state.showBigAssMatch) {
+      console.log('Show big ass match', this.state.showBigAssMatch, this.state.matches);;
+      bigAssMatch = this.state.matches[this.state.showBigAssMatch.matchId];
+    }
+
     const matchesHtml = this.state.matches
       ? <div>
-          {listMatches(this.state.matches)}
+          {listMatches(this.state.matches, this.onSelectMatch)}
         </div>
       : <div>No Matches in tournament</div>;
     const componentToShow = this.state.loading
@@ -287,6 +302,7 @@ class Tournament extends React.Component {
           {TournamentName}
           <div className="tournament-container">
             {componentToShow}
+            {this.state.showBigAssMatch && <BigAssScoreBoard match={bigAssMatch} />}
           </div>
         </div>
       </MuiThemeProvider>
@@ -294,7 +310,9 @@ class Tournament extends React.Component {
   }
 }
 
-function listMatches(matches) {
+
+
+function listMatches(matches, showBigAssMatch) {
   if (matches === undefined || matches === null) {
     return;
   }
@@ -311,7 +329,7 @@ function listMatches(matches) {
 
   return (
     <section>
-      <LiveMatches matches={liveMatches} />
+      <LiveMatches matches={liveMatches} showBigAssMatch={showBigAssMatch}/>
       <FinishedMatches matches={finshedMatchesHtml} />
     </section>
   );

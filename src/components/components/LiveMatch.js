@@ -9,18 +9,23 @@ import {
   CardText
 } from "material-ui/Card";
 
-export default function({
-  h1Player,
-  h2Player,
-  b2Player,
-  b1Player,
-  setsWonByAwayTeam,
-  setsWonByHomeTeam,
-  isFinished,
-  pointsInCurrentSet,
-  scoreInCompletedSet,
-  winner
-}) {
+export default function(props) {
+  const {
+    h1Player,
+    h2Player,
+    b2Player,
+    b1Player,
+    setsWonByAwayTeam,
+    setsWonByHomeTeam,
+    isFinished,
+    pointsInCurrentSet,
+    scoreInCompletedSet,
+    winner,
+    showBigAssMatch
+  } = props;
+
+  console.log('Props', props);
+
   const showMainInfo = winner
     ? <div className="set-score">
         {setsWonByHomeTeam} - {setsWonByAwayTeam}
@@ -37,7 +42,7 @@ export default function({
   );
 
   return (
-    <div className="live-card">
+    <div className="live-card" onDoubleClick={match => showBigAssMatch(props)}>
       <div className="live-matches">
         <div className="container">
           <div className="team">

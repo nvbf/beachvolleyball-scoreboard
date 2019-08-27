@@ -1,6 +1,7 @@
-import React, {PropTypes} from 'react';
+import React from 'react';
 import {TwitterPicker} from 'react-color';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 const colors = [
 	'#F2F2F2',
