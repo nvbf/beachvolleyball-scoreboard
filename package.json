@@ -8,9 +8,17 @@
     "node": "8"
   },
   "xo": {
-    "global": ["describe", "it"],
-    "ignores": ["test/**"],
-    "extends": ["xo/esnext", "xo-react"],
+    "global": [
+      "describe",
+      "it"
+    ],
+    "ignores": [
+      "test/**"
+    ],
+    "extends": [
+      "xo/esnext",
+      "xo-react"
+    ],
     "rules": {
       "jsx-sort-props": 0
     }
@@ -41,6 +49,7 @@
     "react-color": "2.13.4",
     "react-dom": "16.0.0",
     "react-overdrive": "0.0.8",
+    "react-textfit": "^1.1.0",
     "react-toggle": "4.0.1",
     "sendgrid": "5.2.2",
     "slugify2": "0.0.2",

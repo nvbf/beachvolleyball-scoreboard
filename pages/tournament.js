@@ -302,7 +302,7 @@ class Tournament extends React.Component {
           {TournamentName}
           <div className="tournament-container">
             {componentToShow}
-            {this.state.showBigAssMatch && <BigAssScoreBoard match={bigAssMatch} />}
+            {this.state.showBigAssMatch && <BigAssScoreBoard match={bigAssMatch} exitScoreBoard={this.onSelectMatch} />}
           </div>
         </div>
       </MuiThemeProvider>

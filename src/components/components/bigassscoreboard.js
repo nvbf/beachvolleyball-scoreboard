@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Textfit } from 'react-textfit';
 
 
 const ScoreBoard = styled.div`
@@ -8,7 +9,9 @@ const ScoreBoard = styled.div`
    background-color: #a29393;
    position: fixed; 
    left: 0; 
-   top: 0
+   top: 0;
+   background-image: url(http://worldtour.2019.fivb.com/-/media/fivb_beachvolleyball_world_tour_finals_rome_background.jpeg);
+   background-size: cover;
 `;
 
 const TeamContainer = styled.div`    
@@ -35,7 +38,7 @@ const Flag = styled.div`
 const PlayerContainer = styled.div`
     height: 480px;
     width: 800px;
-    background-color: #444;
+    background-color: rgba(68, 68, 68, 0.7);
     padding-left: 50px;
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
@@ -46,6 +49,8 @@ const Player = styled.div`
     line-height: 240px;
     font-size: 80px;
     color: white;
+    margin-right: 50px;
+    text-transform: uppercase;
 `;
 
 const PointList = styled.ul`
@@ -57,7 +62,7 @@ const PointList = styled.ul`
   
   > li {
     box-sizing: border-box;
-    background-color: #444;
+    background-color: rgba(68, 68, 68, 0.7);
     display: inline-block;
     width: 150px;    
     line-height: 200px;
@@ -75,7 +80,7 @@ const getCountryFromPlayer = (player) => {
   return [re[1], re[2]]
 }
 
-export default ({match}) => {
+export default ({match, exitScoreBoard}) => {
 
   console.log('Score board!');
 
@@ -98,13 +103,15 @@ export default ({match}) => {
   const [h1Player, homeCountry] = getCountryFromPlayer(match.h1Player + "[NOR]")
   const [b1Player, awayCountry] = getCountryFromPlayer(match.b1Player + "[SWE]")
 
+  const maxNameSize = 110;
+
   return (
-    <ScoreBoard>
+    <ScoreBoard onDoubleClick={e => exitScoreBoard(null)}>
       <TeamContainer>
         <Flag country={homeCountry} />
         <PlayerContainer>
-          <Player>{h1Player}</Player>
-          <Player>{match.h2Player}</Player>
+          <Player><Textfit mode="single" max={maxNameSize}>{h1Player}</Textfit></Player>
+          <Player><Textfit mode="single" max={maxNameSize}>{match.h2Player}</Textfit></Player>
         </PlayerContainer>
         <Sets  points={homePoints}/>
       </TeamContainer>
@@ -112,8 +119,8 @@ export default ({match}) => {
       <TeamContainer>
         <Flag country={awayCountry} />
         <PlayerContainer>
-          <Player>{b1Player}</Player>
-          <Player>{match.b2Player}</Player>
+          <Player><Textfit mode="single" max={maxNameSize}>{b1Player}</Textfit></Player>
+          <Player><Textfit mode="single" max={maxNameSize}>{match.b2Player}</Textfit></Player>
         </PlayerContainer>
         <Sets  points={awayPoints}/>
       </TeamContainer>
