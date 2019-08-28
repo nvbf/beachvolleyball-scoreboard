@@ -67,7 +67,7 @@ class Tournament extends React.Component {
           <meta charSet="utf-8" />
         </Head>
         <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet" />
-
+        <link href="/static/flags/css/flag-icon.min.css" rel="stylesheet" />
         <style jsx global>{`
           body {
             font-family: Roboto, Helvetica Neue, Arial;
