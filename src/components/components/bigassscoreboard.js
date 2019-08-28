@@ -9,9 +9,18 @@ const ScoreBoard = styled.div`
    background-color: #a29393;
    position: fixed; 
    left: 0; 
-   top: 0;
+   top: 0;  
+`;
+
+const ScoreBoardBackground = styled.div`
+  position: absolute;
+  left: 0;
+  top: 0;
+   width: 100%;
+   height: 100%;
    background-image: url(http://worldtour.2019.fivb.com/-/media/fivb_beachvolleyball_world_tour_finals_rome_background.jpeg);
    background-size: cover;
+   opacity: 0.6;
 `;
 
 const TeamContainer = styled.div`    
@@ -21,6 +30,7 @@ const TeamContainer = styled.div`
     display: flex;
     align-items: center;
     border-radius: 4px;
+    position: relative;
 `
 
 const Flag = styled.div`
@@ -38,7 +48,7 @@ const Flag = styled.div`
 const PlayerContainer = styled.div`
     height: 480px;
     width: 800px;
-    background-color: rgba(68, 68, 68, 0.7);
+    background-color: rgba(68, 68, 68, 0.8);
     padding-left: 50px;
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
@@ -62,7 +72,7 @@ const PointList = styled.ul`
   
   > li {
     box-sizing: border-box;
-    background-color: rgba(68, 68, 68, 0.7);
+    background-color: rgba(68, 68, 68, 0.8);
     display: inline-block;
     width: 150px;    
     line-height: 200px;
@@ -71,7 +81,7 @@ const PointList = styled.ul`
     text-align: center;    
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
-    margin-left: 4px;
+    margin-left: 10px;
   }
   > li.winner {
     color: #ffcc00;
@@ -113,6 +123,7 @@ export default ({match, exitScoreBoard}) => {
 
   return (
     <ScoreBoard onDoubleClick={e => exitScoreBoard(null)}>
+      <ScoreBoardBackground />
       <TeamContainer>
         <Flag country={homeCountry} />
         <PlayerContainer>
