@@ -18,7 +18,8 @@ const ScoreBoardBackground = styled.div`
   top: 0;
    width: 100%;
    height: 100%;
-   background-image: url(http://worldtour.2019.fivb.com/-/media/fivb_beachvolleyball_world_tour_finals_rome_background.jpeg);
+   /*background-image: url(http://worldtour.2019.fivb.com/-/media/fivb_beachvolleyball_world_tour_finals_rome_background.jpeg);*/
+   background-image: url(/static/img/bigassbackground.jpg);
    background-size: cover;
    opacity: 0.6;
 `;
@@ -42,7 +43,7 @@ const Flag = styled.div`
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center center;
-    background-image: url(http://spider.netlife.no/~oveien/flags/${props => props.country.toLowerCase()}.png);
+    background-image: url(/static/img/flags/${props => props.country.toLowerCase()}.png);
 `;
 
 const PlayerContainer = styled.div`
@@ -113,8 +114,10 @@ export default ({match, exitScoreBoard}) => {
     }
   }
 
-  homePoints.push([match.pointsInCurrentSet[0], false]);
-  awayPoints.push([match.pointsInCurrentSet[1], false]);
+  if (!match.isFinished) {
+    homePoints.push([match.pointsInCurrentSet[0], false]);
+    awayPoints.push([match.pointsInCurrentSet[1], false]);
+  }
 
   const [h2Player, homeCountry] = getCountryFromPlayer(match.h2Player)
   const [b2Player, awayCountry] = getCountryFromPlayer(match.b2Player)
