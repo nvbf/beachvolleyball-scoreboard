@@ -73,6 +73,9 @@ const PointList = styled.ul`
     border-top-right-radius: 10px;
     margin-left: 4px;
   }
+  > li.winner {
+    color: #ffcc00;
+  }
 `
 
 const getCountryFromPlayer = (player) => {
@@ -95,13 +98,13 @@ export default ({match, exitScoreBoard}) => {
   if (match.scoreInCompletedSet) {
     for (let set of match.scoreInCompletedSet.split(/,/g)) {
       const [ht, at] = set.split(/\-/);
-      homePoints.push(parseInt(ht));
-      awayPoints.push(parseInt(at));
+      homePoints.push([parseInt(ht), parseInt(ht) > parseInt(at)]);
+      awayPoints.push([parseInt(at), parseInt(ht) < parseInt(at)]);
     }
   }
 
-  homePoints.push(match.pointsInCurrentSet[0]);
-  awayPoints.push(match.pointsInCurrentSet[1]);
+  homePoints.push([match.pointsInCurrentSet[0], false]);
+  awayPoints.push([match.pointsInCurrentSet[1], false]);
 
   const [h2Player, homeCountry] = getCountryFromPlayer(match.h2Player)
   const [b2Player, awayCountry] = getCountryFromPlayer(match.b2Player)
@@ -133,7 +136,7 @@ export default ({match, exitScoreBoard}) => {
 
 const Sets = (props) => {
   const sets = props.points.map( (points) => {
-    return <li>{points}</li>
+    return <li className={points[1] ? 'winner' : ''}>{points[0]}</li>
   });
   return <PointList>{sets}</PointList>
 }
