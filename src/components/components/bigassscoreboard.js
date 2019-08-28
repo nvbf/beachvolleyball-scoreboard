@@ -36,12 +36,13 @@ const TeamContainer = styled.div`
 
 const Flag = styled.div`
     height: 480px;
-    width: 500px;
+    width: 480px;
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;   
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center center;
+    margin-right: 2px;
 `;
 
 const PlayerContainer = styled.div`
