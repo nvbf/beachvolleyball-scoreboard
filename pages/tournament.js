@@ -66,6 +66,8 @@ class Tournament extends React.Component {
           <meta name="viewport" content="width=device-width, initial-scale=1" />
           <meta charSet="utf-8" />
         </Head>
+        <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet" />
+
         <style jsx global>{`
           body {
             font-family: Roboto, Helvetica Neue, Arial;

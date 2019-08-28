@@ -49,19 +49,23 @@ const Flag = styled.div`
 const PlayerContainer = styled.div`
     height: 480px;
     width: 800px;
-    background-color: rgba(68, 68, 68, 0.8);
-    padding-left: 50px;
+    background-color: rgba(68, 68, 68, 0.8);    
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
 `;
 
 const Player = styled.div`
+    padding-left: 50px;
     height: 240px;
     line-height: 240px;
     font-size: 80px;
     color: white;
-    margin-right: 50px;
+    padding-right: 50px;
     text-transform: uppercase;
+    
+    &.player-one {
+      border-bottom: 2px solid #d1c8b5;
+    }
 `;
 
 const PointList = styled.ul`
@@ -130,7 +134,7 @@ export default ({match, exitScoreBoard}) => {
       <TeamContainer>
         <Flag country={homeCountry} />
         <PlayerContainer>
-          <Player><Textfit mode="single" max={maxNameSize}>{match.h1Player}</Textfit></Player>
+          <Player className="player-one"><Textfit mode="single" max={maxNameSize}>{match.h1Player}</Textfit></Player>
           <Player><Textfit mode="single" max={maxNameSize}>{h2Player}</Textfit></Player>
         </PlayerContainer>
         <Sets  points={homePoints}/>
@@ -139,7 +143,7 @@ export default ({match, exitScoreBoard}) => {
       <TeamContainer>
         <Flag country={awayCountry} />
         <PlayerContainer>
-          <Player><Textfit mode="single" max={maxNameSize}>{match.b1Player}</Textfit></Player>
+          <Player className="player-one"><Textfit mode="single" max={maxNameSize}>{match.b1Player}</Textfit></Player>
           <Player><Textfit mode="single" max={maxNameSize}>{b2Player}</Textfit></Player>
         </PlayerContainer>
         <Sets  points={awayPoints} />
