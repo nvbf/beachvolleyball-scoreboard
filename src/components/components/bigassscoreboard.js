@@ -47,7 +47,7 @@ const Flag = styled.div`
 
 const PlayerContainer = styled.div`
     height: 480px;
-    width: 800px;
+    width: 770px;
     background-color: rgba(68, 68, 68, 0.8);    
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
@@ -78,9 +78,9 @@ const PointList = styled.ul`
     box-sizing: border-box;
     background-color: rgba(68, 68, 68, 0.8);
     display: inline-block;
-    width: 150px;    
+    width: 190px;    
     line-height: 200px;
-    font-size: 130px;
+    font-size: 170px;
     color: white;
     text-align: center;    
     border-top-left-radius: 10px;
