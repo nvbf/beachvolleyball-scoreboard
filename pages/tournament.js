@@ -6,22 +6,22 @@ import Head from "next/head";
 import { Card, CardActions, CardHeader, CardText } from "material-ui/Card";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 
-import { init } from "../src/util/auth";
-import { getTournament, matchesFromTournament } from "../src/firebase";
-import { transformToCorrectState } from "../src/domain/tide/storage";
-import LiveMatches from "../src/components/components/LiveMatches";
+import { init } from "../../../src/util/auth";
+import { getTournament, matchesFromTournament } from "../../../src/firebase";
+import { transformToCorrectState } from "../../../src/domain/tide/storage";
+import LiveMatches from "../../../src/components/components/LiveMatches";
 
 import {
   constants as c,
   Match,
   MATCH_FIREBASE_KEY,
   WINNER
-} from "../src/domain/tide/state";
-import FinishedMatches from "../src/components/components/FinishedMatches";
-import Scoreboard from "../src/components/components/scoreboard";
-import BigAssScoreBoard from "../src/components/components/bigassscoreboard";
+} from "../../../src/domain/tide/state";
+import FinishedMatches from "../../../src/components/components/FinishedMatches";
+import Scoreboard from "../../../src/components/components/scoreboard";
+import BigAssScoreBoard from "../../../src/components/components/bigassscoreboard";
 
-class Tournament extends React.Component {
+class Index extends React.Component {
   constructor(props) {
     super(props);
     this.loadTournamentData = this.loadTournamentData.bind(this);
@@ -349,4 +349,4 @@ function compareTimeFinished(a, b) {
   return 0;
 }
 
-export default Tournament;
+export default Index;
