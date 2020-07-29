@@ -31,7 +31,7 @@
     "babelify": "7.3.0",
     "bluebird": "3.5.0",
     "body-parser": "1.17.2",
-    "bootstrap": "3.3.7",
+    "bootstrap": "3.4.1",
     "bulma": "0.5.1",
     "chrome-remote-interface": "0.24.4",
     "const": "1.0.0",
