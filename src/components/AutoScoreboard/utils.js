@@ -16,10 +16,9 @@ export function getCurrentMatchId(matches, gameSchedule, court) {
   const courtGames = getCourtGames(gameSchedule, court);
 
   for (const game of courtGames) {
-    console.log('Court games', game, matches);
     const firebaseMatch = matches.find(m => m.matchId == game.matchId);
     if (!firebaseMatch) {
-      console.log('No match found for ' , game.id)
+      console.log('No match found for ' , game.matchId)
       continue;
     }
 
@@ -31,13 +30,13 @@ export function getCurrentMatchId(matches, gameSchedule, court) {
 
     // If the game finished less than a minute ago,
     // show the same match:
-    if (firebaseMatch.timeFinished && firebaseMatch.timeFinished > new Date().getTime() - (60*2) ) {
+    if (firebaseMatch.timeFinished && firebaseMatch.timeFinished/1000 > new Date().getTime()/1000 - (60*2) ) {
       console.log('Firebase Got a match finished at ', firebaseMatch.timeFinished, new Date().getTime()/1000)
       return firebaseMatch;
     }
 
     // For the next minute, show the next matches:
-    if (firebaseMatch.timeFinished && firebaseMatch.timeFinished > new Date().getTime()/1000 - (60*3) ) {
+    if (firebaseMatch.timeFinished && firebaseMatch.timeFinished/1000 > new Date().getTime()/1000 - (60*3) ) {
       return null;
     }
   }
@@ -50,7 +49,6 @@ export function getNextGames(matches, gameSchedule, court) {
 
   const nextGames = [];
   for (const game of courtGames) {
-    console.log('Court games', game, matches);
     const firebaseMatch = matches.find(m => m.matchId == game.matchId);
 
     if (!firebaseMatch) {

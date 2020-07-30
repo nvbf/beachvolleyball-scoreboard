@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles({
@@ -47,7 +47,7 @@ const useStyles = makeStyles({
     borderBottom: 'none'
   },
   teamName: {
-    textIndent: '16px',
+    textIndent: '10px',
     width: '300px',
     marginRight: '16px',
     textOverflow: 'ellipsis',
@@ -74,24 +74,74 @@ const useStyles = makeStyles({
     fontWeight: '700',
     marginRight: '8px',
     marginLeft: '8px',
+  },
+  servingTeamContainer: {
+    width: '30px'
+  },
+  servingTeam: {
+    width: '10px',
+    height: '10px',
+    margin: '10px',
+    backgroundColor: 'black',
+    borderRadius: '5px'
   }
 })
 
+const calcFontSize = (match) => {
+  let fontSize = '32px';
+  const maxLength = Math.max(
+    `${match.h1Player} / ${match.h2Player}`.length,
+    `${match.b1Player} / ${match.b2Player}`.length,
+  );
+
+  if (maxLength > 15) {
+    fontSize = '20px';
+  }
+  else if (maxLength > 12) {
+    fontSize = '24';
+  }
+  return fontSize;
+}
+
 export default ({match}) => {
   const classes = useStyles ();
+  const [fontSize, setFontSize] = useState('32px');
+  const [showPreviousSetScore, setShowPreviousSetScore] = useState(false);
+
+  useEffect( () => {
+    if (!match) {
+      return;
+    }
+    setFontSize(calcFontSize(match));
+
+
+
+  }, [match])
+
+  const teamNameStyle = {
+    fontSize
+  }
 
   return <div className={classes.container}>
     <div className={classes.teamRows}>
       <div className={classes.teamRow}>
         <div className={classes.nameAndPointsContainer}>
-          <div className={classes.teamName}>{match.h1Player} / {match.h2Player}</div>
+          <div className={classes.servingTeamContainer}>
+          {match.servingTeam == 'HOMETEAM' && <div className={classes.servingTeam}></div>}
+          </div>
+          <div className={classes.teamName} style={teamNameStyle}>{match.h1Player} / {match.h2Player}</div>
           <div className={classes.teamSets}>{match.setsWonByHomeTeam}</div>
           <div className={classes.teamPoints}>{match.pointsInCurrentSet[0]}</div>
         </div>
       </div>
       <div className={classes.teamRow}>
         <div className={`${classes.nameAndPointsContainer} ${classes.nameAndPointsContainerNoBorder}`}>
-          <div className={classes.teamName}>{match.b1Player} / {match.b2Player}</div>
+          <div className={classes.servingTeamContainer}>
+          {match.servingTeam == 'AWAYTEAM' &&
+            <div className={classes.servingTeam}></div>
+          }
+          </div>
+          <div className={classes.teamName} style={teamNameStyle}>{match.b1Player} / {match.b2Player}</div>
           <div className={classes.teamSets}>{match.setsWonByAwayTeam}</div>
           <div className={classes.teamPoints}>{match.pointsInCurrentSet[1]}</div>
         </div>

@@ -30,11 +30,14 @@ export function update(matchId, state) {
   const stateToStore = state
     .setIn([MATCH], lastMatchState)
     .setIn([HISTORY], List());
+
+  // If its'a tournament, we need the complete history to calculate serving team:
+  const completeState = tournamentId ? state : null
   try {
     save(tournamentId, matchId, {
       match: stateToStore,
-      tournamentId: tournamentId
-    });
+      tournamentId: tournamentId,
+    }, completeState);
   } catch (err) {
     console.error("Error on storing match object, firebase", matchId);
     console.error(err);

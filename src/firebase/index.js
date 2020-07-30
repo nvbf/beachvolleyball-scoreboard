@@ -15,14 +15,24 @@ import {
   getScoreForCompletedSets,
   getAwayTeamSetsWon,
   getHomeTeamSetsWon,
-  hasHomeTeamWonMatch
+  hasHomeTeamWonMatch, getTimeoutTakenInCurrentSet, personToServe
 } from "../domain/tide/logic";
 
-function extractDataMatchToTournament(match) {
+
+function extractDataMatchToTournament(state) {
+  const match = state.get(c.MATCH);
+
   const h1Player = match[c.HOMETEAM_FIRST_PLAYER_NAME];
   const h2Player = match[c.HOMETEAM_SECOND_PLAYER_NAME];
   const b1Player = match[c.AWAYTEAM_FIRST_PLAYER_NAME];
   const b2Player = match[c.AWAYTEAM_SECOND_PLAYER_NAME];
+  const homeTeamTimeoutTaken = getTimeoutTakenInCurrentSet(c.HOMETEAM, match);
+  const awayTeamTimeoutTaken = getTimeoutTakenInCurrentSet(c.AWAYTEAM, match);
+
+  // personToServe require complete state to calculate server:
+  const pts = personToServe(state)
+  console.log('Current server', pts);
+  const servingTeam = pts ? pts.team : null;
   const matchId = match[c.MATCH_ID];
 
   console.log("match???", match);
@@ -51,11 +61,14 @@ function extractDataMatchToTournament(match) {
     setsWonByAwayTeam,
     winner,
     matchId,
-    timeFinished
+    timeFinished,
+    homeTeamTimeoutTaken,
+    awayTeamTimeoutTaken,
+    servingTeam
   };
 }
 
-export async function save(tournamentId = 0, matchKey, match) {
+export async function save(tournamentId = 0, matchKey, match, completeState) {
   const uid = await getUID();
   match.userId = uid;
   const matchId = match.match.get(c.MATCH)[c.MATCH_ID];
@@ -65,7 +78,8 @@ export async function save(tournamentId = 0, matchKey, match) {
   // need to get slug from TournamentId
   if (tournamentId !== 0) {
     console.log("tournamentId", tournamentId);
-    const matchInfo = extractDataMatchToTournament(match.match.get(c.MATCH));
+    const matchInfo = extractDataMatchToTournament(completeState);
+    console.log('Match info', matchInfo);
     matchInfo.userId = uid;
     console.log("matchId", matchId);
     updates[matchInTournamentPath(tournamentId, matchId)] = matchInfo;
@@ -143,7 +157,7 @@ export async function saveTournament(tournamentName) {
         resolve(tournamentData);
       });
 
-      
+
   });
 
 }

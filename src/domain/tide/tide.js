@@ -13,7 +13,7 @@ import {
   getFirstTeamToServe,
   getMatch,
   hasHometeamWonSetPure,
-  hasAwayteamWonSetPure
+  hasAwayteamWonSetPure, personToServe
 } from "./logic";
 
 export default function create() {
@@ -25,121 +25,7 @@ export default function create() {
   return tide;
 }
 
-const personToServe = state => {
-  const currentSet = getCurrentSet(state);
-  const index = getCurrentSetIndex(getMatch(state));
-  console.log("CURRENT SET index:", index);
-  const firstTeamToServe = getFirstTeamToServe(currentSet);
-  console.log("firstTeamToServe", firstTeamToServe);
-  const serviceOrderHomeTeam = currentSet[c.SERVICE_ORDER_HOMETEAM];
-  console.log("serviceOrderHomeTeam", currentSet[c.SERVICE_ORDER_HOMETEAM]);
-  const serviceOrderAwayTeam = currentSet[c.SERVICE_ORDER_AWAYTEAM];
-  console.log("serviceOrderAwayTeam", currentSet[c.SERVICE_ORDER_AWAYTEAM]);
-  const actions = getHistory(state);
 
-  //console.log('person to servce actions:', actions);
-
-  const personToServeI = actions
-    .filter(action => {
-      if (
-        action &&
-        action[c.ACTION] &&
-        action[c.ACTION] &&
-        action[c.ACTION].length > 2
-      ) {
-        const actionHistoryAction = action[c.ACTION][2];
-        console.log("actionHistoryState", actionHistoryAction);
-        return (
-          actionHistoryAction === c.HOMETEAM_POINT ||
-          actionHistoryAction === c.AWAYTEAM_POINT
-        );
-      }
-      return false;
-    })
-    .map(action => action[c.ACTION][2])
-    .reduce(
-      (agg, action) => {
-        // console.log("action loop");
-        if (action === c.HOMETEAM_POINT) {
-          agg.hometeamPoints++;
-          if (
-            hasHometeamWonSetPure(agg.hometeamPoints, agg.awayteamPoints, 21)
-          ) {
-            // console.log("Hometeam finished with the set");
-            agg.serving = firstTeamToServe;
-            agg.number = 0;
-            agg.hometeamPoints = 0;
-            agg.awayteamPoints = 0;
-            agg.name = calculateNextPersonToServe(
-              firstTeamToServe,
-              serviceOrderHomeTeam,
-              serviceOrderAwayTeam,
-              0
-            );
-            return agg;
-          }
-        }
-
-        if (action === c.AWAYTEAM_POINT) {
-          agg.awayteamPoints++;
-          if (
-            hasAwayteamWonSetPure(agg.hometeamPoints, agg.awayteamPoints, 21)
-          ) {
-            // console.log("Awayteam finished with the set");
-            agg.serving = firstTeamToServe;
-            agg.number = 0;
-            agg.hometeamPoints = 0;
-            agg.awayteamPoints = 0;
-            agg.name = calculateNextPersonToServe(
-              firstTeamToServe,
-              serviceOrderHomeTeam,
-              serviceOrderAwayTeam,
-              0
-            );
-            return agg;
-          }
-        }
-
-        if (
-          (action === c.HOMETEAM_POINT && agg.serving === c.HOMETEAM) ||
-          (action === c.AWAYTEAM_POINT && agg.serving === c.AWAYTEAM)
-        ) {
-          // console.log("Same server!!!");
-          return agg;
-        }
-
-        const newNumber = agg.number + 1;
-        // console.log("next server", newNumber);
-        const serving = agg.serving === c.HOMETEAM ? c.AWAYTEAM : c.HOMETEAM;
-        return {
-          hometeamPoints: agg.hometeamPoints,
-          awayteamPoints: agg.awayteamPoints,
-          serving,
-          name: calculateNextPersonToServe(
-            firstTeamToServe,
-            serviceOrderHomeTeam,
-            serviceOrderAwayTeam,
-            newNumber
-          ),
-          number: newNumber
-        };
-      },
-      {
-        serving: firstTeamToServe,
-        name: calculateNextPersonToServe(
-          firstTeamToServe,
-          serviceOrderHomeTeam,
-          serviceOrderAwayTeam,
-          0
-        ),
-        hometeamPoints: 0,
-        awayteamPoints: 0,
-        number: 0
-      }
-    );
-
-  return { name: personToServeI.name, team: personToServeI.serving };
-};
 
 function mutateSignals() {
   const state = this.getState();
