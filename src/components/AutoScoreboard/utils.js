@@ -57,8 +57,8 @@ export function getNextGames(matches, gameSchedule, court) {
     }
 
     // The first unfinished match sounds good:
-    if (!firebaseMatch.isFinished) {
-      console.log('Found not finished game', firebaseMatch);
+    if (firebaseMatch.isFinished) {
+      console.log('Found finished game', firebaseMatch);
       continue;
     }
 
