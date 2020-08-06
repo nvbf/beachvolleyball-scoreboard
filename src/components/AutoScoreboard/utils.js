@@ -45,7 +45,10 @@ export function getCurrentMatchId(matches, gameSchedule, court) {
 }
 
 export function getNextGames(matches, gameSchedule, court) {
-  const courtGames = getCourtGames(gameSchedule, court);
+
+  const courtGames = getCourtGames(gameSchedule, court)
+    // If we got a result, it's not a next game:
+    .filter(g => !g.result);
 
   const nextGames = [];
   for (const game of courtGames) {
