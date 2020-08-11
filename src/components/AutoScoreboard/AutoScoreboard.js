@@ -7,6 +7,7 @@ import ScoreBoard from "./ScoreBoard";
 import NextGames from "./NextGames";
 import {update} from "../../domain/tide/storage";
 import Timeout from "./Timeout";
+import {CSSTransition} from "react-transition-group";
 
 
 export default ({court, profixioSlug, tournamentId}) => {
@@ -92,19 +93,28 @@ export default ({court, profixioSlug, tournamentId}) => {
 
   }, [])
 
-  if (!currentMatchId && gameSchedule) {
-    return <NextGames schedule={gameSchedule} court={court} matches={matches} />
-  }
-
-  if (!currentMatchId || !match) {
-    return <div>No match found</div>
-  }
-
-
-  console.log('Current match', match)
+  console.log('Current match', match, gameSchedule)
   return <div style={{width: '1920px',height: '1280px',position: 'relative'}}>
-    <ScoreBoard match={match} />
-    <Timeout team={currentTimeout} />
+
+    <CSSTransition in={!!(currentMatchId && gameSchedule && match)}
+                   timeout={1000}
+                   classNames="scoreboard"
+                   unmountOnExit>
+      <ScoreBoard match={match} />
+    </CSSTransition>
+
+    <CSSTransition in={!!(!currentMatchId && gameSchedule)} timeout={1000}
+                   classNames="next-games"
+                   unmountOnExit
+    >
+      <NextGames schedule={gameSchedule} court={court} matches={matches} />
+    </CSSTransition>
+
+    <CSSTransition timeout={1000} in={!!currentTimeout}
+                   classNames="timeout" unmountOnExit>
+      <Timeout team={currentTimeout} />
+    </CSSTransition>
+
   </div>
 }
 

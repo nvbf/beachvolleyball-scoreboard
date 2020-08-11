@@ -5,33 +5,90 @@ const useStyles = makeStyles({
   container: {
     width: '600px',
     position: 'absolute',
-    marginLeft: '-300px',
-    left: '50%',
-    right: 0,
-    display: 'none',
     bottom: '50px',
-    '&.visible': {
-      display: 'block'
-    }
+    left: '510px',
+    "&.timeout-enter-active": {
+      animation: `$slideFromLeft 1s ease-in-out`
+    },
+    "&.timeout-enter-active $heading": {
+      animation: `$expandCollapse 1s ease-in-out`
+    },
+    "&.timeout-enter-active $teamName": {
+      animation: `$showTeamName 1s ease-in-out`
+    },
+
+    "&.timeout-exit-active": {
+      animationDirection: 'reverse',
+      left: '-300px',
+      animation: `$slideFromLeft 1s ease-in-out`
+    },
+    "&.timeout-exit-active $heading": {
+      animationDirection: 'reverse',
+      animation: `$expandCollapse 1s ease-in-out`
+    },
+    "&.timeout-exit-active $teamName": {
+      animationDirection: 'reverse',
+      opacity: 0,
+      animation: `$showTeamName 1s ease-in-out`
+    },
   },
   heading: {
     color: 'white',
-    backgroundColor: 'black',
-    marginBottom: '8px',
+    backgroundColor: '#222b38',
     height: '57px',
-    display: 'flex',
-    alignItems: 'center',
+    lineHeight: '57px',
     fontSize: '32px',
-    textIndent: '16px'
+    textIndent: '16px',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    zIndex: 1
   },
   teamName: {
     height: '57px',
     backgroundColor: 'white',
     color: 'black',
     fontSize: '28px',
-    display: 'flex',
-    alignItems: 'center',
-    textIndent: '16px'
+    lineHeight: '57px',
+    textIndent: '16px',
+    marginTop: '57px',
+  },
+  "@keyframes slideFromLeft": {
+    "0%": {
+      left: '-300px',
+    },
+    "33%": {
+      left: '510px'
+    },
+    "100%": {
+      left: '510px'
+    }
+  },
+  "@keyframes expandCollapse": {
+    "33%": {
+      height: '57px'
+    },
+    "66%": {
+      height: '114px'
+    },
+    "100%": {
+      height: '57px'
+    },
+  },
+  "@keyframes showTeamName": {
+    "0%": {
+      opacity: 0
+    },
+    "66%": {
+      opacity: 0
+    },
+    "66.1%": {
+      opacity: 1
+    },
+    "100%": {
+      opacity: 1
+    }
   }
 })
 
