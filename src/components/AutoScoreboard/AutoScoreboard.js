@@ -20,13 +20,19 @@ export default ({court, profixioSlug, tournamentId}) => {
   const [match, setMatch] = useState(null);
 
   const updateMatches = useCallback( ({matches}) => {
+    console.log('Update matches', matches);
+    if (matches && matches.length > 0) {
       matches = Object.values(matches);
       setMatches(matches)
+    }
   });
+
 
   const loadMatches = async () => {
     // Hack to init firebase:
+    console.log('Loading matches');
     const uid = await getUID()
+    console.log('Logged in with uid', uid)
     matchesFromTournament(tournamentId, updateMatches);
   }
 
