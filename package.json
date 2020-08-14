@@ -57,7 +57,7 @@
     "sendgrid": "5.2.2",
     "slugify2": "0.0.2",
     "styled-components": "2.1.2",
-    "superagent": "3.5.2",
+    "superagent": "3.7.0",
     "tide": "2.0.0"
   },
   "scripts": {
