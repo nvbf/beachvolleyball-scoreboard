@@ -38,7 +38,8 @@ export default () => {
     <style jsx global>{`
             body {
               width: 1920px;
-              height: 1280px;
+              height: 1080px;
+              overflow: hidden;
               margin: 0;
               padding: 0;
               font-family: 'Open Sans','Source Sans Pro',sans-serif;

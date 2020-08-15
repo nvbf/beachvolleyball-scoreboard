@@ -100,7 +100,7 @@ export default ({court, profixioSlug, tournamentId}) => {
   }, [])
 
   console.log('Current match', match, gameSchedule)
-  return <div style={{width: '1920px',height: '1280px',position: 'relative'}}>
+  return <div style={{width: '1920px',height: '1080px',position: 'relative'}}>
 
     <CSSTransition in={!!(currentMatchId && gameSchedule && match)}
                    timeout={1000}
