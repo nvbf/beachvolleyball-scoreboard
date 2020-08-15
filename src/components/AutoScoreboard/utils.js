@@ -22,6 +22,10 @@ export function getCurrentMatchId(matches, gameSchedule, court) {
       continue;
     }
 
+    if (game.result) {
+      continue
+    }
+
     // The first unfinished match sounds good:
     if (!firebaseMatch.isFinished) {
       console.log('Firebase Found not finished game', firebaseMatch);
