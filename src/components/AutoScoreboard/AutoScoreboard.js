@@ -21,7 +21,7 @@ export default ({court, profixioSlug, tournamentId}) => {
 
   const updateMatches = useCallback( ({matches}) => {
     console.log('Update matches', matches);
-    if (matches && matches.length > 0) {
+    if (matches) {
       matches = Object.values(matches);
       setMatches(matches)
     }
