@@ -6,7 +6,7 @@ const useStyles = makeStyles({
     width: '600px',
     position: 'absolute',
     bottom: '50px',
-    left: '510px',
+    left: '660px',
     "&.timeout-enter-active": {
       animation: `$slideFromLeft 1s ease-in-out`
     },
@@ -56,13 +56,13 @@ const useStyles = makeStyles({
   },
   "@keyframes slideFromLeft": {
     "0%": {
-      left: '-300px',
+      left: '-600px',
     },
     "33%": {
-      left: '510px'
+      left: '660px'
     },
     "100%": {
-      left: '510px'
+      left: '660px'
     }
   },
   "@keyframes expandCollapse": {
