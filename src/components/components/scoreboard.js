@@ -15,6 +15,8 @@ import AddEmailButton from "../molokyler/add-email-button";
 import AddTournamentIdButton from "../molokyler/add-tournamentid-button";
 import AlertInfo from "../atom/alert-info";
 
+import styled from 'styled-components';
+
 import {
   Button,
   ButtonToolbar,
@@ -38,6 +40,16 @@ import {
   ACTION_HISTORY,
   constants as c
 } from "../../domain/tide/state";
+
+const ScoreBoardBackground = styled.div`
+  position: relative;
+  left: 0;
+  top: 0;
+   width: 100%;
+   height: 30vh;
+   background-image: url(/static/img/Asset1.png);
+   background-size: 100% 100%;
+`;
 
 class Scoreboard extends Component {
   constructor(props) {
@@ -79,7 +91,33 @@ class Scoreboard extends Component {
               <h2 className="panel-title">Match standing</h2>
             </div>
             <div className="panel-body">
+              <div width="100%" height="100px">
+              <ScoreBoardBackground>
+                <span style={{opacity: '1.0', position: 'absolute', bottom:'33%',right: '65%', width: '20%', height: '40%'}}>
+                  <HomeTeam/>
+                  <Button style={{width: '100%', height: '100%'}}  bsStyle="primary"  className="points" type="submit" onClick={this.props.tide.actions.all.addPointHometeam}
+						disabled={MATCH_IS_FINISED}
+						>
+						<span className="glyphicon glyphicon-plus-sign" aria-hidden="true"/>
+                  </Button>
+                </span>
 
+                <span style={{opacity: '1.0', position: 'absolute', 
+bottom:'33%',left: '60%', width: '20%', height: '40%'}}>
+                  <AwayTeam/>
+                  <Button style={{width: '100%', height: '100%'}}
+                    bsStyle="primary" 
+                     className="points" type="submit" onClick={this.props.tide.actions.all.addPointAwayteam}
+						disabled={MATCH_IS_FINISED}
+						>
+						<span className="glyphicon glyphicon-plus-sign" aria-hidden="true"/>
+                  </Button>
+                </span>            
+                  
+                </ScoreBoardBackground>
+              </div>
+            </div>
+            <div className="panel-body">
               <table className="table table-striped">
                 <thead>
                   <tr>
@@ -87,7 +125,7 @@ class Scoreboard extends Component {
                     <td>Set 1</td>
                     <td>Set 2</td>
                     <td>Set 3</td>
-                    <td>Add Point</td>
+                    <td>Undo</td>
                   </tr>
                 </thead>
                 <tbody>
@@ -109,7 +147,6 @@ class Scoreboard extends Component {
                   />
                 </tbody>
               </table>
-
             </div>
             <div className="panel-footer">
               <TimeoutButtons />

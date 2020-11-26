@@ -30,12 +30,12 @@ export default class ScoreboardRow extends Component {
 					{score3}
 				</td>
 				<td>
-					<Button
+				<Button
 						bsStyle="primary" className="points" type="submit" onClick={addPoint}
 						disabled={matchFinished}
 						>
-						<span className="glyphicon glyphicon-plus-sign" aria-hidden="true"/>
-					</Button>
+					Undo
+				</Button>
 				</td>
 			</tr>
 		);

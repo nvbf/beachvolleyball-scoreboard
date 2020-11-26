@@ -33,6 +33,7 @@ export default function({
 
   return (
     <tr className={winnerStyle}>
+      <td className="matchId">1</td>
       <td className="teams">
         <span className="home-team">
           {name(h1Player)}/{name(h2Player)}

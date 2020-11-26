@@ -12,6 +12,7 @@ export default function({ matches = [] }) {
         <table className="matches-table" cellSpacing="0">
           <thead>
             <tr>
+              <th>MatchId</th>
               <th>Teams</th>
               <th>Sets</th>
               <th className="sets">
