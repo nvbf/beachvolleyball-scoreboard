@@ -14,6 +14,7 @@ import HomeTeam from "../molokyler/home-team";
 import AddEmailButton from "../molokyler/add-email-button";
 import AddTournamentIdButton from "../molokyler/add-tournamentid-button";
 import AlertInfo from "../atom/alert-info";
+import ScoreboardVisual from "./scoreboardVisual"
 
 import styled from 'styled-components';
 
@@ -92,28 +93,12 @@ class Scoreboard extends Component {
             </div>
             <div className="panel-body">
               <div width="100%" height="100px">
-              <ScoreBoardBackground>
-                <span style={{opacity: '1.0', position: 'absolute', bottom:'33%',right: '65%', width: '20%', height: '40%'}}>
-                  <HomeTeam/>
-                  <Button style={{width: '100%', height: '100%'}}  bsStyle="primary"  className="points" type="submit" onClick={this.props.tide.actions.all.addPointHometeam}
-						disabled={MATCH_IS_FINISED}
-						>
-						<span className="glyphicon glyphicon-plus-sign" aria-hidden="true"/>
-                  </Button>
-                </span>
-
-                <span style={{opacity: '1.0', position: 'absolute', 
-bottom:'33%',left: '60%', width: '20%', height: '40%'}}>
-                  <AwayTeam/>
-                  <Button style={{width: '100%', height: '100%'}}
-                    bsStyle="primary" 
-                     className="points" type="submit" onClick={this.props.tide.actions.all.addPointAwayteam}
-						disabled={MATCH_IS_FINISED}
-						>
-						<span className="glyphicon glyphicon-plus-sign" aria-hidden="true"/>
-                  </Button>
-                </span>            
-                  
+                <ScoreBoardBackground>
+                    <ScoreboardVisual 
+                      addPointHome={this.props.tide.actions.all.addPointHometeam}
+                      addPointAway={this.props.tide.actions.all.addPointAwayteam}
+                      matchFinished={MATCH_IS_FINISED}
+                      />
                 </ScoreBoardBackground>
               </div>
             </div>
