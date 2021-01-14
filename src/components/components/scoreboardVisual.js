@@ -27,7 +27,8 @@ import {
     const {
         MATCH_IS_FINISED,
         addPointHome,
-        addPointAway
+        addPointAway,
+        advanced
       } = this.props;
 
   console.log("rendering scoreboard visual");
@@ -36,13 +37,13 @@ import {
         <span style={{opacity: '1.0', position: 'absolute', bottom:'33%',right: '65%', width: '20%', height: '40%'}}>
             <HomeTeam/>
             <PointPanel
-                addPointTeam={addPointHome} advanced="true" />
+                addPointTeam={addPointHome} advanced={advanced} />
         </span>
 
         <span style={{opacity: '1.0', position: 'absolute', bottom:'33%',left: '60%', width: '20%', height: '40%'}}>
             <AwayTeam/>
             <PointPanel
-                addPointTeam={addPointAway} advanced={false}/>
+                addPointTeam={addPointAway} advanced={advanced}/>
         </span>  
     </div>
   );}
@@ -51,5 +52,6 @@ import {
 ScoreboardVisual.propTypes = {
     addPointHome: PropTypes.bool.isRequired,
     addPointAway: PropTypes.bool.isRequired,
-	matchFinished: PropTypes.bool.isRequired
+    matchFinished: PropTypes.bool.isRequired,
+    advanced: PropTypes.bool.isRequired
 };

@@ -42,6 +42,11 @@ import {
   constants as c
 } from "../../domain/tide/state";
 
+if (typeof window === "undefined") {
+  console.error("Oops, `window` is not defined")
+}
+
+import BootstrapSwitchButton from "bootstrap-switch-button-react"
 const ScoreBoardBackground = styled.div`
   position: relative;
   left: 0;
@@ -55,14 +60,30 @@ const ScoreBoardBackground = styled.div`
 class Scoreboard extends Component {
   constructor(props) {
     super(props);
-    this.state = { showDetails: false };
+    this.state = { showDetails: false, showAdvanced: false };
   }
 
   handleDetailToogle() {
-    this.setState({ showDetails: !this.state.showDetails });
+    console.log(
+      "inside the function for the hell of it! " + (this)
+    );
+    this.setState({
+      showDetails: !this.state.showDetails
+    });
+  }
+
+  
+  handleAdvancedToggle() {
+    this.setState({
+      showAdvanced: !this.state.showAdvanced
+    });
   }
 
   render() {
+    if (typeof window === "undefined") {
+      console.error("Oops, `window` is not defined")
+    }
+
     const {
       HOMETEAM_SECOND_PLAYER_NAME,
       HOMETEAM_FIRST_PLAYER_NAME,
@@ -84,21 +105,47 @@ class Scoreboard extends Component {
 
     const newMatchUrl = "/match?new=true";
 
+    // bsClass?: string;
+    // active?: boolean;
+    // block?: boolean;
+    // bsStyle?: string | null;
+    // bsSize?: Sizes;
+    // componentClass?: React.ReactType;
+    // disabled?: boolean;
+
+    // checked?: boolean;
+    // name?: string;
+    // value: number | string;
+
+
     return (
       <div>
         <div className="container scoreboard">
           <div className="panel panel-default">
             <div className="panel-heading">
               <h2 className="panel-title">Match standing</h2>
+              <div className="panel-body">
+                <label >
+                  <BootstrapSwitchButton
+                    checked={this.state.showAdvanced}
+                    onlabel='Advanced'
+                    onstyle='primary'
+                    offlabel='Basic'
+                    width={200}
+                    onChange={this.handleAdvancedToggle.bind(this)}
+                  />
+                </label>
+              </div>
             </div>
             <div className="panel-body">
               <div width="100%" height="100px">
                 <ScoreBoardBackground>
-                    <ScoreboardVisual 
-                      addPointHome={this.props.tide.actions.all.addPointHometeam}
-                      addPointAway={this.props.tide.actions.all.addPointAwayteam}
-                      matchFinished={MATCH_IS_FINISED}
-                      />
+                  <ScoreboardVisual
+                    addPointHome={this.props.tide.actions.all.addPointHometeam}
+                    addPointAway={this.props.tide.actions.all.addPointAwayteam}
+                    matchFinished={MATCH_IS_FINISED}
+                    advanced={this.state.showAdvanced}
+                  />
                 </ScoreBoardBackground>
               </div>
             </div>

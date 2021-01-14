@@ -21,6 +21,10 @@ const StyledCard = styled(Card)`
    cursor: pointer;
 `;
 
+if (typeof window === "undefined") {
+  console.error("Oops, `window` is not defined")
+}
+
 export default () => {
   return (
     <MuiThemeProvider>
