@@ -17,6 +17,13 @@ import AlertInfo from "../atom/alert-info";
 import ScoreboardVisual from "./scoreboardVisual"
 
 import styled from 'styled-components';
+import dynamic from 'next/dynamic'
+const BootstrapSwitchButton = dynamic(import('bootstrap-switch-button-react'),
+    {
+        loading: () => <p>loading</p>,
+        ssr: false // This line is important. It's what prevents server-side render
+    }
+)
 
 import {
   Button,
@@ -42,11 +49,6 @@ import {
   constants as c
 } from "../../domain/tide/state";
 
-if (typeof window === "undefined") {
-  console.error("Oops, `window` is not defined")
-}
-
-import BootstrapSwitchButton from "bootstrap-switch-button-react"
 const ScoreBoardBackground = styled.div`
   position: relative;
   left: 0;
@@ -60,7 +62,12 @@ const ScoreBoardBackground = styled.div`
 class Scoreboard extends Component {
   constructor(props) {
     super(props);
-    this.state = { showDetails: false, showAdvanced: false };
+    this.state = {
+      windowWidth: null,
+      mobileNavVisible: false,
+      showDetails: false, 
+      showAdvanced: false
+    };
   }
 
   handleDetailToogle() {
