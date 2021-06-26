@@ -34,7 +34,8 @@ const useStyles = makeStyles({
     alignItems: 'center',
     height: '100px',
     textIndent: '20px',
-    textTransform: 'uppercase'
+    textTransform: 'uppercase',
+    marginBottom: '10px'
   },
   gameRowsOuter: {
     position: 'absolute',
@@ -53,32 +54,26 @@ const useStyles = makeStyles({
   gameRow: {
     backgroundColor: 'white',
     display: 'flex',
-    alignItems: 'center',
     fontSize: '32px',
-    '&:first-child $teamName': {
-      borderTop: '2px solid white',
-    }
+    marginTop: '10px',
   },
   gameTime: {
+    paddingTop: '10px',
+    paddingBottom: '10px',
+    paddingLeft: '10px',
     backgroundColor: '#222b38',
     color: 'white',
-    borderTop: '2px solid white',
-    width: '150px',
-    display: 'flex',
-    alignItems: 'center',
+    width: '140px',
     justifyContent: 'center',
-    height: '57px',
-
   },
   teamName: {
+    paddingTop: '10px',
+    paddingBottom: '10px',
     width: '450px',
     fontSize: '24px',
-    borderTop: '2px solid #222b38',
-    height: '57px',
     display: 'flex',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     paddingLeft: '40px',
-
   },
   "@keyframes slideFromTop": {
     "0%": {
@@ -123,6 +118,14 @@ export default ({matches, schedule, court}) => {
     return null;
   }
 
+  const getTeamName = (teamName) => {
+    const parts = teamName.split(/\s*\/\s*/);
+    if (parts.length == 2) {
+      return parts.map(tp => <React.Fragment>{tp}<br /></React.Fragment>)
+    }
+    return teamName;
+  }
+
   console.log('Upcoming games', upcomingGames);
   return <div className={classes.container}>
     <div className={classes.heading}>
@@ -130,11 +133,11 @@ export default ({matches, schedule, court}) => {
     </div>
     <div className={classes.gameRowsOuter}>
       <div className={classes.gameRows}>
-        {upcomingGames.slice(0, 10).map((game) => {
+        {upcomingGames.slice(0, 8).map((game) => {
           return <div className={classes.gameRow} key={game.matchId}>
             <div className={classes.gameTime}>{game.time}</div>
-            <div className={classes.teamName}>{game.homeTeam}</div>
-            <div className={classes.teamName}>{game.awayTeam}</div>
+            <div className={classes.teamName}>{getTeamName(game.homeTeam)}</div>
+            <div className={classes.teamName}>{getTeamName(game.awayTeam)}</div>
           </div>
         })}
       </div>
