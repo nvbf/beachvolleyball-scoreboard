@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import AppBarMain from "../components/appbar";
 import AppCards from "../components/appCards"
+import Grid from "@mui/material/Grid"
 
 function StartPage() {
   return (
@@ -37,21 +38,28 @@ function StartPage() {
           </p>
         </div>
         <main>
-          <AppCards
-            title="New Match"
-            subHeader="Electronic scoresheet, no need for a seperate scorer."
-            path="match"
-          />
-          <AppCards
-            title="Create Tournament"
-            subHeader="Connect matches to one tournament"
-            path="create-tournement"
-          />
-          <AppCards
-            title="Live score"
-            subHeader="Get livescore from an tournament or one match"
-            path="tournements"
-          />
+          <Grid container
+            direction="column"
+            justifyContent="center"
+            alignItems="center"
+            rowSpacing={5}
+          >
+            <AppCards
+              title="New Match"
+              subHeader="Electronic scoresheet, no need for a seperate scorer."
+              path="match"
+            />
+            <AppCards
+              title="Create Tournament"
+              subHeader="Connect matches to one tournament"
+              path="create-tournement"
+            />
+            <AppCards
+              title="Live score"
+              subHeader="Get livescore from an tournament or one match"
+              path="tournements"
+            />
+          </Grid>
         </main>
       </div>
       {/* </ThemeProvider> */}

@@ -1,6 +1,6 @@
 import React from "react";
 import AppBar from "@mui/material/AppBar";
-import Toolbar from '@mui/material/Toolbar';
+import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import cardImage from '../static/img/match.jpg'
 import Link from '@mui/material/Link';
@@ -19,19 +19,21 @@ interface AppCardsProps {
 
 export function AppCards({ title, subHeader, path }: AppCardsProps) {
     return (
-        <Card sx={{ maxWidth: 820 }}>
-            <CardActionArea href={path}>
-                <CardHeader
-                    title={title}
-                    subheader={subHeader}
-                />
-                <CardMedia
-                    component="img"
-                    src={cardImage}
-                    alt="Beacvolleyballcourt"
-                />
-            </CardActionArea>
-        </Card>
+        <Grid item>
+            <Card sx={{ maxWidth: 820 }}>
+                <CardActionArea href={path}>
+                    <CardMedia
+                        component="img"
+                        src={cardImage}
+                        alt="Beacvolleyballcourt"
+                    />
+                    <CardHeader
+                        title={title}
+                        subheader={subHeader}
+                    />
+                </CardActionArea>
+            </Card>
+        </Grid>
     )
 }
 
