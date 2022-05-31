@@ -1,6 +1,5 @@
 node_modules
 .idea
-public/
 npm-debug.log
 coverage
 .c9
