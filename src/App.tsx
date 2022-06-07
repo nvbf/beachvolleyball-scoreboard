@@ -1,17 +1,4 @@
-import React from 'react';
-import logo from './logo.svg';
-import cardImage from './static/img/match.jpg'
 import './App.css';
-import ThemeProvider from "@mui/material/styles/ThemeProvider";
-// import RaisedButton from "@mui/material/RaisedButton";
-import {
-  Card,
-  CardHeader,
-  CardMedia,
-  CardActionArea,
-} from "@mui/material";
-import AppBarMain from "./components/appbar";
-import AppCards from "./components/appCards"
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import StartPage from './pages/StartPage';
 import Match from './pages/Match';
