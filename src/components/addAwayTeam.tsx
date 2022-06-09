@@ -8,10 +8,10 @@ import {
   VolleyCard, VolleyCardHeader, VolleyStack, VolleyFormControl, ShirtColors,
   RightBox, VolleyAlert
 } from "../util/styles"
-import { addHomeTeam } from '../store/teams/actions';
+import { addAwayTeam } from '../store/teams/actions';
 
-export function AddHomeTeam() {
-  const team = useAppSelector(state => state.team.homeTeam)
+export function AddAwayTeam() {
+  const team = useAppSelector(state => state.team.awayTeam)
   const dispatch = useAppDispatch()
 
   const [shirtColor, setShirtColor] = useState(team.shirtColor);
@@ -37,7 +37,7 @@ export function AddHomeTeam() {
   }
 
   function handleSubmit() {
-    dispatch(addHomeTeam({
+    dispatch(addAwayTeam({
       player1Name: player1Name,
       player2Name: player2Name,
       shirtColor: shirtColor,
@@ -49,7 +49,7 @@ export function AddHomeTeam() {
     <Box >
       <VolleyCard >
         <VolleyCardHeader
-          title="Home team"
+          title="Away team"
         />
         <VolleyStack spacing={2}>
           <VolleyFormControl fullWidth>
@@ -74,13 +74,13 @@ export function AddHomeTeam() {
       </VolleyCard>
 
       <VolleyAlert severity="info">
-        The first thing we need to do is to add the name of the players to the home team
+        Great! Now lets add the second team!
       </VolleyAlert>
       <VolleyAlert severity="info">
-        Pick a color for the team, or it will default to blue.
+        Pick a color for the team, or it will default to red.
       </VolleyAlert>
     </Box>
   );
 }
 
-export default AddHomeTeam;
+export default AddAwayTeam;

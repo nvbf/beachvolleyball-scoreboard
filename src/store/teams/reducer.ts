@@ -6,13 +6,13 @@ const initState = {
   homeTeam: {
     player1Name: "",
     player2Name: "",
-    shirtColor: "0000ff",
+    shirtColor: "#0000ff",
     added: false
   },
   awayTeam: {
     player1Name: "",
     player2Name: "",
-    shirtColor: "ff0000",
+    shirtColor: "#ff0000",
     added: false
   },
   shouldUpdate: false,

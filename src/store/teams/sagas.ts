@@ -13,7 +13,7 @@ export function* setHomeTeam(action: PayloadAction<Team>): Generator<CallEffect<
   try {
     console.log(action.payload);
     put(addHomeTeam(action.payload))
-    console.log("Saved");
+    console.log("Saved home");
   } catch (error) {
     yield put(addTeamError(error as Error))
     // yield put(reportError({error} as {error: Error}))
@@ -22,7 +22,9 @@ export function* setHomeTeam(action: PayloadAction<Team>): Generator<CallEffect<
 
 export function* setAwayTeam(action: PayloadAction<Team>): Generator<CallEffect<string> | PutEffect, void, string> {
   try {
-    yield put(addAwayTeam(action.payload))
+    console.log(action.payload);
+    put(addAwayTeam(action.payload))
+    console.log("Saved away");
   } catch (error) {
     yield put(addTeamError(error as Error))
     // yield put(reportError({error} as {error: Error}))

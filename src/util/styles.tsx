@@ -1,16 +1,18 @@
 import Alert from "@mui/material/Alert";
+import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import FormControl from "@mui/material/FormControl";
 
 import {
-    Card,
-    CardHeader,
-  } from "@mui/material";
-  import styled from "styled-components";
+  Card,
+  CardHeader,
+} from "@mui/material";
+import styled from "styled-components";
 
 export const VolleyCard = styled(Card)`
   box-shadow: 0px 0px 9px #888;
+  margin-bottom: 30px;
 `;
 
 export const VolleyCardHeader = styled(CardHeader)`
@@ -23,15 +25,30 @@ export const VolleyFormControl = styled(FormControl)`
 `;
 
 export const VolleyStack = styled(Stack)`
-  padding: 15px;
+  padding: 0px 15px 15px 15px;
+`;
+
+export const VolleyRowStack = styled(Stack)`
+  width: 100%;
+  padding: 0px 8px;
 `;
 
 export const VolleyAlert = styled(Alert)`
   box-shadow: 0px 0px 9px #888;
   margin-top: 15px;
 `;
+
+export const VolleyAvatar = styled(Avatar)`
+  border: solid 1px;
+`;
+
+
+export const LeftMarginBox = styled(Box)`
+  margin-left: 8px
+`;
+
 export const RightBox = styled(Box)`
-align-self: end
+  align-self: end
 `;
 
 export const ShirtColors = [
