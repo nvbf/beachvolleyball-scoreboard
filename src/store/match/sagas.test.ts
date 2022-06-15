@@ -1,5 +1,4 @@
 import { addHomeTeam } from "./actions";
-import { teamsSagas } from "./sagas";
 import { baseState, testSagaWithRedux } from "../utils/testSaga";
 
 // const ints = [

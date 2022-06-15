@@ -8,9 +8,8 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
-import Avatar from "@mui/material/Avatar"; import {
+import {
   Card,
   CardActions,
 } from "@mui/material";
@@ -23,8 +22,8 @@ import {
 } from "../util/styles"
 
 export function Scoreboard() {
-  const homeTeam = useAppSelector(state => state.team.homeTeam)
-  const awayTeam = useAppSelector(state => state.team.awayTeam)
+  const homeTeam = useAppSelector(state => state.match.homeTeam)
+  const awayTeam = useAppSelector(state => state.match.awayTeam)
   const dispatch = useAppDispatch()
 
   const [homeTimeoutUsed, setHomeTimeoutUsed] = useState(false);
@@ -82,44 +81,39 @@ export function Scoreboard() {
           </Table>
         </TableContainer>
         <CardActions>
-          {/* <Grid container> */}
-          {/* <Stack sx={{ width: 1, paddingRight: 2 }}> */}
           <VolleyRowStack
             direction="row"
             justifyContent="space-between"
             spacing={1}
             alignItems="center"
           >
-          <Stack sx={{ width: 1, paddingRight: 2 }}>
-          <Box sx={{ textTransform: 'uppercase', fontSize: 12 }}>timeouts: </Box>
-            <Stack direction="row" spacing={1}>
-              <Button disabled={homeTimeoutUsed} onClick={homeTeamTimeout} variant="contained" sx={{ textTransform: 'none' }}>
-                <VolleyAvatar sx={{ bgcolor: homeTimeoutUsed ? '#fff': homeTeam.shirtColor, height: 20, width: 20 }} variant="rounded"> </VolleyAvatar>
-                <LeftMarginBox> {homeTeam.player1Name} - {homeTeam.player2Name}</LeftMarginBox>
-              </Button>
-              <Button disabled={awayTimeoutUsed} onClick={awayTeamTimeout} variant="contained" sx={{ textTransform: 'none' }}>
-                <VolleyAvatar sx={{ bgcolor: awayTimeoutUsed ? '#fff': awayTeam.shirtColor, height: 20, width: 20 }} variant="rounded"> </VolleyAvatar>
-                <LeftMarginBox> {awayTeam.player1Name} - {awayTeam.player2Name}</LeftMarginBox>
-              </Button>
+            <Stack sx={{ width: 1, paddingRight: 2 }}>
+              <Box sx={{ textTransform: 'uppercase', fontSize: 12 }}>timeouts: </Box>
+              <Stack direction="row" spacing={1}>
+                <Button disabled={homeTimeoutUsed} onClick={homeTeamTimeout} variant="contained" sx={{ textTransform: 'none' }}>
+                  <VolleyAvatar sx={{ bgcolor: homeTimeoutUsed ? '#fff' : homeTeam.shirtColor, height: 20, width: 20 }} variant="rounded"> </VolleyAvatar>
+                  <LeftMarginBox> {homeTeam.player1Name} - {homeTeam.player2Name}</LeftMarginBox>
+                </Button>
+                <Button disabled={awayTimeoutUsed} onClick={awayTeamTimeout} variant="contained" sx={{ textTransform: 'none' }}>
+                  <VolleyAvatar sx={{ bgcolor: awayTimeoutUsed ? '#fff' : awayTeam.shirtColor, height: 20, width: 20 }} variant="rounded"> </VolleyAvatar>
+                  <LeftMarginBox> {awayTeam.player1Name} - {awayTeam.player2Name}</LeftMarginBox>
+                </Button>
+              </Stack>
             </Stack>
-          </Stack>
             <Button sx={{ height: 36 }} color="warning" variant="contained">Undo</Button>
           </VolleyRowStack>
-          {/* </Grid> */}
         </CardActions>
       </VolleyCard>
 
       <VolleyCard >
         <VolleyCardHeader
-          subheader="Match standing"
-        />
+          subheader="Notes for first time users" />
         <VolleyStack spacing={2}>
-
           <VolleyAlert severity="info">
-            The first thing we need to do is to add the name of the players to the home team
+            This scoreboard should be so easy to use and help you in all the parts of the scoreboard process so that it's no need for more people then the referee
           </VolleyAlert>
           <VolleyAlert severity="info">
-            Pick a color for the team, or it will default to blue.
+            You can set the service order by clicking the "Set service order" button above. (Optional) When you have set the service order, we will help you keep track of how is serving.
           </VolleyAlert>
         </VolleyStack>
       </VolleyCard>

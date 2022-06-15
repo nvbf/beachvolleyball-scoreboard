@@ -8,10 +8,10 @@ import {
   VolleyCard, VolleyCardHeader, VolleyStack, VolleyFormControl, ShirtColors,
   RightBox, VolleyAlert
 } from "../util/styles"
-import { addHomeTeam } from '../store/teams/actions';
+import { addHomeTeam } from '../store/match/actions';
 
 export function AddHomeTeam() {
-  const team = useAppSelector(state => state.team.homeTeam)
+  const team = useAppSelector(state => state.match.homeTeam)
   const dispatch = useAppDispatch()
 
   const [shirtColor, setShirtColor] = useState(team.shirtColor);

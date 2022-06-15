@@ -1,6 +1,6 @@
 import { createReducer} from "@reduxjs/toolkit"
-import { teamState } from "../types"
-import { addAwayTeamType, addHomeTeamType, TeamActionTypes } from "./actions"
+import { matchState } from "../types"
+import { addAwayTeamType, addHomeTeamType, MatchActionTypes } from "./actions"
 
 const initState = {
   homeTeam: {
@@ -15,18 +15,22 @@ const initState = {
     shirtColor: "#ff0000",
     added: false
   },
+  matchId: "",
+  tournementId: -1,
+  events: [],
+  sets: [],
   shouldUpdate: false,
   errorMessage: null,
 }
 
-export const teamsReducer = createReducer<teamState>(initState, {
-  [TeamActionTypes.ADD_HOME_TEAM]: (state, action: addHomeTeamType) => {
+export const matchReducer = createReducer<matchState>(initState, {
+  [MatchActionTypes.ADD_HOME_TEAM]: (state, action: addHomeTeamType) => {
     return {
       ...state,
       homeTeam: action.payload
     }
   },
-  [TeamActionTypes.ADD_AWAY_TEAM]: (state, action: addAwayTeamType) => {
+  [MatchActionTypes.ADD_AWAY_TEAM]: (state, action: addAwayTeamType) => {
     return {
       ...state,
       awayTeam: action.payload

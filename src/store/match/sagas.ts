@@ -1,7 +1,7 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import { all, CallEffect, put, PutEffect, takeEvery } from 'redux-saga/effects'
 import { Team } from '../../components/types';
-import { addAwayTeam, addHomeTeam, addTeamError, TeamActionTypes } from "./actions";
+import { addAwayTeam, addHomeTeam, addTeamError, MatchActionTypes } from "./actions";
 
 /*
  * Sagas intercept an action, and then dispatches API calls. When the API call resolves, it either dispatches a success action, or an error action.
@@ -31,9 +31,9 @@ export function* setAwayTeam(action: PayloadAction<Team>): Generator<CallEffect<
   }
 }
 
-export function* teamsSagas() {
+export function* matchSagas() {
   yield all([
-    takeEvery(TeamActionTypes.ADD_HOME_TEAM, setHomeTeam),
-    takeEvery(TeamActionTypes.ADD_AWAY_TEAM, setAwayTeam),
+    takeEvery(MatchActionTypes.ADD_HOME_TEAM, setHomeTeam),
+    takeEvery(MatchActionTypes.ADD_AWAY_TEAM, setAwayTeam),
   ])
 }

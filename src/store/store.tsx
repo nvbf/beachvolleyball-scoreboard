@@ -4,11 +4,14 @@ import { all } from 'redux-saga/effects'
 import { useDispatch, TypedUseSelectorHook, useSelector } from 'react-redux'
 import { select } from "redux-saga/effects";
 import { combineReducers, configureStore } from "@reduxjs/toolkit"
-import { teamsReducer } from './teams/reducer'
-import { teamsSagas } from './teams/sagas'
+import { matchReducer } from './match/reducer'
+import { matchSagas } from './match/sagas'
+import { matchesReducer } from './matches/reducer';
+import { matchesSagas } from './matches/sagas';
 
 export const rootReducer = combineReducers({
-    team: teamsReducer
+    match: matchReducer,
+    matches: matchesReducer
 })
 
 const sagaMiddleware = saga()
@@ -20,7 +23,8 @@ export const store = configureStore({
 
 function* rootSaga() {
     yield all([
-        teamsSagas(),
+        matchSagas(),
+        matchesSagas(),
     ])
 }
 

@@ -8,10 +8,10 @@ import {
   VolleyCard, VolleyCardHeader, VolleyStack, VolleyFormControl, ShirtColors,
   RightBox, VolleyAlert
 } from "../util/styles"
-import { addAwayTeam } from '../store/teams/actions';
+import { addAwayTeam } from '../store/match/actions';
 
 export function AddAwayTeam() {
-  const team = useAppSelector(state => state.team.awayTeam)
+  const team = useAppSelector(state => state.match.awayTeam)
   const dispatch = useAppDispatch()
 
   const [shirtColor, setShirtColor] = useState(team.shirtColor);

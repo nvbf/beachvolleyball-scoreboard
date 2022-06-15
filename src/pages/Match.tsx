@@ -6,8 +6,8 @@ import Scoreboard from '../components/scoreboard';
 
 function Match() {
 
-  const homeTeam = useAppSelector(state => state.team.homeTeam)
-  const awayTeam = useAppSelector(state => state.team.awayTeam)
+  const homeTeam = useAppSelector(state => state.match.homeTeam)
+  const awayTeam = useAppSelector(state => state.match.awayTeam)
 
   return (
     <main>
