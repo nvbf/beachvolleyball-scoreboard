@@ -42,7 +42,7 @@
     "isomorphic-parse": "0.0.3",
     "material-ui": "0.19.0",
     "moment": "2.19.3",
-    "next": "4.2.3",
+    "next": "12.1.0",
     "preact": "8.2.1",
     "preact-compat": "3.17.0",
     "printf": "0.2.5",
