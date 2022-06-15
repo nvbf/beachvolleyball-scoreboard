@@ -1,0 +1,29 @@
+{
+  "tournaments": {
+    "$tournamentId": {
+      "userId": "",
+      "privateId": "",
+      "...": "",
+      "matches": {
+        "active": {
+          "$key": {
+            "state": "the entire state, should be replaced with ACTIONS",
+            "info": {
+              "playerName1": "",
+              "playerName2": "",
+              "playerName3": "",
+              "playerName4": "",
+              "matchId": "",
+              "lastUpdate": "date.now()",
+              "score": {
+                "setScore": "",
+                "pointsInSets": ""
+              }
+            }
+          }
+        },
+        "finished": ""
+      }
+    }
+  }
+}
