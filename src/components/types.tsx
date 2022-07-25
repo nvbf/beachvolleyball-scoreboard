@@ -28,6 +28,11 @@ export type Match = {
   sets: Set[]
 }
 
+export type Stopwatch = {
+  time: number,
+  timeOut: number
+}
+
 export enum EventType {
   Score = "SCORE",
   Timeout = "TIMEOUT",
@@ -43,4 +48,20 @@ export enum Actor {
   AwayPlayer2 = "AWAY_2",
   HomeTeam = "HOME_TEAM",
   AwayTeam = "AWAY_TEAM",
+}
+
+export enum MatchOutcome {
+  HomeWon = "HOME_WON",
+  AwayWon = "AWAY_WON",
+  NotStarted = "NOT_STARTED",
+  Live = "LIVE",
+}
+
+export enum NotificationType {
+  TeamTimeout = "TEAM_TIMEOUT",
+  TechnicalTimeout = "TECHNICAL_TIMEOUT",
+  SwitchSides = "SWITCH_SIDES",
+  SetFinished = "SET_FINISHED",
+  MatchFinished = "MATCH_FINISHED",
+  Nothing = "NOTHING",
 }

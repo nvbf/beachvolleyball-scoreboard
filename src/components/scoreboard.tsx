@@ -1,36 +1,30 @@
-import React, { useState } from 'react';
+import AddIcon from '@mui/icons-material/Add';
+import { default as ArrowDropDownIcon, default as ArrowDropUpIcon } from '@mui/icons-material/ArrowDropDown';
+import {
+  CardActions,
+  Typography
+} from "@mui/material";
+import Box from "@mui/material/Box";
+import Button from '@mui/material/Button';
+import Collapse from '@mui/material/Collapse';
+import IconButton, { IconButtonProps } from '@mui/material/IconButton';
+import Paper from '@mui/material/Paper';
+import Stack from "@mui/material/Stack";
+import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import Collapse from '@mui/material/Collapse';
-import Paper from '@mui/material/Paper';
-import Button from '@mui/material/Button';
-import Box from "@mui/material/Box";
-import { styled } from '@mui/material/styles';
-import Stack from "@mui/material/Stack";
-import IconButton, { IconButtonProps } from '@mui/material/IconButton';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import ArrowDropUpIcon from '@mui/icons-material/ArrowDropDown';
-
-
-import {
-  Card,
-  CardActions,
-  Typography,
-} from "@mui/material";
-
-import AddIcon from '@mui/icons-material/Add';
-import { useAppSelector, useAppDispatch } from '../store/store'
-import {
-  VolleyCard, VolleyCardHeader, VolleyStack, LeftMarginBox,
-  RightBox, VolleyAlert, VolleyRowStack, VolleyAvatar
-} from "../util/styles"
+import React, { useState } from 'react';
+import { addPoint, scorePoint, callTimeout, startStopwatch } from '../store/match/actions';
+import { useAppDispatch, useAppSelector } from '../store/store';
+import { LeftMarginBox, VolleyAlert, VolleyAvatar, VolleyCard, VolleyCardHeader, VolleyRowStack, VolleyStack } from "../util/styles";
 import { Actor } from './types';
-import { addPoint } from '../store/match/actions';
+
+
+
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -50,26 +44,25 @@ export function Scoreboard() {
   const match = useAppSelector(state => state.match)
 
   const dispatch = useAppDispatch()
-
-  const [homeTimeoutUsed, setHomeTimeoutUsed] = useState(false);
-  const [awayTimeoutUsed, setAwayTimeoutUsed] = useState(false);
   const [infoCollapse, setInfoCollapse] = useState(false);
 
 
   function homePoint() {
-    dispatch(addPoint(Actor.HomeTeam))
+    dispatch(scorePoint(Actor.HomeTeam))
   }
 
   function awayPoint() {
-    dispatch(addPoint(Actor.AwayTeam))
+    dispatch(scorePoint(Actor.AwayTeam))
   }
 
   function homeTeamTimeout() {
-    dispatch(addPoint(Actor.HomeTeam))
+    dispatch(callTimeout(Actor.HomeTeam))
+    dispatch(startStopwatch())
   }
 
   function awayTeamTimeout() {
-    dispatch(addPoint(Actor.AwayTeam))
+    dispatch(callTimeout(Actor.AwayTeam))
+    dispatch(startStopwatch())
   }
 
   function toggleInfo() {
@@ -132,11 +125,11 @@ export function Scoreboard() {
               <Box sx={{ textTransform: 'uppercase', fontSize: 12 }}>timeouts: </Box>
               <Stack direction="row" spacing={1}>
                 <Button disabled={match.homeTimeout} onClick={homeTeamTimeout} variant="contained" sx={{ textTransform: 'none' }}>
-                  <VolleyAvatar sx={{ bgcolor: homeTimeoutUsed ? '#fff' : match.homeTeam.shirtColor, height: 20, width: 20 }} variant="rounded"> </VolleyAvatar>
+                  <VolleyAvatar sx={{ bgcolor: match.awayTimeout ? '#fff' : match.homeTeam.shirtColor, height: 20, width: 20 }} variant="rounded"> </VolleyAvatar>
                   <LeftMarginBox> {match.homeTeam.player1Name} - {match.homeTeam.player2Name}</LeftMarginBox>
                 </Button>
                 <Button disabled={match.awayTimeout} onClick={awayTeamTimeout} variant="contained" sx={{ textTransform: 'none' }}>
-                  <VolleyAvatar sx={{ bgcolor: awayTimeoutUsed ? '#fff' : match.awayTeam.shirtColor, height: 20, width: 20 }} variant="rounded"> </VolleyAvatar>
+                  <VolleyAvatar sx={{ bgcolor: match.awayTimeout ? '#fff' : match.awayTeam.shirtColor, height: 20, width: 20 }} variant="rounded"> </VolleyAvatar>
                   <LeftMarginBox> {match.awayTeam.player1Name} - {match.awayTeam.player2Name}</LeftMarginBox>
                 </Button>
               </Stack>
