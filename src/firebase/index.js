@@ -182,22 +182,6 @@ function tournamentPathConn() {
   return firebase.database().ref(c.TOURNAMENT_PATH);
 }
 
-async function getTournament(tournamentId) {
-  return new Promise((resolve, reject) => {
-    tournamentPathConn()
-      .orderByChild("tournamentId")
-      .equalTo(tournamentId)
-      .once("value")
-      .then(function(dataSnapshot) {
-        resolve(dataSnapshot.val());
-      })
-      .catch(err => reject(err));
-  });
-}
-
-function myMatcheConn(matchKey) {
-  return firebase.database().ref(getMatchPath(matchKey));
-}
 
 function myTournamentPath(uid, slug) {
   return `${myActiveTournamentsPath(uid)}/${slug}`;

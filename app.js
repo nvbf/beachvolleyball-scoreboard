@@ -9,10 +9,6 @@ const send = require("./src/util/sendMail");
 
 const dev = process.env.NODE_ENV !== "production";
 const app = next({ dev });
-const pathMatch = require("path-match");
-
-const route = pathMatch();
-const match = route("/tournament/:id");
 
 const handle = app.getRequestHandler();
 
@@ -44,7 +40,15 @@ app
       app.render(req, res, "/tournament", queryParams);
     });
 
+    server.get("/tournament/:slug/profixio/:profixioSlug", (req, res) => {
+      console.log('TEST')
+      const parsedUrl = parse(req.url, true);
+      const queryParams = { slug: req.params.slug, profixioSlug: req.params.profixioSlug };
+      app.render(req, res, "/profixio", queryParams);
+    });
+
     server.get("*", (req, res) => {
+      console.log('Handle any route')
       return handle(req, res);
     });
 

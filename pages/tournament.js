@@ -1,10 +1,5 @@
 import React from "react";
-import firebase from "firebase";
-import component from "react-toggle";
 import Head from "next/head";
-
-import { Card, CardActions, CardHeader, CardText } from "material-ui/Card";
-import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 
 import { init } from "../src/util/auth";
 import { getTournament, matchesFromTournament } from "../src/firebase";
@@ -299,7 +294,6 @@ class Index extends React.Component {
         </div>
       : matchesHtml;
     return (
-      <MuiThemeProvider>
         <div>
           {TournamentName}
           <div className="tournament-container">
@@ -307,7 +301,6 @@ class Index extends React.Component {
             {this.state.showBigAssMatch && <BigAssScoreBoard match={bigAssMatch} exitScoreBoard={this.onSelectMatch} />}
           </div>
         </div>
-      </MuiThemeProvider>
     );
   }
 }

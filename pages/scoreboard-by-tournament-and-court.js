@@ -14,6 +14,8 @@ export default () => {
   const [tournamentId, setTournamentId] = useState(0);
   const [court, setCourt] = useState(0);
   const [profixioSlug, setProfixioSlug] = useState('');
+  // Score delay is used if we have IP cams with high latency:
+  const [scoreDelay, setScoreDelay] = useState(0);
 
   const classes = useStyles ();
   useEffect(() => {
@@ -27,6 +29,9 @@ export default () => {
     }
     if (qs.profixioslug) {
       setProfixioSlug(qs.profixioslug);
+    }
+    if (qs.scoreDelay) {
+      setScoreDelay(parseInt(qs.scoreDelay));
     }
   }, []);
 
@@ -48,7 +53,7 @@ export default () => {
     </style>
     <AutoScoreboard
     tournamentId={tournamentId} court={court}
-    profixioSlug={profixioSlug}
+    profixioSlug={profixioSlug} scoreDelay={scoreDelay}
   />
   </div>
 }

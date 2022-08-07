@@ -1,19 +1,20 @@
 import React from "react";
 
 import { saveTournament } from "../src/firebase";
-import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import AppBar from "../src/components/components/appbar";
 import {
   Card,
   CardActions,
+  CardContent,
   CardHeader,
-  CardText,
-  CardTitle
-} from "material-ui/Card";
-import TextField from "material-ui/TextField";
-import RaisedButton from "material-ui/RaisedButton";
-import { List, ListItem } from "material-ui/List";
-import Divider from "material-ui/Divider";
+  TextField,
+  List,
+  ListItem,
+  Button,
+  Divider,
+  Container,
+  ListItemText
+} from "@material-ui/core";
 
 import src from "debug";
 import { startAnonymousAuth } from "../src/util/auth";
@@ -56,23 +57,24 @@ class CreateTournamentsPage extends React.Component {
 
   render() {
     return (
-      <MuiThemeProvider>
+      <Container maxWidth='xs'>
         <Card>
-          <CardTitle title="Create a new tournament" />
-          <CardText>
+          <CardHeader title='Create a new tournament' />
+          <CardContent>
             <TextField
               id="name"
-              hintText="Tournament name"
+              label="Tournament name"
               disabled={this.state.created}
+              fullWidth
             />
-          </CardText>
-          <CardActions>
-            <RaisedButton
-              primary
-              label="Create Tournament"
+          </CardContent>
+          <CardActions >
+            <Button
+              color='primary'
+              variant='contained'
               disabled={this.state.created}
               onClick={this.createTournament}
-            />
+            >Create Tournament</Button>
           </CardActions>
           {tournamentInfo(
             this.state.slug,
@@ -80,7 +82,7 @@ class CreateTournamentsPage extends React.Component {
             this.state.failed
           )}
         </Card>
-      </MuiThemeProvider>
+      </Container>
     );
   }
 }
@@ -96,11 +98,15 @@ function tournamentInfo(slug, privateId, failed) {
   }
   return (
     <Card id="createdTournamentInfo">
-      <CardTitle>Tournament ID's</CardTitle>
-      <CardText>
+      <CardHeader title={"Tournament ID's"} />
+      <CardContent>
         <List>
-          <ListItem primaryText={slug} secondaryText="slug" />
-          <ListItem primaryText={privateId} secondaryText="privateId" />
+          <ListItem>
+            <ListItemText primary={slug} secondary="slug" />
+          </ListItem>
+          <ListItem>
+            <ListItemText primary={privateId} secondary="privateId" />
+          </ListItem>
         </List>
         <Divider inset={true} />
         <h4>
@@ -113,11 +119,11 @@ function tournamentInfo(slug, privateId, failed) {
           <a href="/match">scoresheet page</a>
         </h4>
         <CardActions>
-          <RaisedButton label="Go to this Tournament" />
-          <RaisedButton label="Create Match" />
-          <RaisedButton label="See Tournaments" />
+          <Button label="Go to this Tournament" />
+          <Button label="Create Match" />
+          <Button label="See Tournaments" />
         </CardActions>
-      </CardText>
+      </CardContent>
     </Card>
   );
 }

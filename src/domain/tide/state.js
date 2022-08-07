@@ -92,12 +92,6 @@ export const BeachVolleyballSet = Record({
   [SERVICE_ORDER_AWAYTEAM]: List()
 });
 
-export const Action = Record({
-  [DATE]: new Date(),
-  [ACTION]: "",
-  [VALUE]: "",
-  [MATCHSTATE]: Match
-});
 
 export const ActionHistory = Record({
   [DATE]: new Date(),
@@ -139,6 +133,14 @@ export const Match = Record({
   [AWAYTEAM_TIMEOUT_TAKEN]: false,
   [COMMENTS]: List()
 });
+
+export const Action = Record({
+  [DATE]: new Date(),
+  [ACTION]: "",
+  [VALUE]: "",
+  [MATCHSTATE]: Match
+});
+
 
 export const State = Record({
   [MATCH]: new Match(),

@@ -10,7 +10,7 @@ import Timeout from "./Timeout";
 import {CSSTransition} from "react-transition-group";
 
 
-export default ({court, profixioSlug, tournamentId}) => {
+export default ({court, profixioSlug, tournamentId, scoreDelay}) => {
   const [matches, setMatches] = useState([]);
   const [gameSchedule, setGameSchedule] = useState([]);
   const [currentMatchId, setCurrentMatchId] = useState(0);
@@ -50,7 +50,7 @@ export default ({court, profixioSlug, tournamentId}) => {
     }
   }, [matches, gameSchedule]);
 
-  useEffect ( () => {
+  const handleMatchChange = () => {
     if (!currentMatchId || !matches) {
       return;
     }
@@ -77,8 +77,17 @@ export default ({court, profixioSlug, tournamentId}) => {
         setCurrentTimeout(null)
       }, 15000);
     }
+  }
 
-
+  useEffect ( () => {
+    if (scoreDelay) {
+      setTimeout(() => {
+        handleMatchChange();
+      }, scoreDelay);
+    }
+    else {
+      handleMatchChange();
+    }
   }, [currentMatchId, matches])
 
   useEffect( () => {
