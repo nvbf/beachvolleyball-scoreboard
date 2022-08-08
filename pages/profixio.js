@@ -9,7 +9,7 @@ import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import MUILink from "@material-ui/core/Link";
 import Icon from "@material-ui/core/Icon";
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import useProfixioMatches from "../src/hooks/useProfixioMatches";
 import useFirebaseTournamentMatches from "../src/hooks/useFirebaseTournamentMatches";
 import {useRouter} from 'next/router'
@@ -18,11 +18,24 @@ import QRCode from "react-qr-code";
 import Link from "next/link";
 import tournament from "./tournament";
 import {makeStyles} from "@material-ui/core/styles";
-import {CircularProgress, List, ListItem, ListItemText} from "@material-ui/core";
+import {
+  Button, Checkbox,
+  CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent, DialogTitle, FormControlLabel,
+  List,
+  ListItem,
+  ListItemText
+} from "@material-ui/core";
 
-const useStyles = makeStyles({
+
+const useStyles = makeStyles(theme => ({
   matchComplete: {
     textDecoration: 'line-through',
+    opacity: 0.5
+  },
+  finishedTime: {
     opacity: 0.5
   },
   liveHeading: {
@@ -36,13 +49,32 @@ const useStyles = makeStyles({
   },
   livePoints: {
     textAlign: 'center'
+  },
+  dialog: {
+    textAlign: 'center',
+    '& > .court': {
+      fontSize: '2rem'
+    }
+  },
+  bottomToolbar: {
+    position: 'fixed',
+    bottom: 0,
+    left: '50%',
+    transform: 'translateX(-50%)',
+    backgroundColor: 'white',
+    minHeight: '50px',
+    display: 'flex',
+    alignItems: 'center',
+    paddingLeft: theme.spacing(4),
+    paddingRight: theme.spacing(4)
   }
-})
+}))
 
 export default (props) => {
   const router = useRouter();
   const [currentMatch, setCurrentMatch] = useState(null);
-  console.log('Router', router)
+  const [showCompletedGames, setShowCompletedGames] = useState(false);
+  const classes = useStyles();
 
   const profixioMatches = useProfixioMatches(router.query.profixioSlug);
   const {matches: firebaseMatches, tournament} = useFirebaseTournamentMatches(router.query.slug);
@@ -52,6 +84,9 @@ export default (props) => {
     setMatchTimes(profixioMatches
       .sort((a, b) => (a.epoch - b.epoch) || (a.court.localeCompare(b.court)))
       .reduce ((allTimes, match) => {
+        if (!showCompletedGames && match.isFinished) {
+          return allTimes;
+        }
         let lastTime = allTimes[allTimes.length-1];
         if (!lastTime || match.epoch != lastTime.epoch) {
           allTimes.push({
@@ -68,8 +103,12 @@ export default (props) => {
         lastTime.matches.push(newMatch);
         return allTimes;
       }, [])
+      .map(time => {
+        time.isFinished = !time.matches.find(match => !match.isFinished)
+        return time;
+      })
     );
-  }, [firebaseMatches, profixioMatches])
+  }, [firebaseMatches, profixioMatches, showCompletedGames])
 
   useEffect(() => {
     const firstMatchNotStarted = document.querySelector('.match-not-started');
@@ -77,6 +116,15 @@ export default (props) => {
       firstMatchNotStarted.scrollIntoView();
     }
   }, [matchTimes])
+
+  const toggleCurrentMatch = (match) => {
+    setCurrentMatch(currentMatch => {
+      if (currentMatch && currentMatch.matchId == match.matchId) {
+        return null;
+      }
+      return match;
+    })
+  }
 
   if (matchTimes.length == 0) {
     return (<div>
@@ -94,27 +142,45 @@ export default (props) => {
           <TournamentUrlsAndInfo tournament={tournament} />
           {matchTimes.map(matchTime => {
           return <React.Fragment key={matchTime.epoch}>
-            <Time epoch={matchTime.epoch} />
+            <Time epoch={matchTime.epoch} isFinished={matchTime.isFinished}/>
             <Table>
             {matchTime.matches.map(match => {
               return <MatchCard key={match.matchId} match={match}
                                 isCurrent={match.matchId == currentMatch?.matchId}
-                                onSetAsCurrent={setCurrentMatch}
+                                onSetAsCurrent={toggleCurrentMatch}
                                 tournament={tournament}
               />
             })}
             </Table>
             </React.Fragment>})}
         </Container>
+        <div className={classes.bottomToolbar}>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={showCompletedGames}
+                onChange={() => setShowCompletedGames(!showCompletedGames)}
+                name="checkedB"
+                color="primary"
+              />
+            }
+            label="Vis ferdige kamper"
+          />
+        </div>
       </div>
   )
 }
 
-const Time = ({epoch}) => {
+const epochToTimeAndDay = (epoch) => {
   const date = new Date(0);
   date.setUTCSeconds(epoch);
+  return `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')} ${date.toLocaleDateString('nb-NO', {weekday: 'long'})}`
+}
 
-  return <h1>{String(date.getHours()).padStart(2, '0')}:{String(date.getMinutes()).padStart(2, '0')} {date.toLocaleDateString('nb-NO', {weekday: 'long'})}</h1>
+const Time = ({epoch, isFinished}) => {
+  const classes = useStyles();
+
+  return <h1 className={isFinished ? classes.finishedTime : ''}>{epochToTimeAndDay(epoch)}</h1>
 }
 
 const MatchCard = ({match, onSetAsCurrent, isCurrent, tournament}) => {
@@ -135,13 +201,13 @@ const MatchCard = ({match, onSetAsCurrent, isCurrent, tournament}) => {
       <TableCell>
         <MatchScore match={match} />
       </TableCell>
-      <TableCell>
+      <TableCell align='right'>
         <IconButton onClick={() => onSetAsCurrent(match)}>
           <Icon>qr_code</Icon>
         </IconButton>
       </TableCell>
     </TableRow>
-    {isCurrent && <QRCodeRow match={match} privateId={tournament.privateId}/>}
+    {isCurrent && <QRCodeRow match={match} onSetAsCurrent={onSetAsCurrent} privateId={tournament.privateId}/>}
   </React.Fragment>
 }
 
@@ -162,7 +228,8 @@ const MatchScore = ({match}) => {
   return null;
 }
 
-const QRCodeRow = ({match, privateId}) => {
+const QRCodeRow = ({match, privateId, onSetAsCurrent}) => {
+  const classes = useStyles();
   const params = new URLSearchParams();
   params.append('name1', getShortPlayerName(match.homeTeam.players[0]));
   params.append('name2', getShortPlayerName(match.homeTeam.players[1]));
@@ -174,23 +241,35 @@ const QRCodeRow = ({match, privateId}) => {
 
   const firebaseLink = `https://console.firebase.google.com/u/0/project/beachvolleyball-scoreboard/database/beachvolleyball-scoreboard/data/~2Ftournament_matches~2F${privateId}~2F${encodeURIComponent(match.matchId)}~2F?hl=NO`;
 
-  return <TableRow >
-    <TableCell colSpan={3}>
-      {!match.firebaseMatch && <>
-        <Box mb={2}>
-          <QRCode value={url}/>}
-        </Box>
-        <Link href={url}>Link</Link>
-      </>}
-      {match.firebaseMatch && <div>
-        <p>Det er allerede starta score på denne kampen. Feil? Kontakt Øystein, Håkon eller noen?</p>
-        <p>
-          <MUILink href={firebaseLink}>Firebase link</MUILink> (Kun for Øystein)
-        </p>
-      </div>}
-    </TableCell>
-  </TableRow>
+  return <Dialog open={true} onClose={() => onSetAsCurrent(false)}>
+    <DialogTitle>
+      <div className={classes.dialog}>
+      <div className='time'>{epochToTimeAndDay(match.epoch)}</div>
+      <div className='teams'>{match.homeTeam.name} - {match.awayTeam.name}</div>
+      <div  className='court'>{match.court}</div>
+      </div>
+      </DialogTitle>
+    <DialogContent>
+        {!match.firebaseMatch && <>
+          <Box mb={2}>
+            <QRCode value={url} size='300'/>}
+          </Box>
+          <Link href={url}>Link</Link>
+        </>}
+        {match.firebaseMatch && <div>
+          <p>Det er allerede starta score på denne kampen. Feil? Kontakt Øystein, Håkon eller noen?</p>
+          <p>
+            <MUILink href={firebaseLink}>Firebase link</MUILink> (Kun for Øystein)
+          </p>
+        </div>}
+    </DialogContent>
+    <DialogActions>
+      <Button variant='contained' color='primary' onClick={() => onSetAsCurrent(false)}>Lukk</Button>
+    </DialogActions>
+  </Dialog>
 }
+
+
 
 const TournamentUrlsAndInfo = ({tournament}) => {
   const router = useRouter();
