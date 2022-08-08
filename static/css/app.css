@@ -30,7 +30,7 @@
 body {
   background: #fff;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;;
-  font-size: 15px;
+  font-size: 15px !important;
   line-height: 1.7;
   margin: 0;
   padding: 30px;
