@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import url from "url";
 import { wrap } from "tide";
 import firebase from "firebase";
@@ -36,7 +36,6 @@ import {
 
 import { get as getStateFromLocalStorage } from "./../src/domain/tide/storage";
 
-import { ButtonToolbar, Button } from "react-bootstrap";
 
 class Main extends React.Component {
   async componentDidMount() {
@@ -258,7 +257,7 @@ function createCorrectQueryString(matchKey) {
   window.history.pushState({}, "", `/match?key=${matchKey}`);
 }
 
-export default wrap(Main, {
+const WrappedMain = wrap(Main, {
   [HOMETEAM_FIRST_PLAYER_NAME]: [MATCH, HOMETEAM_FIRST_PLAYER_NAME],
   [HOMETEAM_SECOND_PLAYER_NAME]: [MATCH, HOMETEAM_SECOND_PLAYER_NAME],
   [HOMETEAM_COLOR]: [MATCH, HOMETEAM_COLOR],
@@ -270,3 +269,18 @@ export default wrap(Main, {
   [ADD_HOMETEAM_COMPONENT]: [MATCH, ADD_HOMETEAM_COMPONENT],
   [SCOREBOARD_COMPONENT]: [MATCH, SCOREBOARD_COMPONENT]
 });
+
+// We can't render this server side as next complain, make sure we're client side:
+export default () => {
+  const [isClientSide, setIsClientSide] = useState(false);
+  useEffect(() => {
+    setIsClientSide(true);
+  }, [])
+
+  if (isClientSide) {
+    return <WrappedMain />
+  }
+  else {
+    return <div>Loading</div>
+  }
+}

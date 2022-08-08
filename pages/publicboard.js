@@ -2,6 +2,16 @@ import React, {Component} from 'react';
 //import MatchApi from './../src/domain/match-api';
 
 export default class PublicBoard extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      hometeam: 'Loading players... ',
+      awayteam: 'Loading players... ',
+      score: [
+        0, 0, 0, 0, 0, 0
+      ]
+    };
+  }
 
 	splitUpKeyValue(param) {
 		return param.split('=');
@@ -35,16 +45,6 @@ export default class PublicBoard extends Component {
 
 	componentWillUnmount() {
 		clearInterval(this.intervalId);
-	}
-
-	getInitialState() {
-		return {
-			hometeam: 'Loading players... ',
-			awayteam: 'Loading players... ',
-			score: [
-				0, 0, 0, 0, 0, 0
-			]
-		};
 	}
 
 	render() {
