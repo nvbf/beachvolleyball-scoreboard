@@ -3,8 +3,8 @@ import Link from "next/link";
 
 import {CircularProgress, List, ListItem, ListItemText} from "@material-ui/core";
 
-import ActionAssignment from "@material-ui/icons/assignment";
-import ActionDelete from "@material-ui/icons/delete";
+import ActionAssignment from "@material-ui/icons/Assignment";
+import ActionDelete from "@material-ui/icons/Delete";
 import { getMyTournaments } from "../src/firebase";
 import { startAnonymousAuth, addObserverOnLoginStatus } from "../src/util/auth";
 

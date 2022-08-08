@@ -15,7 +15,7 @@ import useFirebaseTournamentMatches from "../src/hooks/useFirebaseTournamentMatc
 import {useRouter} from 'next/router'
 import QRCodeIcon from '@material-ui/icons/Edit'
 import QRCode from "react-qr-code";
-import Link from "next/Link";
+import Link from "next/link";
 import tournament from "./tournament";
 import {makeStyles} from "@material-ui/core/styles";
 import {CircularProgress, List, ListItem, ListItemText} from "@material-ui/core";
