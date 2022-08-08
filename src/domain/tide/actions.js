@@ -293,9 +293,17 @@ class AllAction extends Actions {
 
   undo = () => {
     console.log("UNDO");
+    console.log('History', HISTORY);
     const history = this.get([HISTORY]);
     const secondLastAction = history.pop().last();
+    console.log('UNDO, second last', secondLastAction);
+    if (!secondLastAction) {
+      return;
+    }
     const matchState = secondLastAction.get(MATCHSTATE);
+    if (!matchState) {
+      return;
+    }
 
     const undoAction = [UNDO].concat(secondLastAction.get(ACTION));
     this.mutate(MATCH, original => (original = matchState));

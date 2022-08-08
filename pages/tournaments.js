@@ -1,16 +1,13 @@
 import React from "react";
 import Link from "next/link";
 
-import { List, ListItem } from "material-ui/List";
+import {CircularProgress, List, ListItem, ListItemText} from "@material-ui/core";
 
-import ActionAssignment from "material-ui/svg-icons/action/assignment";
-import ActionDelete from "material-ui/svg-icons/action/delete";
-import { red500, yellow500, blue500 } from "material-ui/styles/colors";
-
+import ActionAssignment from "@material-ui/icons/assignment";
+import ActionDelete from "@material-ui/icons/delete";
 import { getMyTournaments } from "../src/firebase";
 import { startAnonymousAuth, addObserverOnLoginStatus } from "../src/util/auth";
-import CircularProgress from "material-ui/CircularProgress";
-import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
+
 
 class TournamentsPage extends React.Component {
   state = {};
@@ -26,21 +23,17 @@ class TournamentsPage extends React.Component {
 
     if (!tournaments) {
       return (
-        <MuiThemeProvider>
           <main>
             <CircularProgress mode="indeterminate" />
           </main>
-        </MuiThemeProvider>
       );
     }
 
     return (
-      <MuiThemeProvider>
         <main>
           <h1>Tournaments</h1>
           {listTournaments(tournaments)}
         </main>
-      </MuiThemeProvider>
     );
   }
 }
@@ -62,6 +55,7 @@ function listTournaments(tournaments = {}) {
         as={`/tournament/${tournament.slug}`}
       >
         <ListItem primaryText={tournamentName} rightIcon={toMatches}>
+          <ListItemText primary={tournamentName} />
           <ActionDelete />
           {/* TODO: how to get this on the same line, or get a good UX on this, delete button does not work*/}
           privateId: {tournament.privateId}
