@@ -41,7 +41,7 @@
     "firebase": "4.3.0",
     "immutable": "3.8.1",
     "isomorphic-parse": "0.0.3",
-    "moment": "2.19.3",
+    "moment": "2.19.4",
     "next": "^12.2.4",
     "preact": "8.2.1",
     "preact-compat": "3.17.0",
