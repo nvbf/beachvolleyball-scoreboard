@@ -8,6 +8,11 @@ import {getUID} from "../src/util/auth";
 import {getTournament} from "../src/firebase";
 
 const useStyles = makeStyles({
+  '@global': {
+    body: {
+      backgroundColor: 'transparent'
+    }
+  },
   container: {
 
   }
@@ -50,6 +55,7 @@ export default () => {
               margin: 0;
               padding: 0;
               font-family: 'Open Sans','Source Sans Pro',sans-serif;
+              background-color: transparent;
             }
             `}
     </style>
