@@ -82,7 +82,6 @@ export default (props) => {
   useEffect(() => {
     console.log('Matches or something changed', profixioMatches, tournament, firebaseMatches);
     setMatchTimes(profixioMatches
-      .sort((a, b) => (a.epoch - b.epoch) || (a.court.localeCompare(b.court)))
       .reduce((allTimes, match) => {
         if (!showCompletedGames && match.isFinished) {
           return allTimes;
@@ -279,7 +278,7 @@ const TournamentUrlsAndInfo = ({tournament}) => {
   const {protocol, host} = window.location;
   const profixioUrl = 'https://www.profixio.com/app/' + router.query.profixioSlug
   const liveScoreUrl = protocol + '//' + host + '/tournament/' + router.query.slug
-  const scoreBoardUrl = protocol + '//' + host + '/tournament/' + router.query.slug + '/scoreboard/by-court/Bane1'
+  const scoreBoardUrl = protocol + '//' + host + '/tournament/' + router.query.slug + '/profixio/'+router.query.profixioSlug+'/scoreboard/by-court/Bane1'
   console.log('Tournament', tournament);
   const firebaseUrl = `https://console.firebase.google.com/u/0/project/beachvolleyball-scoreboard/database/beachvolleyball-scoreboard/data/~2Ftournament_matches~2F${tournament?.privateId}?hl=NO`
   return <List>
@@ -292,7 +291,7 @@ const TournamentUrlsAndInfo = ({tournament}) => {
                     secondary={'Live score'}/>
     </ListItem>
     <ListItem>
-      <ListItemText primary={<MUILink href={liveScoreUrl}>{scoreBoardUrl}</MUILink>}
+      <ListItemText primary={<MUILink href={scoreBoardUrl}>{scoreBoardUrl}</MUILink>}
                     secondary={'OBS scoreboard'}/>
     </ListItem>
     <ListItem>
