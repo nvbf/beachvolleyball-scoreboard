@@ -26,7 +26,7 @@ import {
   DialogContent, DialogTitle, FormControlLabel,
   List,
   ListItem,
-  ListItemText
+  ListItemText, TableBody
 } from "@material-ui/core";
 
 
@@ -83,17 +83,17 @@ export default (props) => {
     console.log('Matches or something changed', tournament);
     setMatchTimes(profixioMatches
       .sort((a, b) => (a.epoch - b.epoch) || (a.court.localeCompare(b.court)))
-      .reduce ((allTimes, match) => {
+      .reduce((allTimes, match) => {
         if (!showCompletedGames && match.isFinished) {
           return allTimes;
         }
-        let lastTime = allTimes[allTimes.length-1];
+        let lastTime = allTimes[allTimes.length - 1];
         if (!lastTime || match.epoch != lastTime.epoch) {
           allTimes.push({
             epoch: match.epoch,
             matches: []
           });
-          lastTime = allTimes[allTimes.length-1];
+          lastTime = allTimes[allTimes.length - 1];
         }
         const newMatch = {...match};
         newMatch.firebaseMatch = firebaseMatches && firebaseMatches[newMatch.matchId]
@@ -130,44 +130,47 @@ export default (props) => {
     return (<div>
       <AppBarMain extraTitle={'Admin ' + tournament?.name}/>
       <Container maxWidth='md'>
-        <CircularProgress mode="indeterminate" />
+        <CircularProgress mode="indeterminate"/>
       </Container>
     </div>)
   }
 
   return (
-      <div>
-        <AppBarMain extraTitle={'Admin ' + tournament?.name}/>
-        <Container maxWidth='md'>
-          <TournamentUrlsAndInfo tournament={tournament} />
-          {matchTimes.map(matchTime => {
+    <div>
+      <AppBarMain extraTitle={'Admin ' + tournament?.name}/>
+      <Container maxWidth='md'>
+        <TournamentUrlsAndInfo tournament={tournament}/>
+        {matchTimes.map(matchTime => {
           return <React.Fragment key={matchTime.epoch}>
             <Time epoch={matchTime.epoch} isFinished={matchTime.isFinished}/>
             <Table>
-            {matchTime.matches.map(match => {
-              return <MatchCard key={match.matchId} match={match}
-                                isCurrent={match.matchId == currentMatch?.matchId}
-                                onSetAsCurrent={toggleCurrentMatch}
-                                tournament={tournament}
-              />
-            })}
+              <TableBody>
+                {matchTime.matches.map(match => {
+                  return <MatchCard key={match.matchId} match={match}
+                                    isCurrent={match.matchId == currentMatch?.matchId}
+                                    onSetAsCurrent={toggleCurrentMatch}
+                                    tournament={tournament}
+                  />
+                })}
+              </TableBody>
             </Table>
-            </React.Fragment>})}
-        </Container>
-        <div className={classes.bottomToolbar}>
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={showCompletedGames}
-                onChange={() => setShowCompletedGames(!showCompletedGames)}
-                name="checkedB"
-                color="primary"
-              />
-            }
-            label="Vis ferdige kamper"
-          />
-        </div>
+          </React.Fragment>
+        })}
+      </Container>
+      <div className={classes.bottomToolbar}>
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={showCompletedGames}
+              onChange={() => setShowCompletedGames(!showCompletedGames)}
+              name="checkedB"
+              color="primary"
+            />
+          }
+          label="Vis ferdige kamper"
+        />
       </div>
+    </div>
   )
 }
 
@@ -199,7 +202,7 @@ const MatchCard = ({match, onSetAsCurrent, isCurrent, tournament}) => {
         <div>Referee: {match.referee}</div>
       </TableCell>
       <TableCell>
-        <MatchScore match={match} />
+        <MatchScore match={match}/>
       </TableCell>
       <TableCell align='right'>
         <IconButton onClick={() => onSetAsCurrent(match)}>
@@ -215,8 +218,7 @@ const MatchScore = ({match}) => {
   const classes = useStyles();
   if (match.result) {
     return <>{match.result}</>
-  }
-  else if (match.firebaseMatch) {
+  } else if (match.firebaseMatch) {
     const fbm = match.firebaseMatch;
     console.log('Live match', fbm);
     return <div>
@@ -244,24 +246,24 @@ const QRCodeRow = ({match, privateId, onSetAsCurrent}) => {
   return <Dialog open={true} onClose={() => onSetAsCurrent(false)}>
     <DialogTitle>
       <div className={classes.dialog}>
-      <div className='time'>{epochToTimeAndDay(match.epoch)}</div>
-      <div className='teams'>{match.homeTeam.name} - {match.awayTeam.name}</div>
-      <div  className='court'>{match.court}</div>
+        <div className='time'>{epochToTimeAndDay(match.epoch)}</div>
+        <div className='teams'>{match.homeTeam.name} - {match.awayTeam.name}</div>
+        <div className='court'>{match.court}</div>
       </div>
-      </DialogTitle>
+    </DialogTitle>
     <DialogContent>
-        {!match.firebaseMatch && <>
-          <Box mb={2}>
-            <QRCode value={url} size='300'/>}
-          </Box>
-          <Link href={url}>Link</Link>
-        </>}
-        {match.firebaseMatch && <div>
-          <p>Det er allerede starta score på denne kampen. Feil? Kontakt Øystein, Håkon eller noen?</p>
-          <p>
-            <MUILink href={firebaseLink}>Firebase link</MUILink> (Kun for Øystein)
-          </p>
-        </div>}
+      {!match.firebaseMatch && <>
+        <Box mb={2}>
+          <QRCode value={url} size={300}/>}
+        </Box>
+        <Link href={url}>Link</Link>
+      </>}
+      {match.firebaseMatch && <div>
+        <p>Det er allerede starta score på denne kampen. Feil? Kontakt Øystein, Håkon eller noen?</p>
+        <p>
+          <MUILink href={firebaseLink}>Firebase link</MUILink> (Kun for Øystein)
+        </p>
+      </div>}
     </DialogContent>
     <DialogActions>
       <Button variant='contained' color='primary' onClick={() => onSetAsCurrent(false)}>Lukk</Button>
@@ -270,23 +272,22 @@ const QRCodeRow = ({match, privateId, onSetAsCurrent}) => {
 }
 
 
-
 const TournamentUrlsAndInfo = ({tournament}) => {
   const router = useRouter();
-  const { protocol, host } = window.location;
+  const {protocol, host} = window.location;
   const profixioUrl = 'https://www.profixio.com/app/' + router.query.profixioSlug
   const liveScoreUrl = protocol + '//' + host + '/tournament/' + router.query.slug
   console.log('Tournament', tournament);
   const firebaseUrl = `https://console.firebase.google.com/u/0/project/beachvolleyball-scoreboard/database/beachvolleyball-scoreboard/data/~2Ftournament_matches~2F${tournament?.privateId}?hl=NO`
   return <List>
     <ListItem>
-      <ListItemText primary={<MUILink href={profixioUrl}>{profixioUrl}</MUILink>} secondary={'Profixio'} />
+      <ListItemText primary={<MUILink href={profixioUrl}>{profixioUrl}</MUILink>} secondary={'Profixio'}/>
     </ListItem>
     <ListItem>
-      <ListItemText primary={<MUILink href={liveScoreUrl}>{liveScoreUrl}</MUILink>} secondary={'Live score'} />
+      <ListItemText primary={<MUILink href={liveScoreUrl}>{liveScoreUrl}</MUILink>} secondary={'Live score'}/>
     </ListItem>
     <ListItem>
-      <ListItemText primary={<MUILink href={firebaseUrl}>{firebaseUrl}</MUILink>} secondary={'Firebase'} />
+      <ListItemText primary={<MUILink href={firebaseUrl}>{firebaseUrl}</MUILink>} secondary={'Firebase'}/>
     </ListItem>
   </List>
 }
