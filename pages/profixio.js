@@ -279,17 +279,25 @@ const TournamentUrlsAndInfo = ({tournament}) => {
   const {protocol, host} = window.location;
   const profixioUrl = 'https://www.profixio.com/app/' + router.query.profixioSlug
   const liveScoreUrl = protocol + '//' + host + '/tournament/' + router.query.slug
+  const scoreBoardUrl = protocol + '//' + host + '/tournament/' + router.query.slug + '/scoreboard/by-court/Bane1'
   console.log('Tournament', tournament);
   const firebaseUrl = `https://console.firebase.google.com/u/0/project/beachvolleyball-scoreboard/database/beachvolleyball-scoreboard/data/~2Ftournament_matches~2F${tournament?.privateId}?hl=NO`
   return <List>
     <ListItem>
-      <ListItemText primary={<MUILink href={profixioUrl}>{profixioUrl}</MUILink>} secondary={'Profixio'}/>
+      <ListItemText primary={<MUILink href={profixioUrl}>{profixioUrl}</MUILink>}
+                    secondary={'Profixio'}/>
     </ListItem>
     <ListItem>
-      <ListItemText primary={<MUILink href={liveScoreUrl}>{liveScoreUrl}</MUILink>} secondary={'Live score'}/>
+      <ListItemText primary={<MUILink href={liveScoreUrl}>{liveScoreUrl}</MUILink>}
+                    secondary={'Live score'}/>
     </ListItem>
     <ListItem>
-      <ListItemText primary={<MUILink href={firebaseUrl}>{firebaseUrl}</MUILink>} secondary={'Firebase'}/>
+      <ListItemText primary={<MUILink href={liveScoreUrl}>{scoreBoardUrl}</MUILink>}
+                    secondary={'OBS scoreboard'}/>
+    </ListItem>
+    <ListItem>
+      <ListItemText primary={<MUILink href={firebaseUrl}>{firebaseUrl}</MUILink>}
+                    secondary={'Firebase'}/>
     </ListItem>
   </List>
 }

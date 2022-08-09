@@ -118,12 +118,14 @@ export default ({matches, schedule, court}) => {
     return null;
   }
 
-  const getTeamName = (teamName) => {
-    const parts = teamName.split(/\s*\/\s*/);
-    if (parts.length == 2) {
-      return parts.map(tp => <React.Fragment>{tp}<br /></React.Fragment>)
+  const getTeamName = (team) => {
+    if (team.players?.length == 2) {
+      return <React.Fragment>
+                {team.players[0]}<br />
+                {team.players[1]}
+      </React.Fragment>
     }
-    return teamName;
+    return <React.Fragment>{team.name}</React.Fragment>
   }
 
   console.log('Upcoming games', upcomingGames);

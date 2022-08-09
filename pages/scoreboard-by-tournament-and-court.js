@@ -3,6 +3,9 @@ import AutoScoreboard from "../src/components/AutoScoreboard/AutoScoreboard";
 import url from "url";
 import { makeStyles } from '@material-ui/core/styles';
 import Head from "next/head";
+import {useRouter} from "next/router";
+import {getUID} from "../src/util/auth";
+import {getTournament} from "../src/firebase";
 
 const useStyles = makeStyles({
   container: {
@@ -11,32 +14,31 @@ const useStyles = makeStyles({
 })
 
 export default () => {
-  const [tournamentId, setTournamentId] = useState(0);
-  const [court, setCourt] = useState(0);
-  const [profixioSlug, setProfixioSlug] = useState('');
+  const router = useRouter()
   // Score delay is used if we have IP cams with high latency:
   const [scoreDelay, setScoreDelay] = useState(0);
-
+  const [tournamentId, setTournamentId] = useState(-1);
   const classes = useStyles ();
+
+  const initScoreBoard = async () => {
+    const uid = await getUID();
+    console.log('Looking for tournament slug', router, router.query.slug);
+    const tournament = await getTournament(router.query.slug);
+    console.log('Tournament', tournament);
+    setTournamentId(tournament.privateId);
+  }
+
   useEffect(() => {
     const qs = url.parse(document.location.search, true).query;
-    console.log('QS:', qs)
-    if (qs.tournamentid) {
-      setTournamentId(qs.tournamentid);
-    }
-    if (qs.court) {
-      setCourt(qs.court);
-    }
-    if (qs.profixioslug) {
-      setProfixioSlug(qs.profixioslug);
-    }
+    initScoreBoard()
+
     if (qs.scoreDelay) {
       setScoreDelay(parseInt(qs.scoreDelay));
     }
   }, []);
 
-  if (!tournamentId || !court || !profixioSlug) {
-    return <div>GET params tourmanetid, profixioslug and court is required</div>
+  if (tournamentId < 0) {
+    return <div>Loading scoreboard</div>
   }
 
   return <div className={classes.container}>
@@ -52,8 +54,18 @@ export default () => {
             `}
     </style>
     <AutoScoreboard
-    tournamentId={tournamentId} court={court}
-    profixioSlug={profixioSlug} scoreDelay={scoreDelay}
-  />
+      tournamentId={tournamentId}
+      court={router.query.court}
+      profixioSlug={router.query.profixioSlug}
+      scoreDelay={scoreDelay}
+    />
   </div>
+}
+
+
+export async function getServerSideProps(context) {
+  console.log('The context', context)
+  return {
+    props: {} //context.query, // will be passed to the page component as props
+  }
 }

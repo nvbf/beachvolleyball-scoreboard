@@ -42,9 +42,19 @@ app
 
     server.get("/tournament/:slug/profixio/:profixioSlug", (req, res) => {
       console.log('TEST')
-      const parsedUrl = parse(req.url, true);
       const queryParams = { slug: req.params.slug, profixioSlug: req.params.profixioSlug };
       app.render(req, res, "/profixio", queryParams);
+    });
+
+    server.get("/tournament/:slug/profixio/:profixioSlug/scoreboard/by-court/:court", (req, res) => {
+      console.log('Found score board route!');
+      const queryParams = {
+        slug: req.params.slug,
+        profixioSlug: req.params.profixioSlug,
+        court: req.params.court,
+      };
+      console.log('Scoreboard', queryParams)
+      app.render(req, res, "/scoreboard-by-tournament-and-court", queryParams);
     });
 
     server.get("*", (req, res) => {

@@ -8,11 +8,13 @@ import NextGames from "./NextGames";
 import {update} from "../../domain/tide/storage";
 import Timeout from "./Timeout";
 import {CSSTransition} from "react-transition-group";
+import useProfixioMatches from "../../hooks/useProfixioMatches";
+import {useInterval} from "../../hooks/useInterval";
 
 
 export default ({court, profixioSlug, tournamentId, scoreDelay}) => {
   const [matches, setMatches] = useState([]);
-  const [gameSchedule, setGameSchedule] = useState([]);
+  const gameSchedule = useProfixioMatches(profixioSlug);
   const [currentMatchId, setCurrentMatchId] = useState(0);
   const [homeTeamTimeoutTaken, setHomeTeamTimeoutTaken] = useState(false);
   const [awayTeamTimeoutTaken, setAwayTeamTimeoutTaken] = useState(false);
@@ -27,19 +29,19 @@ export default ({court, profixioSlug, tournamentId, scoreDelay}) => {
     }
   });
 
-
   const loadMatches = async () => {
     // Hack to init firebase:
     console.log('Loading matches');
     const uid = await getUID()
-    console.log('Logged in with uid', uid)
+    console.log('Logged in with uid', uid, tournamentId)
     matchesFromTournament(tournamentId, updateMatches);
   }
 
-  useEffect(() => {
+  const updateCurrentMatch = useCallback(() => {
     if (!matches || !gameSchedule) {
       return;
     }
+    console.log('Update current match', matches, gameSchedule, court);
     const m = getCurrentMatchId(matches, gameSchedule, court);
 
     if (m) {
@@ -48,6 +50,20 @@ export default ({court, profixioSlug, tournamentId, scoreDelay}) => {
     else {
       setCurrentMatchId(0);
     }
+  }, [matches, gameSchedule, court]);
+
+  useEffect(() => {
+    loadMatches();
+  }, [])
+
+  // updateCurrentMatch/getCurrentMatchId has some login related to next games,
+  // which files if it's not ran by some external script...
+  useInterval(() => {
+    updateCurrentMatch()
+  }, 10000);
+
+  useEffect(() => {
+    updateCurrentMatch()
   }, [matches, gameSchedule]);
 
   const handleMatchChange = () => {
@@ -90,23 +106,6 @@ export default ({court, profixioSlug, tournamentId, scoreDelay}) => {
     }
   }, [currentMatchId, matches])
 
-  useEffect( () => {
-    const updateGameSchedule = async () => {
-      const schedule = await getScheduleBySlug(profixioSlug)
-      console.log('Schedule', schedule);
-      setGameSchedule(schedule);
-    }
-
-    const scheduleTimer = setInterval(updateGameSchedule, 1000*(60*3))
-
-    updateGameSchedule();
-    loadMatches();
-
-    return () => {
-      clearInterval(scheduleTimer);
-    }
-
-  }, [])
 
   console.log('Current match', match, gameSchedule)
   return <div style={{width: '1920px',height: '1080px',position: 'relative'}}>
