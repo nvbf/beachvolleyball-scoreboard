@@ -18,7 +18,7 @@ export default (profixioSlug) => {
       }
     }
 
-    const scheduleTimer = setInterval(updateGameSchedule, 1000*(3*3))
+    const scheduleTimer = setInterval(updateGameSchedule, 1000*(60*3))
 
     updateGameSchedule();
 

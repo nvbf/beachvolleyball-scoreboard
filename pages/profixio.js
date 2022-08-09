@@ -9,7 +9,7 @@ import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import MUILink from "@material-ui/core/Link";
 import Icon from "@material-ui/core/Icon";
-import React, {useCallback, useEffect, useState} from "react";
+import React, {useCallback, useEffect, useRef, useState} from "react";
 import useProfixioMatches from "../src/hooks/useProfixioMatches";
 import useFirebaseTournamentMatches from "../src/hooks/useFirebaseTournamentMatches";
 import {useRouter} from 'next/router'
@@ -67,6 +67,9 @@ const useStyles = makeStyles(theme => ({
     alignItems: 'center',
     paddingLeft: theme.spacing(4),
     paddingRight: theme.spacing(4)
+  },
+  teamsPlayingCell: {
+    width: '60%'
   }
 }))
 
@@ -75,7 +78,7 @@ export default (props) => {
   const [currentMatch, setCurrentMatch] = useState(null);
   const [showCompletedGames, setShowCompletedGames] = useState(false);
   const classes = useStyles();
-
+  const firstRunWithMatches = useRef(true);
   const profixioMatches = useProfixioMatches(router.query.profixioSlug);
   const {matches: firebaseMatches, tournament} = useFirebaseTournamentMatches(router.query.slug);
   const [matchTimes, setMatchTimes] = useState([]);
@@ -110,8 +113,16 @@ export default (props) => {
   }, [firebaseMatches, profixioMatches, showCompletedGames])
 
   useEffect(() => {
+    if (matchTimes.length == 0 || firstRunWithMatches.current === false) {
+      return;
+    }
+
+    console.log('Yey and stuff');
+
+    firstRunWithMatches.current = false;
     const firstMatchNotStarted = document.querySelector('.match-not-started');
     if (firstMatchNotStarted) {
+      console.log('Yeydottscroll')
       firstMatchNotStarted.scrollIntoView();
     }
   }, [matchTimes])
@@ -195,7 +206,7 @@ const MatchCard = ({match, onSetAsCurrent, isCurrent, tournament}) => {
         <div>{match.court}</div>
         <div>{match.matchId}</div>
       </TableCell>
-      <TableCell>
+      <TableCell class={classes.teamsPlayingCell}>
         <Box mb={2}>
           <div>{match.homeTeam.name}</div>
           <div>{match.awayTeam.name}</div>
