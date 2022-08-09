@@ -1,33 +1,18 @@
 import AppBarMain from "../src/components/components/appbar";
 
-import Container from "@material-ui/core/Container";
-import Box from "@material-ui/core/Box";
-import Table from "@material-ui/core/Table";
-import IconButton from "@material-ui/core/IconButton";
+import {Table, TableRow, TableRowColumn} from "material-ui/Table";
 
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
-import MUILink from "@material-ui/core/Link";
-import Icon from "@material-ui/core/Icon";
+import CircularProgress from "material-ui/CircularProgress";
+import Dialog from "material-ui/Dialog";
+import List from "material-ui/List";
 import React, {useCallback, useEffect, useState} from "react";
 import useProfixioMatches from "../src/hooks/useProfixioMatches";
 import useFirebaseTournamentMatches from "../src/hooks/useFirebaseTournamentMatches";
-import {useRouter} from 'next/router'
-import QRCodeIcon from '@material-ui/icons/Edit'
 import QRCode from "react-qr-code";
 import Link from "next/link";
-import tournament from "./tournament";
-import {makeStyles} from "@material-ui/core/styles";
-import {
-  Button, Checkbox,
-  CircularProgress,
-  Dialog,
-  DialogActions,
-  DialogContent, DialogTitle, FormControlLabel,
-  List,
-  ListItem,
-  ListItemText, TableBody
-} from "@material-ui/core";
+
+import {makeStyles} from "material-ui/styles";
+import {ListItem, MuiThemeProvider, RaisedButton} from "material-ui";
 
 
 const useStyles = makeStyles(theme => ({
@@ -71,16 +56,16 @@ const useStyles = makeStyles(theme => ({
 }))
 
 export default (props) => {
-  const router = useRouter();
+  console.log('The props is', props);
+  const {query} = props.url
   const [currentMatch, setCurrentMatch] = useState(null);
   const [showCompletedGames, setShowCompletedGames] = useState(false);
   const classes = useStyles();
-
-  const profixioMatches = useProfixioMatches(router.query.profixioSlug);
-  const {matches: firebaseMatches, tournament} = useFirebaseTournamentMatches(router.query.slug);
+  const profixioMatches = useProfixioMatches(query.profixioSlug);
+  const {matches: firebaseMatches, tournament} = useFirebaseTournamentMatches(query.slug);
   const [matchTimes, setMatchTimes] = useState([]);
   useEffect(() => {
-    console.log('Matches or something changed', profixioMatches, tournament, firebaseMatches);
+    console.log('Matches or something changed', tournament);
     setMatchTimes(profixioMatches
       .sort((a, b) => (a.epoch - b.epoch) || (a.court.localeCompare(b.court)))
       .reduce((allTimes, match) => {
@@ -98,7 +83,7 @@ export default (props) => {
         const newMatch = {...match};
         newMatch.firebaseMatch = firebaseMatches && firebaseMatches[newMatch.matchId]
         if (!newMatch.isFinished) {
-          newMatch.isFinished = newMatch.firebaseMatch?.isFinished;
+          newMatch.isFinished = newMatch.firebaseMatch && newMatch.firebaseMatch.isFinished;
         }
         lastTime.matches.push(newMatch);
         return allTimes;
@@ -126,54 +111,18 @@ export default (props) => {
     })
   }
 
-  console.log('Match times', matchTimes);
-
-  if (profixioMatches.length == 0) {
-    return (<div>
-      <AppBarMain extraTitle={'Admin ' + tournament?.name}/>
+  return (<React.Fragment>
+    <Head>
+      <title>Scorecard for the Lazy Volleyball Referee</title>
+      <link rel="stylesheet" href="/static/css/profixio.css" type="text/css"/>
+    </Head>
+    <div>
       <Container maxWidth='md'>
         <CircularProgress mode="indeterminate"/>
       </Container>
-    </div>)
-  }
-
-  return (
-    <div>
-      <AppBarMain extraTitle={'Admin ' + tournament?.name}/>
-      <Container maxWidth='md'>
-        <TournamentUrlsAndInfo tournament={tournament}/>
-        {matchTimes.map(matchTime => {
-          return <React.Fragment key={matchTime.epoch}>
-            <Time epoch={matchTime.epoch} isFinished={matchTime.isFinished}/>
-            <Table>
-              <TableBody>
-                {matchTime.matches.map(match => {
-                  return <MatchCard key={match.matchId} match={match}
-                                    isCurrent={match.matchId == currentMatch?.matchId}
-                                    onSetAsCurrent={toggleCurrentMatch}
-                                    tournament={tournament}
-                  />
-                })}
-              </TableBody>
-            </Table>
-          </React.Fragment>
-        })}
-      </Container>
-      <div className={classes.bottomToolbar}>
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={showCompletedGames}
-              onChange={() => setShowCompletedGames(!showCompletedGames)}
-              name="checkedB"
-              color="primary"
-            />
-          }
-          label="Vis ferdige kamper"
-        />
-      </div>
     </div>
-  )
+  </React.Fragment>)
+
 }
 
 const epochToTimeAndDay = (epoch) => {
@@ -192,25 +141,27 @@ const MatchCard = ({match, onSetAsCurrent, isCurrent, tournament}) => {
   const classes = useStyles();
   return <React.Fragment>
     <TableRow classes={{root: match.isFinished ? classes.matchComplete : 'match-not-started'}}>
-      <TableCell>
+      <TableRowColumn>
         <div>{match.court}</div>
         <div>{match.matchId}</div>
-      </TableCell>
-      <TableCell>
-        <Box mb={2}>
+      </TableRowColumn>
+      <TableRowColumn>
+        <div className={classes.mb2}>
           <div>{match.homeTeam.name}</div>
           <div>{match.awayTeam.name}</div>
-        </Box>
+        </div>
         <div>Referee: {match.referee}</div>
-      </TableCell>
-      <TableCell>
+      </TableRowColumn>
+      <TableRowColumn>
         <MatchScore match={match}/>
-      </TableCell>
-      <TableCell align='right'>
+      </TableRowColumn>
+      <TableRowColumn align='right'>
+        {/*
         <IconButton onClick={() => onSetAsCurrent(match)}>
           <Icon>qr_code</Icon>
         </IconButton>
-      </TableCell>
+        */}
+      </TableRowColumn>
     </TableRow>
     {isCurrent && <QRCodeRow match={match} onSetAsCurrent={onSetAsCurrent} privateId={tournament.privateId}/>}
   </React.Fragment>
@@ -219,7 +170,7 @@ const MatchCard = ({match, onSetAsCurrent, isCurrent, tournament}) => {
 const MatchScore = ({match}) => {
   const classes = useStyles();
   if (match.result) {
-    return <>{match.result}</>
+    return <React.Fragment>{match.result}</React.Fragment>
   } else if (match.firebaseMatch) {
     const fbm = match.firebaseMatch;
     console.log('Live match', fbm);
@@ -245,31 +196,33 @@ const QRCodeRow = ({match, privateId, onSetAsCurrent}) => {
 
   const firebaseLink = `https://console.firebase.google.com/u/0/project/beachvolleyball-scoreboard/database/beachvolleyball-scoreboard/data/~2Ftournament_matches~2F${privateId}~2F${encodeURIComponent(match.matchId)}~2F?hl=NO`;
 
-  return <Dialog open={true} onClose={() => onSetAsCurrent(false)}>
-    <DialogTitle>
-      <div className={classes.dialog}>
-        <div className='time'>{epochToTimeAndDay(match.epoch)}</div>
-        <div className='teams'>{match.homeTeam.name} - {match.awayTeam.name}</div>
-        <div className='court'>{match.court}</div>
+  const title = <div className={classes.dialog}>
+    <div className='time'>{epochToTimeAndDay(match.epoch)}</div>
+    <div className='teams'>{match.homeTeam.name} - {match.awayTeam.name}</div>
+    <div className='court'>{match.court}</div>
+  </div>
+
+  const actions = [
+    <RaisedButton primary='true' nClick={() => onSetAsCurrent(false)} label='Lukk' />
+  ]
+
+  return <Dialog open={true}
+                 title={title}
+                 actions={actions}
+                 onRequestClose={() => onSetAsCurrent(false)}>
+
+    {!match.firebaseMatch && <React.Fragment>
+      <div className={classes.mb2}>
+        <QRCode value={url} size={300}/>}
       </div>
-    </DialogTitle>
-    <DialogContent>
-      {!match.firebaseMatch && <>
-        <Box mb={2}>
-          <QRCode value={url} size={300}/>}
-        </Box>
-        <Link href={url}>Link</Link>
-      </>}
-      {match.firebaseMatch && <div>
-        <p>Det er allerede starta score på denne kampen. Feil? Kontakt Øystein, Håkon eller noen?</p>
-        <p>
-          <MUILink href={firebaseLink}>Firebase link</MUILink> (Kun for Øystein)
-        </p>
-      </div>}
-    </DialogContent>
-    <DialogActions>
-      <Button variant='contained' color='primary' onClick={() => onSetAsCurrent(false)}>Lukk</Button>
-    </DialogActions>
+      <Link href={url}>Link</Link>
+    </React.Fragment>}
+    {match.firebaseMatch && <div>
+      <p>Det er allerede starta score på denne kampen. Feil? Kontakt Øystein, Håkon eller noen?</p>
+      <p>
+        <a href={firebaseLink}>Firebase link</a> (Kun for Øystein)
+      </p>
+    </div>}
   </Dialog>
 }
 
@@ -280,17 +233,14 @@ const TournamentUrlsAndInfo = ({tournament}) => {
   const profixioUrl = 'https://www.profixio.com/app/' + router.query.profixioSlug
   const liveScoreUrl = protocol + '//' + host + '/tournament/' + router.query.slug
   console.log('Tournament', tournament);
-  const firebaseUrl = `https://console.firebase.google.com/u/0/project/beachvolleyball-scoreboard/database/beachvolleyball-scoreboard/data/~2Ftournament_matches~2F${tournament?.privateId}?hl=NO`
+  const firebaseUrl = `https://console.firebase.google.com/u/0/project/beachvolleyball-scoreboard/database/beachvolleyball-scoreboard/data/~2Ftournament_matches~2F${tournament ? tournament.privateId : ''}?hl=NO`
   return <List>
-    <ListItem>
-      <ListItemText primary={<MUILink href={profixioUrl}>{profixioUrl}</MUILink>} secondary={'Profixio'}/>
-    </ListItem>
-    <ListItem>
-      <ListItemText primary={<MUILink href={liveScoreUrl}>{liveScoreUrl}</MUILink>} secondary={'Live score'}/>
-    </ListItem>
-    <ListItem>
-      <ListItemText primary={<MUILink href={firebaseUrl}>{firebaseUrl}</MUILink>} secondary={'Firebase'}/>
-    </ListItem>
+    <ListItem primaryText={<a href={profixioUrl}>{profixioUrl}</a>}
+              secondaryText={'Profixio'}/>
+    <ListItem primaryText={<MUILink href={liveScoreUrl}>{liveScoreUrl}</MUILink>}
+              secondaryText={'Live score'} />
+    <ListItem primaryText={<MUILink href={firebaseUrl}>{firebaseUrl}</MUILink>}
+              secondaryText={'Firebase'}/>
   </List>
 }
 
@@ -312,4 +262,10 @@ export async function getServerSideProps(context) {
   return {
     props: {} //context.query, // will be passed to the page component as props
   }
+}
+
+const Container = ({children, maxWidth}) => {
+  return <div>
+    {children}
+  </div>
 }

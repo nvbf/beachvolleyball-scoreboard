@@ -8,13 +8,15 @@ import { Component as TideComponent } from "tide";
 import createTide from "./../src/domain/tide/tide";
 
 export default class Match extends React.Component {
+  constructor(props) {
+    super(props);
+    this.tide = createTide();
+  }
   componentDidMount() {
     startAnonymousAuth();
   }
 
   render() {
-    const tide = createTide();
-
     return (
       <div>
         <Head>
@@ -26,7 +28,7 @@ export default class Match extends React.Component {
           <script src="/static/js/es6-shim.min.js" />
         </Head>
         <div>
-          <TideComponent tide={tide}>
+          <TideComponent tide={this.tide}>
             {props => <Main {...props} />}
           </TideComponent>
         </div>
