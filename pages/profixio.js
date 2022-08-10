@@ -51,9 +51,25 @@ const useStyles = makeStyles(theme => ({
     textAlign: 'center'
   },
   dialog: {
-    textAlign: 'center',
-    '& > .court': {
+    display: 'flex',
+    minWidth: '600px',
+    '& .court': {
       fontSize: '2rem'
+    },
+    '& .referee': {
+      fontSize: '1.3rem',
+      textAlign: 'center'
+    },
+    '& .teams': {
+      fontSize: '1rem',
+      textAlign: 'center',
+      marginBottom: theme.spacing(2)
+    },
+    '& .time': {
+      fontSize: '0.8rem',
+    },
+    '& .mini-heading': {
+      textAlign: 'center'
     }
   },
   bottomToolbar: {
@@ -255,27 +271,35 @@ const QRCodeRow = ({match, privateId, onSetAsCurrent}) => {
 
   const firebaseLink = `https://console.firebase.google.com/u/0/project/beachvolleyball-scoreboard/database/beachvolleyball-scoreboard/data/~2Ftournament_matches~2F${privateId}~2F${encodeURIComponent(match.matchId)}~2F?hl=NO`;
 
-  return <Dialog open={true} onClose={() => onSetAsCurrent(false)}>
-    <DialogTitle>
-      <div className={classes.dialog}>
-        <div className='time'>{epochToTimeAndDay(match.epoch)}</div>
-        <div className='teams'>{match.homeTeam.name} - {match.awayTeam.name}</div>
-        <div className='court'>{match.court}</div>
-      </div>
-    </DialogTitle>
+  return <Dialog open={true} onClose={() => onSetAsCurrent(false)} maxWidth='md'>
     <DialogContent>
-      {!match.firebaseMatch && <>
-        <Box mb={2}>
-          <QRCode value={url} size={300}/>}
+      <div className={classes.dialog}>
+        <Box mr={4}>
+          <div className='time'>{epochToTimeAndDay(match.epoch)}</div>
+          <div className='matchId'>#{match.matchId}</div>
+          <div className='court'>{match.court}</div>
         </Box>
-        <Link href={url}>Link</Link>
-      </>}
-      {match.firebaseMatch && <div>
-        <p>Det er allerede starta score på denne kampen. Feil? Kontakt Øystein, Håkon eller noen?</p>
-        <p>
-          <MUILink href={firebaseLink}>Firebase link</MUILink> (Kun for Øystein)
-        </p>
-      </div>}
+        <Box display='flex' flexDirection='column' alignItems='center' flexGrow={1}>
+          <Box mb={4}>
+            <div className={'mini-heading'}>Lag</div>
+            <div className='teams'>{match.homeTeam.name} / {match.awayTeam.name}</div>
+            <div className={'mini-heading'}>Dommer</div>
+            <div className='referee'>{match.referee}</div>
+          </Box>
+          {!match.firebaseMatch && <>
+            <Box mb={2} display='flex' justifyContent='center'>
+              <QRCode value={url} size={300}/>
+            </Box>
+            <Link href={url}>Link</Link>
+          </>}
+          {match.firebaseMatch && <div>
+            <p>Det er allerede starta score på denne kampen. Feil? Kontakt Øystein, Håkon eller noen?</p>
+            <p>
+              <MUILink href={firebaseLink}>Firebase link</MUILink> (Kun for Øystein)
+            </p>
+          </div>}
+        </Box>
+      </div>
     </DialogContent>
     <DialogActions>
       <Button variant='contained' color='primary' onClick={() => onSetAsCurrent(false)}>Lukk</Button>
