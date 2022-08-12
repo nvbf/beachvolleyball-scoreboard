@@ -184,6 +184,7 @@ export default (props) => {
                                     isCurrent={match.matchId == currentMatch?.matchId}
                                     onSetAsCurrent={toggleCurrentMatch}
                                     tournament={tournament}
+                                    matchTimes={matchTimes}
                   />
                 })}
               </TableBody>
@@ -220,7 +221,7 @@ const Time = ({epoch, isFinished}) => {
   return <h1 className={isFinished ? classes.finishedTime : ''}>{epochToTimeAndDay(epoch)}</h1>
 }
 
-const MatchCard = ({match, onSetAsCurrent, isCurrent, tournament}) => {
+const MatchCard = ({match, onSetAsCurrent, isCurrent, tournament, matchTimes}) => {
   const classes = useStyles();
   return <React.Fragment>
     <TableRow classes={{root: match.isFinished ? classes.matchComplete : 'match-not-started'}}>
@@ -233,7 +234,7 @@ const MatchCard = ({match, onSetAsCurrent, isCurrent, tournament}) => {
         <Box mb={1} className={classes.teamsPlayingName}>
           <TeamNames match={match} />
         </Box>
-        <Referees referees={match.referee || ''} />
+        <Referees referees={match.referee || ''} matchTimes={matchTimes} />
       </TableCell>
       <TableCell width={200}>
         <MatchScore match={match}/>
@@ -287,14 +288,51 @@ const TeamNames = ({match}) => {
   return <>{homeTeam} vs {awayTeam}</>
 }
 
-const Referees = ({referees}) => {
+const getMatchInMatchTimesByMatchId = (matchTimes, matchId) => {
+  for (const matchTime of matchTimes) {
+    const match = matchTime.matches.find(m => m.matchId == matchId);
+    if (match) {
+      return match;
+    }
+  }
+  return null;
+}
+
+const getWinnerName = (match) => {
+  if (getWinner(match) == 'home') {
+    return match.homeTeam.name;
+  }
+  return match.awayTeam.name;
+}
+
+const getLoserName = (match) => {
+  if (getWinner(match) == 'home') {
+    return match.awayTeam.name;
+  }
+  return match.homeTeam.name;
+}
+
+const Referees = ({referees, matchTimes}) => {
   const prevMatchCheck = referees.match(/(Winner|Loser) (\d+)/);
   if (prevMatchCheck) {
     const anchor = 'match_' + prevMatchCheck[2];
-    return <>Dømming:  <MUILink href={'#' + anchor}>{referees}</MUILink></>
+    const match = getMatchInMatchTimesByMatchId(matchTimes, prevMatchCheck[2]);
+    if (match.isFinished) {
+      if (prevMatchCheck[1] == 'Winner') {
+        referees = getWinnerName(match);
+      }
+      else {
+        referees = getLoserName(match)
+      }
+    }
+    else {
+      return <>Dømming: <MUILink href={'#' + anchor}>{referees}</MUILink></>
+    }
   }
   return <div>Dømming: {referees}</div>
 }
+
+
 
 const MatchScore = ({match}) => {
   const classes = useStyles();
