@@ -85,7 +85,13 @@ const useStyles = makeStyles(theme => ({
     paddingRight: theme.spacing(4)
   },
   teamsPlayingCell: {
-    width: '60%'
+  },
+  teamsPlayingName: {
+    fontSize: '1.1rem'
+  },
+  courtName: {
+    fontWeight: 'bold',
+    fontSize: '1.3rem'
   }
 }))
 
@@ -219,20 +225,20 @@ const MatchCard = ({match, onSetAsCurrent, isCurrent, tournament}) => {
   return <React.Fragment>
     <TableRow classes={{root: match.isFinished ? classes.matchComplete : 'match-not-started'}}>
       <TableCell>
-        <div>{match.court}</div>
-        <div>{match.matchId}</div>
+        <a  id={'match_' + match.matchId} />
+        <div className={classes.courtName}>{match.court}</div>
+        <div>#{match.matchId}</div>
       </TableCell>
-      <TableCell class={classes.teamsPlayingCell}>
-        <Box mb={2}>
-          <div>{match.homeTeam.name}</div>
-          <div>{match.awayTeam.name}</div>
+      <TableCell classes={{root: classes.teamsPlayingCell}}>
+        <Box mb={1} className={classes.teamsPlayingName}>
+          <TeamNames match={match} />
         </Box>
-        <div>Referee: {match.referee}</div>
+        <Referees referees={match.referee || ''} />
       </TableCell>
-      <TableCell>
+      <TableCell width={200}>
         <MatchScore match={match}/>
       </TableCell>
-      <TableCell align='right'>
+      <TableCell align='right' width='100'>
         <IconButton onClick={() => onSetAsCurrent(match)}>
           <Icon>qr_code</Icon>
         </IconButton>
@@ -240,6 +246,54 @@ const MatchCard = ({match, onSetAsCurrent, isCurrent, tournament}) => {
     </TableRow>
     {isCurrent && <QRCodeRow match={match} onSetAsCurrent={onSetAsCurrent} privateId={tournament.privateId}/>}
   </React.Fragment>
+}
+
+
+const getMoreSets = (setsString) => {
+  const parts = setsString.match(/^\s*(\d+)\s*\-\s*(\d+)\s*\({0,1}/);
+  console.log('Parts', parts);
+  const homePoints = parts[1];
+  const awayPoints = parts[2];
+  if (homePoints > awayPoints) {
+    return "home";
+  }
+  return "away";
+}
+
+const getWinner = (match) => {
+  console.log('Get winner', match);
+  if (match.result) {
+    return getMoreSets(match.result);
+  }
+  else if (match.firebaseMatch) {
+    const fbm = match.firebaseMatch;
+    return getMoreSets(`${fbm.setsWonByHomeTeam} - ${fbm.setsWonByAwayTeam}`)
+  }
+}
+
+
+const TeamNames = ({match}) => {
+  let homeTeam = match.homeTeam.name;
+  let awayTeam = match.awayTeam.name;
+  if (match.isFinished) {
+    let winner = getWinner(match);
+    if (winner == 'home') {
+      homeTeam = <b>{homeTeam}</b>
+    }
+    if (winner == 'away') {
+      awayTeam = <b>{awayTeam}</b>
+    }
+  }
+  return <>{homeTeam} vs {awayTeam}</>
+}
+
+const Referees = ({referees}) => {
+  const prevMatchCheck = referees.match(/(Winner|Loser) (\d+)/);
+  if (prevMatchCheck) {
+    const anchor = 'match_' + prevMatchCheck[2];
+    return <>Dømming:  <MUILink href={'#' + anchor}>{referees}</MUILink></>
+  }
+  return <div>Dømming: {referees}</div>
 }
 
 const MatchScore = ({match}) => {
