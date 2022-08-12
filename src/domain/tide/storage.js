@@ -1,4 +1,4 @@
-import { List, fromJS } from "immutable";
+import { List, fromJS,toJS } from "immutable";
 import { save } from "../../firebase";
 
 import {
@@ -26,14 +26,18 @@ export function update(matchId, state) {
 
   const tournamentId = state[c.MATCH][c.TOURNAMENT_PRIVATE_ID] || 0;
 
-  // Simplified to not store to much!
-  const stateToStore = state
+  // Simplified to not store to much! /Ø: We need at least a previous state:
+  const fireBaseStateToStore = state
     .setIn([MATCH], lastMatchState)
     .setIn([HISTORY], List());
 
+  const localStorageStateToStore = state
+    .setIn([MATCH], lastMatchState)
+    .setIn([HISTORY], List([lastActionState]));
+
   const completeState = tournamentId ? state : null
     save(tournamentId, matchId, {
-      match: stateToStore,
+      match: fireBaseStateToStore,
       tournamentId: tournamentId,
     }, completeState)
       .then(() => {
@@ -44,10 +48,8 @@ export function update(matchId, state) {
         console.error(err);
       })
 
-
-
   try {
-    localStorage.setItem(matchId, JSON.stringify(stateToStore));
+    localStorage.setItem(matchId, JSON.stringify(localStorageStateToStore));
     // database
   } catch (err) {
     console.error("Error on storing match object, localStorage");
@@ -72,9 +74,15 @@ export function transformToCorrectState(state) {
     return agg.push(new ActionHistory(curr));
   }, List());
 
+
+  const history = state[HISTORY].reduce((agg, curr) => {
+    curr[MATCHSTATE] = immutablMatch;
+    return agg.push(new Action(curr));
+  }, List());
+
   const immutableState = new State({
     [MATCH]: immutablMatch,
-    [HISTORY]: List(),
+    [HISTORY]: history,
     [ACTION_HISTORY]: actionHistory
   });
   return immutableState;

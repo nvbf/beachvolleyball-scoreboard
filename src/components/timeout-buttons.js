@@ -55,7 +55,7 @@ class TimeoutMenu extends React.Component {
             bsStyle="warning"
             type="submit"
             className={
-              HISTORY.size === 0 ? "disabled pull-right" : "pull-right"
+              HISTORY.size < 2 ? "disabled pull-right" : "pull-right"
             }
             onClick={all.undo}
           >

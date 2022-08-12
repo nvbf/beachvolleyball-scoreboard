@@ -1,43 +1,33 @@
-import React, { Component } from "react";
-import { wrap } from "tide";
+import React, {Component} from "react";
+import {wrap} from "tide";
 
 import ScoreboardRow from "../molokyler/scoreboard-row";
 import ServiceOrderButton from "./../molokyler/service-order-button";
 import AddCommentButton from "./../molokyler/add-comments-button";
 import InfoArea from "./../molokyler/info-area";
-import MatchDetails from "./../match-details";
-
-import Timeout from "../timeout";
 import TimeoutButtons from "../timeout-buttons";
 import AwayTeam from "../molokyler/away-team";
 import HomeTeam from "../molokyler/home-team";
 import AddEmailButton from "../molokyler/add-email-button";
 import AddTournamentIdButton from "../molokyler/add-tournamentid-button";
-import AlertInfo from "../atom/alert-info";
+
+import {Alert, ButtonToolbar, Panel, PanelGroup} from "react-bootstrap";
 
 import {
-  Button,
-  ButtonToolbar,
-  Alert,
-  PanelGroup,
-  Panel
-} from "react-bootstrap";
-
-import {
-  MATCH,
-  HOMETEAM_FIRST_PLAYER_NAME,
-  HOMETEAM_SECOND_PLAYER_NAME,
-  AWAYTEAM_FIRST_PLAYER_NAME,
-  AWAYTEAM_SECOND_PLAYER_NAME,
-  FIRST_SET,
-  SECOND_SET,
-  THIRD_SET,
-  AWAYTEAM_POINT,
-  HOMETEAM_POINT,
-  MATCH_IS_FINISED,
   ACTION_HISTORY,
-  constants as c
+  AWAYTEAM_FIRST_PLAYER_NAME,
+  AWAYTEAM_POINT,
+  AWAYTEAM_SECOND_PLAYER_NAME,
+  constants as c,
+  HOMETEAM_FIRST_PLAYER_NAME,
+  HOMETEAM_POINT,
+  HOMETEAM_SECOND_PLAYER_NAME,
+  MATCH,
+  MATCH_IS_FINISED,
+  SECOND_SET,
+  THIRD_SET
 } from "../../domain/tide/state";
+import LastActions from "../last-actions";
 
 class Scoreboard extends Component {
   constructor(props) {
@@ -79,7 +69,6 @@ class Scoreboard extends Component {
               <h2 className="panel-title">Match standing</h2>
             </div>
             <div className="panel-body">
-
               <table className="table table-striped">
                 <thead>
                   <tr>
@@ -124,14 +113,9 @@ class Scoreboard extends Component {
             </Alert>
           </section>
 
+          <LastActions actionHistory={ACTION_HISTORY} />
+
           <PanelGroup accordion>
-            <Panel header="Details ⭢" eventKey="1">
-              <MatchDetails
-                events={ACTION_HISTORY}
-                showDetails={this.state.showDetails}
-                handleDetailToogle={this.handleDetailToogle.bind(this)}
-              />
-            </Panel>
             <Panel header="Settings ⭢" eventKey="2">
               <a href={newMatchUrl}>New match</a>
               <AddEmailButton />

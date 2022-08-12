@@ -108,26 +108,44 @@ const constantToText = {
 
 export function getDetailsAsAnArrayOfString(details = []) {
   console.log("getDetailsAsAnArrayOfString", details);
-  const detailsString = details.map((actionHistory, index) => {
+  const detailsString = getDetailsAsAnArray(details)
+    .map((action, index) => {
+      const {isUndo, homeScore, awayScore, timestamp, value} = action;
+      const relativeTime = moment(timestamp).format("HH:mm:ss");
+      const undoInfo = isUndo ? "UNDO:" : "";
+      return printf(
+        `${undoInfo} ${relativeTime}, ${homeScore}-${awayScore}, ${tekstString}`,
+        value
+      );
+    });
+  return detailsString;
+}
+
+export function getDetailsAsAnArray(details = []) {
+  console.log("getDetailsAsAnArrayOfString", details);
+  const detailsString = details.reduce((allDetails, actionHistory, index) => {
     const actions = actionHistory.get(c.ACTION);
     const lastKey = getKey(actions);
     const isUndo = actions[0] === c.UNDO;
     const tekstString = constantToText[lastKey];
     const value = actionHistory.get(c.VALUE);
     const date = actionHistory.get(c.DATE);
-    const relativeTime = moment(date).format("HH:mm:ss");
-    const undoInfo = isUndo ? "UNDO:" : "";
     const homeScore = actionHistory.get(c.HOMETEAM_POINT);
     const awayScore = actionHistory.get(c.AWAYTEAM_POINT);
     if (tekstString === undefined) {
-      //console.log('Skipping', lastKey)
-      return "";
+      return allDetails;
     }
-    return printf(
-      `${undoInfo} ${relativeTime}, ${homeScore}-${awayScore}, ${tekstString}`,
+    allDetails.push({
+      timestamp: date,
+      textString: tekstString,
+      homeScore,
+      awayScore,
+      isUndo,
       value
-    );
-  });
+    });
+    return allDetails;
+  }, []);
+  console.log('Details string', detailsString);
   return detailsString;
 }
 
@@ -481,6 +499,7 @@ export function getSetIndexToRemovePointFrom(score) {
 }
 
 export function isFirstSetFinished(score) {
+  console.log('The score is', score);
   return isSetFinished(score.get(FIRST_SET), 21);
 }
 
