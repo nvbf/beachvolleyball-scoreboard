@@ -194,6 +194,21 @@ table {
 .timeout-buttons {
   margin-right: 5px;
 }
+@media only screen and (max-width: 600px) {
+  /* Add bottom spacing as they are horizontal */
+  .timeout-buttons button {
+    margin-bottom: 10px;
+    width: 100%;
+  }
+  .container.scoreboard {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .timeout-buttons .undo-button {
+    width: 100px;
+  }
+}
 
 
 .react-toggle {

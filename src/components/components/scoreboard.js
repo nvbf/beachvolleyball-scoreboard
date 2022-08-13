@@ -28,6 +28,7 @@ import {
   THIRD_SET
 } from "../../domain/tide/state";
 import LastActions from "../last-actions";
+import {SetTeamColorsButton} from "../molokyler/set-team-colors-button";
 
 class Scoreboard extends Component {
   constructor(props) {
@@ -109,6 +110,7 @@ class Scoreboard extends Component {
               <ButtonToolbar>
                 <ServiceOrderButton />
                 <AddCommentButton />
+                <SetTeamColorsButton />
               </ButtonToolbar>
             </Alert>
           </section>

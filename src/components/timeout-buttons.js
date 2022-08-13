@@ -36,10 +36,10 @@ class TimeoutMenu extends React.Component {
     return (
       <div>
         <Label>Timeout</Label>
-        <ButtonToolbar>
+        <ButtonToolbar className='timeout-buttons'>
           <Button
             type="submit"
-            className={HOMETEAM_TIMEOUT_TAKEN ? "disabled" : ""}
+            className={`${HOMETEAM_TIMEOUT_TAKEN ? "disabled" : ""}`}
             onClick={all.hometeamTakeTimeout}
           >
             <HomeTeam />
@@ -55,7 +55,7 @@ class TimeoutMenu extends React.Component {
             bsStyle="warning"
             type="submit"
             className={
-              HISTORY.size < 2 ? "disabled pull-right" : "pull-right"
+              `undo-button ${HISTORY.size < 2 ? "disabled pull-right" : "pull-right"}`
             }
             onClick={all.undo}
           >
