@@ -2,7 +2,7 @@ import React from "react";
 import Head from "next/head";
 import Main from "./main";
 
-import { startAnonymousAuth, getAuthUser } from "../src/util/auth";
+import {startAnonymousAuth, getAuthUser, addObserverOnLoginStatus} from "../src/util/auth";
 
 import { Component as TideComponent } from "tide";
 import createTide from "./../src/domain/tide/tide";
@@ -11,12 +11,32 @@ export default class Match extends React.Component {
   constructor(props) {
     super(props);
     this.tide = createTide();
+    this.state = {
+      authenticating: true,
+    }
   }
   componentDidMount() {
-    startAnonymousAuth();
+    const self = this;
+    startAnonymousAuth()
+    addObserverOnLoginStatus((user) => {
+      if (user) {
+        self.setState(
+          {
+            authenticating: false,
+            authFailed: false
+          })
+      }
+    })
   }
 
   render() {
+    const { authenticating} = this.state;
+
+    if (authenticating) {
+      console.log('Match: Authenticating')
+      return <div>Authenticating</div>
+    };
+
     return (
       <div>
         <Head>
