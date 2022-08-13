@@ -316,8 +316,9 @@ const Referees = ({referees, matchTimes}) => {
   const prevMatchCheck = referees.match(/(Winner|Loser) (\d+)/);
   if (prevMatchCheck) {
     const anchor = 'match_' + prevMatchCheck[2];
+
     const match = getMatchInMatchTimesByMatchId(matchTimes, prevMatchCheck[2]);
-    if (match.isFinished) {
+    if (match && match.isFinished) {
       if (prevMatchCheck[1] == 'Winner') {
         referees = getWinnerName(match);
       }
