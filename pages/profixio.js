@@ -240,9 +240,11 @@ const MatchCard = ({match, onSetAsCurrent, isCurrent, tournament, matchTimes}) =
         <MatchScore match={match}/>
       </TableCell>
       <TableCell align='right' width='100'>
-        <IconButton onClick={() => onSetAsCurrent(match)}>
+        {(match.homeTeam.players.length && match.awayTeam.players.length) ?
+          <IconButton onClick={() => onSetAsCurrent(match)}>
           <Icon>qr_code</Icon>
-        </IconButton>
+        </IconButton> : null}
+        {(match.homeTeam.players.length == 0 || match.awayTeam.players.length == 0) ? <>Venter på laginfo</> : null}
       </TableCell>
     </TableRow>
     {isCurrent && <QRCodeRow match={match} onSetAsCurrent={onSetAsCurrent} privateId={tournament.privateId}/>}
