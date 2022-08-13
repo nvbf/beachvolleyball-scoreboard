@@ -9,3 +9,6 @@ coverage
 reports/
 selenium-debug.log
 yarn-error.log
+
+# Sentry
+.sentryclirc
