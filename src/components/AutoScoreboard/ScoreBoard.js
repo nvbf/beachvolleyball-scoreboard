@@ -1,6 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import {Transition} from 'react-transition-group'; // ES6
+import {Transition} from 'react-transition-group';
+import {LAST_POINTS_LIST} from "../../domain/tide/state";
+import LastPoints from "./LastPoints";
+import LastSets from "./LastSets"; // ES6
 
 const useStyles = makeStyles({
   container: {
@@ -169,10 +172,9 @@ const calcFontSize = (match) => {
   return fontSize;
 }
 
-export default ({match}) => {
+export default ({match, showLastPoints, showLastSetsPoints}) => {
   const classes = useStyles ();
   const [fontSize, setFontSize] = useState('32px');
-  const [showPreviousSetScore, setShowPreviousSetScore] = useState(false);
 
   useEffect( () => {
     if (!match) {
@@ -194,6 +196,8 @@ export default ({match}) => {
             </div>
             <div className={classes.teamName} style={teamNameStyle}>{match.h1Player} / {match.h2Player}</div>
             <div className={classes.teamSets}>{match.setsWonByHomeTeam}</div>
+            <LastPoints team='H' lastPointsList={match.lastPointsList} show={showLastPoints} />
+            <LastSets team='H' match={match} show={showLastSetsPoints}/>
             <div className={classes.teamPoints}>{match.pointsInCurrentSet[0]}</div>
           </div>
         </div>
@@ -206,6 +210,8 @@ export default ({match}) => {
             </div>
             <div className={classes.teamName} style={teamNameStyle}>{match.b1Player} / {match.b2Player}</div>
             <div className={classes.teamSets}>{match.setsWonByAwayTeam}</div>
+            <LastPoints team='A' lastPointsList={match.lastPointsList} show={showLastPoints}/>
+            <LastSets team='A' match={match} show={showLastSetsPoints}/>
             <div className={classes.teamPoints}>{match.pointsInCurrentSet[1]}</div>
           </div>
         </div>

@@ -54,6 +54,7 @@ export const HOMETEAM = "HOMETEAM";
 export const SET_HAS_STARTED = "SET_HAS_STARTED";
 export const AWAYTEAM_POINT = "AWAYTEAM_POINT";
 export const HOMETEAM_POINT = "HOMETEAM_POINT";
+export const LAST_POINTS_LIST = "LAST_POINTS_LIST";
 export const HOMETEAM_TIMEOUT_TAKEN = "HOMETEAM_TIMEOUT_TAKEN";
 export const AWAYTEAM_TIMEOUT_TAKEN = "AWAYTEAM_TIMEOUT_TAKEN";
 export const MATCH_IS_FINISED = "MATCH_IS_FINISED";
@@ -131,7 +132,8 @@ export const Match = Record({
   [MATCH_IS_FINISED]: false,
   [HOMETEAM_TIMEOUT_TAKEN]: false,
   [AWAYTEAM_TIMEOUT_TAKEN]: false,
-  [COMMENTS]: List()
+  [COMMENTS]: List(),
+  [LAST_POINTS_LIST]: List()
 });
 
 export const Action = Record({
@@ -220,7 +222,8 @@ export const constants = {
   SERVICE_ORDER_AWAYTEAM,
   SHOW_SWITCH,
   SHOW_SET_FINISHED,
-  MATCH_FIREBASE_KEY
+  MATCH_FIREBASE_KEY,
+  LAST_POINTS_LIST
 };
 
 export default State;

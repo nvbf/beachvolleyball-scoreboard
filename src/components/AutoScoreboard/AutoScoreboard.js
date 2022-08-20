@@ -19,6 +19,8 @@ export default ({court, profixioSlug, tournamentId, scoreDelay}) => {
   const [homeTeamTimeoutTaken, setHomeTeamTimeoutTaken] = useState(false);
   const [awayTeamTimeoutTaken, setAwayTeamTimeoutTaken] = useState(false);
   const [currentTimeout, setCurrentTimeout] = useState('');
+  const [showLastPoints, setShowLastPoints] = useState(false);
+  const [showLastSetsPoints, setShowLastSetsPoints] = useState(false);
   const [match, setMatch] = useState(null);
 
   const updateMatches = useCallback( ({matches}) => {
@@ -77,21 +79,38 @@ export default ({court, profixioSlug, tournamentId, scoreDelay}) => {
     if (m.pointsInCurrentSet[0] == 0 && m.pointsInCurrentSet[1] == 0) {
       setHomeTeamTimeoutTaken(false);
       setAwayTeamTimeoutTaken(false)
-
     }
+
+    if ((m.pointsInCurrentSet[0] + m.pointsInCurrentSet[1]) == 10 && m.scoreInCompletedSetAsArray.length > 0) {
+      setShowLastSetsPoints(true);
+      setTimeout(() => setShowLastSetsPoints(false), 10000);
+    }
+
+    console.log('Match stuff change', m)
     if (!homeTeamTimeoutTaken && m.homeTeamTimeoutTaken) {
       setHomeTeamTimeoutTaken(true);
       setCurrentTimeout(`${m.h1Player} / ${m.h2Player}`);
+
       setTimeout(() => {
         setCurrentTimeout(null)
       }, 15000);
+      setShowLastPoints(true);
+      console.log('Show last points set to true')
+      setTimeout(() => {
+        setShowLastPoints(false);
+      }, 10000)
     }
     if (!awayTeamTimeoutTaken && m.awayTeamTimeoutTaken) {
       setAwayTeamTimeoutTaken(true);
       setCurrentTimeout(`${m.b1Player} / ${m.b2Player}`);
+
       setTimeout(() => {
         setCurrentTimeout(null)
       }, 15000);
+      setShowLastPoints(true);
+      setTimeout(() => {
+        setShowLastPoints(false);
+      },10000);
     }
   }
 
@@ -114,7 +133,7 @@ export default ({court, profixioSlug, tournamentId, scoreDelay}) => {
                    timeout={1000}
                    classNames="scoreboard"
                    unmountOnExit>
-      <ScoreBoard match={match} />
+      <ScoreBoard match={match} showLastPoints={showLastPoints} showLastSetsPoints={showLastSetsPoints} />
     </CSSTransition>
 
     <CSSTransition in={!!(!currentMatchId && gameSchedule)} timeout={1000}

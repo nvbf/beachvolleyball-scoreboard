@@ -70,21 +70,30 @@ export function getResult(matchState) {
   return `${s1}, ${s2}, ${s3}`;
 }
 
-export function getScoreFromFirstSet(matchState) {
+export function getScoreFromFirstSet(matchState, asArray) {
   const h = getHomeTeamPointInFirstSet(matchState);
   const b = getAwayTeamPointInFirstSet(matchState);
+  if (asArray) {
+    return [h, b];
+  }
   return `${h} - ${b}`;
 }
 
-export function getScoreFromSecondSet(matchState) {
+export function getScoreFromSecondSet(matchState, asArray) {
   const h = getHomeTeamPointInSecondSet(matchState);
   const b = getAwayTeamPointInSecondSet(matchState);
+  if (asArray) {
+    return [h, b];
+  }
   return `${h} - ${b}`;
 }
 
-export function getScoreFromThirdSet(matchState) {
+export function getScoreFromThirdSet(matchState, asArray) {
   const h = getHomeTeamPointInThirdSet(matchState);
   const b = getAwayTeamPointInThirdSet(matchState);
+  if (asArray) {
+    return [h, b];
+  }
   return `${h} - ${b}`;
 }
 
@@ -466,6 +475,20 @@ export function getScoreForCompletedSets(match) {
     completedSets.push(getScoreFromThirdSet(match));
   }
   return completedSets.join(", ");
+}
+
+export function getScoreForCompletedSetsAsArray(match) {
+  let completedSets = [];
+  if (isFirstSetFinished(match)) {
+    completedSets.push(getScoreFromFirstSet(match, true));
+  }
+  if (isSecondSetFinished(match)) {
+    completedSets.push(getScoreFromSecondSet(match, true));
+  }
+  if (isThirdSetFinished(match)) {
+    completedSets.push(getScoreFromThirdSet(match, true));
+  }
+  return completedSets;
 }
 
 export function getPointsInCurrentSetAsString(match) {

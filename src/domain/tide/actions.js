@@ -25,7 +25,7 @@ import {
   BeachVolleyballSet,
   constants as c,
   TOURNAMENT_PRIVATE_ID,
-  MATCH_FIREBASE_KEY
+  MATCH_FIREBASE_KEY, LAST_POINTS_LIST
 } from "./state";
 
 import { update as storeToLocalStorage } from "./storage";
@@ -120,6 +120,9 @@ class AllAction extends Actions {
 
     this.setNotificationsState(state, newScore, totalPOints);
     this.mutateAndTrack([MATCH, index, HOMETEAM_POINT], newPoints);
+
+    const lastPoints = [...matchState[LAST_POINTS_LIST], 'H'].slice(-10);
+    this.mutate([MATCH, LAST_POINTS_LIST], lastPoints);
   };
 
   addPointAwayteam = (proxy, event, state = this.getState()) => {
@@ -138,6 +141,9 @@ class AllAction extends Actions {
 
     this.setNotificationsState(state, newScore, totalPoints);
     this.mutateAndTrack([MATCH, index, AWAYTEAM_POINT], newPoints);
+
+    const lastPoints = [...matchState[LAST_POINTS_LIST], 'A'].slice(-10);
+    this.mutate([MATCH, LAST_POINTS_LIST], lastPoints);
   };
 
   notificationOk = (proxy, event, state = this.getState()) => {
@@ -179,6 +185,8 @@ class AllAction extends Actions {
       //TODO: should this be here?
       this.mutate([c.MATCH, c.MATCH_IS_FINISED], true);
     } else if (isSetFinished(newScore, pointsInSet)) {
+      // Reset last points:
+      this.mutate([c.MATCH, LAST_POINTS_LIST], []);
       this.mutate([c.MATCH, c.SHOW_COMPONENT], c.SHOW_SET_FINISHED);
     } else if (totalPoints === 21 && !isLastSet) {
       this.mutate([c.MATCH, c.SHOW_COMPONENT], c.SHOW_TTO);

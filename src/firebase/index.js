@@ -3,7 +3,7 @@ import slugify2 from "slugify2";
 
 import { getUID } from "../util/auth";
 import AllAction from "../../src/domain/tide/actions";
-import { constants as c } from "../domain/tide/state";
+import {constants as c, LAST_POINTS_LIST} from "../domain/tide/state";
 
 import {
   isMatchFinished,
@@ -15,7 +15,7 @@ import {
   getScoreForCompletedSets,
   getAwayTeamSetsWon,
   getHomeTeamSetsWon,
-  hasHomeTeamWonMatch, getTimeoutTakenInCurrentSet, personToServe
+  hasHomeTeamWonMatch, getTimeoutTakenInCurrentSet, personToServe, getScoreForCompletedSetsAsArray
 } from "../domain/tide/logic";
 
 
@@ -41,6 +41,8 @@ function extractDataMatchToTournament(state) {
   const scoreInCompletedSet = getScoreForCompletedSets(match);
   const setsWonByHomeTeam = getHomeTeamSetsWon(match);
   const setsWonByAwayTeam = getAwayTeamSetsWon(match);
+  const lastPointsList = [...match[LAST_POINTS_LIST]]
+  const scoreInCompletedSetAsArray = getScoreForCompletedSetsAsArray(match)
 
   let winner = "";
   let timeFinished = ""
@@ -57,6 +59,7 @@ function extractDataMatchToTournament(state) {
     isFinished,
     pointsInCurrentSet,
     scoreInCompletedSet,
+    scoreInCompletedSetAsArray,
     setsWonByHomeTeam,
     setsWonByAwayTeam,
     winner,
@@ -64,7 +67,8 @@ function extractDataMatchToTournament(state) {
     timeFinished,
     homeTeamTimeoutTaken,
     awayTeamTimeoutTaken,
-    servingTeam
+    servingTeam,
+    lastPointsList,
   };
 }
 
