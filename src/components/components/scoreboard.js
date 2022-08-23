@@ -12,7 +12,6 @@ import AddEmailButton from "../molokyler/add-email-button";
 import AddTournamentIdButton from "../molokyler/add-tournamentid-button";
 
 import {Alert, ButtonToolbar, Panel, PanelGroup} from "react-bootstrap";
-
 import {
   ACTION_HISTORY,
   AWAYTEAM_FIRST_PLAYER_NAME,
@@ -29,6 +28,23 @@ import {
 } from "../../domain/tide/state";
 import LastActions from "../last-actions";
 import {SetTeamColorsButton} from "../molokyler/set-team-colors-button";
+import {isPointToSwitch} from "../../domain/tide/logic";
+import {withStyles} from "@material-ui/styles";
+import {makeStyles} from "@material-ui/core/styles";
+
+const styles = theme => ({
+  headingContainer: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  },
+  matchExtraInfo: {
+    color: '#337ab7',
+    fontSize: '20px'
+  }
+})
+
+const useStyles = makeStyles(styles);
 
 class Scoreboard extends Component {
   constructor(props) {
@@ -42,20 +58,15 @@ class Scoreboard extends Component {
 
   render() {
     const {
-      HOMETEAM_SECOND_PLAYER_NAME,
-      HOMETEAM_FIRST_PLAYER_NAME,
-      AWAYTEAM_SECOND_PLAYER_NAME,
-      AWAYTEAM_FIRST_PLAYER_NAME,
       MATCH_IS_FINISED,
       ACTION_HISTORY,
-      SECOND_SET,
-      THIRD_SET,
       h1p,
       a1p,
       h2p,
       a2p,
       h3p,
-      a3p
+      a3p,
+      classes
     } = this.props;
 
     console.log("rendering:");
@@ -66,8 +77,9 @@ class Scoreboard extends Component {
       <div>
         <div className="container scoreboard">
           <div className="panel panel-default">
-            <div className="panel-heading">
+            <div className={`panel-heading  ${classes.headingContainer}`}>
               <h2 className="panel-title">Match standing</h2>
+              <MatchInfo />
             </div>
             <div className="panel-body">
               <table className="table table-striped">
@@ -143,7 +155,7 @@ class Scoreboard extends Component {
   }
 }
 
-export default wrap(Scoreboard, {
+export default wrap(withStyles(styles)(Scoreboard), {
   [HOMETEAM_FIRST_PLAYER_NAME]: [MATCH, HOMETEAM_FIRST_PLAYER_NAME],
   [HOMETEAM_SECOND_PLAYER_NAME]: [MATCH, HOMETEAM_SECOND_PLAYER_NAME],
   [AWAYTEAM_FIRST_PLAYER_NAME]: [MATCH, AWAYTEAM_FIRST_PLAYER_NAME],
@@ -160,3 +172,15 @@ export default wrap(Scoreboard, {
 
 //	[FIRST_SET]: [MATCH, FIRST_SET],
 //
+
+const MatchInfo = wrap(({matchState}) => {
+  const classes = useStyles();
+
+  const pointToSwitch = isPointToSwitch(matchState);
+  if (pointToSwitch) {
+    return <div className={`${classes.matchExtraInfo}`}>Point to switch</div>
+  }
+  return null;
+}, {
+  matchState: [MATCH]
+});

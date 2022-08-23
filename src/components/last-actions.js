@@ -73,7 +73,6 @@ const LastAction = ({actionHistory}) => {
 
 const Action = ({action, ...props}) => {
   const classes = useStyles(props);
-  console.log('The action', action);
   const {
     timestamp, isUndo, homeScore, awayScore, textString, value, team
   } = action;
@@ -109,6 +108,11 @@ const getTimeAgo = (timestamp) => {
   if (duration > 3600) {
     durationString += Math.floor(duration / 3600) + "h";
     duration = duration % 3600;
+  }
+  if (duration >= 60 * 3) {
+    // No need to show seconds for old actions:
+    durationString += Math.floor(duration / 60) + "m";
+    return durationString;
   }
   if (duration > 60) {
     durationString += Math.floor(duration / 60) + "m";

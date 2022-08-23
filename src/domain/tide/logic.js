@@ -158,7 +158,6 @@ export function getDetailsAsAnArray(details = []) {
     const homeScore = actionHistory.get(c.HOMETEAM_POINT);
     const awayScore = actionHistory.get(c.AWAYTEAM_POINT);
 
-    console.log('The actions', actions, homeTeamActions);
 
     const lastAction = [...actions].pop();
     let team = "";
@@ -629,6 +628,21 @@ function hasAwayteamWonSecondSet(score) {
 
 function hasAwayteamWonThirdSet(score) {
   return hasAwayteamWonSet(score.get(THIRD_SET), 15);
+}
+
+export function isPointToSwitch(matchState) {
+  const isLastSet = getCurrentSetIndex(matchState) === c.THIRD_SET;
+  const switchOnPoint = isLastSet
+    ? matchState[c.LAST_SET_SWITCH_EVERY_X_POINT]
+    : matchState[c.DEFAULT_SWITCH_EVERY_X_POINT];
+
+  const homeTeamPoints = getAwayteamPointsInCurrentSet(matchState);
+  const awayTeamPoints = getHometeamPointsInCurrentSet(matchState);
+
+  const totalPoints = homeTeamPoints + awayTeamPoints;
+  console.log('Home team points', homeTeamPoints, awayTeamPoints, totalPoints, totalPoints+1 % switchOnPoint);
+
+  return ((totalPoints+1) % switchOnPoint == 0);
 }
 
 export function hasHometeamWonSetPure(hometeamPoints, awayteamPoints, limit) {
