@@ -115,6 +115,22 @@ const constantToText = {
   [c.COMMENTS]: "Comment: %s"
 };
 
+const homeTeamActions = [
+  c.HOMETEAM_COLOR,
+  c.HOMETEAM_FIRST_PLAYER_NAME,
+  c.HOMETEAM_SECOND_PLAYER_NAME,
+  c.HOMETEAM_POINT,
+  c.HOMETEAM_TIMEOUT_TAKEN
+]
+
+const awayTeamActions = [
+  c.AWAYTEAM_COLOR,
+  c.AWAYTEAM_FIRST_PLAYER_NAME,
+  c.AWAYTEAM_SECOND_PLAYER_NAME,
+  c.AWAYTEAM_POINT,
+  c.AWAYTEAM_TIMEOUT_TAKEN
+]
+
 export function getDetailsAsAnArrayOfString(details = []) {
   console.log("getDetailsAsAnArrayOfString", details);
   const detailsString = getDetailsAsAnArray(details)
@@ -141,6 +157,18 @@ export function getDetailsAsAnArray(details = []) {
     const date = actionHistory.get(c.DATE);
     const homeScore = actionHistory.get(c.HOMETEAM_POINT);
     const awayScore = actionHistory.get(c.AWAYTEAM_POINT);
+
+    console.log('The actions', actions, homeTeamActions);
+
+    const lastAction = [...actions].pop();
+    let team = "";
+    if (homeTeamActions.indexOf(lastAction) >= 0) {
+      team = "H"
+    }
+    else if (awayTeamActions.indexOf(lastAction) >= 0) {
+      team = "A"
+    }
+
     if (tekstString === undefined) {
       return allDetails;
     }
@@ -150,7 +178,8 @@ export function getDetailsAsAnArray(details = []) {
       homeScore,
       awayScore,
       isUndo,
-      value
+      value,
+      team
     });
     return allDetails;
   }, []);
