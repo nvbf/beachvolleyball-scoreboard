@@ -44,10 +44,36 @@ const useStyles = makeStyles(theme => ({
     textAlign: 'center'
   },
   liveSets: {
-    fontSize: '1.3rem',
+    fontSize: '30px',
     textAlign: 'center'
   },
   livePoints: {
+    textAlign: 'left',
+    display: 'flex',
+    alignItems: 'center',
+    '&.current-set': {
+      fontWeight: 'bold',
+      fontSize: '18px'
+    }
+  },
+  livePointsOuterContainer: {
+    display: 'flex',
+    justifyContent: 'center'
+  },
+  livePointsContainer: {
+
+  },
+  setPoints: {
+    textAlign: 'center',
+    flexGrow: 1,
+  },
+  setPointsText: {
+    marginRight: '5px',
+    fontSize: '12px',
+    color: '#999'
+  },
+  matchFinishedTime: {
+    marginTop: '20px',
     textAlign: 'center'
   },
   dialog: {
@@ -343,14 +369,61 @@ const MatchScore = ({match}) => {
     return <>{match.result}</>
   } else if (match.firebaseMatch) {
     const fbm = match.firebaseMatch;
+    const currentSet = fbm.setsWonByHomeTeam + fbm.setsWonByAwayTeam + 1;
+
     console.log('Live match', fbm);
     return <div>
       <div className={classes.liveHeading}>Live</div>
       <div className={classes.liveSets}>{fbm.setsWonByHomeTeam} - {fbm.setsWonByAwayTeam}</div>
-      <div className={classes.livePoints}>{fbm.pointsInCurrentSet[0]} - {fbm.pointsInCurrentSet[1]}</div>
+      <div className={classes.livePointsOuterContainer}>
+        <div className={classes.livePointsContainer}>
+          {fbm.scoreInCompletedSetAsArray && [...fbm.scoreInCompletedSetAsArray].map((points, index) => {
+            return <div className={`${classes.livePoints}`}>
+              <div className={classes.setPointsText}>Set {index + 1}</div>
+              <div className={classes.setPoints}>{points[0]} - {points[1]}</div>
+            </div>
+          })}
+          {!fbm.isFinished && <div
+            className={`${classes.livePoints} current-set`}>
+            <div className={classes.setPointsText}>Set {currentSet}</div>
+            <div className={classes.setPoints}>{fbm.pointsInCurrentSet[0]} - {fbm.pointsInCurrentSet[1]}</div>
+          </div>}
+        </div>
+      </div>
+      <DoneTime timeFinished={fbm.timeFinished} />
     </div>
   }
   return null;
+}
+
+const DoneTime = ({timeFinished}) => {
+  const [clock, setClock] = useState(0);
+  const classes = useStyles();
+
+  useEffect(() => {
+    const interVal = setInterval(() => {
+      setClock(clock => clock+1);
+    }, 1000)
+    return () => {
+      clearInterval(interVal);
+    }
+  }, []);
+
+  if (!timeFinished) {
+    return null;
+  }
+  const now = Math.floor((new Date()).getTime() / 1000);
+  let timeSinceFinished = Math.floor(now - (timeFinished / 1000));
+
+  let timeString = "";
+  if (timeSinceFinished > 60) {
+    timeString += Math.floor(timeSinceFinished / 60) + 'm'
+    timeSinceFinished = timeSinceFinished % 60;
+  }
+  if (timeSinceFinished) {
+     timeString += timeSinceFinished + 's';
+  }
+  return <div className={classes.matchFinishedTime}>Finished {timeString} ago</div>
 }
 
 const QRCodeRow = ({match, privateId, onSetAsCurrent}) => {
