@@ -56,24 +56,42 @@ const useStyles = makeStyles({
     display: 'flex',
     fontSize: '32px',
     marginTop: '10px',
+    alignItems: 'center'
   },
-  gameTime: {
+  gameTimeContainer: {
     paddingTop: '10px',
     paddingBottom: '10px',
     paddingLeft: '10px',
     backgroundColor: '#222b38',
     color: 'white',
     width: '140px',
-    justifyContent: 'center',
+  },
+  gameTime: {
+    lineHeight: '25px',
+    marginBottom: '5px',
+    marginLeft: '-3px'
+  },
+  gameId: {
+    fontSize: '12px',
+    marginBottom: '5px'
+  },
+  gameStage: {
+    fontSize: '16px'
   },
   teamName: {
     paddingTop: '10px',
     paddingBottom: '10px',
     width: '450px',
-    fontSize: '24px',
-    display: 'flex',
+    fontSize: '18px',
     alignItems: 'flex-start',
-    paddingLeft: '40px',
+    flexBasis: '50%',
+    '&.home-team': {
+      textAlign: 'right'
+    }
+  },
+  versus: {
+    marginRight: '40px',
+    marginLeft: '40px',
   },
   "@keyframes slideFromTop": {
     "0%": {
@@ -121,8 +139,8 @@ export default ({matches, schedule, court}) => {
   const getTeamName = (team) => {
     if (team.players?.length == 2) {
       return <React.Fragment>
-                {team.players[0]}<br />
-                {team.players[1]}
+                {team.playersFullName[0]}<br />
+                {team.playersFullName[1]}
       </React.Fragment>
     }
     return <React.Fragment>{team.name}</React.Fragment>
@@ -137,8 +155,13 @@ export default ({matches, schedule, court}) => {
       <div className={classes.gameRows}>
         {upcomingGames.slice(0, 8).map((game) => {
           return <div className={classes.gameRow} key={game.matchId}>
-            <div className={classes.gameTime}>{game.time}</div>
-            <div className={classes.teamName}>{getTeamName(game.homeTeam)}</div>
+            <div className={classes.gameTimeContainer}>
+              <div className={classes.gameId}>#{game.matchId}</div>
+              <div className={classes.gameTime}>{game.time}</div>
+              <div className={classes.gameStage}>{game.stage}</div>
+            </div>
+            <div className={`${classes.teamName} home-team`}>{getTeamName(game.homeTeam)}</div>
+            <div className={classes.versus}><img width='40' src='https://volleyball.no/wp-content/uploads/2021/11/nvbf-logo-hvit.png' style={{filter: 'invert(1)'}}/></div>
             <div className={classes.teamName}>{getTeamName(game.awayTeam)}</div>
           </div>
         })}
