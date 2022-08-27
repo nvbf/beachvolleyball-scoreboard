@@ -76,7 +76,7 @@ const useStyles = makeStyles({
     marginBottom: '5px'
   },
   gameStage: {
-    fontSize: '16px'
+    fontSize: '12px'
   },
   teamName: {
     paddingTop: '10px',
