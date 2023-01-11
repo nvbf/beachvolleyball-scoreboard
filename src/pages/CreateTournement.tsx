@@ -47,7 +47,7 @@ function CreateTournement() {
     <div>
       <div style={styleDivbox}>
         <div style={{ margin: "1vw" }}>CREATE TOURNEMENT HERE</div>
-        <div style={{ margin: "1vw" }}>
+        <div style={{ margin: "2vw" }}>
           <Box
             component="form"
             sx={{
