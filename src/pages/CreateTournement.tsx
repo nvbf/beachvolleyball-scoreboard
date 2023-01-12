@@ -17,7 +17,6 @@ function CreateTournement() {
     color: "black",
     margin: "1vw",
     border: "1px solid black",
-    display: "none",
   };
   //local state hooks in react
   const [tournamentNameState, setTournamentNameState] = useState("");
@@ -68,11 +67,11 @@ function CreateTournement() {
           <Button variant="contained" onClick={createTournamentClick}>
             Create tournement
           </Button>
-          <div style={styleTournamentCreatedBox}>
-            <p>Turneringens navn: {createTournamentState.tournamentName}</p>
-            <p>Turneringens ID: {createTournamentState.tournamentID}</p>
-          </div>
         </div>
+      </div>
+      <div style={styleTournamentCreatedBox}>
+        <p>Turneringens navn: {createTournamentState.tournamentName}</p>
+        <p>Turneringens ID: {createTournamentState.tournamentID}</p>
       </div>
     </div>
   );
