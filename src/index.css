@@ -1,13 +1,35 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+/*style in create tournament site*/
+
+.createTournamentDiv {
+  margin-left: auto;
+  margin-right: auto;
+  color: "black";
+  background-color: white;
+  box-shadow: 1px 1px 1px grey;
+  letter-spacing: 0.0175rem;
+  font-size: large;
+}
+
+.createTournamentSchema {
+  width: 550px;
+  height: 170px;
+}
+
+.createTournamentList {
+  width: 550px;
+  height: 300px;
 }

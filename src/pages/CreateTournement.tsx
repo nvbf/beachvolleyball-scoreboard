@@ -7,17 +7,6 @@ import { useState } from "react";
 import { createTournamentAction } from "./../store/tournament/reducer";
 
 function CreateTournement() {
-  const styleDivbox = {
-    color: "black",
-    margin: "1vw",
-    border: "1px solid black",
-  };
-
-  const styleTournamentCreatedBox = {
-    color: "black",
-    margin: "1vw",
-    border: "1px solid black",
-  };
   //local state hooks in react
   const [tournamentNameState, setTournamentNameState] = useState("");
   const [tournamentIDState, setTournamentIDState] = useState(0);
@@ -44,34 +33,51 @@ function CreateTournement() {
 
   return (
     <div>
-      <div style={styleDivbox}>
-        <div style={{ margin: "1vw" }}>CREATE TOURNEMENT HERE</div>
-        <div style={{ margin: "2vw" }}>
-          <Box
-            component="form"
-            sx={{
-              "& > :not(style)": { m: 1, width: "25ch" },
-            }}
-            noValidate
-            autoComplete="off"
-          >
-            <TextField
-              id="textfield-tournementName"
-              label="Tournament name"
-              variant="standard"
-              onChange={(e) => setTournamentNameState(e.target.value)}
-            />
-          </Box>
-        </div>
-        <div style={{ margin: "1vw" }}>
-          <Button variant="contained" onClick={createTournamentClick}>
-            Create tournement
-          </Button>
-        </div>
+      <div className="createTournamentDiv createTournamentSchema">
+        <h3 style={{ margin: "20px", marginTop: "30px" }}>
+          CREATE NEW TOURNEMENT HERE
+        </h3>
+
+        <Box style={{ margin: "20px" }}>
+          <TextField
+            id="textfield-tournementName"
+            label="Tournament name"
+            variant="standard"
+            onChange={(e) => setTournamentNameState(e.target.value)}
+          />
+        </Box>
+        <Button
+          style={{ margin: "20px", backgroundColor: "rgba(0, 0, 50, 0.87)" }}
+          variant="contained"
+          onClick={createTournamentClick}
+        >
+          Create tournement
+        </Button>
       </div>
-      <div style={styleTournamentCreatedBox}>
-        <p>Turneringens navn: {createTournamentState.tournamentName}</p>
-        <p>Turneringens ID: {createTournamentState.tournamentID}</p>
+
+      <div className="createTournamentDiv createTournamentList">
+        <h3 style={{ margin: "20px" }}>Tournament ID</h3>
+        <p style={{ margin: "20px" }}>
+          Turneringens navn: {createTournamentState.tournamentName}
+        </p>
+        <p style={{ margin: "20px" }}>
+          Turneringens ID: {createTournamentState.tournamentID}
+        </p>
+        <hr
+          style={{
+            backgroundColor: "rgba(0, 0, 0, 0.12)",
+            margin: "0px",
+            height: "1.5px",
+            border: "none",
+            marginLeft: "5px",
+            marginRight: "5px",
+          }}
+        />
+        <h4 style={{ margin: "20px" }}>to see all tournaments go to ....</h4>
+        <h4 style={{ margin: "20px" }}>
+          To create a match that appears on the tournament page. Add the private
+          tournamnent id in settings then tournament id for the scoresheet page
+        </h4>
       </div>
     </div>
   );
