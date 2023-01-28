@@ -17,6 +17,9 @@ function CreateTournement() {
   );
   const dispatch = useAppDispatch();
 
+  //make div box hide when button clicked
+  const [visible, setVisible] = useState(false);
+
   function createTournamentClick() {
     //creates random number
     const min = 1;
@@ -29,6 +32,12 @@ function CreateTournement() {
         tournamentID: tournamentIDState,
       })
     );
+    setVisible(true);
+  }
+
+  let style = { display: "none" };
+  if (visible) {
+    style.display = "block";
   }
 
   return (
@@ -55,7 +64,7 @@ function CreateTournement() {
         </Button>
       </div>
 
-      <div className="createTournamentDiv createTournamentList">
+      <div style={style} className="createTournamentDiv createTournamentList">
         <h3 style={{ margin: "20px" }}>Tournament ID</h3>
         <p style={{ margin: "20px" }}>
           Turneringens navn: {createTournamentState.tournamentName}
