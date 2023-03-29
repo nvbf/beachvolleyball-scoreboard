@@ -8,7 +8,7 @@ tasks:
     env:
       NODE_ENV: development
       DEBUG: "*,-babel"
-      API: http://localhost:3000/api/matches/
+      # API: http://localhost:3000/api/matches/
       PORT: 4000
 
   build:
