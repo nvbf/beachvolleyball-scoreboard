@@ -1,0 +1,30 @@
+version: "3"
+
+tasks:
+  run:
+    desc: Run the app locally
+    cmds:
+      - npm start
+    env:
+      NODE_ENV: development
+      DEBUG: "*,-babel"
+      API: http://localhost:3000/api/matches/
+      PORT: 4000
+
+  build:
+    desc: Build the Docker container
+    silent: true
+    dir: 
+    cmds:
+      - npm run build
+
+  help:
+    desc: Display this help
+    silent: true
+    cmds:
+      - task --list
+
+  default:
+    silent: true
+    cmds:
+      - task: help
