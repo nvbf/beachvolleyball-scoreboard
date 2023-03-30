@@ -11,6 +11,15 @@ tasks:
       # API: http://localhost:3000/api/matches/
       PORT: 4000
 
+  run-prod:
+    desc: Run the app locally
+    cmds:
+      - npm start
+    env:
+      NODE_ENV: production
+      DEBUG: "*,-babel"
+      PORT: 4000
+
   build:
     desc: Build the Docker container
     silent: true
