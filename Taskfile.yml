@@ -4,7 +4,7 @@ tasks:
   run:
     desc: Run the app locally
     cmds:
-      - npm start
+      - npm run dev
     env:
       NODE_ENV: development
       DEBUG: "*,-babel"
@@ -21,9 +21,9 @@ tasks:
       PORT: 4000
 
   build:
-    desc: Build the Docker container
+    desc: Build the node app
     silent: true
-    dir: 
+    dir: .
     cmds:
       - npm run build
 
