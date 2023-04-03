@@ -2,8 +2,7 @@ import { createReducer } from "@reduxjs/toolkit"
 import { Actor, EventType, NotificationType } from "../../components/types"
 import { evaluateScores, isSetDone, sumScores } from "../../util/evaluateScore"
 import { matchState } from "../types"
-import { addAwayTeamType, addHomeTeamType, addPointType, cancelStopwatchType, clearNotificationType, MatchActionTypes, setTickType, showNotificationType, startStopwatchType } from "./actions"
-import { Stopwatch } from "ts-stopwatch";
+import { addAwayTeamType, addHomeTeamType, addPointType, clearNotificationType, MatchActionTypes, showNotificationType } from "./actions"
 import { throwError } from "redux-saga-test-plan/providers"
 
 const initState = {
@@ -19,8 +18,6 @@ const initState = {
     shirtColor: "#ff0000",
     added: true,
   },
-  stopwatch: 0,
-  runStopwatch: false,
   currentSet: 0,
   matchId: "",
   homeTimeout: false,
@@ -106,7 +103,6 @@ export const matchReducer = createReducer<matchState>(initState, {
           ...state,
           technicalTimeout: true,
           showNotification: true,
-          runStopwatch: true,
         }
       default:
         return {
@@ -137,42 +133,18 @@ export const matchReducer = createReducer<matchState>(initState, {
           ...state,
           teamTimeout: false,
           showNotification: false,
-          runStopwatch: false,
         }
       case NotificationType.TechnicalTimeout:
         return {
           ...state,
           technicalTimeout: false,
           showNotification: false,
-          runStopwatch: false,
         }
       default:
         return {
           ...state,
           showNotification: false
         }
-    }
-  },
-  [MatchActionTypes.INIT_STOPWATCH]: (state, action: startStopwatchType) => {
-    return {
-      ...state,
-      stopwatch: 0,
-      runStopwatch: true
-    }
-  },
-  [MatchActionTypes.SET_TICK]: (state, action: setTickType) => {
-    let newVal = state.stopwatch + 1
-    console.log("Add new tick: " + newVal);
-
-    return {
-      ...state,
-      stopwatch: newVal
-    }
-  },
-  [MatchActionTypes.CANCEL_STOPWATCH]: (state, action: cancelStopwatchType) => {
-    return {
-      ...state,
-      runStopwatch: false
     }
   },
 })

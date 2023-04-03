@@ -28,11 +28,6 @@ export type Match = {
   sets: Set[]
 }
 
-export type Stopwatch = {
-  time: number,
-  timeOut: number
-}
-
 export enum EventType {
   Score = "SCORE",
   Timeout = "TIMEOUT",

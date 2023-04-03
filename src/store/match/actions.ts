@@ -1,5 +1,5 @@
 import { createAction } from '@reduxjs/toolkit'
-import { Actor, NotificationType, Stopwatch, Team } from '../../components/types'
+import { Actor, NotificationType, Team } from '../../components/types'
 
 // Use explicity string enums, otherwise the react-devtools struggle with identifying the action, as the
 // action type then would be numbers
@@ -19,13 +19,6 @@ export enum MatchActionTypes {
   CLEAR_NOTIFICATION = 'CLEAR_NOTIFICATION',
 
   ADD_TEAM_ERROR = 'ADD_TEAM_ERROR',
-
-  INIT_STOPWATCH = 'INIT_STOPWATCH',
-  START_STOPWATCH = 'START_STOPWATCH',
-  SET_TICK = 'SET_TICK',
-  TRIGGER_TICK = 'TRIGGER_TICK',
-  CANCEL_STOPWATCH = 'CANCEL_STOPWATCH',
-
 }
 
 export const addHomeTeam = createAction<Team>(MatchActionTypes.ADD_HOME_TEAM)
@@ -40,12 +33,6 @@ export const clearNotification = createAction<NotificationType>(MatchActionTypes
 
 export const evaluateScores = createAction<Actor>(MatchActionTypes.EVALUATE_SCORES)
 
-export const initStopwatch = createAction(MatchActionTypes.INIT_STOPWATCH)
-export const startStopwatch = createAction(MatchActionTypes.START_STOPWATCH)
-export const setTick = createAction(MatchActionTypes.SET_TICK)
-export const triggerTick = createAction(MatchActionTypes.TRIGGER_TICK)
-export const cancelStopwatch = createAction(MatchActionTypes.CANCEL_STOPWATCH)
-
 export const addTeamError = createAction<Error>(MatchActionTypes.ADD_TEAM_ERROR)
 
 export type addHomeTeamType = ReturnType<typeof addHomeTeam>
@@ -59,11 +46,5 @@ export type showNotificationType =  ReturnType<typeof showNotification>
 export type clearNotificationType =  ReturnType<typeof clearNotification>
 
 export type evaluateScoresType =  ReturnType<typeof evaluateScores>
-
-export type initStopwatchType =  ReturnType<typeof initStopwatch>
-export type startStopwatchType =  ReturnType<typeof startStopwatch>
-export type setTickType =  ReturnType<typeof setTick>
-export type triggerTickType =  ReturnType<typeof triggerTick>
-export type cancelStopwatchType =  ReturnType<typeof cancelStopwatch>
 
 export type addTeamErrorType = ReturnType<typeof addTeamError>

@@ -3,7 +3,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import React from 'react';
 import { useState } from "react";
-import { cancelStopwatch, clearNotification, startStopwatch } from "../store/match/actions";
+import { clearNotification } from "../store/match/actions";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import {
   RightBox,
@@ -57,7 +57,6 @@ export function  TechnicalTimeout() {
 
   function clearTechnicalTimout() {
     dispatch(clearNotification(NotificationType.TechnicalTimeout))
-    dispatch(cancelStopwatch())
   }
 
     return (
@@ -67,7 +66,7 @@ export function  TechnicalTimeout() {
         spacing={1}
         alignItems="center"
       >
-        <Typography variant="h6" component="div" sx={{ padding: 2 }}>Technical timeout! {match.stopwatch}</Typography>
+        <Typography variant="h6" component="div" sx={{ padding: 2 }}>Technical timeout! </Typography>
         <RightBox sx={{ float: "right", padding: 2, paddingRight: 4 }}><Button onClick={clearTechnicalTimout} variant="contained" >Done</Button></RightBox >
       </VolleyRowStack>
     )
@@ -79,7 +78,6 @@ export function  TeamTimeout() {
 
   function clearTeamTimout() {
     dispatch(clearNotification(NotificationType.TeamTimeout))
-    dispatch(cancelStopwatch())
   }
 
     return (
@@ -89,7 +87,7 @@ export function  TeamTimeout() {
         spacing={1}
         alignItems="center"
       >
-        <Typography variant="h6" component="div" sx={{ padding: 2 }}>Team timeout! {match.stopwatch}</Typography>
+        <Typography variant="h6" component="div" sx={{ padding: 2 }}>Team timeout! </Typography>
         <RightBox sx={{ float: "right", padding: 2, paddingRight: 4 }}><Button onClick={clearTeamTimout} variant="contained" >Done</Button></RightBox >
       </VolleyRowStack>
     )

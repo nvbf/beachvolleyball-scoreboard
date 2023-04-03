@@ -1,7 +1,7 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import { all, call, CallEffect, delay, put, PutEffect, select, SelectEffect, takeEvery, takeLatest } from 'redux-saga/effects'
-import { Actor, Stopwatch, Team } from '../../components/types';
-import { addAwayTeam, addHomeTeam, addPoint, addTeamError, evaluateScores, initStopwatch, MatchActionTypes, setTick, showNotification, startStopwatch } from "./actions";
+import { Actor, Team } from '../../components/types';
+import { addAwayTeam, addHomeTeam, addPoint, addTeamError, evaluateScores, MatchActionTypes, showNotification } from "./actions";
 
 /*
  * Sagas intercept an action, and then dispatches API calls. When the API call resolves, it either dispatches a success action, or an error action.
@@ -42,7 +42,6 @@ export function* scorePoint(action: PayloadAction<Actor>): Generator<CallEffect 
     console.log("technicalTimeout value:" + technicalTimeout);
 
     if (technicalTimeout) {
-      yield call(startStopwatchSaga);
       console.log("startStopwatch");
 
     }
@@ -55,9 +54,7 @@ export function* scorePoint(action: PayloadAction<Actor>): Generator<CallEffect 
 export function* startStopwatchSaga(): Generator<CallEffect | SelectEffect | PutEffect, void, string> {
 
   try {
-    yield put(initStopwatch())
     console.log("Did tick");
-    yield call(stopwatchSelfTickSaga);
   } catch (error) {
     console.log(error);
 
@@ -65,24 +62,6 @@ export function* startStopwatchSaga(): Generator<CallEffect | SelectEffect | Put
   }
 }
 
-export function* stopwatchSelfTickSaga(): Generator<CallEffect | SelectEffect | PutEffect, void, boolean> {
-  let loop = true
-
-  try {
-    yield delay(1000);
-    yield put(setTick())
-    loop = yield select(getRunStopwatch); // <-- get the project
-    if (loop) {
-      yield call(stopwatchSelfTickSaga)
-    }
-
-  } catch (error) {
-    console.log("Stopped tick:" + error);
-    loop = false
-  }
-}
-
-export const getRunStopwatch = (state: { match: { runStopwatch: boolean; }; }) => state.match.runStopwatch
 export const isTechnicalTimeout = (state: { match: { technicalTimeout: boolean; }; }) => state.match.technicalTimeout
 
 
@@ -91,6 +70,5 @@ export function* matchSagas() {
     takeEvery(MatchActionTypes.ADD_HOME_TEAM, setHomeTeam),
     takeEvery(MatchActionTypes.ADD_AWAY_TEAM, setAwayTeam),
     takeEvery(MatchActionTypes.POINT_SCORED, scorePoint),
-    takeEvery(MatchActionTypes.START_STOPWATCH, startStopwatchSaga),
   ])
 }

@@ -1,12 +1,8 @@
 import { Team, Event, Set, Match } from "../components/types";
-import { Stopwatch } from "ts-stopwatch";
-
 
 export type matchState = {
   homeTeam: Team,
   awayTeam: Team,
-  stopwatch: number,
-  runStopwatch: boolean,
   matchId: string,
   tournementId: number,
   currentSet: number,
