@@ -3,6 +3,18 @@ import AppBarMain from "../components/appbar";
 import AppCards from "../components/appCards"
 import Grid from "@mui/material/Grid"
 
+import SportsIcon from '@mui/icons-material/Sports';
+import {
+  Card,
+  CardHeader,
+  CardMedia,
+  CardContent,
+  Typography,
+  CardActionArea,
+} from "@mui/material";
+
+const iconSize = 80
+
 function StartPage() {
   return (
     <div>
@@ -38,16 +50,22 @@ function StartPage() {
               title="New Match"
               subHeader="Electronic scoresheet, no need for a seperate scorer."
               path="match"
+              iconName="volleyball"
+              size={iconSize}
             />
             <AppCards
               title="Create Tournament"
               subHeader="Connect matches to one tournament"
               path="create-tournement"
+              iconName="player"
+              size={iconSize}
             />
             <AppCards
               title="Live score"
               subHeader="Get livescore from an tournament or one match"
               path="tournements"
+              iconName="flute"
+              size={iconSize}
             />
           </Grid>
         </main>

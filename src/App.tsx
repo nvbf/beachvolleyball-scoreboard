@@ -7,24 +7,6 @@ import Tournements from './pages/Tournements';
 
 
 function App() {
-  // const util = require("util");
-  // const superagent = require("superagent");
-
-  // const { parse } = require("url");
-  // const next = require("next");
-  // const express = require("express");
-  // const bodyParser = require("body-parser");
-  // const send = require("./src/util/sendMail");
-
-  // const dev = process.env.NODE_ENV !== "production";
-  // const app = next({ dev });
-  // const pathMatch = require("path-match");
-
-  // const route = pathMatch();
-  // const match = route("/tournament/:id");
-
-  // const handle = app.getRequestHandler();
-
   return (
     <BrowserRouter>
       <Routes>
