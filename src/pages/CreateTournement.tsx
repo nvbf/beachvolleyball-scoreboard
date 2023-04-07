@@ -2,9 +2,10 @@ import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import { useAppDispatch, useAppSelector } from "../store/store";
-import { useState } from "react";
-
+import { useEffect, useState } from "react";
+import { db } from "../firebase/firebase-config";
 import { createTournamentAction } from "./../store/tournament/reducer";
+import { Firestore, collection, getDocs } from "@firebase/firestore";
 
 function CreateTournement() {
   //local state hooks in react
@@ -21,6 +22,7 @@ function CreateTournement() {
   const [visible, setVisible] = useState(false);
 
   function createTournamentClick() {
+    getValue(db);
     //creates random number
     const min = 1;
     const max = 100;
@@ -40,19 +42,27 @@ function CreateTournement() {
     style.display = "block";
   }
 
+  //Firebase
+
+  async function getValue(db: Firestore) {
+    const value = collection(db, "tournamentName");
+    const valueSnapshot = await getDocs(value);
+    const valueList = valueSnapshot.docs.map((doc) => doc.data());
+    console.log(valueList[0].TournamentName);
+    console.log(valueList[0].TournamentID);
+  }
+
   return (
     <div>
       <div className="createTournamentDiv createTournamentSchema">
         <h3 style={{ margin: "20px", marginTop: "30px" }}>
           CREATE NEW TOURNEMENT HERE
         </h3>
-
         <Box style={{ margin: "20px" }}>
           <TextField
             id="textfield-tournementName"
             label="Tournament name"
             variant="standard"
-            onChange={(e) => setTournamentNameState(e.target.value)}
           />
         </Box>
         <Button
@@ -68,6 +78,7 @@ function CreateTournement() {
         <h3 style={{ margin: "20px" }}>Tournament ID</h3>
         <p style={{ margin: "20px" }}>
           Turneringens navn: {createTournamentState.tournamentName}
+          Turneringens navn(firebaseTest): {}
         </p>
         <p style={{ margin: "20px" }}>
           Turneringens ID: {createTournamentState.tournamentID}
