@@ -1,17 +1,11 @@
-import React from "react";
-import AppBar from "@mui/material/AppBar";
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-import SportsIcon from '@mui/icons-material/Sports';
-import SportsVolleyballIcon from '@mui/icons-material/SportsVolleyball';
-import SportsHandballIcon from '@mui/icons-material/SportsHandball';
-import TimerIcon from '@mui/icons-material/Timer';
-
-
-
-
-
-
+import {
+    Sports,
+    SportsVolleyball,
+    SportsHandball,
+    Timer
+} from '@mui/icons-material';
 import {
     Card,
     CardActionArea,
@@ -32,11 +26,11 @@ const IMAGES = {
 
 export function AppCards({ title, subHeader, path, iconName, size }: AppCardsProps) {
     return (
-        <Grid sx={{ width: 1 }} item>
-            <Card sx={{ maxWidth: 820, display: 'flex', justifyContent: 'center' }}>
+        <Grid item xs={12} md={6}>
+            <Card sx={{ maxWidth: 820, justifyContent: 'center' }}>
                 <CardActionArea href={path}>
-                    <CardContent sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
-                        <Typography sx={{ fontSize: 24, alignSelf: 'center', textAlign: 'center' }} variant="h1" color="text.secondary" gutterBottom>
+                    <CardContent sx={{ justifyContent: 'center', flexDirection: 'column' }}>
+                        <Typography sx={{ fontSize: 24, alignSelf: 'center', textAlign: 'center' }} color="text.secondary">
                             {getIconFromName(iconName, size)}
                         </Typography>
                         <Typography sx={{ alignSelf: 'center', textAlign: 'center' }} variant="h4" component="div">
@@ -56,13 +50,13 @@ export function AppCards({ title, subHeader, path, iconName, size }: AppCardsPro
 const getIconFromName = (iconName: string, size: number) => {
     switch (iconName) {
         case 'flute':
-            return <SportsIcon sx={{ fontSize: size }} />
+            return <Sports sx={{ fontSize: size }} />
         case 'volleyball':
-            return <SportsVolleyballIcon sx={{ fontSize: size }} />
+            return <SportsVolleyball sx={{ fontSize: size }} />
         case 'timer':
-            return <TimerIcon sx={{ fontSize: size }} />
+            return <Timer sx={{ fontSize: size }} />
         case 'player':
-            return <SportsHandballIcon sx={{ fontSize: size }} />
+            return <SportsHandball sx={{ fontSize: size }} />
 
         // all other supported icons 
     }

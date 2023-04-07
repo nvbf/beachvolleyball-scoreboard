@@ -1,6 +1,6 @@
 html {
   margin: 0 auto;
-  max-width: 900px;
+  max-width: 1200px;
 }
 
 body {
@@ -8,8 +8,8 @@ body {
 }
 
 main {
-  margin-top: 40px;
-  padding: 30px;
+  margin-top: 2rem;
+  margin: 1rem;
 }
 
 .App {
