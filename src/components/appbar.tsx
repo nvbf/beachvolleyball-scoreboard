@@ -11,7 +11,7 @@ const AppBarMain = () =>
   <AppBar position="static">
     <Toolbar>
       <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-        Beacvolleyball Score
+        Beachvolleyball Scoreboard
       </Typography>
     </Toolbar>
   </AppBar>
