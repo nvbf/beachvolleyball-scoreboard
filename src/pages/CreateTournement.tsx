@@ -2,10 +2,13 @@ import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import { useAppDispatch, useAppSelector } from "../store/store";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { db } from "../firebase/firebase-config";
+import {
+  getTournamentNamesFromFirestore,
+  postTournamentNamesToFirestore,
+} from "../firebase/interaction-firebase";
 import { createTournamentAction } from "./../store/tournament/reducer";
-import { Firestore, collection, getDocs } from "@firebase/firestore";
 
 function CreateTournement() {
   //local state hooks in react
@@ -22,7 +25,6 @@ function CreateTournement() {
   const [visible, setVisible] = useState(false);
 
   function createTournamentClick() {
-    getValue(db);
     //creates random number
     const min = 1;
     const max = 100;
@@ -40,16 +42,6 @@ function CreateTournement() {
   let style = { display: "none" };
   if (visible) {
     style.display = "block";
-  }
-
-  //Firebase
-
-  async function getValue(db: Firestore) {
-    const value = collection(db, "tournamentName");
-    const valueSnapshot = await getDocs(value);
-    const valueList = valueSnapshot.docs.map((doc) => doc.data());
-    console.log(valueList[0].TournamentName);
-    console.log(valueList[0].TournamentID);
   }
 
   return (
