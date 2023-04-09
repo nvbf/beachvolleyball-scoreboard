@@ -1,5 +1,4 @@
 import { Firestore, collection, getDocs, addDoc } from "@firebase/firestore";
-import { db } from "./firebase-config";
 
 /**
  * Get tournamentnames from firestore
@@ -25,9 +24,9 @@ export async function postTournamentNamesToFirestore(
 ) {
   const value = collection(db, "Tournaments");
   addDoc(value, {
-    Id: 1,
-    isStarted: false,
-    TournamentName: "NT Voldløkka",
+    Id: Id,
+    isStarted: isStarted,
+    TournamentName: TournamentName,
   })
     .then((docRef) => {
       console.log("Document written with ID:", docRef.id);
