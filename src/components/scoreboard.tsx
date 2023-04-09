@@ -1,35 +1,36 @@
 import AddIcon from "@mui/icons-material/Add";
 import {
-  default as ArrowDropDownIcon,
-  default as ArrowDropUpIcon,
-} from "@mui/icons-material/ArrowDropDown";
-import { CardActions, Typography } from "@mui/material";
+  Add,
+  SportsVolleyball,
+  Undo,
+  Settings
+} from '@mui/icons-material';
+import {
+  CardActions,
+  Typography
+} from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Collapse from "@mui/material/Collapse";
 import IconButton, { IconButtonProps } from "@mui/material/IconButton";
 import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
-import { styled } from "@mui/material/styles";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import React, { useState } from "react";
-import { addPoint, scorePoint, callTimeout } from "../store/match/actions";
-import { useAppDispatch, useAppSelector } from "../store/store";
-import {
-  LeftMarginBox,
-  VolleyAlert,
-  VolleyAvatar,
-  VolleyCard,
-  VolleyCardHeader,
-  VolleyRowStack,
-  VolleyStack,
-} from "../util/styles";
-import { Actor } from "./types";
+import { styled } from '@mui/material/styles';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import React, { useState } from 'react';
+import { addPoint, scorePoint, callTimeout } from '../store/match/actions';
+import { useAppDispatch, useAppSelector } from '../store/store';
+import { LeftMarginBox, VolleyAlert, VolleyAvatar, VolleyCard, VolleyCardHeader, VolleyRowStack, VolleyStack } from "../util/styles";
+import { Actor } from './types';
+import Grid from "@mui/material/Grid"
+
+
+
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -72,275 +73,196 @@ export function Scoreboard() {
   }
 
   return (
-    <Box>
-      <VolleyCard>
-        <VolleyCardHeader title="Match standing" />
-        <TableContainer component={Paper}>
-          <Table aria-label="simple table" size="small">
-            <TableHead>
-              <TableRow>
-                <TableCell>Teams</TableCell>
-                <TableCell align="right">Set 1</TableCell>
-                <TableCell align="right">Set 2</TableCell>
-                <TableCell align="right">Set 3</TableCell>
-                <TableCell align="right">Add Point</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              <TableRow
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell>
-                  <Stack direction="row" spacing={2}>
-                    <VolleyAvatar
-                      sx={{
-                        bgcolor: match.homeTeam.shirtColor,
-                        height: 20,
-                        width: 20,
-                        borderColor: "#000",
-                      }}
-                      variant="rounded"
-                    >
-                      {" "}
-                    </VolleyAvatar>
-                    <Box>
-                      {match.homeTeam.player1Name} -{" "}
-                      {match.homeTeam.player2Name}
-                    </Box>
-                  </Stack>
-                </TableCell>
-                <TableCell align="right">
-                  {match.sets[0].homeTeamScore}
-                </TableCell>
-                <TableCell align="right">
-                  {match.sets[1].homeTeamScore}
-                </TableCell>
-                <TableCell align="right">
-                  {match.sets[2].homeTeamScore}
-                </TableCell>
-                <TableCell align="right">
-                  <Button variant="contained" onClick={homePoint}>
-                    <AddIcon />
-                  </Button>
-                </TableCell>
-              </TableRow>
-              <TableRow
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell>
-                  <Stack direction="row" spacing={2}>
-                    <VolleyAvatar
-                      sx={{
-                        bgcolor: match.awayTeam.shirtColor,
-                        height: 20,
-                        width: 20,
-                        borderColor: "#000",
-                      }}
-                      variant="rounded"
-                    >
-                      {" "}
-                    </VolleyAvatar>
-                    <Box>
-                      {match.awayTeam.player1Name} -{" "}
-                      {match.awayTeam.player2Name}
-                    </Box>
-                  </Stack>
-                </TableCell>
-                <TableCell align="right">
-                  {match.sets[0].awayTeamScore}
-                </TableCell>
-                <TableCell align="right">
-                  {match.sets[1].awayTeamScore}
-                </TableCell>
-                <TableCell align="right">
-                  {match.sets[2].awayTeamScore}
-                </TableCell>
-                <TableCell align="right">
-                  <Button variant="contained" onClick={awayPoint}>
-                    <AddIcon />
-                  </Button>
-                </TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <CardActions>
-          <VolleyRowStack
-            direction="row"
-            justifyContent="space-between"
-            spacing={1}
-            alignItems="center"
-          >
-            <Stack sx={{ width: 1, paddingRight: 2 }}>
-              <Box sx={{ textTransform: "uppercase", fontSize: 12 }}>
-                timeouts:{" "}
-              </Box>
-              <Stack direction="row" spacing={1}>
-                <Button
-                  disabled={match.homeTimeout}
-                  onClick={homeTeamTimeout}
-                  variant="contained"
-                  sx={{ textTransform: "none" }}
-                >
-                  <VolleyAvatar
-                    sx={{
-                      bgcolor: match.awayTimeout
-                        ? "#fff"
-                        : match.homeTeam.shirtColor,
-                      height: 20,
-                      width: 20,
-                    }}
-                    variant="rounded"
-                  >
-                    {" "}
-                  </VolleyAvatar>
-                  <LeftMarginBox>
-                    {" "}
-                    {match.homeTeam.player1Name} - {match.homeTeam.player2Name}
-                  </LeftMarginBox>
-                </Button>
-                <Button
-                  disabled={match.awayTimeout}
-                  onClick={awayTeamTimeout}
-                  variant="contained"
-                  sx={{ textTransform: "none" }}
-                >
-                  <VolleyAvatar
-                    sx={{
-                      bgcolor: match.awayTimeout
-                        ? "#fff"
-                        : match.awayTeam.shirtColor,
-                      height: 20,
-                      width: 20,
-                    }}
-                    variant="rounded"
-                  >
-                    {" "}
-                  </VolleyAvatar>
-                  <LeftMarginBox>
-                    {" "}
-                    {match.awayTeam.player1Name} - {match.awayTeam.player2Name}
-                  </LeftMarginBox>
-                </Button>
-              </Stack>
-            </Stack>
-            <Button sx={{ height: 36 }} color="warning" variant="contained">
-              Undo
+    <Grid container
+      justifyContent="center"
+      alignItems="center"
+      rowSpacing={0}
+      spacing={2}
+      columns={12}
+    >
+      <Grid item xs={12}>
+        <Grid container
+          spacing={2}
+          columns={12}
+          sx={{ alignSelf: 'center', textAlign: 'center' }}
+        >
+          <Grid item xs={4} >
+            <Button variant="outlined" onClick={awayPoint} sx={{ color: 'black' }}>
+              <Undo sx={{ fontSize: 52 }} />
             </Button>
-          </VolleyRowStack>
-        </CardActions>
-      </VolleyCard>
-
-      <VolleyCard>
-        <VolleyRowStack
-          direction="row"
+          </Grid>
+          <Grid item xs={4}>
+            clock
+          </Grid>
+          <Grid item xs={4}>
+            <Button variant="outlined" onClick={awayPoint} sx={{ color: 'black' }}>
+              <Settings sx={{ fontSize: 52 }} />
+            </Button>
+          </Grid>
+        </Grid>
+      </Grid>
+      <Grid item xs={12}>
+        <Grid container
+          spacing={2}
+          columns={42}
           justifyContent="space-between"
-          spacing={1}
-          alignItems="center"
+          sx={{ alignSelf: 'center', textAlign: 'center' }}
         >
-          <Typography sx={{ paddingLeft: 2 }}>Match events</Typography>
-          <Box sx={{ paddingRight: 2 }}>
-            <ExpandMore
-              expand={infoCollapse}
-              onClick={toggleInfo}
-              aria-expanded={infoCollapse}
-              aria-label="show more"
+          <Grid item xs={20} sx={{ textAlign: 'right' }}>
+            <Grid container
+              spacing={2}
+              justifyContent="space-between"
+              alignItems="flex-end"
+              columns={12}
             >
-              {infoCollapse && <ArrowDropDownIcon sx={{ width: 60 }} />}
-              {!infoCollapse && <ArrowDropUpIcon sx={{ width: 60 }} />}
-            </ExpandMore>
-          </Box>
-        </VolleyRowStack>
-        <Collapse in={infoCollapse} timeout="auto" unmountOnExit>
-          <VolleyStack spacing={2}>
-            <VolleyAlert severity="info">
-              This scoreboard should be so easy to use and help you in all the
-              parts of the scoreboard process so that it's no need for more
-              people then the referee
-            </VolleyAlert>
-            <VolleyAlert severity="info">
-              You can set the service order by clicking the "Set service order"
-              button above. (Optional) When you have set the service order, we
-              will help you keep track of how is serving.
-            </VolleyAlert>
-          </VolleyStack>
-        </Collapse>
-      </VolleyCard>
+              <Grid item xs={4}>
+                <Typography align='center' sx={{
+                  border: 4, borderRadius: '12px', borderColor: 'primary.main',
+                  fontSize: 42, variant: 'button', lineHeight: 1, paddingTop: 1
+                }}>
+                  0
+                </Typography>
+              </Grid>
+              <Grid item xs={8}>
+                <Typography align='right' sx={{
+                  border: 6, borderRadius: '12px', borderColor: 'primary.main',
+                  fontSize: 84, variant: 'button', lineHeight: 1, paddingTop: 2
+                }}>
+                  {match.sets[0].homeTeamScore}
+                </Typography>
+              </Grid>
 
-      <VolleyCard>
-        <VolleyRowStack
-          direction="row"
-          justifyContent="space-between"
-          spacing={1}
-          alignItems="center"
-        >
-          <Typography sx={{ paddingLeft: 2 }}>Settings</Typography>
-          <Box sx={{ paddingRight: 2 }}>
-            <ExpandMore
-              expand={infoCollapse}
-              onClick={toggleInfo}
-              aria-expanded={infoCollapse}
-              aria-label="show more"
-            >
-              {infoCollapse && <ArrowDropDownIcon sx={{ width: 60 }} />}
-              {!infoCollapse && <ArrowDropUpIcon sx={{ width: 60 }} />}
-            </ExpandMore>
-          </Box>
-        </VolleyRowStack>
-        <Collapse in={infoCollapse} timeout="auto" unmountOnExit>
-          <VolleyStack spacing={2}>
-            <VolleyAlert severity="info">
-              This scoreboard should be so easy to use and help you in all the
-              parts of the scoreboard process so that it's no need for more
-              people then the referee
-            </VolleyAlert>
-            <VolleyAlert severity="info">
-              You can set the service order by clicking the "Set service order"
-              button above. (Optional) When you have set the service order, we
-              will help you keep track of how is serving.
-            </VolleyAlert>
-          </VolleyStack>
-        </Collapse>
-      </VolleyCard>
+            </Grid>
 
-      <VolleyCard>
-        <VolleyRowStack
-          direction="row"
-          justifyContent="space-between"
-          spacing={1}
-          alignItems="center"
-        >
-          <Typography sx={{ paddingLeft: 2 }}>
-            Notes for first time users
-          </Typography>
-          <Box sx={{ paddingRight: 2 }}>
-            <ExpandMore
-              expand={infoCollapse}
-              onClick={toggleInfo}
-              aria-expanded={infoCollapse}
-              aria-label="show more"
+          </Grid>
+          <Grid item xs={20} sx={{ textAlign: 'left' }}>
+            <Grid container
+              spacing={2}
+              justifyContent="space-between"
+              alignItems="flex-end"
+              columns={12}
             >
-              {infoCollapse && <ArrowDropDownIcon sx={{ width: 60 }} />}
-              {!infoCollapse && <ArrowDropUpIcon sx={{ width: 60 }} />}
-            </ExpandMore>
-          </Box>
-        </VolleyRowStack>
-        <Collapse in={infoCollapse} timeout="auto" unmountOnExit>
-          <VolleyStack spacing={2}>
-            <VolleyAlert severity="info">
-              This scoreboard should be so easy to use and help you in all the
-              parts of the scoreboard process so that it's no need for more
-              people then the referee
-            </VolleyAlert>
-            <VolleyAlert severity="info">
-              You can set the service order by clicking the "Set service order"
-              button above. (Optional) When you have set the service order, we
-              will help you keep track of how is serving.
-            </VolleyAlert>
-          </VolleyStack>
-        </Collapse>
-      </VolleyCard>
-    </Box>
+              <Grid item xs={8}>
+                <Typography align='left' sx={{
+                  border: 6, borderRadius: '12px', borderColor: 'secondary.main',
+                  fontSize: 84, variant: 'button', lineHeight: 1, paddingTop: 2,
+                }}>
+                  {match.sets[0].awayTeamScore}
+                </Typography>
+              </Grid>
+              <Grid item xs={4}>
+                <Typography align='center' sx={{
+                  border: 4, borderRadius: '12px', borderColor: 'secondary.main',
+                  fontSize: 42, variant: 'button', lineHeight: 1, paddingTop: 1
+                }}>
+                  0
+                </Typography>
+              </Grid>
+
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
+      <Grid item xs={12}>
+        <Grid container
+          spacing={2}
+          columns={12}
+          sx={{ alignSelf: 'center', textAlign: 'center' }}
+        >
+          <Grid item xs={5} sx={{ textAlign: 'right' }}>
+            <Typography sx={{ fontSize: 18 }}>{match.homeTeam.player1Name}</Typography>
+          </Grid>
+          <Grid item xs={1} sx={{ textAlign: 'left' }}>
+
+          </Grid>
+          <Grid item xs={1} sx={{ textAlign: 'right' }}>
+
+          </Grid>
+          <Grid item xs={5} sx={{ textAlign: 'left' }}>
+            <Typography sx={{ fontSize: 18 }}>{match.awayTeam.player1Name}</Typography>
+          </Grid>
+        </Grid>
+      </Grid>
+      <Grid item xs={12}>
+        <Grid container
+          spacing={2}
+          columns={12}
+          sx={{ alignSelf: 'center', textAlign: 'center' }}
+        >
+          <Grid item xs={5} sx={{ textAlign: 'right' }}>
+            <Typography sx={{ fontSize: 18 }}>{match.homeTeam.player2Name}</Typography>
+          </Grid>
+          <Grid item xs={1} sx={{ textAlign: 'left' }}>
+
+          </Grid>
+          <Grid item xs={1} sx={{ textAlign: 'right' }}>
+            <SportsVolleyball sx={{ fontSize: 18 }} />
+          </Grid>
+          <Grid item xs={5} sx={{ textAlign: 'left' }}>
+            <Typography sx={{ fontSize: 18 }}>{match.awayTeam.player2Name}</Typography>
+          </Grid>
+        </Grid>
+      </Grid>
+      <Grid item xs={12}>
+        <Grid container
+          spacing={2}
+          columns={12}
+          sx={{ alignSelf: 'center', textAlign: 'center' }}
+        >
+          <Grid item xs={5} sx={{ textAlign: 'right' }}>
+            <Button variant="contained" onClick={homePoint}
+              sx={{ width: 1, height: 84, backgroundColor: 'primary.main' }}>
+              <Add sx={{ fontSize: 84 }} />
+            </Button>
+          </Grid>
+          <Grid item xs={2} />
+          <Grid item xs={5} sx={{ textAlign: 'left' }}>
+            <Button variant="contained" onClick={awayPoint} 
+            sx={{ width: 1, height: 84, backgroundColor: 'secondary.main' }}>
+              <Add sx={{ fontSize: 84 }} />
+            </Button>
+          </Grid>
+        </Grid>
+      </Grid>
+      <Grid item xs={12}>
+        <Grid container
+          spacing={2}
+          columns={12}
+          sx={{ alignSelf: 'center', textAlign: 'center' }}
+        >
+          <Grid item xs={5} sx={{ textAlign: 'right' }}>
+            <Button disabled={match.homeTimeout} onClick={homeTeamTimeout} variant="contained" 
+            sx={{ width: 1, textTransform: 'none' , backgroundColor: 'primary.main'}}>
+              <Typography sx={{ fontSize: 18 }}> TIMEOUT</Typography>
+            </Button>
+          </Grid>
+          <Grid item xs={2} />
+          <Grid item xs={5} sx={{ textAlign: 'left' }}>
+            <Button disabled={match.awayTimeout} onClick={awayTeamTimeout} variant="contained" 
+            sx={{ width: 1, textTransform: 'none', backgroundColor: 'secondary.main' }}>
+              <Typography sx={{ fontSize: 18 }}> TIMEOUT</Typography>
+            </Button>
+          </Grid>
+        </Grid>
+      </Grid>
+      <Grid item xs={12}>
+        <Typography sx={{ fontSize: 18 }}>
+          09:12:42 Home team scored
+        </Typography>
+        <Typography sx={{ fontSize: 18 }}>
+          09:12:06 Home team scored
+        </Typography>
+        <Typography sx={{ fontSize: 18 }}>
+          09:11:34 Away team scored
+        </Typography>
+        <Typography sx={{ fontSize: 18, textDecoration: 'line-through' }}>
+          09:11:32 Home team scored
+        </Typography>
+        <Typography sx={{ fontSize: 18 }}>
+          09:11:02 Away team scored
+        </Typography>
+      </Grid>
+    </Grid>
   );
 }
 

@@ -8,7 +8,7 @@ import { throwError } from "redux-saga-test-plan/providers"
 const initState = {
   homeTeam: {
     player1Name: "Haidar Nuri",
-    player2Name: "Øystein Grændsen",
+    player2Name: "Øystein William Grændsen",
     shirtColor: "#0000ff",
     added: true,
   },
