@@ -7,7 +7,7 @@ import { db } from "../firebase/firebase-config";
 import {
   getTournamentNamesFromFirestore,
   postTournamentNamesToFirestore,
-} from "../firebase/interaction-firebase";
+} from "../firebase/service";
 import { createTournamentAction } from "./../store/tournament/reducer";
 
 function CreateTournement() {
