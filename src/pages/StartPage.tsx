@@ -41,30 +41,38 @@ function StartPage() {
         </div>
         <main>
           <Grid container
-            direction="column"
             justifyContent="center"
             alignItems="center"
-            rowSpacing={5}
+            rowSpacing={2}
+            spacing={2}
+            columns={12}
           >
             <AppCards
               title="New Match"
               subHeader="Electronic scoresheet, no need for a seperate scorer."
               path="match"
-              iconName="volleyball"
+              iconName="timer"
               size={iconSize}
             />
             <AppCards
               title="Create Tournament"
               subHeader="Connect matches to one tournament"
               path="create-tournement"
-              iconName="player"
+              iconName="flute"
               size={iconSize}
             />
             <AppCards
               title="Live score"
               subHeader="Get livescore from an tournament or one match"
               path="tournements"
-              iconName="flute"
+              iconName="player"
+              size={iconSize}
+            />
+            <AppCards
+              title="See Tournements"
+              subHeader="See ongoing or past tournament"
+              path="tournements"
+              iconName="volleyball"
               size={iconSize}
             />
           </Grid>

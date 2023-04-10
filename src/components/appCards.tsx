@@ -32,7 +32,7 @@ const IMAGES = {
 
 export function AppCards({ title, subHeader, path, iconName, size }: AppCardsProps) {
     return (
-        <Grid sx={{ width: 1 }} item>
+        <Grid xs={12} md={6} item>
             <Card sx={{ maxWidth: 820, display: 'flex', justifyContent: 'center' }}>
                 <CardActionArea href={path}>
                     <CardContent sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
