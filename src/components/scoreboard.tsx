@@ -87,7 +87,7 @@ export function Scoreboard() {
           sx={{ alignSelf: 'center', textAlign: 'center' }}
         >
           <Grid item xs={4} >
-            <Button variant="outlined" onClick={awayPoint} sx={{ color: 'black' }}>
+            <Button variant="outlined" onClick={awayPoint} sx={{ border: 2, borderRadius: '12px', color: 'black', borderColor: 'black' }}>
               <Undo sx={{ fontSize: 52 }} />
             </Button>
           </Grid>
@@ -95,65 +95,67 @@ export function Scoreboard() {
             clock
           </Grid>
           <Grid item xs={4}>
-            <Button variant="outlined" onClick={awayPoint} sx={{ color: 'black' }}>
+            <Button variant="outlined" onClick={awayPoint} sx={{ border: 2, borderRadius: '12px', color: 'black', borderColor: 'black' }}>
               <Settings sx={{ fontSize: 52 }} />
             </Button>
           </Grid>
         </Grid>
       </Grid>
-      <Grid item xs={12}>
+      <Grid item xs={12} sm={8} md={6}>
         <Grid container
           spacing={2}
-          columns={42}
-          justifyContent="space-between"
-          sx={{ alignSelf: 'center', textAlign: 'center' }}
+          columns={12}
+          justifyContent="space-evenly"
+          alignItems="flex-end"
         >
-          <Grid item xs={20} sx={{ textAlign: 'right' }}>
+          <Grid item xs={6} sx={{ textAlign: 'right' }}>
             <Grid container
               spacing={2}
-              justifyContent="space-between"
+              justifyContent="flex-end"
               alignItems="flex-end"
               columns={12}
             >
-              <Grid item xs={4}>
+              <Grid item>
                 <Typography align='center' sx={{
                   border: 4, borderRadius: '12px', borderColor: 'primary.main',
-                  fontSize: 42, variant: 'button', lineHeight: 1, paddingTop: 1
+                  fontSize: "2rem", variant: 'button', lineHeight: 1, paddingTop: 1,
+                  paddingX: 1
                 }}>
                   0
                 </Typography>
               </Grid>
-              <Grid item xs={8}>
+              <Grid item>
                 <Typography align='right' sx={{
                   border: 6, borderRadius: '12px', borderColor: 'primary.main',
-                  fontSize: 84, variant: 'button', lineHeight: 1, paddingTop: 2
+                  fontSize: "3.5rem", variant: 'button', lineHeight: 1, paddingTop: 3,
+                  paddingX: 1, minWidth: 50
                 }}>
                   {match.sets[0].homeTeamScore}
                 </Typography>
               </Grid>
-
             </Grid>
-
           </Grid>
-          <Grid item xs={20} sx={{ textAlign: 'left' }}>
+          <Grid item xs={6} sx={{ textAlign: 'left' }}>
             <Grid container
               spacing={2}
-              justifyContent="space-between"
+              justifyContent="flex-start"
               alignItems="flex-end"
               columns={12}
             >
-              <Grid item xs={8}>
+              <Grid item>
                 <Typography align='left' sx={{
                   border: 6, borderRadius: '12px', borderColor: 'secondary.main',
-                  fontSize: 84, variant: 'button', lineHeight: 1, paddingTop: 2,
+                  fontSize: "3.5rem", variant: 'button', lineHeight: 1, paddingTop: 3,
+                  paddingX: 1, minWidth: 50
                 }}>
                   {match.sets[0].awayTeamScore}
                 </Typography>
               </Grid>
-              <Grid item xs={4}>
+              <Grid item>
                 <Typography align='center' sx={{
                   border: 4, borderRadius: '12px', borderColor: 'secondary.main',
-                  fontSize: 42, variant: 'button', lineHeight: 1, paddingTop: 1
+                  fontSize: "2rem", variant: 'button', lineHeight: 1, paddingTop: 1,
+                  paddingX: 1
                 }}>
                   0
                 </Typography>
@@ -165,81 +167,69 @@ export function Scoreboard() {
       </Grid>
       <Grid item xs={12}>
         <Grid container
-          spacing={2}
+          columnSpacing={8}
           columns={12}
           sx={{ alignSelf: 'center', textAlign: 'center' }}
         >
-          <Grid item xs={5} sx={{ textAlign: 'right' }}>
-            <Typography sx={{ fontSize: 18 }}>{match.homeTeam.player1Name}</Typography>
+          <Grid item xs={6} sx={{ textAlign: 'right' }}>
+            <Typography sx={{ fontSize: 18 }}> {match.homeTeam.player1Name} <SportsVolleyball sx={{ fontSize: 18, display: "none" }} /></Typography>
           </Grid>
-          <Grid item xs={1} sx={{ textAlign: 'left' }}>
+          <Grid item xs={6} sx={{ textAlign: 'left' }}>
+            <Typography sx={{ fontSize: 18 }}> <SportsVolleyball sx={{ fontSize: 18, display: "none" }} /> {match.awayTeam.player1Name}</Typography>
+          </Grid>
+
+          <Grid item xs={6} sx={{ textAlign: 'right' }}>
+            <Typography sx={{ fontSize: 18 }}> {match.homeTeam.player2Name} <SportsVolleyball sx={{ fontSize: 18, display: "none" }} /></Typography>
 
           </Grid>
-          <Grid item xs={1} sx={{ textAlign: 'right' }}>
 
-          </Grid>
-          <Grid item xs={5} sx={{ textAlign: 'left' }}>
-            <Typography sx={{ fontSize: 18 }}>{match.awayTeam.player1Name}</Typography>
+          <Grid item xs={6} sx={{ textAlign: 'left' }}>
+            <Typography sx={{ fontSize: 18 }}> <SportsVolleyball sx={{ fontSize: 18, display: "none" }} /> {match.awayTeam.player2Name}</Typography>
           </Grid>
         </Grid>
       </Grid>
       <Grid item xs={12}>
         <Grid container
-          spacing={2}
+          columnSpacing={8}
+          rowSpacing={2}
           columns={12}
           sx={{ alignSelf: 'center', textAlign: 'center' }}
         >
-          <Grid item xs={5} sx={{ textAlign: 'right' }}>
-            <Typography sx={{ fontSize: 18 }}>{match.homeTeam.player2Name}</Typography>
-          </Grid>
-          <Grid item xs={1} sx={{ textAlign: 'left' }}>
-
-          </Grid>
-          <Grid item xs={1} sx={{ textAlign: 'right' }}>
-            <SportsVolleyball sx={{ fontSize: 18 }} />
-          </Grid>
-          <Grid item xs={5} sx={{ textAlign: 'left' }}>
-            <Typography sx={{ fontSize: 18 }}>{match.awayTeam.player2Name}</Typography>
-          </Grid>
-        </Grid>
-      </Grid>
-      <Grid item xs={12}>
-        <Grid container
-          spacing={2}
-          columns={12}
-          sx={{ alignSelf: 'center', textAlign: 'center' }}
-        >
-          <Grid item xs={5} sx={{ textAlign: 'right' }}>
+          <Grid item xs={6} sx={{ textAlign: 'right' }}>
             <Button variant="contained" onClick={homePoint}
-              sx={{ width: 1, height: 84, backgroundColor: 'primary.main' }}>
+              sx={{
+                width: 1, height: 84, backgroundColor: 'primary.main',
+                '&:hover': { backgroundColor: 'primary.main' }
+              }}>
               <Add sx={{ fontSize: 84 }} />
             </Button>
           </Grid>
-          <Grid item xs={2} />
-          <Grid item xs={5} sx={{ textAlign: 'left' }}>
-            <Button variant="contained" onClick={awayPoint} 
-            sx={{ width: 1, height: 84, backgroundColor: 'secondary.main' }}>
+          <Grid item xs={6} sx={{ textAlign: 'left' }}>
+            <Button variant="contained" onClick={awayPoint}
+              sx={{
+                width: 1, height: 84, backgroundColor: 'secondary.main',
+                '&:hover': { backgroundColor: 'secondary.main' }
+              }}>
               <Add sx={{ fontSize: 84 }} />
             </Button>
           </Grid>
-        </Grid>
-      </Grid>
-      <Grid item xs={12}>
-        <Grid container
-          spacing={2}
-          columns={12}
-          sx={{ alignSelf: 'center', textAlign: 'center' }}
-        >
-          <Grid item xs={5} sx={{ textAlign: 'right' }}>
-            <Button disabled={match.homeTimeout} onClick={homeTeamTimeout} variant="contained" 
-            sx={{ width: 1, textTransform: 'none' , backgroundColor: 'primary.main'}}>
+
+          <Grid item xs={6} sx={{ textAlign: 'right' }}>
+            <Button disabled={match.homeTimeout} onClick={homeTeamTimeout} variant="contained"
+              sx={{
+                width: 1, textTransform: 'none', backgroundColor: 'primary.main',
+                '&:hover': { backgroundColor: 'primary.main' }
+              }}>
               <Typography sx={{ fontSize: 18 }}> TIMEOUT</Typography>
             </Button>
           </Grid>
-          <Grid item xs={2} />
-          <Grid item xs={5} sx={{ textAlign: 'left' }}>
-            <Button disabled={match.awayTimeout} onClick={awayTeamTimeout} variant="contained" 
-            sx={{ width: 1, textTransform: 'none', backgroundColor: 'secondary.main' }}>
+          <Grid item xs={6} sx={{ textAlign: 'left' }}>
+            <Button disabled={match.awayTimeout} onClick={awayTeamTimeout} variant="contained"
+              sx={{
+                width: 1, textTransform: 'none', backgroundColor: 'secondary.main',
+                '&:hover': { backgroundColor: 'secondary.main' }
+
+              }}>
               <Typography sx={{ fontSize: 18 }}> TIMEOUT</Typography>
             </Button>
           </Grid>
