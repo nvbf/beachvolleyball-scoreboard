@@ -26,7 +26,7 @@ import React, { useState } from 'react';
 import { addPoint, scorePoint, callTimeout } from '../store/match/actions';
 import { useAppDispatch, useAppSelector } from '../store/store';
 import { LeftMarginBox, VolleyAlert, VolleyAvatar, VolleyCard, VolleyCardHeader, VolleyRowStack, VolleyStack } from "../util/styles";
-import { Actor } from './types';
+import { TeamType } from './types';
 import Grid from "@mui/material/Grid"
 
 
@@ -53,19 +53,27 @@ export function Scoreboard() {
   const [infoCollapse, setInfoCollapse] = useState(false);
 
   function homePoint() {
-    dispatch(scorePoint(Actor.HomeTeam));
+    dispatch(scorePoint(TeamType.Home));
   }
 
   function awayPoint() {
-    dispatch(scorePoint(Actor.AwayTeam));
+    dispatch(scorePoint(TeamType.Away));
   }
 
   function homeTeamTimeout() {
-    dispatch(callTimeout(Actor.HomeTeam));
+    dispatch(callTimeout(TeamType.Home));
   }
 
   function awayTeamTimeout() {
-    dispatch(callTimeout(Actor.AwayTeam));
+    dispatch(callTimeout(TeamType.Away));
+  }
+
+  function undo() {
+    // dispatch(callTimeout(Actor.AwayTeam));
+  }
+
+  function toggleSettings() {
+    // dispatch(callTimeout(Actor.AwayTeam));
   }
 
   function toggleInfo() {
@@ -87,7 +95,7 @@ export function Scoreboard() {
           sx={{ alignSelf: 'center', textAlign: 'center' }}
         >
           <Grid item xs={4} >
-            <Button variant="outlined" onClick={awayPoint} sx={{ border: 2, borderRadius: '12px', color: 'black', borderColor: 'black' }}>
+            <Button variant="outlined" onClick={undo} sx={{ border: 2, borderRadius: '12px', color: 'black', borderColor: 'black' }}>
               <Undo sx={{ fontSize: 52 }} />
             </Button>
           </Grid>
@@ -95,7 +103,7 @@ export function Scoreboard() {
             clock
           </Grid>
           <Grid item xs={4}>
-            <Button variant="outlined" onClick={awayPoint} sx={{ border: 2, borderRadius: '12px', color: 'black', borderColor: 'black' }}>
+            <Button variant="outlined" onClick={toggleSettings} sx={{ border: 2, borderRadius: '12px', color: 'black', borderColor: 'black' }}>
               <Settings sx={{ fontSize: 52 }} />
             </Button>
           </Grid>

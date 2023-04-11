@@ -1,5 +1,5 @@
 import { createAction } from '@reduxjs/toolkit'
-import { Actor, NotificationType, Team } from '../../components/types'
+import { TeamType, NotificationType, Team } from '../../components/types'
 
 // Use explicity string enums, otherwise the react-devtools struggle with identifying the action, as the
 // action type then would be numbers
@@ -24,14 +24,14 @@ export enum MatchActionTypes {
 export const addHomeTeam = createAction<Team>(MatchActionTypes.ADD_HOME_TEAM)
 export const addAwayTeam = createAction<Team>(MatchActionTypes.ADD_AWAY_TEAM)
 
-export const scorePoint = createAction<Actor>(MatchActionTypes.POINT_SCORED)
-export const addPoint = createAction<Actor>(MatchActionTypes.ADD_POINT)
-export const callTimeout = createAction<Actor>(MatchActionTypes.CALL_TIMEOUT)
+export const scorePoint = createAction<TeamType>(MatchActionTypes.POINT_SCORED)
+export const addPoint = createAction<TeamType>(MatchActionTypes.ADD_POINT)
+export const callTimeout = createAction<TeamType>(MatchActionTypes.CALL_TIMEOUT)
 
 export const showNotification = createAction(MatchActionTypes.SHOW_NOTIFICATION)
 export const clearNotification = createAction<NotificationType>(MatchActionTypes.CLEAR_NOTIFICATION)
 
-export const evaluateScores = createAction<Actor>(MatchActionTypes.EVALUATE_SCORES)
+export const evaluateScores = createAction<TeamType>(MatchActionTypes.EVALUATE_SCORES)
 
 export const addTeamError = createAction<Error>(MatchActionTypes.ADD_TEAM_ERROR)
 

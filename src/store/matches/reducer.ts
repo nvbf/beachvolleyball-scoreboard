@@ -19,7 +19,7 @@ const initState = {
       matchId: "x8y9wy02ax",
       matchName: "MA42",
       tournementId: "123456",
-      timestamp: new Date(),
+      timestamp: Date.now(),
       sets: [
         {
           homeTeamScore: 21,
@@ -51,7 +51,7 @@ const initState = {
       matchId: "yrd8m3xq",
       matchName: "MA40",
       tournementId: "123456",
-      timestamp: new Date(),
+      timestamp: Date.now(),
       sets: []
     },
     {
@@ -70,7 +70,7 @@ const initState = {
       matchId: "h4d98ra9",
       matchName: "MA41",
       tournementId: "123456",
-      timestamp: new Date(),
+      timestamp: Date.now(),
       sets: [
         {
           homeTeamScore: 21,
@@ -83,7 +83,7 @@ const initState = {
       ]
     }
   ],
-  lastUpdated: new Date(),
+  lastUpdated: Date.now(),
   errorMessage: null,
 }
 

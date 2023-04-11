@@ -1,6 +1,6 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import { all, call, CallEffect, delay, put, PutEffect, select, SelectEffect, takeEvery, takeLatest } from 'redux-saga/effects'
-import { Actor, Team } from '../../components/types';
+import { TeamType, Team } from '../../components/types';
 import { addAwayTeam, addHomeTeam, addPoint, addTeamError, evaluateScores, MatchActionTypes, showNotification } from "./actions";
 
 /*
@@ -31,7 +31,7 @@ export function* setAwayTeam(action: PayloadAction<Team>): Generator<CallEffect<
   }
 }
 
-export function* scorePoint(action: PayloadAction<Actor>): Generator<CallEffect | SelectEffect | PutEffect, void, string> {
+export function* scorePoint(action: PayloadAction<TeamType>): Generator<CallEffect | SelectEffect | PutEffect, void, string> {
   try {
     yield put(addPoint(action.payload))
     console.log("Added addPoint");

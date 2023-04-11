@@ -1,9 +1,10 @@
 import { createReducer } from "@reduxjs/toolkit"
-import { Actor, EventType, NotificationType } from "../../components/types"
+import { TeamType, EventType, NotificationType } from "../../components/types"
 import { evaluateScores, isSetDone, sumScores } from "../../util/evaluateScore"
 import { matchState } from "../types"
 import { addAwayTeamType, addHomeTeamType, addPointType, clearNotificationType, MatchActionTypes, showNotificationType } from "./actions"
 import { throwError } from "redux-saga-test-plan/providers"
+import { v4 } from 'uuid';
 
 const initState = {
   homeTeam: {
@@ -28,6 +29,7 @@ const initState = {
   teamTimeout: false,
   switchSide: false,
   tournementId: -1,
+  
   events: [],
   sets: [
     {
@@ -60,18 +62,18 @@ export const matchReducer = createReducer<matchState>(initState, {
       awayTeam: action.payload
     }
   },
+  
   [MatchActionTypes.ADD_POINT]: (state, action: addPointType) => {
     const nextSets = [
       { ...state.sets[0] },
       { ...state.sets[1] },
       { ...state.sets[2] }
     ]
-    if (action.payload === Actor.HomeTeam) {
+    if (action.payload === TeamType.Home) {
       nextSets[state.currentSet].homeTeamScore++
     } else {
       nextSets[state.currentSet].awayTeamScore++
     }
-
     return {
       ...state,
       sets: nextSets,
@@ -80,14 +82,18 @@ export const matchReducer = createReducer<matchState>(initState, {
       events: [
         ...state.events,
         {
+          id: v4(),
           eventType: EventType.Score,
-          actor: action.payload,
-          timestamp: new Date(),
-          undone: false
+          team: action.payload,
+          playerId: 0,
+          timestamp: Date.now(),
+          undone: v4(),
+          author: ""
         }
       ]
     }
   },
+
   [MatchActionTypes.SHOW_NOTIFICATION]: (state, action: showNotificationType) => {
     let notificationType = evaluateScores(state.sets, state.currentSet)
 
@@ -110,8 +116,9 @@ export const matchReducer = createReducer<matchState>(initState, {
         }
     }
   },
+
   [MatchActionTypes.CALL_TIMEOUT]: (state, action: showNotificationType) => {
-    let isHomeTeam = action.payload === Actor.HomeTeam ? true : false
+    let isHomeTeam = action.payload === TeamType.Home ? true : false
     return {
       ...state,
       homeTimeout: isHomeTeam || state.homeTimeout,
@@ -120,6 +127,7 @@ export const matchReducer = createReducer<matchState>(initState, {
       showNotification: true,
     }
   },
+
   [MatchActionTypes.CLEAR_NOTIFICATION]: (state, action: clearNotificationType) => {
     switch (action.payload) {
       case NotificationType.SwitchSides:

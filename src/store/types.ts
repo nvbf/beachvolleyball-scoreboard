@@ -21,6 +21,6 @@ export type matchState = {
 
 export type matchesState = {
   matches: Match[],
-  lastUpdated: Date,
+  lastUpdated: number,
   errorMessage: Error|null,
 }

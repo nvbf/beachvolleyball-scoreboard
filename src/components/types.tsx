@@ -1,3 +1,4 @@
+import { v4 } from 'uuid';
 
 export type Team = {
   player1Name: string
@@ -7,10 +8,13 @@ export type Team = {
 }
 
 export type Event = {
+  id: string
+  timestamp: number
   eventType: EventType
-  actor: Actor
-  timestamp: Date
-  undone: boolean
+  team: TeamType
+  playerId: number
+  undone: string
+  author: string
 }
 
 export type Set = {
@@ -24,25 +28,22 @@ export type Match = {
   matchId: string,
   matchName: string,
   tournementId: string,
-  timestamp: Date,
+  timestamp: number,
   sets: Set[]
 }
 
 export enum EventType {
   Score = "SCORE",
   Timeout = "TIMEOUT",
+  Undo = "UNDO",
   FirstPlayerServer = "FIRST_PLAYER_SERVE",
   FirstTeamServer = "FIRST_TEAM_SERVE",
   ConfigureTeam = "TEAM_CONFIG"
 }
 
-export enum Actor {
-  HomePlayer1 = "HOME_1",
-  HomePlayer2 = "HOME_2",
-  AwayPlayer1 = "AWAY_1",
-  AwayPlayer2 = "AWAY_2",
-  HomeTeam = "HOME_TEAM",
-  AwayTeam = "AWAY_TEAM",
+export enum TeamType {
+  Home = "HOME",
+  Away = "AWAY",
 }
 
 export enum MatchOutcome {
