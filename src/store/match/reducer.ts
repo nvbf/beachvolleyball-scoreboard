@@ -33,8 +33,8 @@ const initState = {
   events: [],
   sets: [
     {
-      homeTeamScore: 9,
-      awayTeamScore: 10
+      homeTeamScore: 0,
+      awayTeamScore: 0
     },
     {
       homeTeamScore: 0,
@@ -87,7 +87,7 @@ export const matchReducer = createReducer<matchState>(initState, {
           team: action.payload,
           playerId: 0,
           timestamp: Date.now(),
-          undone: v4(),
+          undone: "",
           author: ""
         }
       ]

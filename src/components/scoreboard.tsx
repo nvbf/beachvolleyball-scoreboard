@@ -26,8 +26,10 @@ import React, { useState } from 'react';
 import { addPoint, scorePoint, callTimeout } from '../store/match/actions';
 import { useAppDispatch, useAppSelector } from '../store/store';
 import { LeftMarginBox, VolleyAlert, VolleyAvatar, VolleyCard, VolleyCardHeader, VolleyRowStack, VolleyStack } from "../util/styles";
-import { TeamType } from './types';
+import { TeamType, Event, EventType } from './types';
 import Grid from "@mui/material/Grid"
+import Clock from "./clock";
+import EventList from "./eventList";
 
 
 
@@ -80,6 +82,17 @@ export function Scoreboard() {
     setInfoCollapse(!infoCollapse);
   }
 
+  function returnCurrentTime() {
+    return new Date().toLocaleTimeString();
+  }
+
+  function formatEventBasedOnEventType(event: Event) {
+    if (event.eventType === EventType.Score) {
+      return `${event.team} scored a point!`
+    }
+    return event.eventType
+  }
+
   return (
     <Grid container
       justifyContent="center"
@@ -100,7 +113,9 @@ export function Scoreboard() {
             </Button>
           </Grid>
           <Grid item xs={4}>
-            clock
+            <Typography align='center' sx={{ fontSize: "2rem", variant: 'button', lineHeight: 1, paddingTop: 1, paddingX: 1 }}>
+              <Clock format="24h" />
+            </Typography>
           </Grid>
           <Grid item xs={4}>
             <Button variant="outlined" onClick={toggleSettings} sx={{ border: 2, borderRadius: '12px', color: 'black', borderColor: 'black' }}>
@@ -244,24 +259,117 @@ export function Scoreboard() {
         </Grid>
       </Grid>
       <Grid item xs={12}>
-        <Typography sx={{ fontSize: 18 }}>
-          09:12:42 Home team scored
-        </Typography>
-        <Typography sx={{ fontSize: 18 }}>
-          09:12:06 Home team scored
-        </Typography>
-        <Typography sx={{ fontSize: 18 }}>
-          09:11:34 Away team scored
-        </Typography>
-        <Typography sx={{ fontSize: 18, textDecoration: 'line-through' }}>
-          09:11:32 Home team scored
-        </Typography>
-        <Typography sx={{ fontSize: 18 }}>
-          09:11:02 Away team scored
-        </Typography>
+        <EventList events={match.events} />
       </Grid>
     </Grid>
   );
 }
 
 export default Scoreboard;
+
+export const getPointsByTeam = (events: Event[], team: TeamType): number => {
+  let points = 0;
+  let servingTeam = TeamType.Home;
+  let servingPlayer = 1;
+  let lastEventType: EventType;
+
+  events.forEach((event) => {
+    // check if the event was undone
+    if (event.undone) {
+      // if the event was undone, revert the score and serving team/player
+      if (lastEventType === EventType.Score) {
+        points -= 1;
+      }
+      servingTeam = event.team;
+      servingPlayer = event.playerId;
+    } else {
+      // check the event type and update the score and serving team/player
+      switch (event.eventType) {
+        case EventType.Score:
+          if (event.team === team) {
+            points += 1;
+          }
+          servingTeam = event.team;
+          servingPlayer = event.playerId;
+          break;
+        case EventType.FirstPlayerServer:
+          if (event.playerId !== servingPlayer) {
+            servingTeam = event.team;
+            servingPlayer = event.playerId;
+          }
+          break;
+        case EventType.FirstTeamServer:
+          servingTeam = event.team;
+          servingPlayer = event.playerId;
+          break;
+      }
+      lastEventType = event.eventType;
+    }
+  });
+
+  return points;
+};
+
+export function calculateSets(events: Event[], homeTeam: string, awayTeam: string): { [key: string]: number } {
+  const sets: { [key: string]: number } = { [homeTeam]: 0, [awayTeam]: 0 };
+  let homeScore = 0;
+  let awayScore = 0;
+  events.forEach((event) => {
+    if (event.undone) {
+      return;
+    }
+    if (event.eventType === EventType.Score) {
+      if (event.team === TeamType.Home) {
+        homeScore += 1;
+      } else {
+        awayScore += 1;
+      }
+      if (homeScore >= 21 && homeScore - awayScore >= 2) {
+        sets[homeTeam] += 1;
+        homeScore = 0;
+        awayScore = 0;
+      } else if (awayScore >= 21 && awayScore - homeScore >= 2) {
+        sets[awayTeam] += 1;
+        homeScore = 0;
+        awayScore = 0;
+      }
+    }
+  });
+  return sets;
+}
+
+export function calculatePointsAndSets(events: Event[], homeTeam: string, awayTeam: string): { [key: string]: number } {
+  const sets: { [key: string]: number } = { [homeTeam]: 0, [awayTeam]: 0 };
+  let homeSetScore = [0, 0, 0];
+  let awaySetScore = [0, 0, 0];
+  let currentSet = 1;
+  events.forEach((event) => {
+    if (event.undone) {
+      return;
+    }
+    if (event.eventType === EventType.Score) {
+      const setIndex = currentSet - 1;
+      if (event.team === TeamType.Home) {
+        homeSetScore[setIndex] += 1;
+      } else {
+        awaySetScore[setIndex] += 1;
+      }
+      if (homeSetScore[setIndex] >= 21 && homeSetScore[setIndex] - awaySetScore[setIndex] >= 2) {
+        sets[homeTeam] += 1;
+        homeSetScore[setIndex] = 0;
+        awaySetScore[setIndex] = 0;
+        currentSet += 1;
+      } else if (awaySetScore[setIndex] >= 21 && awaySetScore[setIndex] - homeSetScore[setIndex] >= 2) {
+        sets[awayTeam] += 1;
+        homeSetScore[setIndex] = 0;
+        awaySetScore[setIndex] = 0;
+        currentSet += 1;
+      }
+    }
+  });
+  const currentSetScore = {
+    [homeTeam]: homeSetScore[currentSet - 1],
+    [awayTeam]: awaySetScore[currentSet - 1],
+  };
+  return { ...sets, ...currentSetScore };
+}

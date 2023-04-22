@@ -7,16 +7,6 @@ export type Team = {
   added: boolean
 }
 
-export type Event = {
-  id: string
-  timestamp: number
-  eventType: EventType
-  team: TeamType
-  playerId: number
-  undone: string
-  author: string
-}
-
 export type Set = {
   homeTeamScore: number,
   awayTeamScore: number
@@ -30,6 +20,16 @@ export type Match = {
   tournementId: string,
   timestamp: number,
   sets: Set[]
+}
+
+export type Event = {
+  id: string
+  timestamp: number
+  eventType: EventType
+  team: TeamType
+  playerId: number
+  undone: string
+  author: string
 }
 
 export enum EventType {
