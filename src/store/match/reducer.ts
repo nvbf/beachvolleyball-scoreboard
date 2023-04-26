@@ -1,6 +1,6 @@
 import { createReducer } from "@reduxjs/toolkit"
 import { TeamType, EventType, NotificationType } from "../../components/types"
-import { evaluateScores, isSetDone, sumScores } from "../../util/evaluateScore"
+import { evaluateScores, isSetDone } from "../../util/evaluateScore"
 import { matchState } from "../types"
 import { addAwayTeamType, addHomeTeamType, addPointType, clearNotificationType, MatchActionTypes, showNotificationType } from "./actions"
 import { throwError } from "redux-saga-test-plan/providers"
@@ -31,20 +31,6 @@ const initState = {
   tournementId: -1,
   
   events: [],
-  sets: [
-    {
-      homeTeamScore: 0,
-      awayTeamScore: 0
-    },
-    {
-      homeTeamScore: 0,
-      awayTeamScore: 0
-    },
-    {
-      homeTeamScore: 0,
-      awayTeamScore: 0
-    }
-  ],
   shouldUpdate: false,
   errorMessage: null,
 }
@@ -64,21 +50,8 @@ export const matchReducer = createReducer<matchState>(initState, {
   },
   
   [MatchActionTypes.ADD_POINT]: (state, action: addPointType) => {
-    const nextSets = [
-      { ...state.sets[0] },
-      { ...state.sets[1] },
-      { ...state.sets[2] }
-    ]
-    if (action.payload === TeamType.Home) {
-      nextSets[state.currentSet].homeTeamScore++
-    } else {
-      nextSets[state.currentSet].awayTeamScore++
-    }
     return {
       ...state,
-      sets: nextSets,
-      currentSet: isSetDone(nextSets[state.currentSet], state.currentSet)
-        ? state.currentSet + 1 : state.currentSet,
       events: [
         ...state.events,
         {
@@ -95,7 +68,7 @@ export const matchReducer = createReducer<matchState>(initState, {
   },
 
   [MatchActionTypes.SHOW_NOTIFICATION]: (state, action: showNotificationType) => {
-    let notificationType = evaluateScores(state.sets, state.currentSet)
+    let notificationType = evaluateScores(state.currentSet)
 
     switch (notificationType) {
       case NotificationType.SwitchSides:

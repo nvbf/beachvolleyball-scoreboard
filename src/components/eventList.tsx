@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Event, EventType, TeamType } from "./types";
-import { Box, Button, Typography } from "@material-ui/core";
+import { Box, Button, Typography } from "@mui/material";
 
 interface Props {
   events: Event[];

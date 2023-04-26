@@ -144,7 +144,7 @@ export function Scoreboard() {
                   fontSize: "2rem", variant: 'button', lineHeight: 1, paddingTop: 1,
                   paddingX: 1
                 }}>
-                  0
+                  {getSet(match.events, TeamType.Home)}
                 </Typography>
               </Grid>
               <Grid item>
@@ -153,7 +153,7 @@ export function Scoreboard() {
                   fontSize: "3.5rem", variant: 'button', lineHeight: 1, paddingTop: 3,
                   paddingX: 1, minWidth: 50
                 }}>
-                  {match.sets[0].homeTeamScore}
+                  {getScore(match.events, TeamType.Home)}
                 </Typography>
               </Grid>
             </Grid>
@@ -171,7 +171,7 @@ export function Scoreboard() {
                   fontSize: "3.5rem", variant: 'button', lineHeight: 1, paddingTop: 3,
                   paddingX: 1, minWidth: 50
                 }}>
-                  {match.sets[0].awayTeamScore}
+                  {getScore(match.events, TeamType.Away)}
                 </Typography>
               </Grid>
               <Grid item>
@@ -180,7 +180,7 @@ export function Scoreboard() {
                   fontSize: "2rem", variant: 'button', lineHeight: 1, paddingTop: 1,
                   paddingX: 1
                 }}>
-                  0
+                  {getSet(match.events, TeamType.Away)}
                 </Typography>
               </Grid>
 
@@ -310,32 +310,44 @@ export const getPointsByTeam = (events: Event[], team: TeamType): number => {
   return points;
 };
 
-export function calculateSets(events: Event[], homeTeam: string, awayTeam: string): { [key: string]: number } {
-  const sets: { [key: string]: number } = { [homeTeam]: 0, [awayTeam]: 0 };
-  let homeScore = 0;
-  let awayScore = 0;
-  events.forEach((event) => {
-    if (event.undone) {
-      return;
-    }
-    if (event.eventType === EventType.Score) {
-      if (event.team === TeamType.Home) {
-        homeScore += 1;
-      } else {
-        awayScore += 1;
-      }
-      if (homeScore >= 21 && homeScore - awayScore >= 2) {
-        sets[homeTeam] += 1;
-        homeScore = 0;
-        awayScore = 0;
-      } else if (awayScore >= 21 && awayScore - homeScore >= 2) {
-        sets[awayTeam] += 1;
-        homeScore = 0;
-        awayScore = 0;
-      }
-    }
-  });
-  return sets;
+// export function calculateSets(events: Event[], homeTeam: string, awayTeam: string): { [key: string]: number } {
+//   const sets: { [key: string]: number } = { [homeTeam]: 0, [awayTeam]: 0 };
+//   let homeScore = 0;
+//   let awayScore = 0;
+//   events.forEach((event) => {
+//     if (event.undone) {
+//       return;
+//     }
+//     if (event.eventType === EventType.Score) {
+//       if (event.team === TeamType.Home) {
+//         homeScore += 1;
+//       } else {
+//         awayScore += 1;
+//       }
+//       if (homeScore >= 21 && homeScore - awayScore >= 2) {
+//         sets[homeTeam] += 1;
+//         homeScore = 0;
+//         awayScore = 0;
+//       } else if (awayScore >= 21 && awayScore - homeScore >= 2) {
+//         sets[awayTeam] += 1;
+//         homeScore = 0;
+//         awayScore = 0;
+//       }
+//     }
+//   });
+//   return sets;
+// }
+
+function getScore(events: Event[], team: string) {
+  let score = calculatePointsAndSets(events, TeamType.Home, TeamType.Away)
+  console.log(score)
+  return score[team]
+}
+
+
+function getSet(events: Event[], team: string) {
+  let sets, score = calculateSets(events, TeamType.Home, TeamType.Away)
+  return score[team]
 }
 
 export function calculatePointsAndSets(events: Event[], homeTeam: string, awayTeam: string): { [key: string]: number } {
@@ -371,5 +383,39 @@ export function calculatePointsAndSets(events: Event[], homeTeam: string, awayTe
     [homeTeam]: homeSetScore[currentSet - 1],
     [awayTeam]: awaySetScore[currentSet - 1],
   };
-  return { ...sets, ...currentSetScore };
+  console.log(sets)
+  return currentSetScore;
+}
+
+export function calculateSets(events: Event[], homeTeam: string, awayTeam: string): { [key: string]: number } {
+  const sets: { [key: string]: number } = { [homeTeam]: 0, [awayTeam]: 0 };
+  let homeSetScore = [0, 0, 0];
+  let awaySetScore = [0, 0, 0];
+  let currentSet = 1;
+  events.forEach((event) => {
+    if (event.undone) {
+      return;
+    }
+    if (event.eventType === EventType.Score) {
+      const setIndex = currentSet - 1;
+      if (event.team === TeamType.Home) {
+        homeSetScore[setIndex] += 1;
+      } else {
+        awaySetScore[setIndex] += 1;
+      }
+      if (homeSetScore[setIndex] >= 21 && homeSetScore[setIndex] - awaySetScore[setIndex] >= 2) {
+        sets[homeTeam] += 1;
+        homeSetScore[setIndex] = 0;
+        awaySetScore[setIndex] = 0;
+        currentSet += 1;
+      } else if (awaySetScore[setIndex] >= 21 && awaySetScore[setIndex] - homeSetScore[setIndex] >= 2) {
+        sets[awayTeam] += 1;
+        homeSetScore[setIndex] = 0;
+        awaySetScore[setIndex] = 0;
+        currentSet += 1;
+      }
+    }
+  });
+
+  return sets ;
 }

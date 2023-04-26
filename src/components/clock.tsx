@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Typography from "@material-ui/core/Typography";
+import Typography from "@mui/material/Typography";
 
 interface Props {
   format?: "12h" | "24h";

@@ -1,4 +1,4 @@
-import { MatchOutcome, NotificationType, Set } from "../components/types";
+import { MatchOutcome, NotificationType, Set, Event, EventType, } from "../components/types";
 import { showNotification } from "../store/match/actions";
 import { useAppDispatch, useAppSelector } from "../store/store";
 
@@ -46,17 +46,17 @@ export function checkOutcome(sets: Set[]): MatchOutcome {
 }
 
 
-export function evaluateScores(sets: Set[], currentSet: number) {
+export function evaluateScores(currentSet: number) {
     console.log("In useEvaluateScores");
 
     let sideChange = false
-    if (currentSet === 2) {
-        sideChange = (sumScores(sets[currentSet]) % 5) === 0 && sumScores(sets[currentSet]) !== 0
-    } else {
-        sideChange = (sumScores(sets[currentSet]) % 7) === 0 && sumScores(sets[currentSet]) !== 0
-    }
+    // if (currentSet === 2) {
+    //     sideChange = (sumScores(sets[currentSet]) % 5) === 0 && sumScores(sets[currentSet]) !== 0
+    // } else {
+    //     sideChange = (sumScores(sets[currentSet]) % 7) === 0 && sumScores(sets[currentSet]) !== 0
+    // }
 
-    let technicalTimeout = sumScores(sets[currentSet]) === 21 && currentSet !== 2
+    let technicalTimeout = false // sumScores(sets[currentSet]) === 21 && currentSet !== 2
     if (technicalTimeout) {
         return NotificationType.TechnicalTimeout
     } else if (sideChange) {
@@ -65,6 +65,6 @@ export function evaluateScores(sets: Set[], currentSet: number) {
     return NotificationType.Nothing
 }
 
-export function sumScores(set: Set) {
-    return set.awayTeamScore + set.homeTeamScore
-}
+// export function sumScores(set: Set) {
+//     return set.awayTeamScore + set.homeTeamScore
+// }

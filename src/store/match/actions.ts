@@ -12,6 +12,8 @@ export enum MatchActionTypes {
   CALL_TIMEOUT = 'CALL_TIMEOUT',
   SWITCH_SIDES = 'SWITCH_SIDES',
 
+  UPDATE_SCORES = 'UPDATE_SCORES',
+
   TECHNICAL_TIMEOUT = 'CALL_TIMEOUT',
   EVALUATE_SCORES = 'EVALUATE_SCORES',
 
@@ -27,6 +29,8 @@ export const addAwayTeam = createAction<Team>(MatchActionTypes.ADD_AWAY_TEAM)
 export const scorePoint = createAction<TeamType>(MatchActionTypes.POINT_SCORED)
 export const addPoint = createAction<TeamType>(MatchActionTypes.ADD_POINT)
 export const callTimeout = createAction<TeamType>(MatchActionTypes.CALL_TIMEOUT)
+
+export const updateScores = createAction<TeamType>(MatchActionTypes.UPDATE_SCORES)
 
 export const showNotification = createAction(MatchActionTypes.SHOW_NOTIFICATION)
 export const clearNotification = createAction<NotificationType>(MatchActionTypes.CLEAR_NOTIFICATION)

@@ -14,7 +14,6 @@ export type matchState = {
   teamTimeout: boolean,
   switchSide: boolean,
   events: Event[],
-  sets: Set[],
   shouldUpdate: boolean,
   errorMessage: Error|null,
 }
