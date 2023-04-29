@@ -107,19 +107,19 @@ export function Scoreboard() {
           columns={12}
           sx={{ alignSelf: 'center', textAlign: 'center' }}
         >
-          <Grid item xs={4} >
+          <Grid item xs={3} >
             <Button variant="outlined" onClick={undo} sx={{ border: 2, borderRadius: '12px', color: 'black', borderColor: 'black' }}>
-              <Undo sx={{ fontSize: 52 }} />
+              <Undo sx={{ fontSize: 42 }} />
             </Button>
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={6}>
             <Typography align='center' sx={{ fontSize: "2rem", variant: 'button', lineHeight: 1, paddingTop: 1, paddingX: 1 }}>
               <Clock format="24h" />
             </Typography>
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={3}>
             <Button variant="outlined" onClick={toggleSettings} sx={{ border: 2, borderRadius: '12px', color: 'black', borderColor: 'black' }}>
-              <Settings sx={{ fontSize: 52 }} />
+              <Settings sx={{ fontSize: 42 }} />
             </Button>
           </Grid>
         </Grid>

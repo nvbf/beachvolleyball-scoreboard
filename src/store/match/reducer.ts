@@ -2,11 +2,7 @@ import { createReducer } from "@reduxjs/toolkit"
 import { TeamType, EventType, NotificationType, Event } from "../../components/types"
 import { evaluateScores, isSetDone } from "../../util/evaluateScore"
 import { matchState } from "../types"
-<<<<<<< HEAD
-import { addAwayTeamType, addHomeTeamType, addPointType, clearNotificationType, MatchActionTypes, showNotificationType, undoLastEventType } from "./actions"
-=======
 import { addAwayTeamType, addHomeTeamType, addPointType, callTimeoutType, clearNotificationType, MatchActionTypes, showNotificationType, undoLastEventType } from "./actions"
->>>>>>> 73435b1 (feat: added undo functionality)
 import { throwError } from "redux-saga-test-plan/providers"
 import { v4 } from 'uuid';
 
