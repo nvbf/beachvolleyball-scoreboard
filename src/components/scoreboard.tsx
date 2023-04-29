@@ -195,19 +195,27 @@ export function Scoreboard() {
           sx={{ alignSelf: 'center', textAlign: 'center' }}
         >
           <Grid item xs={6} sx={{ textAlign: 'right' }}>
-            <Typography sx={{ fontSize: 18 }}> {match.homeTeam.player1Name} <SportsVolleyball sx={{ fontSize: 18, display: "none" }} /></Typography>
+            <Typography sx={{ fontSize: 18 }}> {match.homeTeam.player1Name} <SportsVolleyball sx={{
+              fontSize: 18, display: getServer(match.events, TeamType.Home) === 1 ? "true" : "none"
+            }} /></Typography>
           </Grid>
           <Grid item xs={6} sx={{ textAlign: 'left' }}>
-            <Typography sx={{ fontSize: 18 }}> <SportsVolleyball sx={{ fontSize: 18, display: "none" }} /> {match.awayTeam.player1Name}</Typography>
+            <Typography sx={{ fontSize: 18 }}> <SportsVolleyball sx={{
+              fontSize: 18, display: getServer(match.events, TeamType.Away) === 1 ? "true" : "none"
+            }} /> {match.awayTeam.player1Name}</Typography>
           </Grid>
 
           <Grid item xs={6} sx={{ textAlign: 'right' }}>
-            <Typography sx={{ fontSize: 18 }}> {match.homeTeam.player2Name} <SportsVolleyball sx={{ fontSize: 18, display: "none" }} /></Typography>
+            <Typography sx={{ fontSize: 18 }}> {match.homeTeam.player2Name} <SportsVolleyball sx={{
+              fontSize: 18, display: getServer(match.events, TeamType.Home) === 2 ? "true" : "none"
+            }} /></Typography>
 
           </Grid>
 
           <Grid item xs={6} sx={{ textAlign: 'left' }}>
-            <Typography sx={{ fontSize: 18 }}> <SportsVolleyball sx={{ fontSize: 18, display: "none" }} /> {match.awayTeam.player2Name}</Typography>
+            <Typography sx={{ fontSize: 18 }}> <SportsVolleyball sx={{
+              fontSize: 18, display: getServer(match.events, TeamType.Away) === 2 ? "true" : "none"
+            }} /> {match.awayTeam.player2Name}</Typography>
           </Grid>
         </Grid>
       </Grid>
@@ -267,76 +275,54 @@ export function Scoreboard() {
 
 export default Scoreboard;
 
-export const getPointsByTeam = (events: Event[], team: TeamType): number => {
-  let points = 0;
+export const getServer = (events: Event[], team: TeamType): number => {
+  let servingPlayer = 0;
   let servingTeam = TeamType.Home;
-  let servingPlayer = 1;
-  let lastEventType: EventType;
+  let lastServingTeam: TeamType;
+  let lastServingPlayer: Number;
+  let firstTeam: TeamType;
+  let firstServer: number;
 
   events.forEach((event) => {
     // check if the event was undone
-    if (event.undone) {
-      // if the event was undone, revert the score and serving team/player
-      if (lastEventType === EventType.Score) {
-        points -= 1;
-      }
-      servingTeam = event.team;
-      servingPlayer = event.playerId;
-    } else {
+    if (!event.undone) {
       // check the event type and update the score and serving team/player
       switch (event.eventType) {
         case EventType.Score:
-          if (event.team === team) {
-            points += 1;
+          if (lastServingTeam !== event.team) {
+            servingTeam = event.team
+            if (servingTeam !== team) {
+              break;
+            }
+            if (lastServingPlayer === 1) {
+              servingPlayer = 2;
+            } else {
+              servingPlayer = 1;
+            }
           }
-          servingTeam = event.team;
-          servingPlayer = event.playerId;
           break;
         case EventType.FirstPlayerServer:
-          if (event.playerId !== servingPlayer) {
-            servingTeam = event.team;
+          if (event.team === team) {
+            firstServer = event.playerId;
             servingPlayer = event.playerId;
           }
           break;
         case EventType.FirstTeamServer:
+          firstTeam = event.team;
           servingTeam = event.team;
-          servingPlayer = event.playerId;
           break;
       }
-      lastEventType = event.eventType;
+      lastServingTeam = servingTeam;
+      lastServingPlayer = servingPlayer
     }
   });
 
-  return points;
+  if (servingTeam == team) {
+    return servingPlayer
+  } else {
+    return 0
+  }
 };
-
-// export function calculateSets(events: Event[], homeTeam: string, awayTeam: string): { [key: string]: number } {
-//   const sets: { [key: string]: number } = { [homeTeam]: 0, [awayTeam]: 0 };
-//   let homeScore = 0;
-//   let awayScore = 0;
-//   events.forEach((event) => {
-//     if (event.undone) {
-//       return;
-//     }
-//     if (event.eventType === EventType.Score) {
-//       if (event.team === TeamType.Home) {
-//         homeScore += 1;
-//       } else {
-//         awayScore += 1;
-//       }
-//       if (homeScore >= 21 && homeScore - awayScore >= 2) {
-//         sets[homeTeam] += 1;
-//         homeScore = 0;
-//         awayScore = 0;
-//       } else if (awayScore >= 21 && awayScore - homeScore >= 2) {
-//         sets[awayTeam] += 1;
-//         homeScore = 0;
-//         awayScore = 0;
-//       }
-//     }
-//   });
-//   return sets;
-// }
 
 function getScore(events: Event[], team: string) {
   let score = calculatePointsAndSets(events, TeamType.Home, TeamType.Away)
@@ -346,7 +332,7 @@ function getScore(events: Event[], team: string) {
 
 
 function getSet(events: Event[], team: string) {
-  let sets, score = calculateSets(events, TeamType.Home, TeamType.Away)
+  let score = calculateSets(events, TeamType.Home, TeamType.Away)
   return score[team]
 }
 
@@ -417,5 +403,5 @@ export function calculateSets(events: Event[], homeTeam: string, awayTeam: strin
     }
   });
 
-  return sets ;
+  return sets;
 }

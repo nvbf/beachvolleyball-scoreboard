@@ -30,7 +30,29 @@ const initState = {
   switchSide: false,
   tournementId: -1,
   
-  events: [],
+  events: [
+    {
+      id: v4(),
+      eventType: EventType.FirstTeamServer,
+      team: TeamType.Away,
+      playerId: 0,
+      timestamp: Date.now()
+    },
+    {
+      id: v4(),
+      eventType: EventType.FirstPlayerServer,
+      team: TeamType.Away,
+      playerId: 1,
+      timestamp: Date.now()
+    },
+    {
+      id: v4(),
+      eventType: EventType.FirstPlayerServer,
+      team: TeamType.Home,
+      playerId: 2,
+      timestamp: Date.now()
+    },
+  ],
   shouldUpdate: false,
   errorMessage: null,
 }
