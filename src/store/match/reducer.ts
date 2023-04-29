@@ -19,17 +19,14 @@ const initState = {
     shirtColor: "#ff0000",
     added: true,
   },
-  currentSet: 0,
   matchId: "",
-  homeTimeout: false,
-  awayTimeout: false,
   finished: false,
   showNotification: false,
   technicalTimeout: false,
   teamTimeout: false,
   switchSide: false,
   tournementId: -1,
-  
+
   events: [
     {
       id: v4(),
@@ -58,20 +55,20 @@ const initState = {
 }
 
 export const matchReducer = createReducer<matchState>(initState, {
-  [MatchActionTypes.ADD_HOME_TEAM]: (state, action: addHomeTeamType) => {
+  [MatchActionTypes.ADD_HOME_TEAM]: (state: matchState, action: addHomeTeamType) => {
     return {
       ...state,
       homeTeam: action.payload
     }
   },
-  [MatchActionTypes.ADD_AWAY_TEAM]: (state, action: addAwayTeamType) => {
+  [MatchActionTypes.ADD_AWAY_TEAM]: (state: matchState, action: addAwayTeamType) => {
     return {
       ...state,
       awayTeam: action.payload
     }
   },
-  
-  [MatchActionTypes.ADD_POINT]: (state, action: addPointType) => {
+
+  [MatchActionTypes.ADD_POINT]: (state: matchState, action: addPointType) => {
     return {
       ...state,
       events: [
@@ -89,8 +86,8 @@ export const matchReducer = createReducer<matchState>(initState, {
     }
   },
 
-  [MatchActionTypes.SHOW_NOTIFICATION]: (state, action: showNotificationType) => {
-    let notificationType = evaluateScores(state.currentSet)
+  [MatchActionTypes.SHOW_NOTIFICATION]: (state: matchState, action: showNotificationType) => {
+    let notificationType = evaluateScores(1)
 
     switch (notificationType) {
       case NotificationType.SwitchSides:
@@ -112,18 +109,28 @@ export const matchReducer = createReducer<matchState>(initState, {
     }
   },
 
-  [MatchActionTypes.CALL_TIMEOUT]: (state, action: showNotificationType) => {
+  [MatchActionTypes.CALL_TIMEOUT]: (state: matchState, action: showNotificationType) => {
     let isHomeTeam = action.payload === TeamType.Home ? true : false
     return {
       ...state,
-      homeTimeout: isHomeTeam || state.homeTimeout,
-      awayTimeout: !isHomeTeam || state.awayTimeout,
       teamTimeout: true,
       showNotification: true,
+      events: [
+        ...state.events,
+        {
+          id: v4(),
+          eventType: EventType.Timeout,
+          team: action.payload,
+          playerId: 0,
+          timestamp: Date.now(),
+          undone: "",
+          author: ""
+        }
+      ]
     }
   },
 
-  [MatchActionTypes.CLEAR_NOTIFICATION]: (state, action: clearNotificationType) => {
+  [MatchActionTypes.CLEAR_NOTIFICATION]: (state: matchState, action: clearNotificationType) => {
     switch (action.payload) {
       case NotificationType.SwitchSides:
         return {

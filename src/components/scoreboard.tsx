@@ -246,7 +246,7 @@ export function Scoreboard() {
           </Grid>
 
           <Grid item xs={6} sx={{ textAlign: 'right' }}>
-            <Button disabled={match.homeTimeout} onClick={homeTeamTimeout} variant="contained"
+            <Button disabled={hasTakenTimeout(match.events, TeamType.Home)} onClick={homeTeamTimeout} variant="contained"
               sx={{
                 width: 1, textTransform: 'none', backgroundColor: 'primary.main',
                 '&:hover': { backgroundColor: 'primary.main' }
@@ -255,7 +255,7 @@ export function Scoreboard() {
             </Button>
           </Grid>
           <Grid item xs={6} sx={{ textAlign: 'left' }}>
-            <Button disabled={match.awayTimeout} onClick={awayTeamTimeout} variant="contained"
+            <Button disabled={hasTakenTimeout(match.events, TeamType.Away)} onClick={awayTeamTimeout} variant="contained"
               sx={{
                 width: 1, textTransform: 'none', backgroundColor: 'secondary.main',
                 '&:hover': { backgroundColor: 'secondary.main' }
@@ -280,8 +280,6 @@ export const getServer = (events: Event[], team: TeamType): number => {
   let servingTeam = TeamType.Home;
   let lastServingTeam: TeamType;
   let lastServingPlayer: Number;
-  let firstTeam: TeamType;
-  let firstServer: number;
 
   events.forEach((event) => {
     // check if the event was undone
@@ -303,12 +301,10 @@ export const getServer = (events: Event[], team: TeamType): number => {
           break;
         case EventType.FirstPlayerServer:
           if (event.team === team) {
-            firstServer = event.playerId;
             servingPlayer = event.playerId;
           }
           break;
         case EventType.FirstTeamServer:
-          firstTeam = event.team;
           servingTeam = event.team;
           break;
       }
@@ -325,7 +321,7 @@ export const getServer = (events: Event[], team: TeamType): number => {
 };
 
 function getScore(events: Event[], team: string) {
-  let score = calculatePointsAndSets(events, TeamType.Home, TeamType.Away)
+  let score = calculatePoints(events, TeamType.Home, TeamType.Away)
   console.log(score)
   return score[team]
 }
@@ -336,7 +332,7 @@ function getSet(events: Event[], team: string) {
   return score[team]
 }
 
-export function calculatePointsAndSets(events: Event[], homeTeam: string, awayTeam: string): { [key: string]: number } {
+export function calculatePoints(events: Event[], homeTeam: string, awayTeam: string): { [key: string]: number } {
   const sets: { [key: string]: number } = { [homeTeam]: 0, [awayTeam]: 0 };
   let homeSetScore = [0, 0, 0];
   let awaySetScore = [0, 0, 0];
@@ -352,16 +348,28 @@ export function calculatePointsAndSets(events: Event[], homeTeam: string, awayTe
       } else {
         awaySetScore[setIndex] += 1;
       }
-      if (homeSetScore[setIndex] >= 21 && homeSetScore[setIndex] - awaySetScore[setIndex] >= 2) {
-        sets[homeTeam] += 1;
-        homeSetScore[setIndex] = 0;
-        awaySetScore[setIndex] = 0;
-        currentSet += 1;
-      } else if (awaySetScore[setIndex] >= 21 && awaySetScore[setIndex] - homeSetScore[setIndex] >= 2) {
-        sets[awayTeam] += 1;
-        homeSetScore[setIndex] = 0;
-        awaySetScore[setIndex] = 0;
-        currentSet += 1;
+      if (currentSet === 1 || currentSet === 2) {
+        if (homeSetScore[setIndex] >= 21 && homeSetScore[setIndex] - awaySetScore[setIndex] >= 2) {
+          sets[homeTeam] += 1;
+          homeSetScore[setIndex] = 0;
+          awaySetScore[setIndex] = 0;
+          currentSet += 1;
+        } else if (awaySetScore[setIndex] >= 21 && awaySetScore[setIndex] - homeSetScore[setIndex] >= 2) {
+          sets[awayTeam] += 1;
+          homeSetScore[setIndex] = 0;
+          awaySetScore[setIndex] = 0;
+          currentSet += 1;
+        }
+      } else {
+        if (homeSetScore[setIndex] >= 15 && homeSetScore[setIndex] - awaySetScore[setIndex] >= 2) {
+          sets[homeTeam] += 1;
+          homeSetScore[setIndex] = 0;
+          awaySetScore[setIndex] = 0;
+        } else if (awaySetScore[setIndex] >= 15 && awaySetScore[setIndex] - homeSetScore[setIndex] >= 2) {
+          sets[awayTeam] += 1;
+          homeSetScore[setIndex] = 0;
+          awaySetScore[setIndex] = 0;
+        }
       }
     }
   });
@@ -389,19 +397,85 @@ export function calculateSets(events: Event[], homeTeam: string, awayTeam: strin
       } else {
         awaySetScore[setIndex] += 1;
       }
-      if (homeSetScore[setIndex] >= 21 && homeSetScore[setIndex] - awaySetScore[setIndex] >= 2) {
-        sets[homeTeam] += 1;
-        homeSetScore[setIndex] = 0;
-        awaySetScore[setIndex] = 0;
-        currentSet += 1;
-      } else if (awaySetScore[setIndex] >= 21 && awaySetScore[setIndex] - homeSetScore[setIndex] >= 2) {
-        sets[awayTeam] += 1;
-        homeSetScore[setIndex] = 0;
-        awaySetScore[setIndex] = 0;
-        currentSet += 1;
+      if (currentSet === 1 || currentSet === 2) {
+        if (homeSetScore[setIndex] >= 21 && homeSetScore[setIndex] - awaySetScore[setIndex] >= 2) {
+          sets[homeTeam] += 1;
+          homeSetScore[setIndex] = 0;
+          awaySetScore[setIndex] = 0;
+          currentSet += 1;
+        } else if (awaySetScore[setIndex] >= 21 && awaySetScore[setIndex] - homeSetScore[setIndex] >= 2) {
+          sets[awayTeam] += 1;
+          homeSetScore[setIndex] = 0;
+          awaySetScore[setIndex] = 0;
+          currentSet += 1;
+        }
+      } else {
+        if (homeSetScore[setIndex] >= 15 && homeSetScore[setIndex] - awaySetScore[setIndex] >= 2) {
+          sets[homeTeam] += 1;
+          homeSetScore[setIndex] = 0;
+          awaySetScore[setIndex] = 0;
+          currentSet += 1;
+        } else if (awaySetScore[setIndex] >= 15 && awaySetScore[setIndex] - homeSetScore[setIndex] >= 2) {
+          sets[awayTeam] += 1;
+          homeSetScore[setIndex] = 0;
+          awaySetScore[setIndex] = 0;
+          currentSet += 1;
+        }
       }
     }
   });
-
   return sets;
+}
+
+export function hasTakenTimeout(events: Event[], team: TeamType): boolean {
+  const sets: { [key: string]: number } = { [TeamType.Home]: 0, [TeamType.Away]: 0 };
+  let homeSetScore = [0, 0, 0];
+  let awaySetScore = [0, 0, 0];
+  let currentSet = 1;
+  let hasTakenTimeout = false
+  events.forEach((event) => {
+    if (event.undone) {
+      return;
+    }
+    if (event.eventType === EventType.Score) {
+      const setIndex = currentSet - 1;
+      if (event.team === TeamType.Home) {
+        homeSetScore[setIndex] += 1;
+      } else {
+        awaySetScore[setIndex] += 1;
+      }
+      if (currentSet === 1 || currentSet === 2) {
+        if (homeSetScore[setIndex] >= 21 && homeSetScore[setIndex] - awaySetScore[setIndex] >= 2) {
+          sets[TeamType.Home] += 1;
+          homeSetScore[setIndex] = 0;
+          awaySetScore[setIndex] = 0;
+          currentSet += 1;
+          hasTakenTimeout = false
+        } else if (awaySetScore[setIndex] >= 21 && awaySetScore[setIndex] - homeSetScore[setIndex] >= 2) {
+          sets[TeamType.Away] += 1;
+          homeSetScore[setIndex] = 0;
+          awaySetScore[setIndex] = 0;
+          currentSet += 1;
+          hasTakenTimeout = false
+        }
+      } else {
+        if (homeSetScore[setIndex] >= 15 && homeSetScore[setIndex] - awaySetScore[setIndex] >= 2) {
+          sets[TeamType.Home] += 1;
+          homeSetScore[setIndex] = 0;
+          awaySetScore[setIndex] = 0;
+          currentSet += 1;
+        } else if (awaySetScore[setIndex] >= 15 && awaySetScore[setIndex] - homeSetScore[setIndex] >= 2) {
+          sets[TeamType.Away] += 1;
+          homeSetScore[setIndex] = 0;
+          awaySetScore[setIndex] = 0;
+          currentSet += 1;
+        }
+      }
+    } else if (event.eventType === EventType.Timeout) {
+      if (event.team === team) {
+        hasTakenTimeout = true
+      }
+    }
+  });
+  return hasTakenTimeout;
 }
