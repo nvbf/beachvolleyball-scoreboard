@@ -14,6 +14,8 @@ export enum MatchActionTypes {
 
   UPDATE_SCORES = 'UPDATE_SCORES',
 
+  UNDO_LAST_EVENT = 'UNDO_LAST_EVENT',
+
   TECHNICAL_TIMEOUT = 'CALL_TIMEOUT',
   EVALUATE_SCORES = 'EVALUATE_SCORES',
 
@@ -32,6 +34,8 @@ export const callTimeout = createAction<TeamType>(MatchActionTypes.CALL_TIMEOUT)
 
 export const updateScores = createAction<TeamType>(MatchActionTypes.UPDATE_SCORES)
 
+export const undoLastEvent = createAction(MatchActionTypes.UNDO_LAST_EVENT)
+
 export const showNotification = createAction(MatchActionTypes.SHOW_NOTIFICATION)
 export const clearNotification = createAction<NotificationType>(MatchActionTypes.CLEAR_NOTIFICATION)
 
@@ -45,6 +49,8 @@ export type addAwayTeamType =  ReturnType<typeof addAwayTeam>
 export type scorePointType =  ReturnType<typeof scorePoint>
 export type addPointType =  ReturnType<typeof addPoint>
 export type callTimeoutType =  ReturnType<typeof callTimeout>
+
+export type undoLastEventType = ReturnType<typeof undoLastEvent>
 
 export type showNotificationType =  ReturnType<typeof showNotification>
 export type clearNotificationType =  ReturnType<typeof clearNotification>

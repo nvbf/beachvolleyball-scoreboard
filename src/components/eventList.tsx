@@ -58,7 +58,7 @@ const EventList: React.FC<Props> = ({ events }) => {
     }
   };
 
-  const sortedEvents = [...events].sort((a, b) => b.timestamp - a.timestamp);
+  const sortedEvents = [...events].sort((a, b) => b.timestamp - a.timestamp).filter(e => e.eventType !== EventType.Undo);
   const slicedEvents = isExpanded ? sortedEvents : sortedEvents.slice(0, 3);
 
   return (

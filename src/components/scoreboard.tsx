@@ -23,7 +23,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import React, { useState } from 'react';
-import { addPoint, scorePoint, callTimeout } from '../store/match/actions';
+import { addPoint, scorePoint, callTimeout, undoLastEvent } from '../store/match/actions';
 import { useAppDispatch, useAppSelector } from '../store/store';
 import { LeftMarginBox, VolleyAlert, VolleyAvatar, VolleyCard, VolleyCardHeader, VolleyRowStack, VolleyStack } from "../util/styles";
 import { TeamType, Event, EventType } from './types';
@@ -71,7 +71,7 @@ export function Scoreboard() {
   }
 
   function undo() {
-    // dispatch(callTimeout(Actor.AwayTeam));
+    dispatch(undoLastEvent());
   }
 
   function toggleSettings() {

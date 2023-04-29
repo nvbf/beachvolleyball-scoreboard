@@ -30,6 +30,7 @@ export type Event = {
   playerId: number
   undone: string
   author: string
+  reference: string
 }
 
 export enum EventType {

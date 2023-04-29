@@ -1,8 +1,12 @@
 import { createReducer } from "@reduxjs/toolkit"
-import { TeamType, EventType, NotificationType } from "../../components/types"
+import { TeamType, EventType, NotificationType, Event } from "../../components/types"
 import { evaluateScores, isSetDone } from "../../util/evaluateScore"
 import { matchState } from "../types"
-import { addAwayTeamType, addHomeTeamType, addPointType, clearNotificationType, MatchActionTypes, showNotificationType } from "./actions"
+<<<<<<< HEAD
+import { addAwayTeamType, addHomeTeamType, addPointType, clearNotificationType, MatchActionTypes, showNotificationType, undoLastEventType } from "./actions"
+=======
+import { addAwayTeamType, addHomeTeamType, addPointType, callTimeoutType, clearNotificationType, MatchActionTypes, showNotificationType, undoLastEventType } from "./actions"
+>>>>>>> 73435b1 (feat: added undo functionality)
 import { throwError } from "redux-saga-test-plan/providers"
 import { v4 } from 'uuid';
 
@@ -33,21 +37,30 @@ const initState = {
       eventType: EventType.FirstTeamServer,
       team: TeamType.Away,
       playerId: 0,
-      timestamp: Date.now()
+      timestamp: Date.now(),
+      undone: "",
+      author: "",
+      reference: ""
     },
     {
       id: v4(),
       eventType: EventType.FirstPlayerServer,
       team: TeamType.Away,
       playerId: 1,
-      timestamp: Date.now()
+      timestamp: Date.now(),
+      undone: "",
+      author: "",
+      reference: ""
     },
     {
       id: v4(),
       eventType: EventType.FirstPlayerServer,
       team: TeamType.Home,
       playerId: 2,
-      timestamp: Date.now()
+      timestamp: Date.now(),
+      undone: "",
+      author: "",
+      reference: ""
     },
   ],
   shouldUpdate: false,
@@ -80,10 +93,43 @@ export const matchReducer = createReducer<matchState>(initState, {
           playerId: 0,
           timestamp: Date.now(),
           undone: "",
-          author: ""
+          author: "",
+          reference: ""
         }
       ]
     }
+  },
+
+  [MatchActionTypes.UNDO_LAST_EVENT]: (state: matchState, action: undoLastEventType) => {
+    const { events } = state;
+    const reversedEvents = [...events].reverse();
+    const undoneEventIndex = reversedEvents.findIndex((event: Event) => !event.undone && event.eventType !== EventType.Undo);
+    if (undoneEventIndex < 0) {
+      return state;
+    }
+    const actualIndex = undoneEventIndex >= 0 ? events.length - 1 - undoneEventIndex : -1;
+
+    const undoneEvent = events[actualIndex];
+    const undoId = v4();
+    const updatedEvents = [
+      ...events.slice(0, actualIndex),
+      { ...undoneEvent, undone: undoId },
+      ...events.slice(actualIndex + 1, events.length),
+      {
+        id: undoId,
+        eventType: EventType.Undo,
+        team: undoneEvent.team,
+        playerId: undoneEvent.playerId,
+        timestamp: Date.now(),
+        undone: "",
+        author: "",
+        reference: undoneEvent.id
+      }
+    ];
+    return {
+      ...state,
+      events: updatedEvents
+    };
   },
 
   [MatchActionTypes.SHOW_NOTIFICATION]: (state: matchState, action: showNotificationType) => {
@@ -109,7 +155,7 @@ export const matchReducer = createReducer<matchState>(initState, {
     }
   },
 
-  [MatchActionTypes.CALL_TIMEOUT]: (state: matchState, action: showNotificationType) => {
+  [MatchActionTypes.CALL_TIMEOUT]: (state: matchState, action: callTimeoutType) => {
     let isHomeTeam = action.payload === TeamType.Home ? true : false
     return {
       ...state,
@@ -124,7 +170,8 @@ export const matchReducer = createReducer<matchState>(initState, {
           playerId: 0,
           timestamp: Date.now(),
           undone: "",
-          author: ""
+          author: "",
+          reference: ""
         }
       ]
     }
