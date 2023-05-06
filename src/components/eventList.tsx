@@ -65,7 +65,7 @@ const EventList: React.FC<Props> = ({ events }) => {
     <Box mt={2}>
       {slicedEvents.map((event) => (
         <Box key={event.id} mb={1}>
-          <Typography variant="body1">{formattedEvent(event)}</Typography>
+          {formattedEvent(event)}
         </Box>
       ))}
       {events.length > 3 && (

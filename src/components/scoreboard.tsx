@@ -9,19 +9,7 @@ import {
   CardActions,
   Typography
 } from "@mui/material";
-import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Collapse from "@mui/material/Collapse";
-import IconButton, { IconButtonProps } from "@mui/material/IconButton";
-import Paper from "@mui/material/Paper";
-import Stack from "@mui/material/Stack";
-import { styled } from '@mui/material/styles';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
 import React, { useState } from 'react';
 import { addPoint, scorePoint, callTimeout, undoLastEvent } from '../store/match/actions';
 import { useAppDispatch, useAppSelector } from '../store/store';
@@ -30,23 +18,6 @@ import { TeamType, Event, EventType } from './types';
 import Grid from "@mui/material/Grid"
 import Clock from "./clock";
 import EventList from "./eventList";
-
-
-
-
-interface ExpandMoreProps extends IconButtonProps {
-  expand: boolean;
-}
-
-const ExpandMore = styled((props: ExpandMoreProps) => {
-  const { expand, ...other } = props;
-  return <IconButton {...other} />;
-})(({ theme, expand }) => ({
-  transform: !expand ? "rotate(0deg)" : "rotate(180deg)",
-  transition: theme.transitions.create("transform", {
-    duration: theme.transitions.duration.shortest,
-  }),
-}));
 
 export function Scoreboard() {
   const match = useAppSelector((state) => state.match);
@@ -101,29 +72,6 @@ export function Scoreboard() {
       spacing={2}
       columns={12}
     >
-      <Grid item xs={12}>
-        <Grid container
-          spacing={2}
-          columns={12}
-          sx={{ alignSelf: 'center', textAlign: 'center' }}
-        >
-          <Grid item xs={3} >
-            <Button variant="outlined" onClick={undo} sx={{ border: 2, borderRadius: '12px', color: 'black', borderColor: 'black' }}>
-              <Undo sx={{ fontSize: 42 }} />
-            </Button>
-          </Grid>
-          <Grid item xs={6}>
-            <Typography align='center' sx={{ fontSize: "2rem", variant: 'button', lineHeight: 1, paddingTop: 1, paddingX: 1 }}>
-              <Clock format="24h" />
-            </Typography>
-          </Grid>
-          <Grid item xs={3}>
-            <Button variant="outlined" onClick={toggleSettings} sx={{ border: 2, borderRadius: '12px', color: 'black', borderColor: 'black' }}>
-              <Settings sx={{ fontSize: 42 }} />
-            </Button>
-          </Grid>
-        </Grid>
-      </Grid>
       <Grid item xs={12} sm={8} md={6}>
         <Grid container
           spacing={2}
