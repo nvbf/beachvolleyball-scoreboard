@@ -39,7 +39,8 @@ export enum EventType {
   Undo = "UNDO",
   FirstPlayerServer = "FIRST_PLAYER_SERVE",
   FirstTeamServer = "FIRST_TEAM_SERVE",
-  ConfigureTeam = "TEAM_CONFIG"
+  ConfigureTeam = "TEAM_CONFIG",
+  PickColor = "TEAM_COLOR"
 }
 
 export enum TeamType {

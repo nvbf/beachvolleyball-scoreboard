@@ -2,21 +2,20 @@ import { createReducer } from "@reduxjs/toolkit"
 import { TeamType, EventType, NotificationType, Event } from "../../components/types"
 import { evaluateScores, isSetDone } from "../../util/evaluateScore"
 import { matchState } from "../types"
-import { addAwayTeamType, addHomeTeamType, addPointType, callTimeoutType, clearNotificationType, firstServerAwayType, firstServerHomeType, firstServerTeamType, MatchActionTypes, showNotificationType, undoLastEventType } from "./actions"
-import { throwError } from "redux-saga-test-plan/providers"
+import { addAwayTeamType, addHomeTeamType, addPointType, callTimeoutType, clearNotificationType, firstServerAwayType, firstServerHomeType, firstServerTeamType, MatchActionTypes, pickAwayColorType, pickHomeColorType, showNotificationType, undoLastEventType } from "./actions"
 import { v4 } from 'uuid';
 
 const initState = {
   homeTeam: {
     player1Name: "Haidar Nuri",
     player2Name: "Øystein William Grændsen",
-    shirtColor: "#0000ff",
+    shirtColor: "#111111",
     added: true,
   },
   awayTeam: {
     player1Name: "Frode Walde",
     player2Name: "Ståle Mygland",
-    shirtColor: "#ff0000",
+    shirtColor: "#eeeeee",
     added: true,
   },
   matchId: "",
@@ -80,7 +79,7 @@ export const matchReducer = createReducer<matchState>(initState, {
           timestamp: Date.now(),
           undone: "",
           author: "",
-          reference: "" 
+          reference: ""
         }
       ]
     }
@@ -119,6 +118,44 @@ export const matchReducer = createReducer<matchState>(initState, {
           undone: "",
           author: "",
           reference: ""
+        }
+      ]
+    }
+  },
+
+  [MatchActionTypes.PICK_HOME_COLOR]: (state: matchState, action: pickHomeColorType) => {
+    return {
+      ...state,
+      events: [
+        ...state.events,
+        {
+          id: v4(),
+          eventType: EventType.PickColor,
+          team: TeamType.Home,
+          playerId: 0,
+          timestamp: Date.now(),
+          undone: "",
+          author: "",
+          reference: action.payload
+        }
+      ]
+    }
+  },
+
+  [MatchActionTypes.PICK_AWAY_COLOR]: (state: matchState, action: pickAwayColorType) => {
+    return {
+      ...state,
+      events: [
+        ...state.events,
+        {
+          id: v4(),
+          eventType: EventType.PickColor,
+          team: TeamType.Away,
+          playerId: 0,
+          timestamp: Date.now(),
+          undone: "",
+          author: "",
+          reference: action.payload
         }
       ]
     }

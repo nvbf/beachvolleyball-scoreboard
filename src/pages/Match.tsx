@@ -8,6 +8,7 @@ import ScoreboardHeader from '../components/scoreboard/header';
 import { matchState } from '../store/types';
 import { EventType, TeamType, Event } from '../components/types';
 import { ServeOrder } from '../components/serveOrder';
+import { TeamColorPicker } from '../components/scoreboard/teamColorPicker';
 
 function Match() {
 
@@ -20,6 +21,8 @@ function Match() {
       <ScoreboardHeader />
       {getActiveDisplay(match) == DisplayType.AddHomeTeam && <AddHomeTeam />}
       {getActiveDisplay(match) == DisplayType.AddAwayTeam && <AddAwayTeam />}
+      {getActiveDisplay(match) == DisplayType.PickHomeColor && <TeamColorPicker team={TeamType.Home} />}
+      {getActiveDisplay(match) == DisplayType.PickAwayColor && <TeamColorPicker team={TeamType.Away} />}
       {getActiveDisplay(match) == DisplayType.SelectServeorder && <ServeOrder />}
       {getActiveDisplay(match) == DisplayType.ScoreBoard && <Scoreboard />}
       {match.showNotification && <Notification />}
@@ -37,6 +40,8 @@ export enum DisplayType {
   SelectServeorder,
   AddHomeTeam,
   AddAwayTeam,
+  PickHomeColor,
+  PickAwayColor,
 }
 
 function getActiveDisplay(state: matchState): DisplayType {
@@ -44,13 +49,21 @@ function getActiveDisplay(state: matchState): DisplayType {
     return DisplayType.AddHomeTeam
   } else if (!state.awayTeam.added) {
     return DisplayType.AddAwayTeam
+  } else if (!hasTeamPickedColor(state.events, TeamType.Home)) {
+    return DisplayType.PickHomeColor
+  } else if (!hasTeamPickedColor(state.events, TeamType.Away)) {
+    return DisplayType.PickAwayColor
   } else if (!serveOrderSet(state.events)) {
     return DisplayType.SelectServeorder
   }
   return DisplayType.ScoreBoard
 }
 
-export function serveOrderSet(events: Event[]): boolean {
+function hasTeamPickedColor(events: Event[], team: TeamType): boolean {
+  return events.some((event) => event.eventType === EventType.PickColor && event.team === team && !event.undone)
+}
+
+function serveOrderSet(events: Event[]): boolean {
   const sets: { [key: string]: number } = { [TeamType.Home]: 0, [TeamType.Away]: 0 };
   let homeSetScore = [0, 0, 0];
   let awaySetScore = [0, 0, 0];

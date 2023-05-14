@@ -18,11 +18,12 @@ const EventList: React.FC<Props> = ({ events }) => {
     const teamString = teamToString(event.team);
     const playerName = event.playerId.toString(); // replace with actual player name
     const undoneString = event.undone ? <del>Undone</del> : "";
+    const reference = event.reference ? `(${event.reference})` : "";
     const timestampString = new Date(event.timestamp).toLocaleTimeString([], { hour12: false });
     return (
       <Typography variant="body1">
         <span style={{ textDecoration: undoneString ? "line-through" : "none" }}>
-          {timestampString}: {eventTypeString} - {teamString} 
+          {timestampString}: {eventTypeString} - {teamString} {reference}
         </span>
       </Typography>
     );
@@ -42,6 +43,8 @@ const EventList: React.FC<Props> = ({ events }) => {
         return "First Team Serve";
       case EventType.ConfigureTeam:
         return "Configure Team";
+      case EventType.PickColor:
+        return "Configure Team Color";
       default:
         return "";
     }

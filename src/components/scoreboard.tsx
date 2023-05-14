@@ -18,6 +18,7 @@ import { TeamType, Event, EventType } from './types';
 import Grid from "@mui/material/Grid"
 import Clock from "./clock";
 import EventList from "./eventList";
+import { getBackgroundColor, getTextColor } from "./scoreboard/eventFunctions";
 
 export function Scoreboard() {
   const match = useAppSelector((state) => state.match);
@@ -88,7 +89,7 @@ export function Scoreboard() {
             >
               <Grid item>
                 <Typography align='center' sx={{
-                  border: 4, borderRadius: '12px', borderColor: 'primary.main',
+                  border: 4, borderRadius: '12px', borderColor: getBackgroundColor(match.events, TeamType.Home),
                   fontSize: "2rem", variant: 'button', lineHeight: 1, paddingTop: 1,
                   paddingX: 1
                 }}>
@@ -97,7 +98,7 @@ export function Scoreboard() {
               </Grid>
               <Grid item>
                 <Typography align='right' sx={{
-                  border: 6, borderRadius: '12px', borderColor: 'primary.main',
+                  border: 6, borderRadius: '12px', borderColor: getBackgroundColor(match.events, TeamType.Home),
                   fontSize: "3.5rem", variant: 'button', lineHeight: 1, paddingTop: 3,
                   paddingX: 1, minWidth: 50
                 }}>
@@ -115,7 +116,7 @@ export function Scoreboard() {
             >
               <Grid item>
                 <Typography align='left' sx={{
-                  border: 6, borderRadius: '12px', borderColor: 'secondary.main',
+                  border: 6, borderRadius: '12px', borderColor: getBackgroundColor(match.events, TeamType.Away),
                   fontSize: "3.5rem", variant: 'button', lineHeight: 1, paddingTop: 3,
                   paddingX: 1, minWidth: 50
                 }}>
@@ -124,7 +125,7 @@ export function Scoreboard() {
               </Grid>
               <Grid item>
                 <Typography align='center' sx={{
-                  border: 4, borderRadius: '12px', borderColor: 'secondary.main',
+                  border: 4, borderRadius: '12px', borderColor: getBackgroundColor(match.events, TeamType.Away),
                   fontSize: "2rem", variant: 'button', lineHeight: 1, paddingTop: 1,
                   paddingX: 1
                 }}>
@@ -177,39 +178,39 @@ export function Scoreboard() {
           <Grid item xs={6} sx={{ textAlign: 'right' }}>
             <Button variant="contained" onClick={homePoint}
               sx={{
-                width: 1, height: 84, backgroundColor: 'primary.main',
-                '&:hover': { backgroundColor: 'primary.main' }
+                width: 1, height: 84, backgroundColor: getBackgroundColor(match.events, TeamType.Home),
+                '&:hover': { backgroundColor: getBackgroundColor(match.events, TeamType.Home) }
               }}>
-              <Add sx={{ fontSize: 84 }} />
+              <Add sx={{ fontSize: 84, color: getTextColor(match.events, TeamType.Home) }} />
             </Button>
           </Grid>
           <Grid item xs={6} sx={{ textAlign: 'left' }}>
             <Button variant="contained" onClick={awayPoint}
               sx={{
-                width: 1, height: 84, backgroundColor: 'secondary.main',
-                '&:hover': { backgroundColor: 'secondary.main' }
+                width: 1, height: 84, backgroundColor: getBackgroundColor(match.events, TeamType.Away),
+                '&:hover': { backgroundColor: getBackgroundColor(match.events, TeamType.Away) }
               }}>
-              <Add sx={{ fontSize: 84 }} />
+              <Add sx={{ fontSize: 84, color: getTextColor(match.events, TeamType.Away) }} />
             </Button>
           </Grid>
 
           <Grid item xs={6} sx={{ textAlign: 'right' }}>
             <Button disabled={hasTakenTimeout(match.events, TeamType.Home)} onClick={homeTeamTimeout} variant="contained"
               sx={{
-                width: 1, textTransform: 'none', backgroundColor: 'primary.main',
-                '&:hover': { backgroundColor: 'primary.main' }
+                width: 1, textTransform: 'none', backgroundColor: getBackgroundColor(match.events, TeamType.Home),
+                '&:hover': { backgroundColor: getBackgroundColor(match.events, TeamType.Home) }
               }}>
-              <Typography sx={{ fontSize: 18 }}> TIMEOUT</Typography>
+              <Typography sx={{ fontSize: 18, color: getTextColor(match.events, TeamType.Home) }}> TIMEOUT</Typography>
             </Button>
           </Grid>
           <Grid item xs={6} sx={{ textAlign: 'left' }}>
             <Button disabled={hasTakenTimeout(match.events, TeamType.Away)} onClick={awayTeamTimeout} variant="contained"
               sx={{
-                width: 1, textTransform: 'none', backgroundColor: 'secondary.main',
-                '&:hover': { backgroundColor: 'secondary.main' }
+                width: 1, textTransform: 'none', backgroundColor: getBackgroundColor(match.events, TeamType.Away),
+                '&:hover': { backgroundColor: getBackgroundColor(match.events, TeamType.Away) }
 
               }}>
-              <Typography sx={{ fontSize: 18 }}> TIMEOUT</Typography>
+              <Typography sx={{ fontSize: 18, color: getTextColor(match.events, TeamType.Away) }}> TIMEOUT</Typography>
             </Button>
           </Grid>
         </Grid>

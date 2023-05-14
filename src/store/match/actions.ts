@@ -16,6 +16,9 @@ export enum MatchActionTypes {
   FIRST_SERVER_HOME = 'FIRST_SERVER_HOME',
   FIRST_SERVER_AWAY = 'FIRST_SERVER_AWAY',
 
+  PICK_HOME_COLOR = 'PICK_HOME_COLOR',
+  PICK_AWAY_COLOR = 'PICK_AWAY_COLOR',
+
   UPDATE_SCORES = 'UPDATE_SCORES',
 
   UNDO_LAST_EVENT = 'UNDO_LAST_EVENT',
@@ -42,6 +45,9 @@ export const firstServerAway = createAction<number>(MatchActionTypes.FIRST_SERVE
 
 export const updateScores = createAction<TeamType>(MatchActionTypes.UPDATE_SCORES)
 
+export const pickHomeColor = createAction<string>(MatchActionTypes.PICK_HOME_COLOR)
+export const pickAwayColor = createAction<string>(MatchActionTypes.PICK_AWAY_COLOR)
+
 export const undoLastEvent = createAction(MatchActionTypes.UNDO_LAST_EVENT)
 
 export const showNotification = createAction(MatchActionTypes.SHOW_NOTIFICATION)
@@ -63,6 +69,9 @@ export type firstServerHomeType =  ReturnType<typeof firstServerHome>
 export type firstServerAwayType =  ReturnType<typeof firstServerAway>
 
 export type undoLastEventType = ReturnType<typeof undoLastEvent>
+
+export type pickHomeColorType = ReturnType<typeof pickHomeColor>
+export type pickAwayColorType = ReturnType<typeof pickAwayColor>
 
 export type showNotificationType =  ReturnType<typeof showNotification>
 export type clearNotificationType =  ReturnType<typeof clearNotification>
