@@ -8,7 +8,10 @@ import {
 import {
   Box,
   CardActions,
-  Typography
+  ThemeProvider,
+  Typography,
+  createTheme,
+  responsiveFontSizes
 } from "@mui/material";
 import Button from "@mui/material/Button";
 import React, { useState } from 'react';
@@ -39,130 +42,145 @@ export function ServeOrder() {
     dispatch(firstServerAway(player));
   }
 
+  let theme = createTheme();
+  theme = responsiveFontSizes(theme);
+  theme.typography.h6 = {
+    fontWeight: 'normal',
+    fontSize: '1.0rem',
+    '@media (min-width:600px)': {
+      fontSize: '1.4rem',
+    },
+    [theme.breakpoints.up('md')]: {
+      fontSize: '1.6rem',
+    },
+  };
+
   return (
-    <Grid container
-      justifyContent="center"
-      alignItems="center"
-      rowSpacing={0}
-      spacing={2}
-      columns={12}
-    >
-      <Grid item xs={12}>
-        <Grid container
-          columnSpacing={8}
-          rowSpacing={2}
-          justifyContent="center"
-          columns={12}
-          sx={{ alignSelf: 'center', textAlign: 'center' }}
-        >
-          <Grid item xs={12} sx={{ textAlign: 'center' }}>
-            <Typography sx={{ fontSize: 32 }}> First team to serve </Typography>
-          </Grid>
-          <Grid item xs={6} sx={{ textAlign: 'right', display: showServer(match.events, TeamType.Home, 0) }}>
-            <Button disabled={serveOrderSet(match.events)[0] !== TeamType.None} variant="contained" onClick={setFirstServerTeam.bind(null, TeamType.Home)}
-              sx={{
-                width: 1, height: 84, backgroundColor: getBackgroundColor(match.events, TeamType.Home),
-                '&:hover': { backgroundColor: getBackgroundColor(match.events, TeamType.Home) }
-              }}>
-              <Typography sx={{ fontSize: 22, color: getTextColor(match.events, TeamType.Home) }}>
-                <Box>{getInitials(match.homeTeam.player1Name)}</Box>
-                <Box>{getInitials(match.homeTeam.player2Name)}</Box>
-              </Typography>
-            </Button>
-          </Grid>
-          <Grid item xs={6} sx={{ textAlign: 'left', display: showServer(match.events, TeamType.Away, 0) }}>
-            <Button disabled={serveOrderSet(match.events)[0] !== TeamType.None} variant="contained" onClick={setFirstServerTeam.bind(null, TeamType.Away)}
-              sx={{
-                width: 1, height: 84, backgroundColor: getBackgroundColor(match.events, TeamType.Away),
-                '&:hover': { backgroundColor: getBackgroundColor(match.events, TeamType.Away) }
-              }}>
-              <Typography sx={{ fontSize: 22, color: getTextColor(match.events, TeamType.Away) }}>
-                <Box>{getInitials(match.awayTeam.player1Name)}</Box>
-                <Box>{getInitials(match.awayTeam.player2Name)}</Box>
-              </Typography>
-            </Button>
-          </Grid>
-        </Grid>
-      </Grid>
-      <Grid item xs={12}>
-        <Grid container
-          columnSpacing={8}
-          rowSpacing={2}
-          columns={12}
-          justifyContent="center"
-          sx={{ alignSelf: 'center', textAlign: 'center' }}
-        >
-          <Grid item xs={12} sx={{ textAlign: 'center' }}>
-            <Typography sx={{ fontSize: 32 }}> First home team server</Typography>
-          </Grid>
-          <Grid item xs={6} sx={{ textAlign: 'right', display: showServer(match.events, TeamType.Home, 1) }}>
-            <Button disabled={serveOrderSet(match.events)[1] !== 0} variant="contained" onClick={setHomeServer.bind(null, 1)}
-              sx={{
-                width: 1, height: 84, backgroundColor: getBackgroundColor(match.events, TeamType.Home),
-                '&:hover': { backgroundColor: getBackgroundColor(match.events, TeamType.Home) }
-              }}>
-              <Typography sx={{ fontSize: 22, color: getTextColor(match.events, TeamType.Home) }}>
-                <Box>{getInitials(match.homeTeam.player1Name)} </Box>
-              </Typography>
-            </Button>
-          </Grid>
-          <Grid item xs={6} sx={{ textAlign: 'left', display: showServer(match.events, TeamType.Home, 2) }}>
-            <Button disabled={serveOrderSet(match.events)[1] !== 0} variant="contained" onClick={setHomeServer.bind(null, 2)}
-              sx={{
-                display: showServer(match.events, TeamType.Home, 2),
-                width: 1, height: 84, backgroundColor: getBackgroundColor(match.events, TeamType.Home),
-                '&:hover': { backgroundColor: getBackgroundColor(match.events, TeamType.Home) }
-              }}>
-              <Typography sx={{ fontSize: 22, color: getTextColor(match.events, TeamType.Home) }}>
-                <Box>{getInitials(match.homeTeam.player2Name)}</Box>
-              </Typography>
-            </Button>
+    <ThemeProvider theme={theme}>
+      <Grid container
+        justifyContent="center"
+        alignItems="center"
+        rowSpacing={0}
+        spacing={2}
+        columns={12}
+      >
+        <Grid item xs={12}>
+          <Grid container
+            columnSpacing={2}
+            rowSpacing={2}
+            justifyContent="center"
+            columns={12}
+            sx={{ alignSelf: 'center', textAlign: 'center' }}
+          >
+            <Grid item xs={12} sx={{ textAlign: 'center' }}>
+              <Typography variant="h4"> First team to serve </Typography>
+            </Grid>
+            <Grid item xs={6} sx={{ textAlign: 'right', display: showServer(match.events, TeamType.Home, 0) }}>
+              <Button disabled={serveOrderSet(match.events)[0] !== TeamType.None} variant="contained" onClick={setFirstServerTeam.bind(null, TeamType.Home)}
+                sx={{
+                  width: 1, height: 96, backgroundColor: getBackgroundColor(match.events, TeamType.Home),
+                  '&:hover': { backgroundColor: getBackgroundColor(match.events, TeamType.Home) }
+                }}>
+                <Typography variant="h6" sx={{color: getTextColor(match.events, TeamType.Home) }}>
+                  <Box>{getInitials(match.homeTeam.player1Name)}</Box>
+                  <Box>{getInitials(match.homeTeam.player2Name)}</Box>
+                </Typography>
+              </Button>
+            </Grid>
+            <Grid item xs={6} sx={{ textAlign: 'left', display: showServer(match.events, TeamType.Away, 0) }}>
+              <Button disabled={serveOrderSet(match.events)[0] !== TeamType.None} variant="contained" onClick={setFirstServerTeam.bind(null, TeamType.Away)}
+                sx={{
+                  width: 1, height: 96, backgroundColor: getBackgroundColor(match.events, TeamType.Away),
+                  '&:hover': { backgroundColor: getBackgroundColor(match.events, TeamType.Away) }
+                }}>
+                <Typography variant="h6" sx={{color: getTextColor(match.events, TeamType.Away) }}>
+                  <Box>{getInitials(match.awayTeam.player1Name)}</Box>
+                  <Box>{getInitials(match.awayTeam.player2Name)}</Box>
+                </Typography>
+              </Button>
+            </Grid>
           </Grid>
         </Grid>
-      </Grid>
-      <Grid item xs={12}>
-        <Grid container
-          columnSpacing={8}
-          rowSpacing={2}
-          columns={12}
-          justifyContent="center"
-          sx={{ alignSelf: 'center', textAlign: 'center' }}
-        >
-          <Grid item xs={12} sx={{ textAlign: 'center' }}>
-            <Typography sx={{ fontSize: 32 }}> First away team server</Typography>
-          </Grid>
-          <Grid item xs={6} sx={{ textAlign: 'right', display: showServer(match.events, TeamType.Away, 1) }}>
-            <Button
-              disabled={serveOrderSet(match.events)[2] !== 0}
-              variant="contained" onClick={setAwayServer.bind(null, 1)}
-              sx={{
-                display: showServer(match.events, TeamType.Away, 1),
-                width: 1, height: 84, backgroundColor: getBackgroundColor(match.events, TeamType.Away),
-                '&:hover': { backgroundColor: getBackgroundColor(match.events, TeamType.Away) }
-              }}>
-              <Typography sx={{ fontSize: 22, color: getTextColor(match.events, TeamType.Away) }}>
-                <Box>{getInitials(match.awayTeam.player1Name)} </Box>
-              </Typography>
-            </Button>
-          </Grid>
-          <Grid item xs={6} sx={{ textAlign: 'left', display: showServer(match.events, TeamType.Away, 2) }}>
-            <Button disabled={serveOrderSet(match.events)[2] !== 0} variant="contained" onClick={setAwayServer.bind(null, 2)}
-              sx={{
-                display: showServer(match.events, TeamType.Away, 2),
-                width: 1, height: 84, backgroundColor: getBackgroundColor(match.events, TeamType.Away),
-                '&:hover': { backgroundColor: getBackgroundColor(match.events, TeamType.Away) }
-              }}>
-              <Typography sx={{ fontSize: 22, color: getTextColor(match.events, TeamType.Away) }}>
-                <Box>{getInitials(match.awayTeam.player2Name)}</Box>
-              </Typography>
-            </Button>
+        <Grid item xs={12}>
+          <Grid container
+            columnSpacing={2}
+            rowSpacing={2}
+            columns={12}
+            justifyContent="center"
+            sx={{ alignSelf: 'center', textAlign: 'center' }}
+          >
+            <Grid item xs={12} sx={{ textAlign: 'center' }}>
+              <Typography variant="h4"> First home team server</Typography>
+            </Grid>
+            <Grid item xs={6} sx={{ textAlign: 'right', display: showServer(match.events, TeamType.Home, 1) }}>
+              <Button disabled={serveOrderSet(match.events)[1] !== 0} variant="contained" onClick={setHomeServer.bind(null, 1)}
+                sx={{
+                  width: 1, height: 76, backgroundColor: getBackgroundColor(match.events, TeamType.Home),
+                  '&:hover': { backgroundColor: getBackgroundColor(match.events, TeamType.Home) }
+                }}>
+                <Typography variant="h6" sx={{color: getTextColor(match.events, TeamType.Home) }}>
+                  <Box>{getInitials(match.homeTeam.player1Name)} </Box>
+                </Typography>
+              </Button>
+            </Grid>
+            <Grid item xs={6} sx={{ textAlign: 'left', display: showServer(match.events, TeamType.Home, 2) }}>
+              <Button disabled={serveOrderSet(match.events)[1] !== 0} variant="contained" onClick={setHomeServer.bind(null, 2)}
+                sx={{
+                  display: showServer(match.events, TeamType.Home, 2),
+                  width: 1, height: 76, backgroundColor: getBackgroundColor(match.events, TeamType.Home),
+                  '&:hover': { backgroundColor: getBackgroundColor(match.events, TeamType.Home) }
+                }}>
+                <Typography variant="h6" sx={{ color: getTextColor(match.events, TeamType.Home) }}>
+                  <Box>{getInitials(match.homeTeam.player2Name)}</Box>
+                </Typography>
+              </Button>
+            </Grid>
           </Grid>
         </Grid>
+        <Grid item xs={12}>
+          <Grid container
+            columnSpacing={2}
+            rowSpacing={2}
+            columns={12}
+            justifyContent="center"
+            sx={{ alignSelf: 'center', textAlign: 'center' }}
+          >
+            <Grid item xs={12} sx={{ textAlign: 'center' }}>
+              <Typography variant="h4"> First away team server</Typography>
+            </Grid>
+            <Grid item xs={6} sx={{ textAlign: 'right', display: showServer(match.events, TeamType.Away, 1) }}>
+              <Button
+                disabled={serveOrderSet(match.events)[2] !== 0}
+                variant="contained" onClick={setAwayServer.bind(null, 1)}
+                sx={{
+                  display: showServer(match.events, TeamType.Away, 1),
+                  width: 1, height: 76, backgroundColor: getBackgroundColor(match.events, TeamType.Away),
+                  '&:hover': { backgroundColor: getBackgroundColor(match.events, TeamType.Away) }
+                }}>
+                <Typography variant="h6" sx={{color: getTextColor(match.events, TeamType.Away) }}>
+                  <Box>{getInitials(match.awayTeam.player1Name)} </Box>
+                </Typography>
+              </Button>
+            </Grid>
+            <Grid item xs={6} sx={{ textAlign: 'left', display: showServer(match.events, TeamType.Away, 2) }}>
+              <Button disabled={serveOrderSet(match.events)[2] !== 0} variant="contained" onClick={setAwayServer.bind(null, 2)}
+                sx={{
+                  display: showServer(match.events, TeamType.Away, 2),
+                  width: 1, height: 76, backgroundColor: getBackgroundColor(match.events, TeamType.Away),
+                  '&:hover': { backgroundColor: getBackgroundColor(match.events, TeamType.Away) }
+                }}>
+                <Typography variant="h6" sx={{color: getTextColor(match.events, TeamType.Away) }}>
+                  <Box>{getInitials(match.awayTeam.player2Name)}</Box>
+                </Typography>
+              </Button>
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item xs={12}>
+          <EventList events={match.events} />
+        </Grid>
       </Grid>
-      <Grid item xs={12}>
-        <EventList events={match.events} />
-      </Grid>
-    </Grid>
+    </ThemeProvider>
   );
 }
 
