@@ -45,6 +45,7 @@ export enum EventType {
 export enum TeamType {
   Home = "HOME",
   Away = "AWAY",
+  None = "NONE",
 }
 
 export enum MatchOutcome {

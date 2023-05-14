@@ -12,6 +12,10 @@ export enum MatchActionTypes {
   CALL_TIMEOUT = 'CALL_TIMEOUT',
   SWITCH_SIDES = 'SWITCH_SIDES',
 
+  FIRST_SERVER_TEAM = 'FIRST_SERVER_TEAM',
+  FIRST_SERVER_HOME = 'FIRST_SERVER_HOME',
+  FIRST_SERVER_AWAY = 'FIRST_SERVER_AWAY',
+
   UPDATE_SCORES = 'UPDATE_SCORES',
 
   UNDO_LAST_EVENT = 'UNDO_LAST_EVENT',
@@ -32,6 +36,10 @@ export const scorePoint = createAction<TeamType>(MatchActionTypes.POINT_SCORED)
 export const addPoint = createAction<TeamType>(MatchActionTypes.ADD_POINT)
 export const callTimeout = createAction<TeamType>(MatchActionTypes.CALL_TIMEOUT)
 
+export const firstServerTeam = createAction<TeamType>(MatchActionTypes.FIRST_SERVER_TEAM)
+export const firstServerHome = createAction<number>(MatchActionTypes.FIRST_SERVER_HOME)
+export const firstServerAway = createAction<number>(MatchActionTypes.FIRST_SERVER_AWAY)
+
 export const updateScores = createAction<TeamType>(MatchActionTypes.UPDATE_SCORES)
 
 export const undoLastEvent = createAction(MatchActionTypes.UNDO_LAST_EVENT)
@@ -49,6 +57,10 @@ export type addAwayTeamType =  ReturnType<typeof addAwayTeam>
 export type scorePointType =  ReturnType<typeof scorePoint>
 export type addPointType =  ReturnType<typeof addPoint>
 export type callTimeoutType =  ReturnType<typeof callTimeout>
+
+export type firstServerTeamType =  ReturnType<typeof firstServerTeam>
+export type firstServerHomeType =  ReturnType<typeof firstServerHome>
+export type firstServerAwayType =  ReturnType<typeof firstServerAway>
 
 export type undoLastEventType = ReturnType<typeof undoLastEvent>
 

@@ -5,6 +5,9 @@ import { Notification } from '../components/notification';
 import Scoreboard from '../components/scoreboard';
 import { useAppSelector } from '../store/store';
 import ScoreboardHeader from '../components/scoreboard/header';
+import { matchState } from '../store/types';
+import { EventType, TeamType, Event } from '../components/types';
+import { ServeOrder } from '../components/serveOrder';
 
 function Match() {
 
@@ -15,9 +18,10 @@ function Match() {
   return (
     <main>
       <ScoreboardHeader />
-      {!homeTeam.added && <AddHomeTeam />}
-      {(homeTeam.added && !awayTeam.added) && <AddAwayTeam />}
-      {(homeTeam.added === true && awayTeam.added && !match.showNotification) && <Scoreboard />}
+      {getActiveDisplay(match) == DisplayType.AddHomeTeam && <AddHomeTeam />}
+      {getActiveDisplay(match) == DisplayType.AddAwayTeam && <AddAwayTeam />}
+      {getActiveDisplay(match) == DisplayType.SelectServeorder && <ServeOrder />}
+      {getActiveDisplay(match) == DisplayType.ScoreBoard && <Scoreboard />}
       {match.showNotification && <Notification />}
     </main>
   );
@@ -31,4 +35,81 @@ export enum DisplayType {
   TeamTimeout,
   TechnicalTimeout,
   SelectServeorder,
+  AddHomeTeam,
+  AddAwayTeam,
+}
+
+function getActiveDisplay(state: matchState): DisplayType {
+  if (!state.homeTeam.added) {
+    return DisplayType.AddHomeTeam
+  } else if (!state.awayTeam.added) {
+    return DisplayType.AddAwayTeam
+  } else if (!serveOrderSet(state.events)) {
+    return DisplayType.SelectServeorder
+  }
+  return DisplayType.ScoreBoard
+}
+
+export function serveOrderSet(events: Event[]): boolean {
+  const sets: { [key: string]: number } = { [TeamType.Home]: 0, [TeamType.Away]: 0 };
+  let homeSetScore = [0, 0, 0];
+  let awaySetScore = [0, 0, 0];
+  let currentSet = 1;
+  let serveOrderSet = false
+  let firstHomeServerSet = false
+  let firstAwayServerSet = false
+
+  events.forEach((event) => {
+    if (event.undone) {
+      return;
+    }
+    if (event.eventType === EventType.Score) {
+      const setIndex = currentSet - 1;
+      if (event.team === TeamType.Home) {
+        homeSetScore[setIndex] += 1;
+      } else {
+        awaySetScore[setIndex] += 1;
+      }
+      if (currentSet === 1 || currentSet === 2) {
+        if (homeSetScore[setIndex] >= 21 && homeSetScore[setIndex] - awaySetScore[setIndex] >= 2) {
+          sets[TeamType.Home] += 1;
+          homeSetScore[setIndex] = 0;
+          awaySetScore[setIndex] = 0;
+          currentSet += 1;
+          serveOrderSet = false;
+          firstHomeServerSet = false;
+          firstAwayServerSet = false;
+        } else if (awaySetScore[setIndex] >= 21 && awaySetScore[setIndex] - homeSetScore[setIndex] >= 2) {
+          sets[TeamType.Away] += 1;
+          homeSetScore[setIndex] = 0;
+          awaySetScore[setIndex] = 0;
+          currentSet += 1;
+          serveOrderSet = false;
+          firstHomeServerSet = false;
+          firstAwayServerSet = false;
+        }
+      } else {
+        if (homeSetScore[setIndex] >= 15 && homeSetScore[setIndex] - awaySetScore[setIndex] >= 2) {
+          sets[TeamType.Home] += 1;
+          homeSetScore[setIndex] = 0;
+          awaySetScore[setIndex] = 0;
+          currentSet += 1;
+        } else if (awaySetScore[setIndex] >= 15 && awaySetScore[setIndex] - homeSetScore[setIndex] >= 2) {
+          sets[TeamType.Away] += 1;
+          homeSetScore[setIndex] = 0;
+          awaySetScore[setIndex] = 0;
+          currentSet += 1;
+        }
+      }
+    } else if (event.eventType === EventType.FirstPlayerServer) {
+      if (event.team === TeamType.Home) {
+        firstHomeServerSet = true
+      } else {
+        firstAwayServerSet = true
+      }
+    } else if (event.eventType === EventType.FirstTeamServer) {
+      serveOrderSet = true
+    }
+  });
+  return serveOrderSet && firstHomeServerSet && firstAwayServerSet;
 }

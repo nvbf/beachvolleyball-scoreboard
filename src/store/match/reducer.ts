@@ -2,7 +2,7 @@ import { createReducer } from "@reduxjs/toolkit"
 import { TeamType, EventType, NotificationType, Event } from "../../components/types"
 import { evaluateScores, isSetDone } from "../../util/evaluateScore"
 import { matchState } from "../types"
-import { addAwayTeamType, addHomeTeamType, addPointType, callTimeoutType, clearNotificationType, MatchActionTypes, showNotificationType, undoLastEventType } from "./actions"
+import { addAwayTeamType, addHomeTeamType, addPointType, callTimeoutType, clearNotificationType, firstServerAwayType, firstServerHomeType, firstServerTeamType, MatchActionTypes, showNotificationType, undoLastEventType } from "./actions"
 import { throwError } from "redux-saga-test-plan/providers"
 import { v4 } from 'uuid';
 
@@ -28,36 +28,7 @@ const initState = {
   tournementId: -1,
 
   events: [
-    {
-      id: v4(),
-      eventType: EventType.FirstTeamServer,
-      team: TeamType.Away,
-      playerId: 0,
-      timestamp: Date.now(),
-      undone: "",
-      author: "",
-      reference: ""
-    },
-    {
-      id: v4(),
-      eventType: EventType.FirstPlayerServer,
-      team: TeamType.Away,
-      playerId: 1,
-      timestamp: Date.now(),
-      undone: "",
-      author: "",
-      reference: ""
-    },
-    {
-      id: v4(),
-      eventType: EventType.FirstPlayerServer,
-      team: TeamType.Home,
-      playerId: 2,
-      timestamp: Date.now(),
-      undone: "",
-      author: "",
-      reference: ""
-    },
+
   ],
   shouldUpdate: false,
   errorMessage: null,
@@ -87,6 +58,63 @@ export const matchReducer = createReducer<matchState>(initState, {
           eventType: EventType.Score,
           team: action.payload,
           playerId: 0,
+          timestamp: Date.now(),
+          undone: "",
+          author: "",
+          reference: ""
+        }
+      ]
+    }
+  },
+
+  [MatchActionTypes.FIRST_SERVER_TEAM]: (state: matchState, action: firstServerTeamType) => {
+    return {
+      ...state,
+      events: [
+        ...state.events,
+        {
+          id: v4(),
+          eventType: EventType.FirstTeamServer,
+          team: action.payload,
+          playerId: 0,
+          timestamp: Date.now(),
+          undone: "",
+          author: "",
+          reference: "" 
+        }
+      ]
+    }
+  },
+
+  [MatchActionTypes.FIRST_SERVER_HOME]: (state: matchState, action: firstServerHomeType) => {
+    return {
+      ...state,
+      events: [
+        ...state.events,
+        {
+          id: v4(),
+          eventType: EventType.FirstPlayerServer,
+          team: TeamType.Home,
+          playerId: action.payload,
+          timestamp: Date.now(),
+          undone: "",
+          author: "",
+          reference: ""
+        }
+      ]
+    }
+  },
+
+  [MatchActionTypes.FIRST_SERVER_AWAY]: (state: matchState, action: firstServerAwayType) => {
+    return {
+      ...state,
+      events: [
+        ...state.events,
+        {
+          id: v4(),
+          eventType: EventType.FirstPlayerServer,
+          team: TeamType.Away,
+          playerId: action.payload,
           timestamp: Date.now(),
           undone: "",
           author: "",
