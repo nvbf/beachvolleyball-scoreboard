@@ -1,4 +1,4 @@
-import { Team, Event, Set, Match } from "../components/types";
+import { Team, Event, Set, Match, TeamType } from "../components/types";
 
 export type matchState = {
   homeTeam: Team,
@@ -7,9 +7,13 @@ export type matchState = {
   tournementId: number,
   finished: boolean,
   showNotification: boolean,
-  technicalTimeout: boolean,
-  teamTimeout: boolean,
   switchSide: boolean,
+  currentSet: number,
+  currentSetScore: {[key: string]: number},
+  currentScore: { [key: string]: number },
+  teamTimeout: { [key: string]: boolean },
+  firstServer: { [key: string]: number },
+  firstServerTeam: string,
   events: Event[],
   shouldUpdate: boolean,
   errorMessage: Error|null,

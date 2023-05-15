@@ -22,7 +22,7 @@ export function Notification() {
           title="Notification"
         />
         {match.switchSide && <SwitchSides />}
-        {match.technicalTimeout && <TechnicalTimeout />}
+        {/* {match.technicalTimeout && <TechnicalTimeout />} */}
         {match.teamTimeout && <TeamTimeout />}
 
         

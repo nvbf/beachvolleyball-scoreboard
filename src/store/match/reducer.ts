@@ -1,8 +1,7 @@
 import { createReducer } from "@reduxjs/toolkit"
 import { TeamType, EventType, NotificationType, Event } from "../../components/types"
-import { evaluateScores, isSetDone } from "../../util/evaluateScore"
 import { matchState } from "../types"
-import { addAwayTeamType, addHomeTeamType, addPointType, callTimeoutType, clearNotificationType, firstServerAwayType, firstServerHomeType, firstServerTeamType, MatchActionTypes, pickAwayColorType, pickHomeColorType, showNotificationType, undoLastEventType } from "./actions"
+import { addAwayTeamType, addHomeTeamType, clearNotificationType, evaluateEventsType, insertEventType, MatchActionTypes, undoLastEventType } from "./actions"
 import { v4 } from 'uuid';
 
 const initState = {
@@ -22,10 +21,14 @@ const initState = {
   finished: false,
   showNotification: false,
   technicalTimeout: false,
-  teamTimeout: false,
   switchSide: false,
   tournementId: -1,
-
+  firstServer: { "HOME": 0, "AWAY": 0 },
+  firstServerTeam: TeamType.None,
+  currentSet: 0,
+  currentSetScore: { "HOME": 0, "AWAY": 0 },
+  currentScore: { "HOME": 0, "AWAY": 0 },
+  teamTimeout: { "HOME": false, "AWAY": false },
   events: [
 
   ],
@@ -47,116 +50,12 @@ export const matchReducer = createReducer<matchState>(initState, {
     }
   },
 
-  [MatchActionTypes.ADD_POINT]: (state: matchState, action: addPointType) => {
+  [MatchActionTypes.INSERT_EVENT]: (state: matchState, action: insertEventType) => {
     return {
       ...state,
       events: [
         ...state.events,
-        {
-          id: v4(),
-          eventType: EventType.Score,
-          team: action.payload,
-          playerId: 0,
-          timestamp: Date.now(),
-          undone: "",
-          author: "",
-          reference: ""
-        }
-      ]
-    }
-  },
-
-  [MatchActionTypes.FIRST_SERVER_TEAM]: (state: matchState, action: firstServerTeamType) => {
-    return {
-      ...state,
-      events: [
-        ...state.events,
-        {
-          id: v4(),
-          eventType: EventType.FirstTeamServer,
-          team: action.payload,
-          playerId: 0,
-          timestamp: Date.now(),
-          undone: "",
-          author: "",
-          reference: ""
-        }
-      ]
-    }
-  },
-
-  [MatchActionTypes.FIRST_SERVER_HOME]: (state: matchState, action: firstServerHomeType) => {
-    return {
-      ...state,
-      events: [
-        ...state.events,
-        {
-          id: v4(),
-          eventType: EventType.FirstPlayerServer,
-          team: TeamType.Home,
-          playerId: action.payload,
-          timestamp: Date.now(),
-          undone: "",
-          author: "",
-          reference: ""
-        }
-      ]
-    }
-  },
-
-  [MatchActionTypes.FIRST_SERVER_AWAY]: (state: matchState, action: firstServerAwayType) => {
-    return {
-      ...state,
-      events: [
-        ...state.events,
-        {
-          id: v4(),
-          eventType: EventType.FirstPlayerServer,
-          team: TeamType.Away,
-          playerId: action.payload,
-          timestamp: Date.now(),
-          undone: "",
-          author: "",
-          reference: ""
-        }
-      ]
-    }
-  },
-
-  [MatchActionTypes.PICK_HOME_COLOR]: (state: matchState, action: pickHomeColorType) => {
-    return {
-      ...state,
-      events: [
-        ...state.events,
-        {
-          id: v4(),
-          eventType: EventType.PickColor,
-          team: TeamType.Home,
-          playerId: 0,
-          timestamp: Date.now(),
-          undone: "",
-          author: "",
-          reference: action.payload
-        }
-      ]
-    }
-  },
-
-  [MatchActionTypes.PICK_AWAY_COLOR]: (state: matchState, action: pickAwayColorType) => {
-    return {
-      ...state,
-      events: [
-        ...state.events,
-        {
-          id: v4(),
-          eventType: EventType.PickColor,
-          team: TeamType.Away,
-          playerId: 0,
-          timestamp: Date.now(),
-          undone: "",
-          author: "",
-          reference: action.payload
-        }
+        action.payload
       ]
     }
   },
@@ -193,76 +92,127 @@ export const matchReducer = createReducer<matchState>(initState, {
     };
   },
 
-  [MatchActionTypes.SHOW_NOTIFICATION]: (state: matchState, action: showNotificationType) => {
-    let notificationType = evaluateScores(1)
 
-    switch (notificationType) {
-      case NotificationType.SwitchSides:
-        return {
-          ...state,
-          switchSide: true,
-          showNotification: true
+  [MatchActionTypes.EVALUATE_EVENTS]: (state: matchState, action: evaluateEventsType) => {
+    const { events } = state;
+    const sets: { [key: string]: number } = { [TeamType.Home]: 0, [TeamType.Away]: 0 };
+    let homeSetScore = [0, 0, 0];
+    let awaySetScore = [0, 0, 0];
+    let currentSet = 1;
+    let teamTimeout = { "HOME": false, "AWAY": false };
+    let firstServer = { "HOME": 0, "AWAY": 0 };
+    let firstServerTeam = TeamType.None
+    events.forEach((event) => {
+      if (event.undone) {
+        return;
+      }
+      if (event.eventType === EventType.Score) {
+        const setIndex = currentSet - 1;
+        if (event.team === TeamType.Home) {
+          homeSetScore[setIndex] += 1;
+        } else {
+          awaySetScore[setIndex] += 1;
         }
-      case NotificationType.TechnicalTimeout:
-        return {
-          ...state,
-          technicalTimeout: true,
-          showNotification: true,
+        if (currentSet === 1 || currentSet === 2) {
+          if (homeSetScore[setIndex] >= 21 && homeSetScore[setIndex] - awaySetScore[setIndex] >= 2) {
+            sets[TeamType.Home] += 1;
+            teamTimeout = { "HOME": false, "AWAY": false }
+            firstServer = { "HOME": 0, "AWAY": 0 }
+            firstServerTeam = TeamType.None
+            homeSetScore[setIndex] = 0;
+            awaySetScore[setIndex] = 0;
+            currentSet += 1;
+          } else if (awaySetScore[setIndex] >= 21 && awaySetScore[setIndex] - homeSetScore[setIndex] >= 2) {
+            sets[TeamType.Away] += 1;
+            teamTimeout = { "HOME": false, "AWAY": false }
+            firstServer = { "HOME": 0, "AWAY": 0 }
+            firstServerTeam = TeamType.None
+            homeSetScore[setIndex] = 0;
+            awaySetScore[setIndex] = 0;
+            currentSet += 1;
+          }
+        } else {
+          if (homeSetScore[setIndex] >= 15 && homeSetScore[setIndex] - awaySetScore[setIndex] >= 2) {
+            sets[TeamType.Home] += 1;
+            homeSetScore[setIndex] = 0;
+            awaySetScore[setIndex] = 0;
+          } else if (awaySetScore[setIndex] >= 15 && awaySetScore[setIndex] - homeSetScore[setIndex] >= 2) {
+            sets[TeamType.Away] += 1;
+            homeSetScore[setIndex] = 0;
+            awaySetScore[setIndex] = 0;
+          }
         }
-      default:
-        return {
-          ...state
-        }
-    }
-  },
-
-  [MatchActionTypes.CALL_TIMEOUT]: (state: matchState, action: callTimeoutType) => {
-    let isHomeTeam = action.payload === TeamType.Home ? true : false
+      } else if (event.eventType === EventType.Timeout && event.team !== TeamType.None) {
+        teamTimeout[event.team] = true
+      } else if (event.eventType === EventType.FirstPlayerServer && event.team !== TeamType.None) {
+        firstServer[event.team] = event.playerId
+      } else if (event.eventType === EventType.FirstTeamServer && event.team !== TeamType.None) {
+        firstServerTeam = event.team
+      }
+    });
+    const currentSetScore = {
+      [TeamType.Home]: homeSetScore[currentSet - 1],
+      [TeamType.Away]: awaySetScore[currentSet - 1],
+    };
     return {
       ...state,
-      teamTimeout: true,
-      showNotification: true,
-      events: [
-        ...state.events,
-        {
-          id: v4(),
-          eventType: EventType.Timeout,
-          team: action.payload,
-          playerId: 0,
-          timestamp: Date.now(),
-          undone: "",
-          author: "",
-          reference: ""
-        }
-      ]
+      currentScore: currentSetScore,
+      currentSetScore: sets,
+      currentSet: currentSet,
+      firstServer: firstServer,
+      firstServerTeam: firstServerTeam,
+      teamTimeout: teamTimeout,
     }
   },
 
-  [MatchActionTypes.CLEAR_NOTIFICATION]: (state: matchState, action: clearNotificationType) => {
-    switch (action.payload) {
-      case NotificationType.SwitchSides:
-        return {
-          ...state,
-          switchSide: false,
-          showNotification: false
-        }
-      case NotificationType.TeamTimeout:
-        return {
-          ...state,
-          teamTimeout: false,
-          showNotification: false,
-        }
-      case NotificationType.TechnicalTimeout:
-        return {
-          ...state,
-          technicalTimeout: false,
-          showNotification: false,
-        }
-      default:
-        return {
-          ...state,
-          showNotification: false
-        }
-    }
-  },
+  // [MatchActionTypes.SHOW_NOTIFICATION]: (state: matchState, action: showNotificationType) => {
+  //   let notificationType = evaluateScores(1)
+
+  //   switch (notificationType) {
+  //     case NotificationType.SwitchSides:
+  //       return {
+  //         ...state,
+  //         switchSide: true,
+  //         showNotification: true
+  //       }
+  //     case NotificationType.TechnicalTimeout:
+  //       return {
+  //         ...state,
+  //         technicalTimeout: true,
+  //         showNotification: true,
+  //       }
+  //     default:
+  //       return {
+  //         ...state
+  //       }
+  //   }
+  // },
+
+  // [MatchActionTypes.CLEAR_NOTIFICATION]: (state: matchState, action: clearNotificationType) => {
+  //   switch (action.payload) {
+  //     case NotificationType.SwitchSides:
+  //       return {
+  //         ...state,
+  //         switchSide: false,
+  //         showNotification: false
+  //       }
+  //     case NotificationType.TeamTimeout:
+  //       return {
+  //         ...state,
+  //         teamTimeout: false,
+  //         showNotification: false,
+  //       }
+  //     case NotificationType.TechnicalTimeout:
+  //       return {
+  //         ...state,
+  //         technicalTimeout: false,
+  //         showNotification: false,
+  //       }
+  //     default:
+  //       return {
+  //         ...state,
+  //         showNotification: false
+  //       }
+  //   }
+  // },
 })

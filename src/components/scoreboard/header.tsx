@@ -1,23 +1,17 @@
 import AddIcon from "@mui/icons-material/Add";
 import {
-  Add,
-  SportsVolleyball,
   Undo,
   Settings
 } from '@mui/icons-material';
 import {
-  CardActions,
   Typography
 } from "@mui/material";
 import Button from "@mui/material/Button";
 import React, { useState } from 'react';
-import { addPoint, scorePoint, callTimeout, undoLastEvent } from '../../store/match/actions';
+import { undoEvent } from '../../store/match/actions';
 import { useAppDispatch, useAppSelector } from '../../store/store';
-import { LeftMarginBox, VolleyAlert, VolleyAvatar, VolleyCard, VolleyCardHeader, VolleyRowStack, VolleyStack } from "../../util/styles";
-import { TeamType, Event, EventType } from '../types';
 import Grid from "@mui/material/Grid"
 import Clock from "../clock";
-import EventList from "../eventList";
 
 export function ScoreboardHeader() {
   const match = useAppSelector((state) => state.match);
@@ -26,7 +20,7 @@ export function ScoreboardHeader() {
   const [infoCollapse, setInfoCollapse] = useState(false);
 
   function undo() {
-    dispatch(undoLastEvent());
+    dispatch(undoEvent());
   }
 
   function toggleSettings() {

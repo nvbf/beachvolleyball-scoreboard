@@ -8,7 +8,8 @@ import {
     Abc,
 } from '@mui/icons-material';
 import { getTextColorFromBackground } from "../../util/color";
-import { pickAwayColor, pickHomeColor } from "../../store/match/actions";
+import { addEvent } from "../../store/match/actions";
+import { pickTeamColorEvent } from "./eventFunctions";
 
 
 interface TeamColorPickerProps {
@@ -19,20 +20,29 @@ export function TeamColorPicker({ team }: TeamColorPickerProps) {
 
     const dispatch = useAppDispatch();
 
-    let colors: string[] = [
-        "#ffffff", "#999999", "#000000",
-        "#ff0000", "#ff5500", "#ffaa00",
-        "#ffff00", "#aaff00", "#00ff55",
-        "#00ffaa", "#00ffff", "#00aaff",
-        "#0055ff", "#5500ff", "#aa00ff",
-        "#ff00ff", "#ff00aa", "#ffaaaa"]
+    const colorList = [
+        { color: "#000000", key: "black" },
+        { color: "#999999", key: "gray" },
+        { color: "#ffffff", key: "white" },
+        { color: "#ffff00", key: "yellow" },
+        { color: "#aaff00", key: "lime" },
+        { color: "#00ff55", key: "green" },
+        { color: "#00ffaa", key: "cyan" },
+        { color: "#00ffff", key: "light-blue" },
+        { color: "#00aaff", key: "sky-blue" },
+        { color: "#0055ff", key: "blue" },
+        { color: "#5500ff", key: "indigo" },
+        { color: "#aa00ff", key: "purple" },
+        { color: "#ff00ff", key: "pink" },
+        { color: "#ff00aa", key: "magenta" },
+        { color: "#ffaaaa", key: "light-pink" },
+        { color: "#ffaa00", key: "amber" },
+        { color: "#ff5500", key: "orange" },
+        { color: "#ff0000", key: "red" }
+    ];
 
     function handleColorClick(color: string) {
-        if (team === TeamType.Home) {
-            dispatch(pickHomeColor(color));
-        } else {
-            dispatch(pickAwayColor(color));
-        }
+        dispatch(addEvent(pickTeamColorEvent(team, color)));
     }
 
     return (
@@ -55,17 +65,18 @@ export function TeamColorPicker({ team }: TeamColorPickerProps) {
                     columns={12}
                     sx={{ alignSelf: 'center', textAlign: 'center' }}
                 >
-                    {colors.map((color) => (
-                        <Grid item sm={2} xs={4}>
+                    {colorList.map((item) => (
+                        <Grid item sm={2} xs={4} key={item.key}
+                        >
                             <Button
                                 sx={{
-                                    width: 1, height: 42, backgroundColor: color,
-                                    '&:hover': { backgroundColor: color }
+                                    width: 1, height: 42, backgroundColor: item.color,
+                                    '&:hover': { backgroundColor: item.color }
                                 }}
-                                onClick={handleColorClick.bind(null, color)}
+                                onClick={handleColorClick.bind(null, item.color)}
                             >
 
-                                <Abc sx={{ fontSize: 42, color: getTextColorFromBackground(color) }} />
+                                <Abc sx={{ fontSize: 42, color: getTextColorFromBackground(item.color) }} />
                             </Button>
                         </Grid>
                     ))}
@@ -78,7 +89,7 @@ export function TeamColorPicker({ team }: TeamColorPickerProps) {
                         '&:hover': { backgroundColor: getDefaultColorByTeam(team) }
                     }}>
                     <Typography sx={{ fontSize: 22, color: getTextColorFromBackground(getDefaultColorByTeam(team)) }}>
-                        <Box>Go with default color</Box>
+                        Go with default color
                     </Typography>
                 </Button>
             </Grid>

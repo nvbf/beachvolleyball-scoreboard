@@ -1,3 +1,4 @@
+import { v4 } from "uuid";
 import { getTextColorFromBackground } from "../../util/color";
 import { Event, EventType, TeamType } from "../types"
 
@@ -18,5 +19,70 @@ export const getDefaultColor = (team: TeamType): string => {
         return "#000000"
     } else {
         return "#777788"
+    }
+}
+
+export const createAddPointEvent = (team: TeamType): Event => {
+    return {
+        id: v4(),
+        eventType: EventType.Score,
+        team: team,
+        playerId: 0,
+        timestamp: Date.now(),
+        undone: "",
+        author: "",
+        reference: ""
+    }
+}
+
+export const callTimeoutEvent = (team: TeamType): Event => {
+    return {
+        id: v4(),
+        eventType: EventType.Timeout,
+        team: team,
+        playerId: 0,
+        timestamp: Date.now(),
+        undone: "",
+        author: "",
+        reference: ""
+    }
+}
+
+export const selectFirstServerEvent = (team: TeamType, player: number): Event => {
+    return {
+        id: v4(),
+        eventType: EventType.FirstPlayerServer,
+        team: team,
+        playerId: player,
+        timestamp: Date.now(),
+        undone: "",
+        author: "",
+        reference: ""
+    }
+}
+
+export const selectFirstServingTeamEvent = (team: TeamType): Event => {
+    return {
+        id: v4(),
+        eventType: EventType.FirstTeamServer,
+        team: team,
+        playerId: 0,
+        timestamp: Date.now(),
+        undone: "",
+        author: "",
+        reference: ""
+    }
+}
+
+export const pickTeamColorEvent = (team: TeamType, color: string): Event => {
+    return {
+        id: v4(),
+        eventType: EventType.PickColor,
+        team: team,
+        playerId: 0,
+        timestamp: Date.now(),
+        undone: "",
+        author: "",
+        reference: color
     }
 }

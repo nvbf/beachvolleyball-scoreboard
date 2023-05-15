@@ -1,5 +1,5 @@
 import { createAction } from '@reduxjs/toolkit'
-import { TeamType, NotificationType, Team } from '../../components/types'
+import { TeamType, NotificationType, Team, Event } from '../../components/types'
 
 // Use explicity string enums, otherwise the react-devtools struggle with identifying the action, as the
 // action type then would be numbers
@@ -7,75 +7,53 @@ export enum MatchActionTypes {
   ADD_HOME_TEAM = 'ADD_HOME_TEAM',
   ADD_AWAY_TEAM = 'ADD_AWAY_TEAM',
 
-  POINT_SCORED = 'POINT_SCORED',
-  ADD_POINT = 'ADD_POINT',
   CALL_TIMEOUT = 'CALL_TIMEOUT',
   SWITCH_SIDES = 'SWITCH_SIDES',
 
-  FIRST_SERVER_TEAM = 'FIRST_SERVER_TEAM',
-  FIRST_SERVER_HOME = 'FIRST_SERVER_HOME',
-  FIRST_SERVER_AWAY = 'FIRST_SERVER_AWAY',
-
-  PICK_HOME_COLOR = 'PICK_HOME_COLOR',
-  PICK_AWAY_COLOR = 'PICK_AWAY_COLOR',
-
   UPDATE_SCORES = 'UPDATE_SCORES',
 
-  UNDO_LAST_EVENT = 'UNDO_LAST_EVENT',
-
   TECHNICAL_TIMEOUT = 'CALL_TIMEOUT',
-  EVALUATE_SCORES = 'EVALUATE_SCORES',
+  EVALUATE_EVENTS = 'EVALUATE_EVENTS',
 
-  SHOW_NOTIFICATION = 'SHOW_NOTIFICATION',
   CLEAR_NOTIFICATION = 'CLEAR_NOTIFICATION',
 
   ADD_TEAM_ERROR = 'ADD_TEAM_ERROR',
+
+  ADD_EVENT = 'ADD_EVENT',
+  UNDO_LAST_EVENT = 'UNDO_LAST_EVENT',
+
+  INSERT_EVENT = 'INSERT_EVENT',
+  UNDO_EVENT = 'UNDO_EVENT',
 }
 
 export const addHomeTeam = createAction<Team>(MatchActionTypes.ADD_HOME_TEAM)
 export const addAwayTeam = createAction<Team>(MatchActionTypes.ADD_AWAY_TEAM)
 
-export const scorePoint = createAction<TeamType>(MatchActionTypes.POINT_SCORED)
-export const addPoint = createAction<TeamType>(MatchActionTypes.ADD_POINT)
-export const callTimeout = createAction<TeamType>(MatchActionTypes.CALL_TIMEOUT)
-
-export const firstServerTeam = createAction<TeamType>(MatchActionTypes.FIRST_SERVER_TEAM)
-export const firstServerHome = createAction<number>(MatchActionTypes.FIRST_SERVER_HOME)
-export const firstServerAway = createAction<number>(MatchActionTypes.FIRST_SERVER_AWAY)
-
 export const updateScores = createAction<TeamType>(MatchActionTypes.UPDATE_SCORES)
 
-export const pickHomeColor = createAction<string>(MatchActionTypes.PICK_HOME_COLOR)
-export const pickAwayColor = createAction<string>(MatchActionTypes.PICK_AWAY_COLOR)
-
-export const undoLastEvent = createAction(MatchActionTypes.UNDO_LAST_EVENT)
-
-export const showNotification = createAction(MatchActionTypes.SHOW_NOTIFICATION)
 export const clearNotification = createAction<NotificationType>(MatchActionTypes.CLEAR_NOTIFICATION)
-
-export const evaluateScores = createAction<TeamType>(MatchActionTypes.EVALUATE_SCORES)
 
 export const addTeamError = createAction<Error>(MatchActionTypes.ADD_TEAM_ERROR)
 
+export const addEvent = createAction<Event>(MatchActionTypes.ADD_EVENT)
+export const undoLastEvent = createAction(MatchActionTypes.UNDO_LAST_EVENT)
+
+export const insertEvent = createAction<Event>(MatchActionTypes.INSERT_EVENT)
+export const undoEvent = createAction(MatchActionTypes.UNDO_EVENT)
+
+export const evaluateEvents = createAction(MatchActionTypes.EVALUATE_EVENTS)
+
 export type addHomeTeamType = ReturnType<typeof addHomeTeam>
-export type addAwayTeamType =  ReturnType<typeof addAwayTeam>
+export type addAwayTeamType = ReturnType<typeof addAwayTeam>
 
-export type scorePointType =  ReturnType<typeof scorePoint>
-export type addPointType =  ReturnType<typeof addPoint>
-export type callTimeoutType =  ReturnType<typeof callTimeout>
-
-export type firstServerTeamType =  ReturnType<typeof firstServerTeam>
-export type firstServerHomeType =  ReturnType<typeof firstServerHome>
-export type firstServerAwayType =  ReturnType<typeof firstServerAway>
-
+export type addEventType = ReturnType<typeof addEvent>
 export type undoLastEventType = ReturnType<typeof undoLastEvent>
 
-export type pickHomeColorType = ReturnType<typeof pickHomeColor>
-export type pickAwayColorType = ReturnType<typeof pickAwayColor>
+export type insertEventType = ReturnType<typeof insertEvent>
+export type undoEventType = ReturnType<typeof undoEvent>
 
-export type showNotificationType =  ReturnType<typeof showNotification>
-export type clearNotificationType =  ReturnType<typeof clearNotification>
+export type evaluateEventsType = ReturnType<typeof evaluateEvents>
 
-export type evaluateScoresType =  ReturnType<typeof evaluateScores>
+export type clearNotificationType = ReturnType<typeof clearNotification>
 
 export type addTeamErrorType = ReturnType<typeof addTeamError>

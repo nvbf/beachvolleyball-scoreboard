@@ -11,14 +11,13 @@ import {
 } from "@mui/material";
 import Button from "@mui/material/Button";
 import React, { useState } from 'react';
-import { addPoint, scorePoint, callTimeout, undoLastEvent } from '../store/match/actions';
+import { addEvent } from '../store/match/actions';
 import { useAppDispatch, useAppSelector } from '../store/store';
-import { LeftMarginBox, VolleyAlert, VolleyAvatar, VolleyCard, VolleyCardHeader, VolleyRowStack, VolleyStack } from "../util/styles";
 import { TeamType, Event, EventType } from './types';
 import Grid from "@mui/material/Grid"
 import Clock from "./clock";
 import EventList from "./eventList";
-import { getBackgroundColor, getTextColor } from "./scoreboard/eventFunctions";
+import { callTimeoutEvent, createAddPointEvent, getBackgroundColor, getTextColor } from "./scoreboard/eventFunctions";
 
 export function Scoreboard() {
   const match = useAppSelector((state) => state.match);
@@ -27,36 +26,25 @@ export function Scoreboard() {
   const [infoCollapse, setInfoCollapse] = useState(false);
 
   function homePoint() {
-    dispatch(scorePoint(TeamType.Home));
+    dispatch(addEvent(createAddPointEvent(TeamType.Home)))
   }
 
   function awayPoint() {
-    dispatch(scorePoint(TeamType.Away));
+    dispatch(addEvent(createAddPointEvent(TeamType.Away)))
   }
 
   function homeTeamTimeout() {
-    dispatch(callTimeout(TeamType.Home));
+    dispatch(addEvent(callTimeoutEvent(TeamType.Home)))
   }
 
   function awayTeamTimeout() {
-    dispatch(callTimeout(TeamType.Away));
-  }
-
-  function undo() {
-    dispatch(undoLastEvent());
+    dispatch(addEvent(callTimeoutEvent(TeamType.Away)))
   }
 
   function toggleSettings() {
     // dispatch(callTimeout(Actor.AwayTeam));
   }
 
-  function toggleInfo() {
-    setInfoCollapse(!infoCollapse);
-  }
-
-  function returnCurrentTime() {
-    return new Date().toLocaleTimeString();
-  }
 
   function formatEventBasedOnEventType(event: Event) {
     if (event.eventType === EventType.Score) {
@@ -93,7 +81,7 @@ export function Scoreboard() {
                   fontSize: "2rem", variant: 'button', lineHeight: 1, paddingTop: 1,
                   paddingX: 1
                 }}>
-                  {getSet(match.events, TeamType.Home)}
+                  {match.currentSetScore[TeamType.Home]}
                 </Typography>
               </Grid>
               <Grid item>
@@ -102,7 +90,7 @@ export function Scoreboard() {
                   fontSize: "3.5rem", variant: 'button', lineHeight: 1, paddingTop: 3,
                   paddingX: 1, minWidth: 50
                 }}>
-                  {getScore(match.events, TeamType.Home)}
+                  {match.currentScore[TeamType.Home]}
                 </Typography>
               </Grid>
             </Grid>
@@ -120,7 +108,7 @@ export function Scoreboard() {
                   fontSize: "3.5rem", variant: 'button', lineHeight: 1, paddingTop: 3,
                   paddingX: 1, minWidth: 50
                 }}>
-                  {getScore(match.events, TeamType.Away)}
+                  {match.currentScore[TeamType.Away]}
                 </Typography>
               </Grid>
               <Grid item>
@@ -129,7 +117,7 @@ export function Scoreboard() {
                   fontSize: "2rem", variant: 'button', lineHeight: 1, paddingTop: 1,
                   paddingX: 1
                 }}>
-                  {getSet(match.events, TeamType.Away)}
+                  {match.currentSetScore[TeamType.Away]}
                 </Typography>
               </Grid>
 
@@ -195,7 +183,7 @@ export function Scoreboard() {
           </Grid>
 
           <Grid item xs={6} sx={{ textAlign: 'right' }}>
-            <Button disabled={hasTakenTimeout(match.events, TeamType.Home)} onClick={homeTeamTimeout} variant="contained"
+            <Button disabled={match.teamTimeout[TeamType.Home]} onClick={homeTeamTimeout} variant="contained"
               sx={{
                 width: 1, textTransform: 'none', backgroundColor: getBackgroundColor(match.events, TeamType.Home),
                 '&:hover': { backgroundColor: getBackgroundColor(match.events, TeamType.Home) }
@@ -204,7 +192,7 @@ export function Scoreboard() {
             </Button>
           </Grid>
           <Grid item xs={6} sx={{ textAlign: 'left' }}>
-            <Button disabled={hasTakenTimeout(match.events, TeamType.Away)} onClick={awayTeamTimeout} variant="contained"
+            <Button disabled={match.teamTimeout[TeamType.Away]} onClick={awayTeamTimeout} variant="contained"
               sx={{
                 width: 1, textTransform: 'none', backgroundColor: getBackgroundColor(match.events, TeamType.Away),
                 '&:hover': { backgroundColor: getBackgroundColor(match.events, TeamType.Away) }
@@ -268,163 +256,3 @@ export const getServer = (events: Event[], team: TeamType): number => {
     return 0
   }
 };
-
-function getScore(events: Event[], team: string) {
-  let score = calculatePoints(events, TeamType.Home, TeamType.Away)
-  console.log(score)
-  return score[team]
-}
-
-
-function getSet(events: Event[], team: string) {
-  let score = calculateSets(events, TeamType.Home, TeamType.Away)
-  return score[team]
-}
-
-export function calculatePoints(events: Event[], homeTeam: string, awayTeam: string): { [key: string]: number } {
-  const sets: { [key: string]: number } = { [homeTeam]: 0, [awayTeam]: 0 };
-  let homeSetScore = [0, 0, 0];
-  let awaySetScore = [0, 0, 0];
-  let currentSet = 1;
-  events.forEach((event) => {
-    if (event.undone) {
-      return;
-    }
-    if (event.eventType === EventType.Score) {
-      const setIndex = currentSet - 1;
-      if (event.team === TeamType.Home) {
-        homeSetScore[setIndex] += 1;
-      } else {
-        awaySetScore[setIndex] += 1;
-      }
-      if (currentSet === 1 || currentSet === 2) {
-        if (homeSetScore[setIndex] >= 21 && homeSetScore[setIndex] - awaySetScore[setIndex] >= 2) {
-          sets[homeTeam] += 1;
-          homeSetScore[setIndex] = 0;
-          awaySetScore[setIndex] = 0;
-          currentSet += 1;
-        } else if (awaySetScore[setIndex] >= 21 && awaySetScore[setIndex] - homeSetScore[setIndex] >= 2) {
-          sets[awayTeam] += 1;
-          homeSetScore[setIndex] = 0;
-          awaySetScore[setIndex] = 0;
-          currentSet += 1;
-        }
-      } else {
-        if (homeSetScore[setIndex] >= 15 && homeSetScore[setIndex] - awaySetScore[setIndex] >= 2) {
-          sets[homeTeam] += 1;
-          homeSetScore[setIndex] = 0;
-          awaySetScore[setIndex] = 0;
-        } else if (awaySetScore[setIndex] >= 15 && awaySetScore[setIndex] - homeSetScore[setIndex] >= 2) {
-          sets[awayTeam] += 1;
-          homeSetScore[setIndex] = 0;
-          awaySetScore[setIndex] = 0;
-        }
-      }
-    }
-  });
-  const currentSetScore = {
-    [homeTeam]: homeSetScore[currentSet - 1],
-    [awayTeam]: awaySetScore[currentSet - 1],
-  };
-  console.log(sets)
-  return currentSetScore;
-}
-
-export function calculateSets(events: Event[], homeTeam: string, awayTeam: string): { [key: string]: number } {
-  const sets: { [key: string]: number } = { [homeTeam]: 0, [awayTeam]: 0 };
-  let homeSetScore = [0, 0, 0];
-  let awaySetScore = [0, 0, 0];
-  let currentSet = 1;
-  events.forEach((event) => {
-    if (event.undone) {
-      return;
-    }
-    if (event.eventType === EventType.Score) {
-      const setIndex = currentSet - 1;
-      if (event.team === TeamType.Home) {
-        homeSetScore[setIndex] += 1;
-      } else {
-        awaySetScore[setIndex] += 1;
-      }
-      if (currentSet === 1 || currentSet === 2) {
-        if (homeSetScore[setIndex] >= 21 && homeSetScore[setIndex] - awaySetScore[setIndex] >= 2) {
-          sets[homeTeam] += 1;
-          homeSetScore[setIndex] = 0;
-          awaySetScore[setIndex] = 0;
-          currentSet += 1;
-        } else if (awaySetScore[setIndex] >= 21 && awaySetScore[setIndex] - homeSetScore[setIndex] >= 2) {
-          sets[awayTeam] += 1;
-          homeSetScore[setIndex] = 0;
-          awaySetScore[setIndex] = 0;
-          currentSet += 1;
-        }
-      } else {
-        if (homeSetScore[setIndex] >= 15 && homeSetScore[setIndex] - awaySetScore[setIndex] >= 2) {
-          sets[homeTeam] += 1;
-          homeSetScore[setIndex] = 0;
-          awaySetScore[setIndex] = 0;
-          currentSet += 1;
-        } else if (awaySetScore[setIndex] >= 15 && awaySetScore[setIndex] - homeSetScore[setIndex] >= 2) {
-          sets[awayTeam] += 1;
-          homeSetScore[setIndex] = 0;
-          awaySetScore[setIndex] = 0;
-          currentSet += 1;
-        }
-      }
-    }
-  });
-  return sets;
-}
-
-export function hasTakenTimeout(events: Event[], team: TeamType): boolean {
-  const sets: { [key: string]: number } = { [TeamType.Home]: 0, [TeamType.Away]: 0 };
-  let homeSetScore = [0, 0, 0];
-  let awaySetScore = [0, 0, 0];
-  let currentSet = 1;
-  let hasTakenTimeout = false
-  events.forEach((event) => {
-    if (event.undone) {
-      return;
-    }
-    if (event.eventType === EventType.Score) {
-      const setIndex = currentSet - 1;
-      if (event.team === TeamType.Home) {
-        homeSetScore[setIndex] += 1;
-      } else {
-        awaySetScore[setIndex] += 1;
-      }
-      if (currentSet === 1 || currentSet === 2) {
-        if (homeSetScore[setIndex] >= 21 && homeSetScore[setIndex] - awaySetScore[setIndex] >= 2) {
-          sets[TeamType.Home] += 1;
-          homeSetScore[setIndex] = 0;
-          awaySetScore[setIndex] = 0;
-          currentSet += 1;
-          hasTakenTimeout = false
-        } else if (awaySetScore[setIndex] >= 21 && awaySetScore[setIndex] - homeSetScore[setIndex] >= 2) {
-          sets[TeamType.Away] += 1;
-          homeSetScore[setIndex] = 0;
-          awaySetScore[setIndex] = 0;
-          currentSet += 1;
-          hasTakenTimeout = false
-        }
-      } else {
-        if (homeSetScore[setIndex] >= 15 && homeSetScore[setIndex] - awaySetScore[setIndex] >= 2) {
-          sets[TeamType.Home] += 1;
-          homeSetScore[setIndex] = 0;
-          awaySetScore[setIndex] = 0;
-          currentSet += 1;
-        } else if (awaySetScore[setIndex] >= 15 && awaySetScore[setIndex] - homeSetScore[setIndex] >= 2) {
-          sets[TeamType.Away] += 1;
-          homeSetScore[setIndex] = 0;
-          awaySetScore[setIndex] = 0;
-          currentSet += 1;
-        }
-      }
-    } else if (event.eventType === EventType.Timeout) {
-      if (event.team === team) {
-        hasTakenTimeout = true
-      }
-    }
-  });
-  return hasTakenTimeout;
-}
