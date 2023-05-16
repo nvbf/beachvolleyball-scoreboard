@@ -164,7 +164,7 @@ export function Scoreboard() {
           sx={{ alignSelf: 'center', textAlign: 'center' }}
         >
           <Grid item xs={6} sx={{ textAlign: 'right' }}>
-            <Button variant="contained" onClick={homePoint}
+            <Button disabled={match.finished} variant="contained" onClick={homePoint}
               sx={{
                 width: 1, height: 84, backgroundColor: getBackgroundColor(match.events, TeamType.Home),
                 '&:hover': { backgroundColor: getBackgroundColor(match.events, TeamType.Home) }
@@ -173,7 +173,7 @@ export function Scoreboard() {
             </Button>
           </Grid>
           <Grid item xs={6} sx={{ textAlign: 'left' }}>
-            <Button variant="contained" onClick={awayPoint}
+            <Button disabled={match.finished} variant="contained" onClick={awayPoint}
               sx={{
                 width: 1, height: 84, backgroundColor: getBackgroundColor(match.events, TeamType.Away),
                 '&:hover': { backgroundColor: getBackgroundColor(match.events, TeamType.Away) }
@@ -183,7 +183,7 @@ export function Scoreboard() {
           </Grid>
 
           <Grid item xs={6} sx={{ textAlign: 'right' }}>
-            <Button disabled={match.teamTimeout[TeamType.Home]} onClick={homeTeamTimeout} variant="contained"
+            <Button disabled={match.teamTimeout[TeamType.Home] || match.finished} onClick={homeTeamTimeout} variant="contained"
               sx={{
                 width: 1, textTransform: 'none', backgroundColor: getBackgroundColor(match.events, TeamType.Home),
                 '&:hover': { backgroundColor: getBackgroundColor(match.events, TeamType.Home) }
@@ -192,7 +192,7 @@ export function Scoreboard() {
             </Button>
           </Grid>
           <Grid item xs={6} sx={{ textAlign: 'left' }}>
-            <Button disabled={match.teamTimeout[TeamType.Away]} onClick={awayTeamTimeout} variant="contained"
+            <Button disabled={match.teamTimeout[TeamType.Away] || match.finished} onClick={awayTeamTimeout} variant="contained"
               sx={{
                 width: 1, textTransform: 'none', backgroundColor: getBackgroundColor(match.events, TeamType.Away),
                 '&:hover': { backgroundColor: getBackgroundColor(match.events, TeamType.Away) }

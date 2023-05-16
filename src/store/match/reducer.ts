@@ -19,7 +19,7 @@ const initState = {
   },
   matchId: "",
   finished: false,
-  showNotification: false,
+  showNotification: true,
   technicalTimeout: false,
   switchSide: false,
   tournementId: -1,
@@ -51,6 +51,16 @@ export const matchReducer = createReducer<matchState>(initState, {
   },
 
   [MatchActionTypes.INSERT_EVENT]: (state: matchState, action: insertEventType) => {
+    if (action.payload.eventType === EventType.Score) {
+      return {
+        ...state,
+        showNotification: true,
+        events: [
+          ...state.events,
+          action.payload
+        ]
+      }
+    }
     return {
       ...state,
       events: [
@@ -83,11 +93,12 @@ export const matchReducer = createReducer<matchState>(initState, {
         timestamp: Date.now(),
         undone: "",
         author: "",
-        reference: undoneEvent.id
+        reference: undoneEvent.id,
       }
     ];
     return {
       ...state,
+      showNotification: true,
       events: updatedEvents
     };
   },
@@ -154,6 +165,7 @@ export const matchReducer = createReducer<matchState>(initState, {
       [TeamType.Home]: homeSetScore[currentSet - 1],
       [TeamType.Away]: awaySetScore[currentSet - 1],
     };
+    let matchDone = sets[TeamType.Home] === 2 || sets[TeamType.Away] === 2
     return {
       ...state,
       currentScore: currentSetScore,
@@ -162,6 +174,7 @@ export const matchReducer = createReducer<matchState>(initState, {
       firstServer: firstServer,
       firstServerTeam: firstServerTeam,
       teamTimeout: teamTimeout,
+      finished: matchDone,
     }
   },
 
@@ -188,31 +201,11 @@ export const matchReducer = createReducer<matchState>(initState, {
   //   }
   // },
 
-  // [MatchActionTypes.CLEAR_NOTIFICATION]: (state: matchState, action: clearNotificationType) => {
-  //   switch (action.payload) {
-  //     case NotificationType.SwitchSides:
-  //       return {
-  //         ...state,
-  //         switchSide: false,
-  //         showNotification: false
-  //       }
-  //     case NotificationType.TeamTimeout:
-  //       return {
-  //         ...state,
-  //         teamTimeout: false,
-  //         showNotification: false,
-  //       }
-  //     case NotificationType.TechnicalTimeout:
-  //       return {
-  //         ...state,
-  //         technicalTimeout: false,
-  //         showNotification: false,
-  //       }
-  //     default:
-  //       return {
-  //         ...state,
-  //         showNotification: false
-  //       }
-  //   }
-  // },
+  [MatchActionTypes.CLEAR_NOTIFICATION]: (state: matchState, action: clearNotificationType) => {
+
+    return {
+      ...state,
+      showNotification: false
+    }
+  }
 })

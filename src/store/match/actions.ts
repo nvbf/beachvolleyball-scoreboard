@@ -31,7 +31,7 @@ export const addAwayTeam = createAction<Team>(MatchActionTypes.ADD_AWAY_TEAM)
 
 export const updateScores = createAction<TeamType>(MatchActionTypes.UPDATE_SCORES)
 
-export const clearNotification = createAction<NotificationType>(MatchActionTypes.CLEAR_NOTIFICATION)
+export const clearNotification = createAction(MatchActionTypes.CLEAR_NOTIFICATION)
 
 export const addTeamError = createAction<Error>(MatchActionTypes.ADD_TEAM_ERROR)
 
