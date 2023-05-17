@@ -1,8 +1,7 @@
 import React from 'react';
-import AddAwayTeam from '../components/addAwayTeam';
-import AddHomeTeam from '../components/addHomeTeam';
+import { AddTeam } from '../components/scoreboard/addTeam';
 import Scoreboard from '../components/scoreboard';
-import { useAppSelector } from '../store/store';
+import { useAppDispatch, useAppSelector } from '../store/store';
 import ScoreboardHeader from '../components/scoreboard/header';
 import { matchState } from '../store/types';
 import { EventType, TeamType, Event } from '../components/types';
@@ -13,18 +12,44 @@ import SetFinished from '../components/scoreboard/setFinished';
 import MatchFinished from '../components/scoreboard/matchFinished';
 import TeamTimeout from '../components/scoreboard/teamTimeout';
 import TechnicalTimeout from '../components/scoreboard/technicalTimeout';
+import { useLocation } from 'react-router-dom';
+import { addAwayTeam, addHomeTeam } from '../store/match/actions';
+
 
 function Match() {
-
-  const homeTeam = useAppSelector(state => state.match.homeTeam)
-  const awayTeam = useAppSelector(state => state.match.awayTeam)
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
   const match = useAppSelector(state => state.match)
+  const dispatch = useAppDispatch();
+
+
+  const homePlayer1 = searchParams.get('name1');
+  const homePlayer2 = searchParams.get('name2');
+  const awayPlayer1 = searchParams.get('name3');
+  const awayPlayer2 = searchParams.get('name4');
+  const matchId = searchParams.get('matchid');
+  const tournementId = searchParams.get('tournementid');
+
+  if (!match.homeTeam.player1Name && !match.homeTeam.player1Name && homePlayer1 && homePlayer2) {
+    dispatch(addHomeTeam({
+      player1Name: homePlayer1,
+      player2Name: homePlayer2,
+    }))
+  }
+
+  if (!match.awayTeam.player1Name && !match.awayTeam.player1Name && awayPlayer1 && awayPlayer2) {
+    dispatch(addAwayTeam({
+      player1Name: awayPlayer1,
+      player2Name: awayPlayer2,
+    }))
+  }
+
 
   return (
     <main>
       <ScoreboardHeader />
-      {getActiveDisplay(match) === DisplayType.AddHomeTeam && <AddHomeTeam />}
-      {getActiveDisplay(match) === DisplayType.AddAwayTeam && <AddAwayTeam />}
+      {getActiveDisplay(match) === DisplayType.AddHomeTeam && <AddTeam teamType={TeamType.Home} />}
+      {getActiveDisplay(match) === DisplayType.AddAwayTeam && <AddTeam teamType={TeamType.Away} />}
       {getActiveDisplay(match) === DisplayType.PickHomeColor && <TeamColorPicker team={TeamType.Home} />}
       {getActiveDisplay(match) === DisplayType.PickAwayColor && <TeamColorPicker team={TeamType.Away} />}
       {getActiveDisplay(match) === DisplayType.SelectServeorder && <ServeOrder />}
@@ -56,9 +81,9 @@ export enum DisplayType {
 }
 
 function getActiveDisplay(state: matchState): DisplayType {
-  if (!state.homeTeam.added) {
+  if (state.homeTeam.player1Name === "" || state.homeTeam.player2Name === "") {
     return DisplayType.AddHomeTeam
-  } else if (!state.awayTeam.added) {
+  } else if (state.awayTeam.player1Name === "" || state.awayTeam.player2Name === "") {
     return DisplayType.AddAwayTeam
   } else if (!hasTeamPickedColor(state.events, TeamType.Home)) {
     return DisplayType.PickHomeColor

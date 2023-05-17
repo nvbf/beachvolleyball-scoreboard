@@ -6,23 +6,19 @@ import { v4 } from 'uuid';
 
 const initState = {
   homeTeam: {
-    player1Name: "Haidar Nuri",
-    player2Name: "Øystein William Grændsen",
-    shirtColor: "#111111",
-    added: true,
+    player1Name: "",
+    player2Name: "",
   },
   awayTeam: {
-    player1Name: "Frode Walde",
-    player2Name: "Ståle Mygland",
-    shirtColor: "#eeeeee",
-    added: true,
+    player1Name: "",
+    player2Name: "",
   },
   matchId: "",
+  tournementId: -1,
   finished: false,
   showNotification: true,
   technicalTimeout: false,
   switchSide: false,
-  tournementId: -1,
   firstServer: { "HOME": 0, "AWAY": 0 },
   firstServerTeam: TeamType.None,
   currentSet: 0,
