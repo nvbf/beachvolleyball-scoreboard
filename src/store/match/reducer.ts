@@ -1,7 +1,7 @@
 import { createReducer } from "@reduxjs/toolkit"
 import { TeamType, EventType, NotificationType, Event } from "../../components/types"
 import { matchState } from "../types"
-import { addAwayTeamType, addHomeTeamType, clearNotificationType, evaluateEventsType, insertEventType, MatchActionTypes, undoLastEventType } from "./actions"
+import { addAwayTeamType, addHomeTeamType, clearNotificationType, evaluateEventsType, insertEventType, MatchActionTypes, mirrorSidesType, undoLastEventType } from "./actions"
 import { v4 } from 'uuid';
 
 const initState = {
@@ -19,6 +19,7 @@ const initState = {
   showNotification: true,
   technicalTimeout: false,
   switchSide: false,
+  mirrorSides: false,
   firstServer: { "HOME": 0, "AWAY": 0 },
   firstServerTeam: TeamType.None,
   currentSet: 0,
@@ -196,6 +197,14 @@ export const matchReducer = createReducer<matchState>(initState, {
   //       }
   //   }
   // },
+
+  [MatchActionTypes.MIRROR_SIDES]: (state: matchState, action: mirrorSidesType) => {
+
+    return {
+      ...state,
+      mirrorSides: !state.mirrorSides
+    }
+  },
 
   [MatchActionTypes.CLEAR_NOTIFICATION]: (state: matchState, action: clearNotificationType) => {
 

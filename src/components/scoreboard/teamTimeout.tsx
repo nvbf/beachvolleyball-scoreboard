@@ -29,7 +29,17 @@ export function TeamTimeout({ team }: TeamTimeoutProps) {
             sx={{ alignSelf: 'center', textAlign: 'center' }}
         >
             <Grid item xs={12}>
-                <Typography sx={{ fontSize: 28 }}>Team timout for the {team === TeamType.Home ? "home" : "away"} team</Typography>
+                <Typography sx={{ fontSize: 28 }}>Team timeout for the {team === TeamType.Home ? "home" : "away"} team</Typography>
+            </Grid>
+            <Grid item md={6} xs={12} sx={{ textAlign: 'left' }}>
+                <Button variant="contained" onClick={handleDone.bind(null)}
+                    sx={{
+                        width: 1, height: 64
+                    }}>
+                    <Typography>
+                        Done!
+                    </Typography>
+                </Button>
             </Grid>
         </Grid>
     );

@@ -3,7 +3,7 @@ import { TeamType } from "../types";
 import Grid from "@mui/material/Grid";
 import { Box, Button, Typography } from "@mui/material";
 import { useAppDispatch, useAppSelector } from '../../store/store';
-import { addEvent, clearNotification } from "../../store/match/actions";
+import { addEvent, clearNotification, mirrorSides } from "../../store/match/actions";
 import { pickTeamColorEvent } from "./eventFunctions";
 
 export function TeamTimeout() {
@@ -12,6 +12,7 @@ export function TeamTimeout() {
 
     function handleDone() {
         dispatch(clearNotification());
+        dispatch(mirrorSides());
     }
 
     return (

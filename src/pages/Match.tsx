@@ -54,7 +54,7 @@ function Match() {
       {getActiveDisplay(match) === DisplayType.PickAwayColor && <TeamColorPicker team={TeamType.Away} />}
       {getActiveDisplay(match) === DisplayType.SelectServeorder && <ServeOrder />}
       {getActiveDisplay(match) === DisplayType.ScoreBoard && <Scoreboard />}
-      {getActiveDisplay(match) === DisplayType.TeamTimeout && <TeamTimeout team={match.events[-1].team} />}
+      {getActiveDisplay(match) === DisplayType.TeamTimeout && <TeamTimeout team={match.events.slice().reverse()[0].team} />}
       {getActiveDisplay(match) === DisplayType.TechnicalTimeout && <TechnicalTimeout />}
       {getActiveDisplay(match) === DisplayType.SwitchSides && <SwitchSides />}
       {getActiveDisplay(match) === DisplayType.SetFinished && <SetFinished />}

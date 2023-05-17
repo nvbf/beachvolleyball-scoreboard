@@ -4,7 +4,7 @@ import Grid from "@mui/material/Grid";
 import { Box, Button, Typography } from "@mui/material";
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import { getTextColorFromBackground } from "../../util/color";
-import { clearNotification } from "../../store/match/actions";
+import { clearNotification, mirrorSides } from "../../store/match/actions";
 
 
 interface TeamColorPickerProps {
@@ -17,6 +17,7 @@ export function SwitchSides() {
 
     function handleDone() {
         dispatch(clearNotification());
+        dispatch(mirrorSides());
     }
 
     return (

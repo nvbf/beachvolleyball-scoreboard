@@ -19,6 +19,7 @@ import Clock from "./clock";
 import EventList from "./eventList";
 import { callTimeoutEvent, createAddPointEvent, getBackgroundColor, getTextColor } from "./scoreboard/eventFunctions";
 import { getInitials } from "../util/names";
+import { matchState } from "../store/types";
 
 export function Scoreboard() {
   const match = useAppSelector((state) => state.match);
@@ -30,8 +31,16 @@ export function Scoreboard() {
     dispatch(addEvent(createAddPointEvent(TeamType.Home)))
   }
 
+  function addPoint(team: TeamType) {
+    dispatch(addEvent(createAddPointEvent(team)))
+  }
+
   function awayPoint() {
     dispatch(addEvent(createAddPointEvent(TeamType.Away)))
+  }
+
+  function teamTimeout(team: TeamType) {
+    dispatch(addEvent(callTimeoutEvent(team)))
   }
 
   function homeTeamTimeout() {
@@ -78,20 +87,20 @@ export function Scoreboard() {
             >
               <Grid item>
                 <Typography align='center' sx={{
-                  border: 4, borderRadius: '12px', borderColor: getBackgroundColor(match.events, TeamType.Home),
+                  border: 4, borderRadius: '12px', borderColor: getBackgroundColor(match.events, getLeftTeam(match)),
                   fontSize: "2rem", variant: 'button', lineHeight: 1, paddingTop: 1,
                   paddingX: 1
                 }}>
-                  {match.currentSetScore[TeamType.Home]}
+                  {match.currentSetScore[getLeftTeam(match)]}
                 </Typography>
               </Grid>
               <Grid item>
                 <Typography align='right' sx={{
-                  border: 6, borderRadius: '12px', borderColor: getBackgroundColor(match.events, TeamType.Home),
+                  border: 6, borderRadius: '12px', borderColor: getBackgroundColor(match.events, getLeftTeam(match)),
                   fontSize: "3.5rem", variant: 'button', lineHeight: 1, paddingTop: 3,
                   paddingX: 1, minWidth: 50
                 }}>
-                  {match.currentScore[TeamType.Home]}
+                  {match.currentScore[getLeftTeam(match)]}
                 </Typography>
               </Grid>
             </Grid>
@@ -105,20 +114,20 @@ export function Scoreboard() {
             >
               <Grid item>
                 <Typography align='left' sx={{
-                  border: 6, borderRadius: '12px', borderColor: getBackgroundColor(match.events, TeamType.Away),
+                  border: 6, borderRadius: '12px', borderColor: getBackgroundColor(match.events, getRightTeam(match)),
                   fontSize: "3.5rem", variant: 'button', lineHeight: 1, paddingTop: 3,
                   paddingX: 1, minWidth: 50
                 }}>
-                  {match.currentScore[TeamType.Away]}
+                  {match.currentScore[getRightTeam(match)]}
                 </Typography>
               </Grid>
               <Grid item>
                 <Typography align='center' sx={{
-                  border: 4, borderRadius: '12px', borderColor: getBackgroundColor(match.events, TeamType.Away),
+                  border: 4, borderRadius: '12px', borderColor: getBackgroundColor(match.events, getRightTeam(match)),
                   fontSize: "2rem", variant: 'button', lineHeight: 1, paddingTop: 1,
                   paddingX: 1
                 }}>
-                  {match.currentSetScore[TeamType.Away]}
+                  {match.currentSetScore[getRightTeam(match)]}
                 </Typography>
               </Grid>
 
@@ -133,27 +142,27 @@ export function Scoreboard() {
           sx={{ alignSelf: 'center', textAlign: 'center' }}
         >
           <Grid item xs={6} sx={{ textAlign: 'right' }}>
-            <Typography sx={{ fontSize: 18 }}> {getInitials(match.homeTeam.player1Name)} <SportsVolleyball sx={{
-              fontSize: 18, display: getServer(match.events, TeamType.Home) === 1 ? "true" : "none"
+            <Typography sx={{ fontSize: 18 }}> {getInitials(getPlayer(match, 1, getLeftTeam(match)))} <SportsVolleyball sx={{
+              fontSize: 18, display: getServer(match.events, getLeftTeam(match)) === 1 ? "true" : "none"
             }} /></Typography>
           </Grid>
           <Grid item xs={6} sx={{ textAlign: 'left' }}>
             <Typography sx={{ fontSize: 18 }}> <SportsVolleyball sx={{
-              fontSize: 18, display: getServer(match.events, TeamType.Away) === 1 ? "true" : "none"
-            }} /> {getInitials(match.awayTeam.player1Name)}</Typography>
+              fontSize: 18, display: getServer(match.events, getRightTeam(match)) === 1 ? "true" : "none"
+            }} /> {getInitials(getPlayer(match, 1, getRightTeam(match)))}</Typography>
           </Grid>
 
           <Grid item xs={6} sx={{ textAlign: 'right' }}>
-            <Typography sx={{ fontSize: 18 }}> {getInitials(match.homeTeam.player2Name)} <SportsVolleyball sx={{
-              fontSize: 18, display: getServer(match.events, TeamType.Home) === 2 ? "true" : "none"
+            <Typography sx={{ fontSize: 18 }}> {getInitials(getPlayer(match, 2, getLeftTeam(match)))} <SportsVolleyball sx={{
+              fontSize: 18, display: getServer(match.events, getLeftTeam(match)) === 2 ? "true" : "none"
             }} /></Typography>
 
           </Grid>
 
           <Grid item xs={6} sx={{ textAlign: 'left' }}>
             <Typography sx={{ fontSize: 18 }}> <SportsVolleyball sx={{
-              fontSize: 18, display: getServer(match.events, TeamType.Away) === 2 ? "true" : "none"
-            }} /> {getInitials(match.awayTeam.player2Name)}</Typography>
+              fontSize: 18, display: getServer(match.events, getRightTeam(match)) === 2 ? "true" : "none"
+            }} /> {getInitials(getPlayer(match, 2, getRightTeam(match)))}</Typography>
           </Grid>
         </Grid>
       </Grid>
@@ -165,41 +174,41 @@ export function Scoreboard() {
           sx={{ alignSelf: 'center', textAlign: 'center' }}
         >
           <Grid item xs={6} sx={{ textAlign: 'right' }}>
-            <Button disabled={match.finished} variant="contained" onClick={homePoint}
+            <Button disabled={match.finished} variant="contained" onClick={addPoint.bind(null, getLeftTeam(match))}
               sx={{
-                width: 1, height: 84, backgroundColor: getBackgroundColor(match.events, TeamType.Home),
-                '&:hover': { backgroundColor: getBackgroundColor(match.events, TeamType.Home) }
+                width: 1, height: 84, backgroundColor: getBackgroundColor(match.events, getLeftTeam(match)),
+                '&:hover': { backgroundColor: getBackgroundColor(match.events, getLeftTeam(match)) }
               }}>
-              <Add sx={{ fontSize: 84, color: getTextColor(match.events, TeamType.Home) }} />
+              <Add sx={{ fontSize: 84, color: getTextColor(match.events, getLeftTeam(match)) }} />
             </Button>
           </Grid>
           <Grid item xs={6} sx={{ textAlign: 'left' }}>
-            <Button disabled={match.finished} variant="contained" onClick={awayPoint}
+            <Button disabled={match.finished} variant="contained" onClick={addPoint.bind(null, getRightTeam(match))}
               sx={{
-                width: 1, height: 84, backgroundColor: getBackgroundColor(match.events, TeamType.Away),
-                '&:hover': { backgroundColor: getBackgroundColor(match.events, TeamType.Away) }
+                width: 1, height: 84, backgroundColor: getBackgroundColor(match.events, getRightTeam(match)),
+                '&:hover': { backgroundColor: getBackgroundColor(match.events, getRightTeam(match)) }
               }}>
-              <Add sx={{ fontSize: 84, color: getTextColor(match.events, TeamType.Away) }} />
+              <Add sx={{ fontSize: 84, color: getTextColor(match.events, getRightTeam(match)) }} />
             </Button>
           </Grid>
 
           <Grid item xs={6} sx={{ textAlign: 'right' }}>
-            <Button disabled={match.teamTimeout[TeamType.Home] || match.finished} onClick={homeTeamTimeout} variant="contained"
+            <Button disabled={match.teamTimeout[getLeftTeam(match)] || match.finished} onClick={teamTimeout.bind(null, getLeftTeam(match))} variant="contained"
               sx={{
-                width: 1, textTransform: 'none', backgroundColor: getBackgroundColor(match.events, TeamType.Home),
-                '&:hover': { backgroundColor: getBackgroundColor(match.events, TeamType.Home) }
+                width: 1, textTransform: 'none', backgroundColor: getBackgroundColor(match.events, getLeftTeam(match)),
+                '&:hover': { backgroundColor: getBackgroundColor(match.events, getLeftTeam(match)) }
               }}>
-              <Typography sx={{ fontSize: 18, color: getTextColor(match.events, TeamType.Home) }}> TIMEOUT</Typography>
+              <Typography sx={{ fontSize: 18, color: getTextColor(match.events, getLeftTeam(match)) }}> TIMEOUT</Typography>
             </Button>
           </Grid>
           <Grid item xs={6} sx={{ textAlign: 'left' }}>
-            <Button disabled={match.teamTimeout[TeamType.Away] || match.finished} onClick={awayTeamTimeout} variant="contained"
+            <Button disabled={match.teamTimeout[getRightTeam(match)] || match.finished} onClick={teamTimeout.bind(null, getRightTeam(match))} variant="contained"
               sx={{
-                width: 1, textTransform: 'none', backgroundColor: getBackgroundColor(match.events, TeamType.Away),
-                '&:hover': { backgroundColor: getBackgroundColor(match.events, TeamType.Away) }
+                width: 1, textTransform: 'none', backgroundColor: getBackgroundColor(match.events, getRightTeam(match)),
+                '&:hover': { backgroundColor: getBackgroundColor(match.events, getRightTeam(match)) }
 
               }}>
-              <Typography sx={{ fontSize: 18, color: getTextColor(match.events, TeamType.Away) }}> TIMEOUT</Typography>
+              <Typography sx={{ fontSize: 18, color: getTextColor(match.events, getRightTeam(match)) }}> TIMEOUT</Typography>
             </Button>
           </Grid>
         </Grid>
@@ -212,6 +221,36 @@ export function Scoreboard() {
 }
 
 export default Scoreboard;
+
+export const getRightTeam = (match: matchState): TeamType => {
+  if (match.mirrorSides){
+    return TeamType.Home  
+  }
+  return TeamType.Away
+}
+
+export const getLeftTeam = (match: matchState): TeamType => {
+  if (match.mirrorSides) {
+    return TeamType.Away
+  }
+  return TeamType.Home
+}
+
+export const getPlayer = (match: matchState, playerId: number, teamType: TeamType): string => {
+  if(teamType === TeamType.Home) {
+    if (playerId === 1){
+      return match.homeTeam.player1Name
+    } else {
+      return match.homeTeam.player2Name
+    }
+  } else {
+    if (playerId === 1) {
+      return match.awayTeam.player1Name
+    } else {
+      return match.awayTeam.player2Name
+    }
+  }
+}
 
 export const getServer = (events: Event[], team: TeamType): number => {
   let servingPlayer = 0;

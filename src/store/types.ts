@@ -8,6 +8,7 @@ export type matchState = {
   finished: boolean,
   showNotification: boolean,
   switchSide: boolean,
+  mirrorSides: boolean,
   currentSet: number,
   currentSetScore: {[key: string]: number},
   currentScore: { [key: string]: number },
