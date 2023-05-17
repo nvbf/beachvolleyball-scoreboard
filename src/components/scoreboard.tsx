@@ -18,6 +18,7 @@ import Grid from "@mui/material/Grid"
 import Clock from "./clock";
 import EventList from "./eventList";
 import { callTimeoutEvent, createAddPointEvent, getBackgroundColor, getTextColor } from "./scoreboard/eventFunctions";
+import { getInitials } from "../util/names";
 
 export function Scoreboard() {
   const match = useAppSelector((state) => state.match);
@@ -132,18 +133,18 @@ export function Scoreboard() {
           sx={{ alignSelf: 'center', textAlign: 'center' }}
         >
           <Grid item xs={6} sx={{ textAlign: 'right' }}>
-            <Typography sx={{ fontSize: 18 }}> {match.homeTeam.player1Name} <SportsVolleyball sx={{
+            <Typography sx={{ fontSize: 18 }}> {getInitials(match.homeTeam.player1Name)} <SportsVolleyball sx={{
               fontSize: 18, display: getServer(match.events, TeamType.Home) === 1 ? "true" : "none"
             }} /></Typography>
           </Grid>
           <Grid item xs={6} sx={{ textAlign: 'left' }}>
             <Typography sx={{ fontSize: 18 }}> <SportsVolleyball sx={{
               fontSize: 18, display: getServer(match.events, TeamType.Away) === 1 ? "true" : "none"
-            }} /> {match.awayTeam.player1Name}</Typography>
+            }} /> {getInitials(match.awayTeam.player1Name)}</Typography>
           </Grid>
 
           <Grid item xs={6} sx={{ textAlign: 'right' }}>
-            <Typography sx={{ fontSize: 18 }}> {match.homeTeam.player2Name} <SportsVolleyball sx={{
+            <Typography sx={{ fontSize: 18 }}> {getInitials(match.homeTeam.player2Name)} <SportsVolleyball sx={{
               fontSize: 18, display: getServer(match.events, TeamType.Home) === 2 ? "true" : "none"
             }} /></Typography>
 
@@ -152,7 +153,7 @@ export function Scoreboard() {
           <Grid item xs={6} sx={{ textAlign: 'left' }}>
             <Typography sx={{ fontSize: 18 }}> <SportsVolleyball sx={{
               fontSize: 18, display: getServer(match.events, TeamType.Away) === 2 ? "true" : "none"
-            }} /> {match.awayTeam.player2Name}</Typography>
+            }} /> {getInitials(match.awayTeam.player2Name)}</Typography>
           </Grid>
         </Grid>
       </Grid>

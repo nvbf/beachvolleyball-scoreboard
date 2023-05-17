@@ -1,6 +1,15 @@
-export function getInitials(name: string): string {
-    const parts = name.split(" ");
-    const firstInitial = parts[0].charAt(0).toUpperCase();
-    const lastInitial = parts[parts.length - 1].charAt(0).toUpperCase() + parts[parts.length - 1].substring(1);
-    return `${firstInitial}. ${lastInitial}`;
+export function getInitials(names: string) {
+    // Split the names into an array
+    const nameArr = names.split(' ');
+
+    // Get the last name
+    const lastName = nameArr.pop();
+
+    // Create initials for each name except the last name
+    const initials = nameArr.map((name) => name.charAt(0).toUpperCase() + '.');
+
+    // Combine initials and the last name
+    const result = [...initials, lastName].join(' ');
+
+    return result;
 }
