@@ -25,7 +25,8 @@ export enum MatchActionTypes {
   INSERT_EVENT = 'INSERT_EVENT',
   UNDO_EVENT = 'UNDO_EVENT',
 
-  MIRROR_SIDES = 'MIRROR_SIDES'
+  NO_MIRROR_SIDES = 'NO_MIRROR_SIDES',
+  TEAM_START_LEFT = 'TEAM_START_LEFT',
 }
 
 export const addHomeTeam = createAction<Team>(MatchActionTypes.ADD_HOME_TEAM)
@@ -43,7 +44,8 @@ export const undoLastEvent = createAction(MatchActionTypes.UNDO_LAST_EVENT)
 export const insertEvent = createAction<Event>(MatchActionTypes.INSERT_EVENT)
 export const undoEvent = createAction(MatchActionTypes.UNDO_EVENT)
 
-export const mirrorSides = createAction(MatchActionTypes.MIRROR_SIDES)
+export const noMirrorSides = createAction(MatchActionTypes.NO_MIRROR_SIDES)
+export const teamStartLeft = createAction<TeamType>(MatchActionTypes.TEAM_START_LEFT)
 
 export const evaluateEvents = createAction(MatchActionTypes.EVALUATE_EVENTS)
 
@@ -56,7 +58,8 @@ export type undoLastEventType = ReturnType<typeof undoLastEvent>
 export type insertEventType = ReturnType<typeof insertEvent>
 export type undoEventType = ReturnType<typeof undoEvent>
 
-export type mirrorSidesType = ReturnType<typeof mirrorSides>
+export type noMirrorSidesType = ReturnType<typeof noMirrorSides>
+export type teamStartLeftType = ReturnType<typeof teamStartLeft>
 
 export type evaluateEventsType = ReturnType<typeof evaluateEvents>
 

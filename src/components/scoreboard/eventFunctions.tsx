@@ -86,3 +86,29 @@ export const pickTeamColorEvent = (team: TeamType, color: string): Event => {
         reference: color
     }
 }
+
+export const setLeftStartTeamEvent = (team: TeamType): Event => {
+    return {
+        id: v4(),
+        eventType: EventType.LeftSideStartTeam,
+        team: team,
+        playerId: 0,
+        timestamp: Date.now(),
+        undone: "",
+        author: "",
+        reference: ""
+    }
+}
+
+export const setNoSideSwitchEvent = (): Event => {
+    return {
+        id: v4(),
+        eventType: EventType.NoSideSwitch,
+        team: TeamType.None,
+        playerId: 0,
+        timestamp: Date.now(),
+        undone: "",
+        author: "",
+        reference: ""
+    }
+}

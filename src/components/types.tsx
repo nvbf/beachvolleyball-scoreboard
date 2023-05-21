@@ -38,6 +38,8 @@ export enum EventType {
   FirstPlayerServer = "FIRST_PLAYER_SERVE",
   FirstTeamServer = "FIRST_TEAM_SERVE",
   ConfigureTeam = "TEAM_CONFIG",
+  NoSideSwitch = "NO_SIDE_SWITCH",
+  LeftSideStartTeam = "LEFT_SIDE_START_TEAM",
   PickColor = "TEAM_COLOR"
 }
 

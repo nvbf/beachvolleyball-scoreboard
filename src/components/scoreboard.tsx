@@ -223,22 +223,24 @@ export function Scoreboard() {
 export default Scoreboard;
 
 export const getRightTeam = (match: matchState): TeamType => {
-  if (match.mirrorSides){
-    return TeamType.Home  
+  if (match.leftSideTeam === TeamType.None || match.leftSideTeam === TeamType.Home) {
+    return TeamType.Away
+  } else {
+    return TeamType.Home
   }
-  return TeamType.Away
 }
 
 export const getLeftTeam = (match: matchState): TeamType => {
-  if (match.mirrorSides) {
+  if (match.leftSideTeam === TeamType.None || match.leftSideTeam === TeamType.Home){
+    return TeamType.Home
+  } else {
     return TeamType.Away
   }
-  return TeamType.Home
 }
 
 export const getPlayer = (match: matchState, playerId: number, teamType: TeamType): string => {
-  if(teamType === TeamType.Home) {
-    if (playerId === 1){
+  if (teamType === TeamType.Home) {
+    if (playerId === 1) {
       return match.homeTeam.player1Name
     } else {
       return match.homeTeam.player2Name

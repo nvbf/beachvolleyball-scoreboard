@@ -7,13 +7,14 @@ import { matchState } from '../store/types';
 import { EventType, TeamType, Event } from '../components/types';
 import { ServeOrder } from '../components/serveOrder';
 import { TeamColorPicker } from '../components/scoreboard/teamColorPicker';
-import SwitchSides from '../components/scoreboard/switchSides';
+import { SetLeftStartTeam } from '../components/scoreboard/setLeftStartTeam';
 import SetFinished from '../components/scoreboard/setFinished';
 import MatchFinished from '../components/scoreboard/matchFinished';
 import TeamTimeout from '../components/scoreboard/teamTimeout';
 import TechnicalTimeout from '../components/scoreboard/technicalTimeout';
 import { useLocation } from 'react-router-dom';
 import { addAwayTeam, addHomeTeam } from '../store/match/actions';
+import SwitchSides from '../components/scoreboard/switchSides';
 
 
 function Match() {
@@ -44,7 +45,6 @@ function Match() {
     }))
   }
 
-
   return (
     <main>
       <ScoreboardHeader />
@@ -53,6 +53,7 @@ function Match() {
       {getActiveDisplay(match) === DisplayType.PickHomeColor && <TeamColorPicker team={TeamType.Home} />}
       {getActiveDisplay(match) === DisplayType.PickAwayColor && <TeamColorPicker team={TeamType.Away} />}
       {getActiveDisplay(match) === DisplayType.SelectServeorder && <ServeOrder />}
+      {getActiveDisplay(match) === DisplayType.SetLeftStartTeam && <SetLeftStartTeam />}
       {getActiveDisplay(match) === DisplayType.ScoreBoard && <Scoreboard />}
       {getActiveDisplay(match) === DisplayType.TeamTimeout && <TeamTimeout team={match.events.slice().reverse()[0].team} />}
       {getActiveDisplay(match) === DisplayType.TechnicalTimeout && <TechnicalTimeout />}
@@ -71,6 +72,7 @@ export enum DisplayType {
   TeamTimeout,
   TechnicalTimeout,
   SelectServeorder,
+  SetLeftStartTeam,
   AddHomeTeam,
   AddAwayTeam,
   PickHomeColor,
@@ -101,6 +103,9 @@ function getActiveDisplay(state: matchState): DisplayType {
     return DisplayType.SwitchSides
   } else if (serveOrderSet(state)) {
     return DisplayType.SelectServeorder
+  } else if (setLeftServer(state)) {
+    console.log("setLeftServer")
+    return DisplayType.SetLeftStartTeam
   }
   return DisplayType.ScoreBoard
 }
@@ -114,6 +119,17 @@ function serveOrderSet(state: matchState): boolean {
     return false
   }
   return state.firstServerTeam === TeamType.None || state.firstServer[TeamType.Home] === 0 || state.firstServer[TeamType.Away] === 0;
+}
+
+function setLeftServer(state: matchState): boolean {
+  console.log("in setLeftServer")
+  if (state.noMirrorSides) {
+    console.log("state.noMirrorSides")
+    return false
+  }
+  console.log(state.leftSideTeam === TeamType.None)
+  console.log("state.leftSideTeam === TeamType.None:")
+  return state.leftSideTeam === TeamType.None;
 }
 
 function switchSides(state: matchState): boolean {
@@ -141,13 +157,6 @@ function teamTimeout(state: matchState): boolean {
 }
 
 function setFinished(state: matchState): boolean {
-  let homeScore = state.currentScore[TeamType.Home]
-  let awayScore = state.currentScore[TeamType.Away]
-  console.log("finished: " + state.finished)
-  console.log("homeScore >= 21 && homeScore - awayScore >= 2: " + (homeScore >= 21 && homeScore - awayScore >= 2))
-  console.log(homeScore + " >= 21 && " + homeScore + " -" + awayScore + ">= 2: " + (homeScore >= 21 && homeScore - awayScore >= 2))
-
-  console.log("awayScore >= 21 && awayScore - homeScore >= 2: " + (awayScore >= 21 && awayScore - homeScore >= 2))
   return !state.finished && (
     state.currentScore[TeamType.Home] === 0 && state.currentScore[TeamType.Away] === 0 && state.currentSet !== 1
   );

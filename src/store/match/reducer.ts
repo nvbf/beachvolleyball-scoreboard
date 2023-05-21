@@ -1,7 +1,7 @@
 import { createReducer } from "@reduxjs/toolkit"
 import { TeamType, EventType, NotificationType, Event } from "../../components/types"
 import { matchState } from "../types"
-import { addAwayTeamType, addHomeTeamType, clearNotificationType, evaluateEventsType, insertEventType, MatchActionTypes, mirrorSidesType, undoLastEventType } from "./actions"
+import { addAwayTeamType, addHomeTeamType, clearNotificationType, evaluateEventsType, insertEventType, MatchActionTypes, undoLastEventType } from "./actions"
 import { v4 } from 'uuid';
 
 const initState = {
@@ -19,9 +19,10 @@ const initState = {
   showNotification: true,
   technicalTimeout: false,
   switchSide: false,
-  mirrorSides: false,
+  noMirrorSides: false,
   firstServer: { "HOME": 0, "AWAY": 0 },
   firstServerTeam: TeamType.None,
+  leftSideTeam: TeamType.None,
   currentSet: 0,
   currentSetScore: { "HOME": 0, "AWAY": 0 },
   currentScore: { "HOME": 0, "AWAY": 0 },
@@ -109,7 +110,9 @@ export const matchReducer = createReducer<matchState>(initState, {
     let currentSet = 1;
     let teamTimeout = { "HOME": false, "AWAY": false };
     let firstServer = { "HOME": 0, "AWAY": 0 };
-    let firstServerTeam = TeamType.None
+    let firstServerTeam = TeamType.None;
+    let leftSideTeam = TeamType.None;
+    let noMirrorSides = false;
     events.forEach((event) => {
       if (event.undone) {
         return;
@@ -122,11 +125,19 @@ export const matchReducer = createReducer<matchState>(initState, {
           awaySetScore[setIndex] += 1;
         }
         if (currentSet === 1 || currentSet === 2) {
+          if ((homeSetScore[setIndex] + awaySetScore[setIndex]) % 7 === 0) {
+            if (leftSideTeam === TeamType.Home) {
+              leftSideTeam = TeamType.Away
+            } else {
+              leftSideTeam = TeamType.Home
+            }
+          }
           if (homeSetScore[setIndex] >= 21 && homeSetScore[setIndex] - awaySetScore[setIndex] >= 2) {
             sets[TeamType.Home] += 1;
             teamTimeout = { "HOME": false, "AWAY": false }
             firstServer = { "HOME": 0, "AWAY": 0 }
-            firstServerTeam = TeamType.None
+            firstServerTeam = TeamType.None;
+            leftSideTeam = TeamType.None;
             homeSetScore[setIndex] = 0;
             awaySetScore[setIndex] = 0;
             currentSet += 1;
@@ -134,12 +145,20 @@ export const matchReducer = createReducer<matchState>(initState, {
             sets[TeamType.Away] += 1;
             teamTimeout = { "HOME": false, "AWAY": false }
             firstServer = { "HOME": 0, "AWAY": 0 }
-            firstServerTeam = TeamType.None
+            firstServerTeam = TeamType.None;
+            leftSideTeam = TeamType.None;
             homeSetScore[setIndex] = 0;
             awaySetScore[setIndex] = 0;
             currentSet += 1;
           }
         } else {
+          if ((homeSetScore[setIndex] + awaySetScore[setIndex]) % 5 === 0) {
+            if (leftSideTeam === TeamType.Home) {
+              leftSideTeam = TeamType.Away
+            } else {
+              leftSideTeam = TeamType.Home
+            }
+          }
           if (homeSetScore[setIndex] >= 15 && homeSetScore[setIndex] - awaySetScore[setIndex] >= 2) {
             sets[TeamType.Home] += 1;
             homeSetScore[setIndex] = 0;
@@ -156,13 +175,17 @@ export const matchReducer = createReducer<matchState>(initState, {
         firstServer[event.team] = event.playerId
       } else if (event.eventType === EventType.FirstTeamServer && event.team !== TeamType.None) {
         firstServerTeam = event.team
+      } else if (event.eventType === EventType.LeftSideStartTeam && event.team !== TeamType.None) {
+        leftSideTeam = event.team
+      } else if (event.eventType === EventType.NoSideSwitch) {
+        noMirrorSides = true
       }
     });
     const currentSetScore = {
       [TeamType.Home]: homeSetScore[currentSet - 1],
       [TeamType.Away]: awaySetScore[currentSet - 1],
     };
-    let matchDone = sets[TeamType.Home] === 2 || sets[TeamType.Away] === 2
+    let matchDone = sets[TeamType.Home] === 2 || sets[TeamType.Away] === 2;
     return {
       ...state,
       currentScore: currentSetScore,
@@ -172,6 +195,8 @@ export const matchReducer = createReducer<matchState>(initState, {
       firstServerTeam: firstServerTeam,
       teamTimeout: teamTimeout,
       finished: matchDone,
+      leftSideTeam: leftSideTeam,
+      noMirrorSides: noMirrorSides
     }
   },
 
@@ -197,14 +222,6 @@ export const matchReducer = createReducer<matchState>(initState, {
   //       }
   //   }
   // },
-
-  [MatchActionTypes.MIRROR_SIDES]: (state: matchState, action: mirrorSidesType) => {
-
-    return {
-      ...state,
-      mirrorSides: !state.mirrorSides
-    }
-  },
 
   [MatchActionTypes.CLEAR_NOTIFICATION]: (state: matchState, action: clearNotificationType) => {
 
