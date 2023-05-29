@@ -2,8 +2,8 @@ import './App.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import StartPage from './pages/StartPage';
 import Match from './pages/Match';
-import CreateTournement from './pages/CreateTournement';
-import Tournements from './pages/Tournements';
+import CreateTournament from './pages/CreateTournament';
+import Tournaments from './pages/Tournaments';
 
 
 function App() {
@@ -12,8 +12,8 @@ function App() {
       <Routes>
         <Route path="/" element={<StartPage />} />
         <Route path="/match" element={<Match />} />
-        <Route path="/create-tournement" element={<CreateTournement />} />
-        <Route path="/tournements" element={<Tournements />} />
+        <Route path="/create-tournament" element={<CreateTournament />} />
+        <Route path="/tournements" element={<Tournaments />} />
       </Routes>
     </BrowserRouter>
   );

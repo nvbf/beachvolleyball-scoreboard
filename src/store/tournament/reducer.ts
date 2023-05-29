@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initState = {
   tournamentName: "loool",
-  tournamentID: 0,
+  profixioslugID: 0,
 };
 
 export const createTournamentSlice = createSlice({

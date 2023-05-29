@@ -57,7 +57,7 @@ function StartPage() {
             <AppCards
               title="Create Tournament"
               subHeader="Connect matches to one tournament"
-              path="create-tournement"
+              path="create-tournament"
               iconName="flute"
               size={iconSize}
             />
