@@ -4,39 +4,49 @@ import { db } from './../firebase/firebase-config';
 
 interface Match {
   homeTeam: {
-    players: string[],
     playersFullName: string[],
-    name: string
   },
   awayTeam: {
-    players: string[],
     playersFullName: string[],
-    name: string
   },
-  date: string,
+  epoch: number,
+  court: string,
+  matchId: string,
+  group: string | null,
   result: string,
-  matchId: string
+  isFinished: boolean,
+  referee: string,
+  stage: string
 }
 
 const fetchProfixioDataAndAddToFirestore = async (): Promise<Match[]> => {
   const url = 'https://www.volleytv.no/ss/profixio2json.php?slug=sandvesanden_open_23';
   const slug = url.split('slug=')[1];  
-  const slugName = slug.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');  
 
   try {
     const response = await fetch(url);
     const data: Match[] = await response.json();
 
-    const tournamentDoc = doc(db, "Tournaments", slugName);
+    const tournamentDoc = doc(db, "Tournaments", slug);
     const matchesCollection = collection(tournamentDoc, "Matches");
 
     await Promise.all(data.map(async (match: Match) => {
       const matchDoc = doc(matchesCollection, match.matchId.toString());
       await setDoc(matchDoc, {
-        homeTeam: match.homeTeam,
-        awayTeam: match.awayTeam,
-        date: match.date,
-        result: match.result
+        homeTeam: {
+          playersFullName: match.homeTeam.playersFullName,
+        },
+        awayTeam: {
+          playersFullName: match.awayTeam.playersFullName,
+        },
+        epoch: match.epoch,
+        court: match.court,
+        matchId: match.matchId,
+        group: match.group,
+        result: match.result,
+        isFinished: match.isFinished,
+        referee: match.referee,
+        stage: match.stage
       });
     }));
 
@@ -61,31 +71,10 @@ const YourReactComponent: React.FC = () => {
     return <div>Loading...</div>;
   }
 
-  // You can now use the fetched data in your component's render method
+  // When data fetching and processing is done, simply display "complete"
   return (
     <div>
-      {data.map(match => (
-        <table key={match.matchId} style={{ margin: "20px 0", width: "100%" }}>
-          <thead>
-            <tr>
-              <th>Home Team</th>
-              <th>Away Team</th>
-              <th>Date</th>
-              <th>Result</th>
-              <th>QR Code</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>{match.homeTeam.name}</td>
-              <td>{match.awayTeam.name}</td>
-              <td>{match.date}</td>
-              <td>{match.result}</td>
-              <td><img src="/path/to/your/placeholder/image.jpg" alt="QR code will be here" /></td>
-            </tr>
-          </tbody>
-        </table>
-      ))}
+      Complete
     </div>
   );
 };
