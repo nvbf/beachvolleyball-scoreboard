@@ -112,3 +112,32 @@ export const setNoSideSwitchEvent = (): Event => {
         reference: ""
     }
 }
+
+export const createUndoEvent = (events: Event[]): Event => {
+    const reversedEvents = [...events].reverse();
+    const undoneEventIndex = reversedEvents.findIndex((event: Event) => !event.undone && event.eventType !== EventType.Undo);
+
+    if (undoneEventIndex < 0) {
+        return {
+            id: "",
+            eventType: EventType.Undo,
+            team: TeamType.None,
+            playerId: 0,
+            timestamp: Date.now(),
+            undone: "",
+            author: "",
+            reference: ""
+        }
+    }
+    const actualIndex = undoneEventIndex >= 0 ? events.length - 1 - undoneEventIndex : -1;
+    return {
+        id: v4(),
+        eventType: EventType.Undo,
+        team: TeamType.None,
+        playerId: 0,
+        timestamp: Date.now(),
+        undone: "",
+        author: "",
+        reference: events[actualIndex].id
+    }
+}

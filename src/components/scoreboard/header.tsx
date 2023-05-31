@@ -1,4 +1,3 @@
-import AddIcon from "@mui/icons-material/Add";
 import {
   Undo,
   Settings
@@ -12,6 +11,7 @@ import { undoEvent } from '../../store/match/actions';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import Grid from "@mui/material/Grid"
 import Clock from "../clock";
+import { createUndoEvent } from "./eventFunctions";
 
 export function ScoreboardHeader() {
   const match = useAppSelector((state) => state.match);
@@ -20,9 +20,9 @@ export function ScoreboardHeader() {
   const [infoCollapse, setInfoCollapse] = useState(false);
 
   function undo() {
-    dispatch(undoEvent());
+    dispatch(undoEvent({ matchId: match.matchId, event: createUndoEvent(match.events)}));
   }
-
+  
   function toggleSettings() {
     // dispatch(callTimeout(Actor.AwayTeam));
   }

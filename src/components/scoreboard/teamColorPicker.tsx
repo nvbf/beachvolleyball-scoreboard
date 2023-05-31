@@ -17,7 +17,7 @@ interface TeamColorPickerProps {
 }
 
 export function TeamColorPicker({ team }: TeamColorPickerProps) {
-
+    const match = useAppSelector((state) => state.match);
     const dispatch = useAppDispatch();
 
     const colorList = [
@@ -42,7 +42,7 @@ export function TeamColorPicker({ team }: TeamColorPickerProps) {
     ];
 
     function handleColorClick(color: string) {
-        dispatch(addEvent(pickTeamColorEvent(team, color)));
+        dispatch(addEvent({ matchId: match.matchId, event: pickTeamColorEvent(team, color) }));
     }
 
     return (
