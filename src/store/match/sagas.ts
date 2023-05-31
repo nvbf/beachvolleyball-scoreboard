@@ -39,10 +39,10 @@ export function* pushNewEvent(action: PayloadAction<AddEventPayload>): Generator
     yield put(insertEvent(action.payload.event))
     console.log("Added new event " + action.payload.matchId);
 
-    yield call(addEventToMatchToFirestore, action.payload.matchId, action.payload.event)
-
     yield put(evaluateEvents())
     console.log("Evaluated events");
+
+    yield call(addEventToMatchToFirestore, action.payload.matchId, action.payload.event)
 
   } catch (error) {
     console.log("Error when pushing new event");
@@ -62,7 +62,6 @@ export function* getOldEvents(action: PayloadAction<string>): Generator<CallEffe
     yield put(storeEvents(events))
     console.log("Store events");
     yield put(evaluateEvents())
-
   } catch (error) {
     console.log("Error when pushing new event");
   }
@@ -73,10 +72,10 @@ export function* undoEvent(action: PayloadAction<AddEventPayload>): Generator<Ca
     yield put(undoLastEvent())
     console.log("Undo event");
 
-    yield call(addEventToMatchToFirestore, action.payload.matchId, action.payload.event)
-
     yield put(evaluateEvents())
     console.log("Evaluated events");
+
+    yield call(addEventToMatchToFirestore, action.payload.matchId, action.payload.event)
 
   } catch (error) {
     console.log("Error when pushing new event");
