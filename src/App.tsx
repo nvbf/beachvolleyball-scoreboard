@@ -4,6 +4,7 @@ import StartPage from './pages/StartPage';
 import Match from './pages/Match';
 import CreateTournament from './pages/CreateTournament';
 import Tournaments from './pages/Tournaments';
+import TournamentAdmin from './pages/TournamentAdmin';
 
 
 function App() {
@@ -13,7 +14,8 @@ function App() {
         <Route path="/" element={<StartPage />} />
         <Route path="/match" element={<Match />} />
         <Route path="/create-tournament" element={<CreateTournament />} />
-        <Route path="/tournements" element={<Tournaments />} />
+        <Route path="/tournaments" element={<Tournaments />} />
+        <Route path="/tournamentadmin" element={<TournamentAdmin />} />
       </Routes>
     </BrowserRouter>
   );

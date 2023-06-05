@@ -64,14 +64,14 @@ function StartPage() {
             <AppCards
               title="Live score"
               subHeader="Get livescore from an tournament or one match"
-              path="tournements"
+              path="tournaments"
               iconName="player"
               size={iconSize}
             />
             <AppCards
-              title="See Tournements"
+              title="See Tournaments"
               subHeader="See ongoing or past tournament"
-              path="tournements"
+              path="tournaments"
               iconName="volleyball"
               size={iconSize}
             />
