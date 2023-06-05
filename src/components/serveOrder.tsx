@@ -31,15 +31,15 @@ export function ServeOrder() {
   const dispatch = useAppDispatch();
 
   function setFirstServerTeam(team: TeamType) {
-    dispatch(addEvent(selectFirstServingTeamEvent(team)));
+    dispatch(addEvent({ matchId: match.matchId, event: selectFirstServingTeamEvent(team) }));
   }
 
   function setHomeServer(player: number) {
-    dispatch(addEvent(selectFirstServerEvent(TeamType.Home, player)));
+    dispatch(addEvent({ matchId: match.matchId, event: selectFirstServerEvent(TeamType.Home, player) }));
   }
 
   function setAwayServer(player: number) {
-    dispatch(addEvent(selectFirstServerEvent(TeamType.Away, player)));
+    dispatch(addEvent({ matchId: match.matchId, event: selectFirstServerEvent(TeamType.Away, player) }));
   }
 
   let theme = createTheme();

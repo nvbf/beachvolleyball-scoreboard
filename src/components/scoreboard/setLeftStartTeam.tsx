@@ -33,11 +33,11 @@ export function SetLeftStartTeam() {
     const dispatch = useAppDispatch();
 
     function setLeftTeam() {
-        dispatch(addEvent(setLeftStartTeamEvent(leftSideTeam)));
+        dispatch(addEvent({ matchId: match.matchId, event: setLeftStartTeamEvent(leftSideTeam) }));
     }
 
     function setNoSideSwitch() {
-        dispatch(addEvent(setNoSideSwitchEvent()));
+        dispatch(addEvent({ matchId: match.matchId, event: setNoSideSwitchEvent() }));
     }
 
     function handleSwitch() {

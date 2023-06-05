@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { AddTeam } from '../components/scoreboard/addTeam';
 import Scoreboard from '../components/scoreboard';
 import { useAppDispatch, useAppSelector } from '../store/store';
@@ -13,7 +13,7 @@ import MatchFinished from '../components/scoreboard/matchFinished';
 import TeamTimeout from '../components/scoreboard/teamTimeout';
 import TechnicalTimeout from '../components/scoreboard/technicalTimeout';
 import { useLocation } from 'react-router-dom';
-import { addAwayTeam, addHomeTeam } from '../store/match/actions';
+import { addAwayTeam, addHomeTeam, checkDb, setMatchId } from '../store/match/actions';
 import SwitchSides from '../components/scoreboard/switchSides';
 
 
@@ -22,6 +22,7 @@ function Match() {
   const searchParams = new URLSearchParams(location.search);
   const match = useAppSelector(state => state.match)
   const dispatch = useAppDispatch();
+  const [checkedDb, setCheckedDb] = useState(false);
 
 
   const homePlayer1 = searchParams.get('name1');
@@ -30,6 +31,17 @@ function Match() {
   const awayPlayer2 = searchParams.get('name4');
   const matchId = searchParams.get('matchid');
   const tournementId = searchParams.get('tournementid');
+  console.log("Is this being run all the time??? " + matchId)
+
+  if (!match.matchId && matchId) {
+    dispatch(setMatchId(matchId))
+    setCheckedDb(true)
+  }
+
+  if (!checkedDb && matchId) {
+    dispatch(checkDb(matchId))
+    setCheckedDb(true)
+  }
 
   if (!match.homeTeam.player1Name && !match.homeTeam.player1Name && homePlayer1 && homePlayer2) {
     dispatch(addHomeTeam({

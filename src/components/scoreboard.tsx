@@ -27,40 +27,12 @@ export function Scoreboard() {
   const dispatch = useAppDispatch();
   const [infoCollapse, setInfoCollapse] = useState(false);
 
-  function homePoint() {
-    dispatch(addEvent(createAddPointEvent(TeamType.Home)))
-  }
-
   function addPoint(team: TeamType) {
-    dispatch(addEvent(createAddPointEvent(team)))
-  }
-
-  function awayPoint() {
-    dispatch(addEvent(createAddPointEvent(TeamType.Away)))
+    dispatch(addEvent({ matchId: match.matchId, event: createAddPointEvent(team) }))
   }
 
   function teamTimeout(team: TeamType) {
-    dispatch(addEvent(callTimeoutEvent(team)))
-  }
-
-  function homeTeamTimeout() {
-    dispatch(addEvent(callTimeoutEvent(TeamType.Home)))
-  }
-
-  function awayTeamTimeout() {
-    dispatch(addEvent(callTimeoutEvent(TeamType.Away)))
-  }
-
-  function toggleSettings() {
-    // dispatch(callTimeout(Actor.AwayTeam));
-  }
-
-
-  function formatEventBasedOnEventType(event: Event) {
-    if (event.eventType === EventType.Score) {
-      return `${event.team} scored a point!`
-    }
-    return event.eventType
+    dispatch(addEvent({ matchId: match.matchId, event: callTimeoutEvent(team) }))
   }
 
   return (
@@ -231,7 +203,7 @@ export const getRightTeam = (match: matchState): TeamType => {
 }
 
 export const getLeftTeam = (match: matchState): TeamType => {
-  if (match.leftSideTeam === TeamType.None || match.leftSideTeam === TeamType.Home){
+  if (match.leftSideTeam === TeamType.None || match.leftSideTeam === TeamType.Home) {
     return TeamType.Home
   } else {
     return TeamType.Away

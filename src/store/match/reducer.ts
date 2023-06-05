@@ -1,7 +1,7 @@
 import { createReducer } from "@reduxjs/toolkit"
 import { TeamType, EventType, NotificationType, Event } from "../../components/types"
 import { matchState } from "../types"
-import { addAwayTeamType, addHomeTeamType, clearNotificationType, evaluateEventsType, insertEventType, MatchActionTypes, undoLastEventType } from "./actions"
+import { addAwayTeamType, addHomeTeamType, checkDb, clearNotificationType, evaluateEventsType, insertEventType, MatchActionTypes, setMatchIdType, setTournementIdType, storeEvents, storeEventsType, undoLastEventType } from "./actions"
 import { v4 } from 'uuid';
 
 const initState = {
@@ -14,7 +14,8 @@ const initState = {
     player2Name: "",
   },
   matchId: "",
-  tournementId: -1,
+  tournementId: "",
+  checkedDb: false,
   finished: false,
   showNotification: true,
   technicalTimeout: false,
@@ -45,6 +46,18 @@ export const matchReducer = createReducer<matchState>(initState, {
     return {
       ...state,
       awayTeam: action.payload
+    }
+  },
+  [MatchActionTypes.SET_MATCH_ID]: (state: matchState, action: setMatchIdType) => {
+    return {
+      ...state,
+      matchId: action.payload
+    }
+  },
+  [MatchActionTypes.SET_TOURNEMENT_ID]: (state: matchState, action: setTournementIdType) => {
+    return {
+      ...state,
+      tournementId : action.payload
     }
   },
 
@@ -197,6 +210,16 @@ export const matchReducer = createReducer<matchState>(initState, {
       finished: matchDone,
       leftSideTeam: leftSideTeam,
       noMirrorSides: noMirrorSides
+    }
+  },
+
+  [MatchActionTypes.STORE_EVENTS]: (state: matchState, action: storeEventsType) => {
+    console.log("In reducer store events");
+
+    return {
+      ...state,
+      events: action.payload,
+      checkDb: true
     }
   },
 
