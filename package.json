@@ -7,10 +7,10 @@
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@mui/icons-material": "^5.11.11",
-    "@mui/material": "^5.11.15",
+    "@mui/material": "^5.13.4",
     "@reduxjs/toolkit": "^1.9.3",
     "@vitejs/plugin-react": "^3.1.0",
-    "firebase": "^9.19.1",
+    "firebase": "^9.22.2",
     "qrcode.react": "^3.1.0",
     "react": "^18.2.0",
     "react-color": "^2.19.3",
@@ -43,6 +43,6 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "start": "vite --port $PORT"
+    "start": "vite --port 3000"
   }
 }
