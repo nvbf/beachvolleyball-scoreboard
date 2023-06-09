@@ -17,7 +17,7 @@ import {
 import QRCode from "qrcode.react";
 
 function TournamentAdmin() {
-  const [matches, setMatches] = useState({ ongoing: [], finished: [] });
+const [matches, setMatches] = useState<{ ongoing: any[]; finished: any[] }>({ ongoing: [], finished: [] });
   const [open, setOpen] = useState(false);
   const [activeQrCode, setActiveQrCode] = useState("");
   const [showOngoing, setShowOngoing] = useState(true);
@@ -75,10 +75,6 @@ function TournamentAdmin() {
         const awayTeamName = match.AwayTeam?.Name?.replace(/^\#\d+\s/, "");
         const homeTeamName = match.HomeTeam?.Name?.replace(/^\#\d+\s/, "");
 
-        // Console logs for debugging
-        console.log("Away Team Name:", awayTeamName);
-        console.log("Home Team Name:", homeTeamName);
-        console.log("Tournament ID:", tournamentID);
 
         const [name1, name2] = awayTeamName ? awayTeamName.split(" / ") : ["", ""];
 const [name3, name4] = homeTeamName ? homeTeamName.split(" / ") : ["", ""];
@@ -93,8 +89,6 @@ const [name3, name4] = homeTeamName ? homeTeamName.split(" / ") : ["", ""];
           )}&matchid=${matchID}&tournamentid=${tournamentID}`
         : "";
 
-
-        console.log("Generated URL:", url); // Log the generated URL for debugging
 
       return (
         <Box mb={3} key={match.Number}>
