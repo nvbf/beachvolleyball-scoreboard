@@ -77,17 +77,19 @@ const [matches, setMatches] = useState<{ ongoing: any[]; finished: any[] }>({ on
 
 
         const [name1, name2] = awayTeamName ? awayTeamName.split(" / ") : ["", ""];
-const [name3, name4] = homeTeamName ? homeTeamName.split(" / ") : ["", ""];
+        const [name3, name4] = homeTeamName ? homeTeamName.split(" / ") : ["", ""];
 
-      const url = showQRCode
-        ? `https://scoreboard-sandbox.herokuapp.com/match?name1=${encodeURIComponent(
-            name1
-          )}&name2=${encodeURIComponent(name2)}&name3=${encodeURIComponent(
-            name3
-          )}&name4=${encodeURIComponent(
-            name4
-          )}&matchid=${matchID}&tournamentid=${tournamentID}`
-        : "";
+     const url = showQRCode
+    ? `https://scoreboard-sandbox.herokuapp.com/match?name1=${encodeURIComponent(
+        name1.trim()
+      )}&name2=${encodeURIComponent(name2.trim())}&name3=${encodeURIComponent(
+        name3.trim()
+      )}&name4=${encodeURIComponent(
+        name4.trim()
+      )}&matchid=${matchID}&tournamentid=${tournamentID}`
+    : "";
+
+        
 
 
       return (
