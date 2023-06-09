@@ -17,11 +17,12 @@ import {
 import QRCode from "qrcode.react";
 
 function TournamentAdmin() {
-  const [matches, setMatches] = useState({ ongoing: [], finished: [] });
+  const [matches, setMatches] = useState<{ ongoing: any[]; finished: any[] }>({ ongoing: [], finished: [] });
   const [open, setOpen] = useState(false);
   const [activeQrCode, setActiveQrCode] = useState("");
   const [showOngoing, setShowOngoing] = useState(true);
   const [showFinished, setShowFinished] = useState(true);
+  const [tournamentID, setTournamentID] = useState("");
 
   useEffect(() => {
     const fetchMatches = async () => {
@@ -34,11 +35,12 @@ function TournamentAdmin() {
       // Fetch tournament document to get tournamentID
       const tournamentDoc = await getDoc(tournamentDocRef);
       const tournamentID = tournamentDoc.data()?.ID;
+      setTournamentID(tournamentID);
 
       const matchesCollection = collection(tournamentDocRef, "Matches");
       const matchesSnapshot = await getDocs(matchesCollection);
 
-      const matchesData = [];
+      const matchesData: any[] = [];
 
       matchesSnapshot.forEach((doc) => {
         matchesData.push(doc.data());
@@ -58,7 +60,7 @@ function TournamentAdmin() {
     fetchMatches();
   }, []);
 
-  const handleOpen = (url) => {
+  const handleOpen = (url: React.SetStateAction<string>) => {
     setActiveQrCode(url);
     setOpen(true);
   };
@@ -67,26 +69,33 @@ function TournamentAdmin() {
     setOpen(false);
   };
 
-  const renderMatches = (matchesArray, showQRCode, tournamentID) =>
+  const renderMatches = (matchesArray: any[], showQRCode: boolean, tournamentID: string) =>
     matchesArray.map((match) => {
-      const matchID = match.ID;
-      const awayTeamName = match.AwayTeam?.Name?.replace(/^\#\d+\s/, "");
-      const homeTeamName = match.HomeTeam?.Name?.replace(/^\#\d+\s/, "");
+        const matchID = match.ID;
+        const awayTeamName = match.AwayTeam?.Name?.replace(/^\#\d+\s/, "");
+        const homeTeamName = match.HomeTeam?.Name?.replace(/^\#\d+\s/, "");
 
-      const [name1, name2] = awayTeamName.split(" and ");
-      const [name3, name4] = homeTeamName.split(" and ");
+        // Console logs for debugging
+        console.log("Away Team Name:", awayTeamName);
+        console.log("Home Team Name:", homeTeamName);
+        console.log("Tournament ID:", tournamentID);
 
-      const url = showQRCode
-        ? `https://scoreboard-sandbox.herokuapp.com/match?name1=${encodeURIComponent(
-            name1
-          )}&name2=${encodeURIComponent(name2)}&name3=${encodeURIComponent(
-            name3
-          )}&name4=${encodeURIComponent(
-            name4
-          )}&matchid=${matchID}&tournamentid=${tournamentID}`
-        : "";
+        const [name1, name2] = awayTeamName ? awayTeamName.split(" / ") : ["", ""];
+const [name3, name4] = homeTeamName ? homeTeamName.split(" / ") : ["", ""];
 
-      console.log(url);
+const url = showQRCode
+? `https://scoreboard-sandbox.herokuapp.com/match?name1=${encodeURIComponent(
+    name1.trim()
+  )}&name2=${encodeURIComponent(name2.trim())}&name3=${encodeURIComponent(
+    name3.trim()
+  )}&name4=${encodeURIComponent(
+    name4.trim()
+  )}&matchid=${matchID}&tournamentid=${tournamentID}`
+: "";
+
+
+        console.log("Generated URL:", url); // Log the generated URL for debugging
+
       return (
         <Box mb={3} key={match.Number}>
           <TableContainer component={Paper}>
@@ -139,7 +148,7 @@ function TournamentAdmin() {
         </button>
       </h2>
       <Collapse in={showOngoing}>
-        {renderMatches(matches.ongoing, true)}
+        {renderMatches(matches.ongoing, true,tournamentID)}
       </Collapse>
       <h2>
         Finished Matches{" "}
@@ -148,7 +157,7 @@ function TournamentAdmin() {
         </button>
       </h2>
       <Collapse in={showFinished}>
-        {renderMatches(matches.finished, false)}
+        {renderMatches(matches.finished, false,tournamentID)}
       </Collapse>
       <Dialog open={open} onClose={handleClose}>
         <Box p={3}>
