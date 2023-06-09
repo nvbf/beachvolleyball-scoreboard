@@ -24,6 +24,7 @@ import EventList from "./eventList";
 import { getInitials } from "../util/names";
 import { getBackgroundColor, getTextColor, selectFirstServerEvent, selectFirstServingTeamEvent } from "./scoreboard/eventFunctions";
 import { matchState } from "../store/types";
+import { getTextColorFromBackground } from "../util/color";
 
 export function ServeOrder() {
   const match = useAppSelector((state) => state.match);
@@ -31,15 +32,15 @@ export function ServeOrder() {
   const dispatch = useAppDispatch();
 
   function setFirstServerTeam(team: TeamType) {
-    dispatch(addEvent({ matchId: match.matchId, event: selectFirstServingTeamEvent(team) }));
+    dispatch(addEvent({ matchId: match.matchId, id: match.id, event: selectFirstServingTeamEvent(team) }));
   }
 
   function setHomeServer(player: number) {
-    dispatch(addEvent({ matchId: match.matchId, event: selectFirstServerEvent(TeamType.Home, player) }));
+    dispatch(addEvent({ matchId: match.matchId, id: match.id, event: selectFirstServerEvent(TeamType.Home, player) }));
   }
 
   function setAwayServer(player: number) {
-    dispatch(addEvent({ matchId: match.matchId, event: selectFirstServerEvent(TeamType.Away, player) }));
+    dispatch(addEvent({ matchId: match.matchId, id: match.id, event: selectFirstServerEvent(TeamType.Away, player) }));
   }
 
   let theme = createTheme();
@@ -78,10 +79,10 @@ export function ServeOrder() {
             <Grid item xs={6} sx={{ textAlign: 'right', display: showServer(match, TeamType.Home, 0) }}>
               <Button disabled={match.firstServerTeam !== TeamType.None} variant="contained" onClick={setFirstServerTeam.bind(null, TeamType.Home)}
                 sx={{
-                  width: 1, height: 96, backgroundColor: getBackgroundColor(match.events, TeamType.Home),
-                  '&:hover': { backgroundColor: getBackgroundColor(match.events, TeamType.Home) }
+                  width: 1, height: 96, backgroundColor: match.teamColor[TeamType.Home],
+                  '&:hover': { backgroundColor: match.teamColor[TeamType.Home] }
                 }}>
-                <Typography variant="h6" sx={{ color: getTextColor(match.events, TeamType.Home) }}>
+                <Typography variant="h6" sx={{ color: getTextColorFromBackground(match.teamColor[TeamType.Home]) }}>
                   <Box>{getInitials(match.homeTeam.player1Name)}</Box>
                   <Box>{getInitials(match.homeTeam.player2Name)}</Box>
                 </Typography>
@@ -90,10 +91,10 @@ export function ServeOrder() {
             <Grid item xs={6} sx={{ textAlign: 'left', display: showServer(match, TeamType.Away, 0) }}>
               <Button disabled={match.firstServerTeam !== TeamType.None} variant="contained" onClick={setFirstServerTeam.bind(null, TeamType.Away)}
                 sx={{
-                  width: 1, height: 96, backgroundColor: getBackgroundColor(match.events, TeamType.Away),
-                  '&:hover': { backgroundColor: getBackgroundColor(match.events, TeamType.Away) }
+                  width: 1, height: 96, backgroundColor: match.teamColor[TeamType.Away],
+                  '&:hover': { backgroundColor: match.teamColor[TeamType.Away] }
                 }}>
-                <Typography variant="h6" sx={{ color: getTextColor(match.events, TeamType.Away) }}>
+                <Typography variant="h6" sx={{ color: getTextColorFromBackground(match.teamColor[TeamType.Away]) }}>
                   <Box>{getInitials(match.awayTeam.player1Name)}</Box>
                   <Box>{getInitials(match.awayTeam.player2Name)}</Box>
                 </Typography>
@@ -115,10 +116,10 @@ export function ServeOrder() {
             <Grid item xs={6} sx={{ textAlign: 'right', display: showServer(match, TeamType.Home, 1) }}>
               <Button disabled={match.firstServer[TeamType.Home] !== 0} variant="contained" onClick={setHomeServer.bind(null, 1)}
                 sx={{
-                  width: 1, height: 76, backgroundColor: getBackgroundColor(match.events, TeamType.Home),
-                  '&:hover': { backgroundColor: getBackgroundColor(match.events, TeamType.Home) }
+                  width: 1, height: 76, backgroundColor: match.teamColor[TeamType.Home],
+                  '&:hover': { backgroundColor: match.teamColor[TeamType.Home] }
                 }}>
-                <Typography variant="h6" sx={{ color: getTextColor(match.events, TeamType.Home) }}>
+                <Typography variant="h6" sx={{ color: getTextColorFromBackground(match.teamColor[TeamType.Home]) }}>
                   <Box>{getInitials(match.homeTeam.player1Name)} </Box>
                 </Typography>
               </Button>
@@ -127,10 +128,10 @@ export function ServeOrder() {
               <Button disabled={match.firstServer[TeamType.Home] !== 0} variant="contained" onClick={setHomeServer.bind(null, 2)}
                 sx={{
                   display: showServer(match, TeamType.Home, 2),
-                  width: 1, height: 76, backgroundColor: getBackgroundColor(match.events, TeamType.Home),
-                  '&:hover': { backgroundColor: getBackgroundColor(match.events, TeamType.Home) }
+                  width: 1, height: 76, backgroundColor: match.teamColor[TeamType.Home],
+                  '&:hover': { backgroundColor: match.teamColor[TeamType.Home] }
                 }}>
-                <Typography variant="h6" sx={{ color: getTextColor(match.events, TeamType.Home) }}>
+                <Typography variant="h6" sx={{ color: getTextColorFromBackground(match.teamColor[TeamType.Home]) }}>
                   <Box>{getInitials(match.homeTeam.player2Name)}</Box>
                 </Typography>
               </Button>
@@ -154,10 +155,10 @@ export function ServeOrder() {
                 variant="contained" onClick={setAwayServer.bind(null, 1)}
                 sx={{
                   display: showServer(match, TeamType.Away, 1),
-                  width: 1, height: 76, backgroundColor: getBackgroundColor(match.events, TeamType.Away),
-                  '&:hover': { backgroundColor: getBackgroundColor(match.events, TeamType.Away) }
+                  width: 1, height: 76, backgroundColor: match.teamColor[TeamType.Away],
+                  '&:hover': { backgroundColor: match.teamColor[TeamType.Away] }
                 }}>
-                <Typography variant="h6" sx={{ color: getTextColor(match.events, TeamType.Away) }}>
+                <Typography variant="h6" sx={{ color: getTextColorFromBackground(match.teamColor[TeamType.Away]) }}>
                   <Box>{getInitials(match.awayTeam.player1Name)} </Box>
                 </Typography>
               </Button>
@@ -166,10 +167,10 @@ export function ServeOrder() {
               <Button disabled={match.firstServer[TeamType.Away] !== 0} variant="contained" onClick={setAwayServer.bind(null, 2)}
                 sx={{
                   display: showServer(match, TeamType.Away, 2),
-                  width: 1, height: 76, backgroundColor: getBackgroundColor(match.events, TeamType.Away),
-                  '&:hover': { backgroundColor: getBackgroundColor(match.events, TeamType.Away) }
+                  width: 1, height: 76, backgroundColor: match.teamColor[TeamType.Away],
+                  '&:hover': { backgroundColor: match.teamColor[TeamType.Away] }
                 }}>
-                <Typography variant="h6" sx={{ color: getTextColor(match.events, TeamType.Away) }}>
+                <Typography variant="h6" sx={{ color: getTextColorFromBackground(match.teamColor[TeamType.Away]) }}>
                   <Box>{getInitials(match.awayTeam.player2Name)}</Box>
                 </Typography>
               </Button>

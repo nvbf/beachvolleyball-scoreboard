@@ -5,13 +5,10 @@ import { select } from "redux-saga/effects";
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { matchReducer } from "./match/reducer";
 import { matchSagas } from "./match/sagas";
-import { matchesReducer } from "./matches/reducer";
-import { matchesSagas } from "./matches/sagas";
 import { createTournamentSlice } from "./tournament/reducer";
 
 export const rootReducer = combineReducers({
   match: matchReducer,
-  matches: matchesReducer,
   tournament: createTournamentSlice.reducer,
 });
 
@@ -26,7 +23,7 @@ export const store = configureStore({
 });
 
 function* rootSaga() {
-  yield all([matchSagas(), matchesSagas()]);
+  yield all([matchSagas()]);
 }
 
 sagaMiddleware.run(rootSaga);

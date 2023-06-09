@@ -44,7 +44,7 @@ const Clock: React.FC<Props> = ({ format = "24h" }) => {
   }, [format]);
 
   return (
-    <Typography variant="h4" component="span">
+    <Typography variant="h3" component="span">
       {time}
     </Typography>
   );

@@ -1,7 +1,11 @@
 import { createReducer } from "@reduxjs/toolkit"
 import { TeamType, EventType, NotificationType, Event } from "../../components/types"
 import { matchState } from "../types"
-import { addAwayTeamType, addHomeTeamType, checkDb, clearNotificationType, evaluateEventsType, insertEventType, MatchActionTypes, setMatchIdType, setTournementIdType, storeEvents, storeEventsType, undoLastEventType } from "./actions"
+import {
+  addAwayTeamType, addHomeTeamType, clearNotificationType, evaluateEventsType, insertEventType,
+  MatchActionTypes, setMatchIdType, setTeamColorType, setTournamentIdType, storeEvents, storeEventsType, undoLastEventType,
+  resetMatchIdType, resetAwayPlayerNameType, resetHomePlayerNameType, resetTeamColorType, resetTournamentIdType, storeMatchType, setIdType
+} from "./actions"
 import { v4 } from 'uuid';
 
 const initState = {
@@ -13,14 +17,17 @@ const initState = {
     player1Name: "",
     player2Name: "",
   },
-  matchId: "",
-  tournementId: "",
+  teamColor: { "HOME": "", "AWAY": "" },
+  matchId: "null",
+  tournamentId: "null",
+  id: "",
   checkedDb: false,
   finished: false,
   showNotification: true,
   technicalTimeout: false,
   switchSide: false,
   noMirrorSides: false,
+  matchStarted: false,
   firstServer: { "HOME": 0, "AWAY": 0 },
   firstServerTeam: TeamType.None,
   leftSideTeam: TeamType.None,
@@ -48,19 +55,51 @@ export const matchReducer = createReducer<matchState>(initState, {
       awayTeam: action.payload
     }
   },
+  [MatchActionTypes.SET_ID]: (state: matchState, action: setIdType) => {
+    return {
+      ...state,
+      id: action.payload
+    }
+  },
   [MatchActionTypes.SET_MATCH_ID]: (state: matchState, action: setMatchIdType) => {
     return {
       ...state,
       matchId: action.payload
     }
   },
-  [MatchActionTypes.SET_TOURNEMENT_ID]: (state: matchState, action: setTournementIdType) => {
+  [MatchActionTypes.SET_TOURNEMENT_ID]: (state: matchState, action: setTournamentIdType) => {
     return {
       ...state,
-      tournementId : action.payload
+      tournamentId: action.payload
     }
   },
+  [MatchActionTypes.RESET_MATCH_ID]: (state: matchState, action: resetMatchIdType) => {
+    state.matchId = "null"
 
+  },
+  [MatchActionTypes.RESET_TOURNEMENT_ID]: (state: matchState, action: resetTournamentIdType) => {
+    state.tournamentId = "null"
+  },
+  [MatchActionTypes.RESET_HOME_PLAYER_NAME]: (state: matchState, action: resetHomePlayerNameType) => {
+    if (action.payload === 1) {
+      state.homeTeam.player1Name = "";
+    } else {
+      state.homeTeam.player2Name = "";
+    }
+  },
+  [MatchActionTypes.RESET_AWAY_PLAYER_NAME]: (state: matchState, action: resetAwayPlayerNameType) => {
+    if (action.payload === 1) {
+      state.awayTeam.player1Name = "";
+    } else {
+      state.awayTeam.player2Name = "";
+    }
+  },
+  [MatchActionTypes.RESET_TEAM_COLOR]: (state: matchState, action: resetTeamColorType) => {
+    state.teamColor[action.payload] = "";
+  },
+  [MatchActionTypes.SET_TEAM_COLOR]: (state: matchState, action: setTeamColorType) => {
+    state.teamColor[action.payload.team] = action.payload.color
+  },
   [MatchActionTypes.INSERT_EVENT]: (state: matchState, action: insertEventType) => {
     if (action.payload.eventType === EventType.Score) {
       return {
@@ -80,7 +119,6 @@ export const matchReducer = createReducer<matchState>(initState, {
       ]
     }
   },
-
   [MatchActionTypes.UNDO_LAST_EVENT]: (state: matchState, action: undoLastEventType) => {
     const { events } = state;
     const reversedEvents = [...events].reverse();
@@ -113,8 +151,6 @@ export const matchReducer = createReducer<matchState>(initState, {
       events: updatedEvents
     };
   },
-
-
   [MatchActionTypes.EVALUATE_EVENTS]: (state: matchState, action: evaluateEventsType) => {
     const { events } = state;
     const sets: { [key: string]: number } = { [TeamType.Home]: 0, [TeamType.Away]: 0 };
@@ -126,11 +162,15 @@ export const matchReducer = createReducer<matchState>(initState, {
     let firstServerTeam = TeamType.None;
     let leftSideTeam = TeamType.None;
     let noMirrorSides = false;
+    let matchStarted = false;
     events.forEach((event) => {
       if (event.undone) {
         return;
       }
       if (event.eventType === EventType.Score) {
+        if (!matchStarted) {
+          matchStarted = true
+        }
         const setIndex = currentSet - 1;
         if (event.team === TeamType.Home) {
           homeSetScore[setIndex] += 1;
@@ -209,6 +249,7 @@ export const matchReducer = createReducer<matchState>(initState, {
       teamTimeout: teamTimeout,
       finished: matchDone,
       leftSideTeam: leftSideTeam,
+      matchStarted: matchStarted,
       noMirrorSides: noMirrorSides
     }
   },
@@ -223,28 +264,20 @@ export const matchReducer = createReducer<matchState>(initState, {
     }
   },
 
-  // [MatchActionTypes.SHOW_NOTIFICATION]: (state: matchState, action: showNotificationType) => {
-  //   let notificationType = evaluateScores(1)
+  [MatchActionTypes.STORE_MATCH]: (state: matchState, action: storeMatchType) => {
+    console.log("In reducer store match");
 
-  //   switch (notificationType) {
-  //     case NotificationType.SwitchSides:
-  //       return {
-  //         ...state,
-  //         switchSide: true,
-  //         showNotification: true
-  //       }
-  //     case NotificationType.TechnicalTimeout:
-  //       return {
-  //         ...state,
-  //         technicalTimeout: true,
-  //         showNotification: true,
-  //       }
-  //     default:
-  //       return {
-  //         ...state
-  //       }
-  //   }
-  // },
+    return {
+      ...state,
+      id: action.payload.id,
+      matchId: action.payload.matchId,
+      tournamentId: action.payload.tournamentId,
+      homeTeam: action.payload.homeTeam,
+      awayTeam: action.payload.awayTeam,
+      teamColor: { "HOME": action.payload.homeColor, "AWAY": action.payload.awayColor },
+      timestamp: action.payload.timestamp,
+    }
+  },
 
   [MatchActionTypes.CLEAR_NOTIFICATION]: (state: matchState, action: clearNotificationType) => {
 

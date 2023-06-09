@@ -1,9 +1,10 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import { all, call, CallEffect, delay, put, PutEffect, select, SelectEffect, takeEvery, takeLatest } from 'redux-saga/effects'
-import { TeamType, Team, Event } from '../../components/types';
-import { addAwayTeam, AddEventPayload, addHomeTeam, addTeamError, evaluateEvents, insertEvent, MatchActionTypes, storeEvents, undoLastEvent } from "./actions";
+import { TeamType, Team, Event, Match } from '../../components/types';
+import { addAwayTeam, AddEventPayload, addHomeTeam, addTeamError, evaluateEvents, insertEvent, MatchActionTypes, storeEvents, storeMatch, undoLastEvent } from "./actions";
 import { db } from '../../firebase/firebase-config';
-import { addEventToMatchToFirestore, getEventsFromMatch } from '../../firebase/match_service';
+import { addEventToMatchToFirestore, getEventsFromMatch, getMatch, initNewMatch } from '../../firebase/match_service';
+import { v4 } from 'uuid';
 
 /*
  * Sagas intercept an action, and then dispatches API calls. When the API call resolves, it either dispatches a success action, or an error action.
@@ -37,12 +38,12 @@ export function* pushNewEvent(action: PayloadAction<AddEventPayload>): Generator
 
   try {
     yield put(insertEvent(action.payload.event))
-    console.log("Added new event " + action.payload.matchId);
+    console.log("Added new event " + action.payload.id);
 
     yield put(evaluateEvents())
     console.log("Evaluated events");
 
-    yield call(addEventToMatchToFirestore, action.payload.matchId, action.payload.event)
+    yield call(addEventToMatchToFirestore, action.payload.id, action.payload.event)
 
   } catch (error) {
     console.log("Error when pushing new event");
@@ -55,7 +56,7 @@ export function* getOldEvents(action: PayloadAction<string>): Generator<CallEffe
     console.log("check events");
 
     // add a new document with a generated id
-    let events = yield call(getEventsFromMatch, action.payload)
+    let events = yield call(getEventsFromMatch, action.payload);
 
     console.log(events)
 
@@ -67,6 +68,22 @@ export function* getOldEvents(action: PayloadAction<string>): Generator<CallEffe
   }
 }
 
+export function* getOldMatch(action: PayloadAction<string>): Generator<CallEffect | SelectEffect | PutEffect, void, Match> {
+
+  try {
+    console.log("check events with id %s", action.payload);
+
+    // add a new document with a generated id
+    let match = yield call(getMatch, action.payload);
+
+    console.log(match)
+
+    yield put(storeMatch(match))
+    console.log("Store match");
+  } catch (error) {
+    console.log("Error when pushing new event");
+  }
+}
 export function* undoEvent(action: PayloadAction<AddEventPayload>): Generator<CallEffect | SelectEffect | PutEffect, void, string> {
   try {
     yield put(undoLastEvent())
@@ -82,13 +99,29 @@ export function* undoEvent(action: PayloadAction<AddEventPayload>): Generator<Ca
   }
 }
 
+export function* initMatch(action: PayloadAction<Match>): Generator<CallEffect | SelectEffect | PutEffect, void, string> {
+
+  try {
+
+    yield call(initNewMatch, action.payload, action.payload.id)
+
+    window.location.href = "/match/" + action.payload.id;
+
+  } catch (error) {
+    console.log("Error when pushing new event");
+  }
+}
+
 export function* matchSagas() {
   yield all([
     takeEvery(MatchActionTypes.ADD_HOME_TEAM, setHomeTeam),
     takeEvery(MatchActionTypes.ADD_AWAY_TEAM, setAwayTeam),
     takeEvery(MatchActionTypes.ADD_EVENT, pushNewEvent),
     takeEvery(MatchActionTypes.CHECK_DB, getOldEvents),
+    takeEvery(MatchActionTypes.CHECK_DB, getOldMatch),
     takeEvery(MatchActionTypes.UNDO_EVENT, undoEvent),
+    takeEvery(MatchActionTypes.INIT_MATCH, initMatch),
+
   ])
 
 }

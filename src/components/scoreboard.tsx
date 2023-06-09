@@ -20,6 +20,7 @@ import EventList from "./eventList";
 import { callTimeoutEvent, createAddPointEvent, getBackgroundColor, getTextColor } from "./scoreboard/eventFunctions";
 import { getInitials } from "../util/names";
 import { matchState } from "../store/types";
+import { getTextColorFromBackground } from "../util/color";
 
 export function Scoreboard() {
   const match = useAppSelector((state) => state.match);
@@ -28,11 +29,11 @@ export function Scoreboard() {
   const [infoCollapse, setInfoCollapse] = useState(false);
 
   function addPoint(team: TeamType) {
-    dispatch(addEvent({ matchId: match.matchId, event: createAddPointEvent(team) }))
+    dispatch(addEvent({ matchId: match.matchId, id: match.id, event: createAddPointEvent(team) }))
   }
 
   function teamTimeout(team: TeamType) {
-    dispatch(addEvent({ matchId: match.matchId, event: callTimeoutEvent(team) }))
+    dispatch(addEvent({ matchId: match.matchId, id: match.id, event: callTimeoutEvent(team) }))
   }
 
   return (
@@ -59,7 +60,7 @@ export function Scoreboard() {
             >
               <Grid item>
                 <Typography align='center' sx={{
-                  border: 4, borderRadius: '12px', borderColor: getBackgroundColor(match.events, getLeftTeam(match)),
+                  border: 4, borderRadius: '12px', borderColor: match.teamColor[getLeftTeam(match)],
                   fontSize: "2rem", variant: 'button', lineHeight: 1, paddingTop: 1,
                   paddingX: 1
                 }}>
@@ -68,7 +69,7 @@ export function Scoreboard() {
               </Grid>
               <Grid item>
                 <Typography align='right' sx={{
-                  border: 6, borderRadius: '12px', borderColor: getBackgroundColor(match.events, getLeftTeam(match)),
+                  border: 6, borderRadius: '12px', borderColor: match.teamColor[getLeftTeam(match)],
                   fontSize: "3.5rem", variant: 'button', lineHeight: 1, paddingTop: 3,
                   paddingX: 1, minWidth: 50
                 }}>
@@ -86,7 +87,7 @@ export function Scoreboard() {
             >
               <Grid item>
                 <Typography align='left' sx={{
-                  border: 6, borderRadius: '12px', borderColor: getBackgroundColor(match.events, getRightTeam(match)),
+                  border: 6, borderRadius: '12px', borderColor: match.teamColor[getRightTeam(match)],
                   fontSize: "3.5rem", variant: 'button', lineHeight: 1, paddingTop: 3,
                   paddingX: 1, minWidth: 50
                 }}>
@@ -95,7 +96,7 @@ export function Scoreboard() {
               </Grid>
               <Grid item>
                 <Typography align='center' sx={{
-                  border: 4, borderRadius: '12px', borderColor: getBackgroundColor(match.events, getRightTeam(match)),
+                  border: 4, borderRadius: '12px', borderColor: match.teamColor[getRightTeam(match)],
                   fontSize: "2rem", variant: 'button', lineHeight: 1, paddingTop: 1,
                   paddingX: 1
                 }}>
@@ -148,27 +149,27 @@ export function Scoreboard() {
           <Grid item xs={6} sx={{ textAlign: 'right' }}>
             <Button disabled={match.finished} variant="contained" onClick={addPoint.bind(null, getLeftTeam(match))}
               sx={{
-                width: 1, height: 84, backgroundColor: getBackgroundColor(match.events, getLeftTeam(match)),
-                '&:hover': { backgroundColor: getBackgroundColor(match.events, getLeftTeam(match)) }
+                width: 1, height: 84, backgroundColor: match.teamColor[getLeftTeam(match)],
+                '&:hover': { backgroundColor: match.teamColor[getLeftTeam(match)] }
               }}>
-              <Add sx={{ fontSize: 84, color: getTextColor(match.events, getLeftTeam(match)) }} />
+              <Add sx={{ fontSize: 84, color: getTextColorFromBackground(match.teamColor[getLeftTeam(match)]) }} />
             </Button>
           </Grid>
           <Grid item xs={6} sx={{ textAlign: 'left' }}>
             <Button disabled={match.finished} variant="contained" onClick={addPoint.bind(null, getRightTeam(match))}
               sx={{
-                width: 1, height: 84, backgroundColor: getBackgroundColor(match.events, getRightTeam(match)),
-                '&:hover': { backgroundColor: getBackgroundColor(match.events, getRightTeam(match)) }
+                width: 1, height: 84, backgroundColor: match.teamColor[getRightTeam(match)],
+                '&:hover': { backgroundColor: match.teamColor[getRightTeam(match)] }
               }}>
-              <Add sx={{ fontSize: 84, color: getTextColor(match.events, getRightTeam(match)) }} />
+              <Add sx={{ fontSize: 84, color: getTextColorFromBackground(match.teamColor[getRightTeam(match)]) }} />
             </Button>
           </Grid>
 
           <Grid item xs={6} sx={{ textAlign: 'right' }}>
             <Button disabled={match.teamTimeout[getLeftTeam(match)] || match.finished} onClick={teamTimeout.bind(null, getLeftTeam(match))} variant="contained"
               sx={{
-                width: 1, textTransform: 'none', backgroundColor: getBackgroundColor(match.events, getLeftTeam(match)),
-                '&:hover': { backgroundColor: getBackgroundColor(match.events, getLeftTeam(match)) }
+                width: 1, textTransform: 'none', backgroundColor: match.teamColor[getLeftTeam(match)],
+                '&:hover': { backgroundColor: match.teamColor[getLeftTeam(match)] }
               }}>
               <Typography sx={{ fontSize: 18, color: getTextColor(match.events, getLeftTeam(match)) }}> TIMEOUT</Typography>
             </Button>
@@ -176,11 +177,11 @@ export function Scoreboard() {
           <Grid item xs={6} sx={{ textAlign: 'left' }}>
             <Button disabled={match.teamTimeout[getRightTeam(match)] || match.finished} onClick={teamTimeout.bind(null, getRightTeam(match))} variant="contained"
               sx={{
-                width: 1, textTransform: 'none', backgroundColor: getBackgroundColor(match.events, getRightTeam(match)),
-                '&:hover': { backgroundColor: getBackgroundColor(match.events, getRightTeam(match)) }
+                width: 1, textTransform: 'none', backgroundColor: match.teamColor[getRightTeam(match)],
+                '&:hover': { backgroundColor: match.teamColor[getRightTeam(match)] }
 
               }}>
-              <Typography sx={{ fontSize: 18, color: getTextColor(match.events, getRightTeam(match)) }}> TIMEOUT</Typography>
+              <Typography sx={{ fontSize: 18, color: getTextColorFromBackground(match.teamColor[getRightTeam(match)]) }}> TIMEOUT</Typography>
             </Button>
           </Grid>
         </Grid>

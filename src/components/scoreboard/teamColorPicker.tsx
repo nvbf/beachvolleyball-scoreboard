@@ -8,7 +8,7 @@ import {
     Abc,
 } from '@mui/icons-material';
 import { getTextColorFromBackground } from "../../util/color";
-import { addEvent } from "../../store/match/actions";
+import { addEvent, setTeamColor } from "../../store/match/actions";
 import { pickTeamColorEvent } from "./eventFunctions";
 
 
@@ -42,8 +42,11 @@ export function TeamColorPicker({ team }: TeamColorPickerProps) {
     ];
 
     function handleColorClick(color: string) {
-        dispatch(addEvent({ matchId: match.matchId, event: pickTeamColorEvent(team, color) }));
+        dispatch(setTeamColor({ color: color, team: team }));
     }
+
+    let taken = team === TeamType.Home ? match.teamColor[TeamType.Away] : match.teamColor[TeamType.Home]
+    console.log(taken)
 
     return (
         <Grid
@@ -56,6 +59,9 @@ export function TeamColorPicker({ team }: TeamColorPickerProps) {
         >
             <Grid item xs={12}>
                 <Typography sx={{ fontSize: 28 }}>Choose a color for the {team === TeamType.Home ? "home" : "away"} team:</Typography>
+                <Typography sx={{ fontSize: 28 }}>{team === TeamType.Home ? match.homeTeam.player1Name : match.awayTeam.player1Name}</Typography>
+                <Typography sx={{ fontSize: 28 }}>{team === TeamType.Home ? match.homeTeam.player2Name : match.awayTeam.player2Name}</Typography>
+
             </Grid>
             <Grid item xs={12}>
                 <Grid container
@@ -69,8 +75,11 @@ export function TeamColorPicker({ team }: TeamColorPickerProps) {
                         <Grid item sm={2} xs={4} key={item.key}
                         >
                             <Button
+                                disabled={taken === item.color}
+
                                 sx={{
-                                    width: 1, height: 42, backgroundColor: item.color,
+                                    width: 1, height: 42,
+                                    backgroundColor: taken === item.color ? "#cccccc" : item.color,
                                     '&:hover': { backgroundColor: item.color }
                                 }}
                                 onClick={handleColorClick.bind(null, item.color)}

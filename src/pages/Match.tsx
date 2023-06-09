@@ -12,58 +12,33 @@ import SetFinished from '../components/scoreboard/setFinished';
 import MatchFinished from '../components/scoreboard/matchFinished';
 import TeamTimeout from '../components/scoreboard/teamTimeout';
 import TechnicalTimeout from '../components/scoreboard/technicalTimeout';
-import { useLocation } from 'react-router-dom';
-import { addAwayTeam, addHomeTeam, checkDb, setMatchId } from '../store/match/actions';
+import { useLocation, useParams } from 'react-router-dom';
+import { addAwayTeam, addHomeTeam, checkDb, setId } from '../store/match/actions';
 import SwitchSides from '../components/scoreboard/switchSides';
 
 
 function Match() {
   const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
   const match = useAppSelector(state => state.match)
   const dispatch = useAppDispatch();
   const [checkedDb, setCheckedDb] = useState(false);
 
+  const params = useParams();
 
-  const homePlayer1 = searchParams.get('name1');
-  const homePlayer2 = searchParams.get('name2');
-  const awayPlayer1 = searchParams.get('name3');
-  const awayPlayer2 = searchParams.get('name4');
-  const matchId = searchParams.get('matchid');
-  const tournementId = searchParams.get('tournementid');
-  console.log("Is this being run all the time??? " + matchId)
+  if (!match.id && params.matchId) {
+    console.log('set match id : %s', params.matchId)
+    dispatch(setId(params.matchId))
+  }
 
-  if (!match.matchId && matchId) {
-    dispatch(setMatchId(matchId))
+  if (!checkedDb && match.id) {
+    dispatch(checkDb(match.id))
+    console.log('checking for id : %s', match.id)
     setCheckedDb(true)
-  }
-
-  if (!checkedDb && matchId) {
-    dispatch(checkDb(matchId))
-    setCheckedDb(true)
-  }
-
-  if (!match.homeTeam.player1Name && !match.homeTeam.player1Name && homePlayer1 && homePlayer2) {
-    dispatch(addHomeTeam({
-      player1Name: homePlayer1,
-      player2Name: homePlayer2,
-    }))
-  }
-
-  if (!match.awayTeam.player1Name && !match.awayTeam.player1Name && awayPlayer1 && awayPlayer2) {
-    dispatch(addAwayTeam({
-      player1Name: awayPlayer1,
-      player2Name: awayPlayer2,
-    }))
   }
 
   return (
     <main>
       <ScoreboardHeader />
-      {getActiveDisplay(match) === DisplayType.AddHomeTeam && <AddTeam teamType={TeamType.Home} />}
-      {getActiveDisplay(match) === DisplayType.AddAwayTeam && <AddTeam teamType={TeamType.Away} />}
-      {getActiveDisplay(match) === DisplayType.PickHomeColor && <TeamColorPicker team={TeamType.Home} />}
-      {getActiveDisplay(match) === DisplayType.PickAwayColor && <TeamColorPicker team={TeamType.Away} />}
       {getActiveDisplay(match) === DisplayType.SelectServeorder && <ServeOrder />}
       {getActiveDisplay(match) === DisplayType.SetLeftStartTeam && <SetLeftStartTeam />}
       {getActiveDisplay(match) === DisplayType.ScoreBoard && <Scoreboard />}
@@ -72,6 +47,7 @@ function Match() {
       {getActiveDisplay(match) === DisplayType.SwitchSides && <SwitchSides />}
       {getActiveDisplay(match) === DisplayType.SetFinished && <SetFinished />}
       {getActiveDisplay(match) === DisplayType.MatchFinished && <MatchFinished />}
+      {getActiveDisplay(match) === DisplayType.MatchFinalized && <Scoreboard />}
     </main>
   );
 }
@@ -85,24 +61,16 @@ export enum DisplayType {
   TechnicalTimeout,
   SelectServeorder,
   SetLeftStartTeam,
-  AddHomeTeam,
-  AddAwayTeam,
-  PickHomeColor,
-  PickAwayColor,
   SwitchSides,
   SetFinished,
-  MatchFinished
+  MatchFinished,
+  MatchFinalized,
 }
 
 function getActiveDisplay(state: matchState): DisplayType {
-  if (state.homeTeam.player1Name === "" || state.homeTeam.player2Name === "") {
-    return DisplayType.AddHomeTeam
-  } else if (state.awayTeam.player1Name === "" || state.awayTeam.player2Name === "") {
-    return DisplayType.AddAwayTeam
-  } else if (!hasTeamPickedColor(state.events, TeamType.Home)) {
-    return DisplayType.PickHomeColor
-  } else if (!hasTeamPickedColor(state.events, TeamType.Away)) {
-    return DisplayType.PickAwayColor
+  if (matchFinalized(state)) {
+    console.log("SHOULD BE DONE!!")
+    return DisplayType.MatchFinalized
   } else if (technicalTimeout(state) && state.showNotification) {
     return DisplayType.TechnicalTimeout
   } else if (teamTimeout(state) && state.showNotification) {
@@ -122,10 +90,6 @@ function getActiveDisplay(state: matchState): DisplayType {
   return DisplayType.ScoreBoard
 }
 
-function hasTeamPickedColor(events: Event[], team: TeamType): boolean {
-  return events.some((event) => event.eventType === EventType.PickColor && event.team === team && !event.undone)
-}
-
 function serveOrderSet(state: matchState): boolean {
   if (state.finished) {
     return false
@@ -139,8 +103,6 @@ function setLeftServer(state: matchState): boolean {
     console.log("state.noMirrorSides")
     return false
   }
-  console.log(state.leftSideTeam === TeamType.None)
-  console.log("state.leftSideTeam === TeamType.None:")
   return state.leftSideTeam === TeamType.None;
 }
 
@@ -162,6 +124,10 @@ function technicalTimeout(state: matchState): boolean {
     return state.currentScore[TeamType.Home] + state.currentScore[TeamType.Away] === 21
   }
   return false
+}
+
+function matchFinalized(state: matchState): boolean {
+  return (state.events.find(e => !e.undone && e.eventType === EventType.MatchFinalized)?.eventType) === EventType.MatchFinalized || false;
 }
 
 function teamTimeout(state: matchState): boolean {
