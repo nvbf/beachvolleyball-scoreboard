@@ -40,7 +40,7 @@ function TournamentAdmin() {
       const matchesCollection = collection(tournamentDocRef, "Matches");
       const matchesSnapshot = await getDocs(matchesCollection);
 
-      const matchesData = [];
+      const matchesData: DocumentData[] = [];
 
       matchesSnapshot.forEach((doc) => {
         matchesData.push(doc.data());
@@ -60,7 +60,7 @@ function TournamentAdmin() {
     fetchMatches();
   }, []);
 
-  const handleOpen = (url) => {
+  const handleOpen = (url: React.SetStateAction<string>) => {
     setActiveQrCode(url);
     setOpen(true);
   };
