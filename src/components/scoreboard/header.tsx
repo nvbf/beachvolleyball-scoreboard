@@ -20,9 +20,9 @@ export function ScoreboardHeader() {
   const [infoCollapse, setInfoCollapse] = useState(false);
 
   function undo() {
-    dispatch(undoEvent({ matchId: match.matchId, event: createUndoEvent(match.events)}));
+    dispatch(undoEvent({ matchId: match.matchId, id: match.id, event: createUndoEvent(match.events) }));
   }
-  
+
   function toggleSettings() {
     // dispatch(callTimeout(Actor.AwayTeam));
   }

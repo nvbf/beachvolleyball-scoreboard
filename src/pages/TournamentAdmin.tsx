@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { collection, getDocs, doc, getDoc } from "@firebase/firestore";
+import { collection, getDocs, doc, getDoc, DocumentData } from "@firebase/firestore";
 import { db } from "./../firebase/firebase-config";
 import {
   Table,
@@ -17,7 +17,10 @@ import {
 import QRCode from "qrcode.react";
 
 function TournamentAdmin() {
-  const [matches, setMatches] = useState({ ongoing: [], finished: [] });
+  const initOngoing: DocumentData[] = []
+  const initFinished: DocumentData[] = []
+
+  const [matches, setMatches] = useState({ ongoing: initOngoing, finished: initFinished });
   const [open, setOpen] = useState(false);
   const [activeQrCode, setActiveQrCode] = useState("");
   const [showOngoing, setShowOngoing] = useState(true);
@@ -38,7 +41,7 @@ function TournamentAdmin() {
       const matchesCollection = collection(tournamentDocRef, "Matches");
       const matchesSnapshot = await getDocs(matchesCollection);
 
-      const matchesData = [];
+      const matchesData: DocumentData[] = [];
 
       matchesSnapshot.forEach((doc) => {
         matchesData.push(doc.data());
@@ -58,7 +61,7 @@ function TournamentAdmin() {
     fetchMatches();
   }, []);
 
-  const handleOpen = (url) => {
+  const handleOpen = (url: string) => {
     setActiveQrCode(url);
     setOpen(true);
   };
@@ -78,12 +81,12 @@ function TournamentAdmin() {
 
       const url = showQRCode
         ? `https://scoreboard-sandbox.herokuapp.com/match?name1=${encodeURIComponent(
-            name1
-          )}&name2=${encodeURIComponent(name2)}&name3=${encodeURIComponent(
-            name3
-          )}&name4=${encodeURIComponent(
-            name4
-          )}&matchid=${matchID}&tournamentid=${tournamentID}`
+          name1
+        )}&name2=${encodeURIComponent(name2)}&name3=${encodeURIComponent(
+          name3
+        )}&name4=${encodeURIComponent(
+          name4
+        )}&matchid=${matchID}&tournamentid=${tournamentID}`
         : "";
 
       console.log(url);
