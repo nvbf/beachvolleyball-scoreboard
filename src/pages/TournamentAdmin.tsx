@@ -1,37 +1,41 @@
 import React, { useEffect, useState } from "react";
-import { collection, getDocs } from "@firebase/firestore";
+import { collection, getDocs, doc, getDoc } from "@firebase/firestore";
 import { db } from "./../firebase/firebase-config";
 import {
   Table,
   TableBody,
   TableCell,
   TableContainer,
+  TableHead,
   TableRow,
   Paper,
   Box,
   Dialog,
+  Collapse,
   Button,
 } from "@mui/material";
 import QRCode from "qrcode.react";
-import { doc } from "firebase/firestore";
 
 function TournamentAdmin() {
   const [matches, setMatches] = useState({ ongoing: [], finished: [] });
   const [open, setOpen] = useState(false);
   const [activeQrCode, setActiveQrCode] = useState("");
-  const [areFinishedMatchesExpanded, setAreFinishedMatchesExpanded] =
-    useState(true);
-  const [areOngoingMatchesExpanded, setAreOngoingMatchesExpanded] =
-    useState(true);
+  const [showOngoing, setShowOngoing] = useState(true);
+  const [showFinished, setShowFinished] = useState(true);
 
   useEffect(() => {
     const fetchMatches = async () => {
-      const tournamentDoc = doc(
+      const tournamentDocRef = doc(
         db,
         "Tournaments",
         "hordaland_tour_04_-_u15u17u19__senior_23"
       );
-      const matchesCollection = collection(tournamentDoc, "Matches");
+
+      // Fetch tournament document to get tournamentID
+      const tournamentDoc = await getDoc(tournamentDocRef);
+      const tournamentID = tournamentDoc.data()?.ID;
+
+      const matchesCollection = collection(tournamentDocRef, "Matches");
       const matchesSnapshot = await getDocs(matchesCollection);
 
       const matchesData = [];
@@ -40,15 +44,15 @@ function TournamentAdmin() {
         matchesData.push(doc.data());
       });
 
-      // Sort the matches by number
       matchesData.sort((a, b) => parseInt(a.Number) - parseInt(b.Number));
 
-      // Split the matches into ongoing and finished based on HasWinner field
       const ongoingMatches = matchesData.filter((match) => !match.HasWinner);
       const finishedMatches = matchesData.filter((match) => match.HasWinner);
 
-      // Update the matches state
       setMatches({ ongoing: ongoingMatches, finished: finishedMatches });
+
+      renderMatches(ongoingMatches, true, tournamentID);
+      renderMatches(finishedMatches, false, tournamentID);
     };
 
     fetchMatches();
@@ -63,26 +67,28 @@ function TournamentAdmin() {
     setOpen(false);
   };
 
-  const toggleFinishedMatches = () => {
-    setAreFinishedMatchesExpanded(!areFinishedMatchesExpanded);
-  };
+  const renderMatches = (matchesArray, showQRCode, tournamentID) =>
+    matchesArray.map((match) => {
+      const matchID = match.ID;
+      const awayTeamName = match.AwayTeam?.Name?.replace(/^\#\d+\s/, "");
+      const homeTeamName = match.HomeTeam?.Name?.replace(/^\#\d+\s/, "");
 
-  const toggleOngoingMatches = () => {
-    setAreOngoingMatchesExpanded(!areOngoingMatchesExpanded);
-  };
+      const [name1, name2] = awayTeamName.split(" and ");
+      const [name3, name4] = homeTeamName.split(" and ");
 
-  const renderMatches = (matchesArray: any[], showQrCode: any[]) =>
-    matchesArray.map((match, index) => {
-      const homeTeamName = match.HomeTeam?.Name;
-      const awayTeamName = match.AwayTeam?.Name;
+      const url = showQRCode
+        ? `https://scoreboard-sandbox.herokuapp.com/match?name1=${encodeURIComponent(
+            name1
+          )}&name2=${encodeURIComponent(name2)}&name3=${encodeURIComponent(
+            name3
+          )}&name4=${encodeURIComponent(
+            name4
+          )}&matchid=${matchID}&tournamentid=${tournamentID}`
+        : "";
 
-      // Don't render the match if both team names are empty strings
-      if (!homeTeamName && !awayTeamName) {
-        return null;
-      }
-
+      console.log(url);
       return (
-        <Box mb={3} key={index}>
+        <Box mb={3} key={match.Number}>
           <TableContainer component={Paper}>
             <Table>
               <TableBody>
@@ -92,29 +98,30 @@ function TournamentAdmin() {
                 <TableRow>
                   <TableCell>Date</TableCell>
                   <TableCell>{match.Date}</TableCell>
-                  {showQrCode && (
-                    <TableCell rowSpan={3} align="right">
+                  {showQRCode && (
+                    <TableCell rowSpan={4} align="right">
                       <Box display="flex" justifyContent="center" p={1}>
-                        <QRCode
-                          value={`Your QR Code Value Here`}
-                          size={128}
-                          onClick={() => handleOpen(`Your QR Code Value Here`)}
-                        />
+                        <QRCode value={url} />
+                      </Box>
+                      <Box display="flex" justifyContent="center">
+                        <Button
+                          variant="outlined"
+                          size="small"
+                          onClick={() => handleOpen(url)}
+                        >
+                          Expand QR
+                        </Button>
                       </Box>
                     </TableCell>
                   )}
                 </TableRow>
                 <TableRow>
-                  <TableCell>Home Team</TableCell>
-                  <TableCell>{homeTeamName}</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>Away Team</TableCell>
+                  <TableCell>Away team</TableCell>
                   <TableCell>{awayTeamName}</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell>Court</TableCell>
-                  <TableCell>{match.Field?.Name}</TableCell>
+                  <TableCell>Home team</TableCell>
+                  <TableCell>{homeTeamName}</TableCell>
                 </TableRow>
               </TableBody>
             </Table>
@@ -124,37 +131,31 @@ function TournamentAdmin() {
     });
 
   return (
-    <div>
+    <Box mt={3}>
       <h2>
         Ongoing Matches{" "}
-        <Button onClick={toggleOngoingMatches}>
-          {areOngoingMatchesExpanded ? "Hide" : "Show"}
-        </Button>
+        <button onClick={() => setShowOngoing(!showOngoing)}>
+          {showOngoing ? "Hide" : "Show"}
+        </button>
       </h2>
-      {areOngoingMatchesExpanded && renderMatches(matches.ongoing, true)}
-
+      <Collapse in={showOngoing}>
+        {renderMatches(matches.ongoing, true)}
+      </Collapse>
       <h2>
         Finished Matches{" "}
-        <Button onClick={toggleFinishedMatches}>
-          {areFinishedMatchesExpanded ? "Hide" : "Show"}
-        </Button>
+        <button onClick={() => setShowFinished(!showFinished)}>
+          {showFinished ? "Hide" : "Show"}
+        </button>
       </h2>
-      {areFinishedMatchesExpanded && renderMatches(matches.finished, false)}
-
+      <Collapse in={showFinished}>
+        {renderMatches(matches.finished, false)}
+      </Collapse>
       <Dialog open={open} onClose={handleClose}>
-        <Box
-          sx={{
-            width: "100%",
-            height: "100vh",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <QRCode value={activeQrCode} size={512} />
+        <Box p={3}>
+          <QRCode value={activeQrCode} size={256} />
         </Box>
       </Dialog>
-    </div>
+    </Box>
   );
 }
 
