@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { collection, getDocs, doc, getDoc } from "@firebase/firestore";
+import { collection, getDocs, doc, getDoc, DocumentData } from "@firebase/firestore";
 import { db } from "./../firebase/firebase-config";
 import {
   Table,
@@ -17,7 +17,7 @@ import {
 import QRCode from "qrcode.react";
 
 function TournamentAdmin() {
-  const [matches, setMatches] = useState<{ ongoing: any[]; finished: any[] }>({ ongoing: [], finished: [] });
+  const [matches, setMatches] = useState({ ongoing: [], finished: [] });
   const [open, setOpen] = useState(false);
   const [activeQrCode, setActiveQrCode] = useState("");
   const [showOngoing, setShowOngoing] = useState(true);
@@ -40,7 +40,7 @@ function TournamentAdmin() {
       const matchesCollection = collection(tournamentDocRef, "Matches");
       const matchesSnapshot = await getDocs(matchesCollection);
 
-      const matchesData: any[] = [];
+      const matchesData = [];
 
       matchesSnapshot.forEach((doc) => {
         matchesData.push(doc.data());
@@ -60,7 +60,7 @@ function TournamentAdmin() {
     fetchMatches();
   }, []);
 
-  const handleOpen = (url: React.SetStateAction<string>) => {
+  const handleOpen = (url) => {
     setActiveQrCode(url);
     setOpen(true);
   };
@@ -83,15 +83,15 @@ function TournamentAdmin() {
         const [name1, name2] = awayTeamName ? awayTeamName.split(" / ") : ["", ""];
 const [name3, name4] = homeTeamName ? homeTeamName.split(" / ") : ["", ""];
 
-const url = showQRCode
-? `https://scoreboard-sandbox.herokuapp.com/match?name1=${encodeURIComponent(
-    name1.trim()
-  )}&name2=${encodeURIComponent(name2.trim())}&name3=${encodeURIComponent(
-    name3.trim()
-  )}&name4=${encodeURIComponent(
-    name4.trim()
-  )}&matchid=${matchID}&tournamentid=${tournamentID}`
-: "";
+      const url = showQRCode
+        ? `https://scoreboard-sandbox.herokuapp.com/match?name1=${encodeURIComponent(
+            name1
+          )}&name2=${encodeURIComponent(name2)}&name3=${encodeURIComponent(
+            name3
+          )}&name4=${encodeURIComponent(
+            name4
+          )}&matchid=${matchID}&tournamentid=${tournamentID}`
+        : "";
 
 
         console.log("Generated URL:", url); // Log the generated URL for debugging

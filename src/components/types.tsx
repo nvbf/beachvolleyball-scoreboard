@@ -11,13 +11,14 @@ export type Set = {
 }
 
 export type Match = {
+  id: string,
   homeTeam: Team,
   awayTeam: Team,
+  homeColor: string,
+  awayColor: string,
   matchId: string,
-  matchName: string,
-  tournementId: string,
+  tournamentId: string,
   timestamp: number,
-  sets: Set[]
 }
 
 export type Event = {
@@ -40,7 +41,8 @@ export enum EventType {
   ConfigureTeam = "TEAM_CONFIG",
   NoSideSwitch = "NO_SIDE_SWITCH",
   LeftSideStartTeam = "LEFT_SIDE_START_TEAM",
-  PickColor = "TEAM_COLOR"
+  PickColor = "TEAM_COLOR",
+  MatchFinalized = "MATCH_FINALIZED"
 }
 
 export enum TeamType {

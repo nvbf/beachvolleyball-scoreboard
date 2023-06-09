@@ -35,6 +35,19 @@ export const createAddPointEvent = (team: TeamType): Event => {
     }
 }
 
+export const finalizeMatchEvent = (): Event => {
+    return {
+        id: v4(),
+        eventType: EventType.MatchFinalized,
+        team: TeamType.None,
+        playerId: 0,
+        timestamp: Date.now(),
+        undone: "",
+        author: "",
+        reference: ""
+    }
+}
+
 export const callTimeoutEvent = (team: TeamType): Event => {
     return {
         id: v4(),

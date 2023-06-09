@@ -25,6 +25,7 @@ import { getBackgroundColor, getTextColor, selectFirstServerEvent, selectFirstSe
 import { matchState } from "../../store/types";
 import { setLeftStartTeamEvent } from "../scoreboard/eventFunctions";
 import { setNoSideSwitchEvent } from "../scoreboard/eventFunctions";
+import { getTextColorFromBackground } from "../../util/color";
 
 export function SetLeftStartTeam() {
     const match = useAppSelector((state) => state.match);
@@ -33,11 +34,11 @@ export function SetLeftStartTeam() {
     const dispatch = useAppDispatch();
 
     function setLeftTeam() {
-        dispatch(addEvent({ matchId: match.matchId, event: setLeftStartTeamEvent(leftSideTeam) }));
+        dispatch(addEvent({ matchId: match.matchId, id: match.id, event: setLeftStartTeamEvent(leftSideTeam) }));
     }
 
     function setNoSideSwitch() {
-        dispatch(addEvent({ matchId: match.matchId, event: setNoSideSwitchEvent() }));
+        dispatch(addEvent({ matchId: match.matchId, id: match.id, event: setNoSideSwitchEvent() }));
     }
 
     function handleSwitch() {
@@ -129,10 +130,10 @@ export function SetLeftStartTeam() {
                         <Grid item xs={6} sx={{ textAlign: 'right' }}>
                             <Button variant="contained"
                                 sx={{
-                                    width: 1, height: 96, backgroundColor: getBackgroundColor(match.events, getLeftTeam()),
-                                    '&:hover': { backgroundColor: getBackgroundColor(match.events, getLeftTeam()) }
+                                    width: 1, height: 96, backgroundColor: match.teamColor[getLeftTeam()],
+                                    '&:hover': { backgroundColor: match.teamColor[getLeftTeam()] }
                                 }}>
-                                <Typography variant="h6" sx={{ color: getTextColor(match.events, getLeftTeam()) }}>
+                                <Typography variant="h6" sx={{ color: getTextColorFromBackground(match.teamColor[getLeftTeam()]) }}>
                                     <Box>{getInitials(getPlayer(match, 1, getLeftTeam()))}</Box>
                                     <Box>{getInitials(getPlayer(match, 2, getLeftTeam()))}</Box>
                                 </Typography>
@@ -141,10 +142,10 @@ export function SetLeftStartTeam() {
                         <Grid item xs={6} sx={{ textAlign: 'left' }}>
                             <Button variant="contained"
                                 sx={{
-                                    width: 1, height: 96, backgroundColor: getBackgroundColor(match.events, getRightTeam()),
-                                    '&:hover': { backgroundColor: getBackgroundColor(match.events, getRightTeam()) }
+                                    width: 1, height: 96, backgroundColor: match.teamColor[getRightTeam()],
+                                    '&:hover': { backgroundColor: match.teamColor[getRightTeam()] }
                                 }}>
-                                <Typography variant="h6" sx={{ color: getTextColor(match.events, getRightTeam()) }}>
+                                <Typography variant="h6" sx={{ color: getTextColorFromBackground(match.teamColor[getRightTeam()]) }}>
                                     <Box>{getInitials(getPlayer(match, 1, getRightTeam()))}</Box>
                                     <Box>{getInitials(getPlayer(match, 2, getRightTeam()))}</Box>
                                 </Typography>

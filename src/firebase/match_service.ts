@@ -1,6 +1,7 @@
 import { collection, getDocs, addDoc, getFirestore } from "@firebase/firestore";
-import { Event, EventType } from "../components/types";
+import { Event, EventType, Match } from "../components/types";
 import { getUID } from "./auth";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 
 export const addEventToMatchToFirestore = async (
   matchId: string,
@@ -10,7 +11,7 @@ export const addEventToMatchToFirestore = async (
   const eventCollection = collection(db, "Matches", matchId, "events");
   return addDoc(eventCollection, Event)
     .then((docRef) => {
-      console.log("Document written with ID:", docRef.id);
+      console.log("Document written to match: %s with ID: %s", matchId, docRef.id);
       return docRef.id;
     })
     .catch((error) => {
@@ -58,4 +59,66 @@ export const getEventsFromMatch = async (
   // Sort the events by timestamp
   sortedEventList.sort((a, b) => a.timestamp - b.timestamp);
   return sortedEventList
+}
+
+export const getMatch = async (
+  matchId: string
+) => {
+  console.log('Looking for id', matchId)
+
+  let db = getFirestore()
+  const uid = await getUID()
+  console.log('Logged in with uid', uid)
+  const value = doc(db, "Matches", matchId);
+  const document = await getDoc(value);
+  if (document.exists()) {
+    let match: Match = {
+      id: document.data().id,
+      homeTeam: document.data().homeTeam,
+      awayTeam: document.data().awayTeam,
+      homeColor: document.data().homeColor,
+      awayColor: document.data().awayColor,
+      matchId: document.data().matchId,
+      tournamentId: document.data().tournamentId,
+      timestamp: document.data().timestamp,
+    }
+    console.log('Got match with id', matchId)
+
+    return match
+  }
+  let match: Match = {
+    id: "",
+    homeTeam: {
+      player1Name: "",
+      player2Name: "",
+    },
+    awayTeam: {
+      player1Name: "",
+      player2Name: "",
+    },
+    homeColor: "",
+    awayColor: "",
+    matchId: "",
+    tournamentId: "",
+    timestamp: 0,
+  }
+  return match
+}
+
+export const initNewMatch = async (
+  match: Match,
+  id: string
+) => {
+  let db = getFirestore()
+  const matches = doc(db, "Matches", id);
+
+  return setDoc(matches, match)
+    .then(() => {
+      console.log("Document written with ID:", id);
+      return id;
+    })
+    .catch((error) => {
+      console.error("error adding tournament name:", error);
+      throw error;
+    });
 }
