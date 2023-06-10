@@ -12,12 +12,13 @@ import { useAppDispatch, useAppSelector } from '../../store/store';
 import Grid from "@mui/material/Grid"
 import Clock from "../clock";
 import { createUndoEvent } from "./eventFunctions";
+import { EventType } from '../types';
+import TimeElapsed from '../timeElaped';
 
 export function ScoreboardHeader() {
   const match = useAppSelector((state) => state.match);
 
   const dispatch = useAppDispatch();
-  const [infoCollapse, setInfoCollapse] = useState(false);
 
   function undo() {
     dispatch(undoEvent({ matchId: match.matchId, id: match.id, event: createUndoEvent(match.events) }));
@@ -48,7 +49,7 @@ export function ScoreboardHeader() {
           </Grid>
           <Grid item xs={6}>
             <Typography align='center' sx={{ fontSize: "2rem", variant: 'button', lineHeight: 1, paddingTop: 1, paddingX: 1 }}>
-              <Clock format="24h" />
+              <TimeElapsed startTime={match.startTime} />
             </Typography>
           </Grid>
           <Grid item xs={3}>

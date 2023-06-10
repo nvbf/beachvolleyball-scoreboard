@@ -15,6 +15,7 @@ export type matchState = {
   noMirrorSides: boolean,
   matchStarted: boolean,
   currentSet: number,
+  startTime: number,
   currentSetScore: { [key: string]: number },
   currentScore: { [key: string]: number },
   teamTimeout: { [key: string]: boolean },

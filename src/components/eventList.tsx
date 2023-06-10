@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import { Event, EventType, TeamType } from "./types";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Grid, Typography } from "@mui/material";
+import { useAppSelector } from "../store/store";
+import moment from "moment";
 
 interface Props {
   events: Event[];
 }
 
 const EventList: React.FC<Props> = ({ events }) => {
+  const match = useAppSelector((state) => state.match);
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
   const toggleExpansion = () => {
@@ -19,11 +22,29 @@ const EventList: React.FC<Props> = ({ events }) => {
     const playerName = event.playerId.toString(); // replace with actual player name
     const undoneString = event.undone ? <del>Undone</del> : "";
     const reference = event.reference ? `(${event.reference})` : "";
-    const timestampString = new Date(event.timestamp).toLocaleTimeString([], { hour12: false });
+    const elapsed = match.startTime === 0 ? moment.duration(0) : moment.duration(event.timestamp - match.startTime)
+    let hours = elapsed.hours().toString();
+    let minutes = elapsed.minutes().toString();
+    let seconds = elapsed.seconds().toString();
+    let formattedTime = "";
+
+    if (minutes.length < 2) {
+      minutes = "0" + minutes;
+    }
+
+    if (seconds.length < 2) {
+      seconds = "0" + seconds;
+    }
+
+    if (elapsed.asHours() === 0) {
+      formattedTime = `${minutes}:${seconds}`;
+    } else {
+      formattedTime = `${hours}:${minutes}:${seconds}`;
+    }
     return (
       <Typography variant="body1">
         <span style={{ textDecoration: undoneString ? "line-through" : "none" }}>
-          {timestampString}: {eventTypeString} - {teamString} {reference}
+          {formattedTime}: {eventTypeString} - {teamString} {reference}
         </span>
       </Typography>
     );
@@ -65,18 +86,18 @@ const EventList: React.FC<Props> = ({ events }) => {
   const slicedEvents = isExpanded ? sortedEvents : sortedEvents.slice(0, 3);
 
   return (
-    <Box mt={2}>
+    <Grid item xs={12} sx={{ alignSelf: 'center', textAlign: 'center' }}>
       {slicedEvents.map((event) => (
-        <Box key={event.id} mb={1}>
+        <Typography key={event.id} mb={1}>
           {formattedEvent(event)}
-        </Box>
+        </Typography>
       ))}
       {events.length > 3 && (
         <Button variant="contained" onClick={toggleExpansion}>
           {isExpanded ? "Show less" : "Show more"}
         </Button>
       )}
-    </Box>
+    </Grid>
   );
 };
 

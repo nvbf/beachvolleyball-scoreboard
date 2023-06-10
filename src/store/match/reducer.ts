@@ -28,6 +28,7 @@ const initState = {
   switchSide: false,
   noMirrorSides: false,
   matchStarted: false,
+  startTime: 0,
   firstServer: { "HOME": 0, "AWAY": 0 },
   firstServerTeam: TeamType.None,
   leftSideTeam: TeamType.None,
@@ -163,6 +164,7 @@ export const matchReducer = createReducer<matchState>(initState, {
     let leftSideTeam = TeamType.None;
     let noMirrorSides = false;
     let matchStarted = false;
+    let matchStartTime = 0;
     events.forEach((event) => {
       if (event.undone) {
         return;
@@ -170,6 +172,9 @@ export const matchReducer = createReducer<matchState>(initState, {
       if (event.eventType === EventType.Score) {
         if (!matchStarted) {
           matchStarted = true
+        }
+        if (matchStartTime === 0) {
+          matchStartTime = event.timestamp
         }
         const setIndex = currentSet - 1;
         if (event.team === TeamType.Home) {
@@ -250,7 +255,8 @@ export const matchReducer = createReducer<matchState>(initState, {
       finished: matchDone,
       leftSideTeam: leftSideTeam,
       matchStarted: matchStarted,
-      noMirrorSides: noMirrorSides
+      noMirrorSides: noMirrorSides,
+      startTime: matchStartTime
     }
   },
 

@@ -5,7 +5,7 @@ import {
   Undo,
   Settings,
   ArrowForwardIos,
-  ArrowBackIos
+  ArrowBackIosNew
 } from '@mui/icons-material';
 import {
   CardActions,
@@ -120,17 +120,17 @@ export function Scoreboard() {
             <Typography sx={{
               fontSize: 18,
               textDecoration: (getServer(match.events, getLeftTeam(match)) === 1) ? "underline" : "none"
-             }}> {getInitials(getPlayer(match, 1, getLeftTeam(match)))} </Typography>
+            }}> {getInitials(getPlayer(match, 1, getLeftTeam(match)))} </Typography>
           </Grid>
           <Grid item xs={1}>
             {(getServer(match.events, getRightTeam(match)) === 1) && <ArrowForwardIos />}
-            {(getServer(match.events, getLeftTeam(match)) === 1) && <ArrowBackIos />}
+            {(getServer(match.events, getLeftTeam(match)) === 1) && <ArrowBackIosNew />}
           </Grid>
           <Grid item xs={6} sx={{ textAlign: 'left' }}>
             <Typography sx={{
               fontSize: 18,
               textDecoration: (getServer(match.events, getRightTeam(match)) === 1) ? "underline" : "none"
-             }}> {getInitials(getPlayer(match, 1, getRightTeam(match)))}</Typography>
+            }}> {getInitials(getPlayer(match, 1, getRightTeam(match)))}</Typography>
           </Grid>
 
           <Grid item xs={6} sx={{ textAlign: 'right' }}>
@@ -141,7 +141,7 @@ export function Scoreboard() {
 
           </Grid>
           <Grid item xs={1}>
-            {(getServer(match.events, getLeftTeam(match)) === 2) && <ArrowBackIos />}
+            {(getServer(match.events, getLeftTeam(match)) === 2) && <ArrowBackIosNew />}
             {(getServer(match.events, getRightTeam(match)) === 2) && <ArrowForwardIos />}
           </Grid>
           <Grid item xs={6} sx={{ textAlign: 'left' }}>
@@ -205,7 +205,9 @@ export function Scoreboard() {
           </Grid>
         </Grid>
       </Grid>
-      <Grid item xs={12}>
+      <Grid container columns={12}
+        sx={{ alignSelf: 'center', textAlign: 'center', marginTop: "20px" }}
+      >
         <EventList events={match.events} />
       </Grid>
     </Grid>
