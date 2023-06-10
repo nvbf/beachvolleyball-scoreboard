@@ -13,23 +13,30 @@ import {
   Dialog,
   Collapse,
   Button,
+  Grid,
+  Typography,
 } from "@mui/material";
 import QRCode from "qrcode.react";
+import { useParams } from "react-router-dom";
+import { getInitials } from "../util/names";
 
 function TournamentAdmin() {
-const [matches, setMatches] = useState<{ ongoing: any[]; finished: any[] }>({ ongoing: [], finished: [] });
+  const params = useParams();
+
+  const [matches, setMatches] = useState<{ ongoing: any[]; finished: any[] }>({ ongoing: [], finished: [] });
   const [open, setOpen] = useState(false);
   const [activeQrCode, setActiveQrCode] = useState("");
   const [showOngoing, setShowOngoing] = useState(true);
   const [showFinished, setShowFinished] = useState(true);
   const [tournamentID, setTournamentID] = useState("");
+  const tournamentSlug: string = params.tournamentSlug ? params.tournamentSlug : "dummy"
 
   useEffect(() => {
     const fetchMatches = async () => {
       const tournamentDocRef = doc(
         db,
         "Tournaments",
-        "hordaland_tour_04_-_u15u17u19__senior_23"
+        tournamentSlug
       );
 
       // Fetch tournament document to get tournamentID
@@ -71,66 +78,100 @@ const [matches, setMatches] = useState<{ ongoing: any[]; finished: any[] }>({ on
 
   const renderMatches = (matchesArray: any[], showQRCode: boolean, tournamentID: string) =>
     matchesArray.map((match) => {
-        const matchID = match.ID;
-        const awayTeamName = match.AwayTeam?.Name?.replace(/^\#\d+\s/, "");
-        const homeTeamName = match.HomeTeam?.Name?.replace(/^\#\d+\s/, "");
+      const matchID = match.Number;
+      const awayTeamName = match.AwayTeam?.Name?.replace(/^\#\d+\s/, "");
+      const homeTeamName = match.HomeTeam?.Name?.replace(/^\#\d+\s/, "");
 
 
-        const [name1, name2] = awayTeamName ? awayTeamName.split(" / ") : ["", ""];
-        const [name3, name4] = homeTeamName ? homeTeamName.split(" / ") : ["", ""];
+      const [name1, name2] = awayTeamName ? awayTeamName.split(" / ") : ["", ""];
+      const [name3, name4] = homeTeamName ? homeTeamName.split(" / ") : ["", ""];
 
-     const url = showQRCode
-    ? `https://scoreboard-sandbox.herokuapp.com/match?name1=${encodeURIComponent(
-        name1.trim()
-      )}&name2=${encodeURIComponent(name2.trim())}&name3=${encodeURIComponent(
-        name3.trim()
-      )}&name4=${encodeURIComponent(
-        name4.trim()
-      )}&matchid=${matchID}&tournamentid=${tournamentID}`
-    : "";
-
-        
-
+      const url = showQRCode
+        ? `https://${window.location.hostname}/match?name1=${encodeURIComponent(
+          name1.trim()
+        )}&name2=${encodeURIComponent(name2.trim())}&name3=${encodeURIComponent(
+          name3.trim()
+        )}&name4=${encodeURIComponent(
+          name4.trim()
+        )}&matchid=${matchID}&tournamentid=${tournamentSlug}`
+        : "";
 
       return (
-        <Box mb={3} key={match.Number}>
-          <TableContainer component={Paper}>
-            <Table>
-              <TableBody>
-                <TableRow>
-                  <TableCell>Match {match.Number}</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>Date</TableCell>
-                  <TableCell>{match.Date}</TableCell>
-                  {showQRCode && (
-                    <TableCell rowSpan={4} align="right">
-                      <Box display="flex" justifyContent="center" p={1}>
-                        <QRCode value={url} />
-                      </Box>
-                      <Box display="flex" justifyContent="center">
-                        <Button
-                          variant="outlined"
-                          size="small"
-                          onClick={() => handleOpen(url)}
-                        >
-                          Expand QR
-                        </Button>
-                      </Box>
-                    </TableCell>
-                  )}
-                </TableRow>
-                <TableRow>
-                  <TableCell>Away team</TableCell>
-                  <TableCell>{awayTeamName}</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>Home team</TableCell>
-                  <TableCell>{homeTeamName}</TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
-          </TableContainer>
+        <Box mb={3} key={match.Number} sx={{
+          border: 2, borderRadius: '12px', borderColor: 'black'
+        }} >
+          <Grid container
+            spacing={2}
+            columns={12}
+            justifyContent="space-evenly"
+            alignItems="center"
+          >
+            <Grid item md={10} xs={8} sx={{ textAlign: 'right' }}>
+              <Grid container
+                spacing={2}
+                justifyContent="flex-end"
+                alignItems="center"
+                columns={12}
+              >
+                <Grid item xs={6}>
+                  <Typography align='left' sx={{
+                    variant: 'button', lineHeight: 1, paddingTop: 1, paddingX: 1
+                  }}>
+                  {match.Field.Name}
+                  </Typography>
+                </Grid>
+                <Grid item xs={6}>
+                  <Typography align='left' sx={{
+                    variant: 'button', lineHeight: 1, paddingTop: 1, paddingX: 1
+                  }}>
+                    Match: {match.Number}
+                  </Typography>
+                </Grid>
+                <Grid item xs={6}>
+                  <Typography align='left' sx={{
+                    variant: 'button', lineHeight: 1, paddingTop: 1, paddingX: 1
+                  }}>
+                  {match.Time}
+                  </Typography>
+                </Grid>
+                <Grid item xs={6}>
+                  <Typography align='left' sx={{
+                    variant: 'button', lineHeight: 1, paddingTop: 1, paddingX: 1
+                  }}>
+                    {match.Date}
+                  </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography align='left' sx={{
+                    variant: 'button', lineHeight: 1, paddingTop: 1, paddingX: 1
+                  }}>
+                    {getInitials(name1)} / {getInitials(name2)}
+                  </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography align='left' sx={{
+                    variant: 'button', lineHeight: 1, paddingTop: 1, paddingX: 1
+                  }}>
+                    {getInitials(name3)} / {getInitials(name4)}
+                  </Typography>
+                </Grid>
+              </Grid>
+            </Grid>
+            <Grid item md={2} xs={4} sx={{ textAlign: 'right' }}>
+              <Box display="flex" justifyContent="center" p={1}>
+                <QRCode value={url} />
+              </Box>
+              <Box display="flex" justifyContent="center">
+                <Button
+                  variant="outlined"
+                  size="small"
+                  onClick={() => handleOpen(url)}
+                >
+                  Expand QR
+                </Button>
+              </Box>
+            </Grid>
+          </Grid>
         </Box>
       );
     });
@@ -144,7 +185,7 @@ const [matches, setMatches] = useState<{ ongoing: any[]; finished: any[] }>({ on
         </button>
       </h2>
       <Collapse in={showOngoing}>
-        {renderMatches(matches.ongoing, true,tournamentID)}
+        {renderMatches(matches.ongoing, true, tournamentID)}
       </Collapse>
       <h2>
         Finished Matches{" "}
@@ -153,11 +194,11 @@ const [matches, setMatches] = useState<{ ongoing: any[]; finished: any[] }>({ on
         </button>
       </h2>
       <Collapse in={showFinished}>
-        {renderMatches(matches.finished, false,tournamentID)}
+        {renderMatches(matches.finished, false, tournamentID)}
       </Collapse>
       <Dialog open={open} onClose={handleClose}>
         <Box p={3}>
-          <QRCode value={activeQrCode} size={256} />
+          <QRCode value={activeQrCode} size={Math.min( 512, window.outerWidth - 100)} />
         </Box>
       </Dialog>
     </Box>

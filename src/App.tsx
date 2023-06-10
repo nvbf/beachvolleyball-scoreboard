@@ -17,7 +17,7 @@ function App() {
         <Route path="/match/:matchId" element={<Match />} />
         <Route path="/create-tournament" element={<CreateTournament />} />
         <Route path="/tournaments" element={<Tournaments />} />
-        <Route path="/tournamentadmin" element={<TournamentAdmin />} />
+        <Route path="/tournamentadmin/:tournamentSlug" element={<TournamentAdmin />} />
       </Routes>
     </BrowserRouter>
   );
