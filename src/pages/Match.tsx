@@ -15,6 +15,8 @@ import TechnicalTimeout from '../components/scoreboard/technicalTimeout';
 import { useLocation, useParams } from 'react-router-dom';
 import { addAwayTeam, addHomeTeam, checkDb, setId } from '../store/match/actions';
 import SwitchSides from '../components/scoreboard/switchSides';
+import LinearProgress from '@mui/material/LinearProgress';
+import Loader from '../components/loader';
 
 
 function Match() {
@@ -48,6 +50,7 @@ function Match() {
       {getActiveDisplay(match) === DisplayType.SetFinished && <SetFinished />}
       {getActiveDisplay(match) === DisplayType.MatchFinished && <MatchFinished />}
       {getActiveDisplay(match) === DisplayType.MatchFinalized && <Scoreboard />}
+      {getActiveDisplay(match) === DisplayType.Loading && < Loader />}
     </main>
   );
 }
@@ -55,6 +58,7 @@ function Match() {
 export default Match;
 
 export enum DisplayType {
+  Loading,
   ScoreBoard,
   SideSwitch,
   TeamTimeout,
@@ -69,8 +73,9 @@ export enum DisplayType {
 
 function getActiveDisplay(state: matchState): DisplayType {
   if (matchFinalized(state)) {
-    console.log("SHOULD BE DONE!!")
     return DisplayType.MatchFinalized
+  } else if (state.matchId === "null") {
+    return DisplayType.Loading
   } else if (technicalTimeout(state) && state.showNotification) {
     return DisplayType.TechnicalTimeout
   } else if (teamTimeout(state) && state.showNotification) {

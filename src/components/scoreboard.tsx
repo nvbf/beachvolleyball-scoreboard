@@ -3,7 +3,9 @@ import {
   Add,
   SportsVolleyball,
   Undo,
-  Settings
+  Settings,
+  ArrowForwardIos,
+  ArrowBackIos
 } from '@mui/icons-material';
 import {
   CardActions,
@@ -110,40 +112,51 @@ export function Scoreboard() {
       </Grid>
       <Grid item xs={12}>
         <Grid container
-          columnSpacing={8}
-          columns={12}
+          columnSpacing={0}
+          columns={13}
           sx={{ alignSelf: 'center', textAlign: 'center' }}
         >
           <Grid item xs={6} sx={{ textAlign: 'right' }}>
-            <Typography sx={{ fontSize: 18 }}> {getInitials(getPlayer(match, 1, getLeftTeam(match)))} <SportsVolleyball sx={{
-              fontSize: 18, display: getServer(match.events, getLeftTeam(match)) === 1 ? "true" : "none"
-            }} /></Typography>
+            <Typography sx={{
+              fontSize: 18,
+              textDecoration: (getServer(match.events, getLeftTeam(match)) === 1) ? "underline" : "none"
+             }}> {getInitials(getPlayer(match, 1, getLeftTeam(match)))} </Typography>
+          </Grid>
+          <Grid item xs={1}>
+            {(getServer(match.events, getRightTeam(match)) === 1) && <ArrowForwardIos />}
+            {(getServer(match.events, getLeftTeam(match)) === 1) && <ArrowBackIos />}
           </Grid>
           <Grid item xs={6} sx={{ textAlign: 'left' }}>
-            <Typography sx={{ fontSize: 18 }}> <SportsVolleyball sx={{
-              fontSize: 18, display: getServer(match.events, getRightTeam(match)) === 1 ? "true" : "none"
-            }} /> {getInitials(getPlayer(match, 1, getRightTeam(match)))}</Typography>
+            <Typography sx={{
+              fontSize: 18,
+              textDecoration: (getServer(match.events, getRightTeam(match)) === 1) ? "underline" : "none"
+             }}> {getInitials(getPlayer(match, 1, getRightTeam(match)))}</Typography>
           </Grid>
 
           <Grid item xs={6} sx={{ textAlign: 'right' }}>
-            <Typography sx={{ fontSize: 18 }}> {getInitials(getPlayer(match, 2, getLeftTeam(match)))} <SportsVolleyball sx={{
-              fontSize: 18, display: getServer(match.events, getLeftTeam(match)) === 2 ? "true" : "none"
-            }} /></Typography>
+            <Typography sx={{
+              fontSize: 18,
+              textDecoration: (getServer(match.events, getLeftTeam(match)) === 2) ? "underline" : "none"
+            }}> {getInitials(getPlayer(match, 2, getLeftTeam(match)))}</Typography>
 
           </Grid>
-
+          <Grid item xs={1}>
+            {(getServer(match.events, getLeftTeam(match)) === 2) && <ArrowBackIos />}
+            {(getServer(match.events, getRightTeam(match)) === 2) && <ArrowForwardIos />}
+          </Grid>
           <Grid item xs={6} sx={{ textAlign: 'left' }}>
-            <Typography sx={{ fontSize: 18 }}> <SportsVolleyball sx={{
-              fontSize: 18, display: getServer(match.events, getRightTeam(match)) === 2 ? "true" : "none"
-            }} /> {getInitials(getPlayer(match, 2, getRightTeam(match)))}</Typography>
+            <Typography sx={{
+              fontSize: 18,
+              textDecoration: (getServer(match.events, getRightTeam(match)) === 2) ? "underline" : "none"
+            }}> {getInitials(getPlayer(match, 2, getRightTeam(match)))}</Typography>
           </Grid>
         </Grid>
       </Grid>
       <Grid item xs={12}>
         <Grid container
-          columnSpacing={8}
+          columnSpacing={0}
           rowSpacing={2}
-          columns={12}
+          columns={13}
           sx={{ alignSelf: 'center', textAlign: 'center' }}
         >
           <Grid item xs={6} sx={{ textAlign: 'right' }}>
@@ -154,6 +167,9 @@ export function Scoreboard() {
               }}>
               <Add sx={{ fontSize: 84, color: getTextColorFromBackground(match.teamColor[getLeftTeam(match)]) }} />
             </Button>
+          </Grid>
+          <Grid item xs={1}>
+
           </Grid>
           <Grid item xs={6} sx={{ textAlign: 'left' }}>
             <Button disabled={match.finished} variant="contained" onClick={addPoint.bind(null, getRightTeam(match))}
@@ -171,8 +187,11 @@ export function Scoreboard() {
                 width: 1, textTransform: 'none', backgroundColor: match.teamColor[getLeftTeam(match)],
                 '&:hover': { backgroundColor: match.teamColor[getLeftTeam(match)] }
               }}>
-              <Typography sx={{ fontSize: 18, color: getTextColor(match.events, getLeftTeam(match)) }}> TIMEOUT</Typography>
+              <Typography sx={{ fontSize: 18, color: getTextColorFromBackground(match.teamColor[getLeftTeam(match)]) }}> TIMEOUT</Typography>
             </Button>
+          </Grid>
+          <Grid item xs={1}>
+
           </Grid>
           <Grid item xs={6} sx={{ textAlign: 'left' }}>
             <Button disabled={match.teamTimeout[getRightTeam(match)] || match.finished} onClick={teamTimeout.bind(null, getRightTeam(match))} variant="contained"
