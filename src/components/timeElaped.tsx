@@ -26,7 +26,7 @@ const TimeElapsed: React.FC<Props> = ({ startTime }) => {
         seconds = "0" + seconds;
       }
 
-      if (elapsed.asHours() === 0) {
+      if (elapsed.hours() === 0) {
         formattedTime = `${minutes}:${seconds}`;
       } else {
         formattedTime = `${hours}:${minutes}:${seconds}`;

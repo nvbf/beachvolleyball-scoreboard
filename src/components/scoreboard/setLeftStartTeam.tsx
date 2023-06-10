@@ -120,9 +120,11 @@ export function SetLeftStartTeam() {
                                 sx={{ alignSelf: 'center', textAlign: 'center' }}
                             >
                                 <Grid item xs={6} sx={{ textAlign: 'left' }}>
-                                    <Button variant="outlined" sx={{ width: 1, border: 2, borderRadius: '12px', color: 'black', borderColor: 'black' }}
+                                    <Button variant="contained" sx={{
+                                        width: 1
+                                    }}
                                         onClick={handleSwitch.bind(null)}>
-                                        <SwapHoriz sx={{ fontSize: 64 }} />
+                                        <SwapHoriz sx={{ fontSize: 54 }} />
                                     </Button>
                                 </Grid>
                             </Grid>
