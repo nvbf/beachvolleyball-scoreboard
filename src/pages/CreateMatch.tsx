@@ -20,7 +20,7 @@ function Match() {
   const homePlayer2 = searchParams.get('name2');
   const awayPlayer1 = searchParams.get('name3');
   const awayPlayer2 = searchParams.get('name4');
-  const matchId = searchParams.get('matchid');
+  const matchId = searchParams.get('matchId');
   const tournamentId = searchParams.get('tournamentId');
 
   if (match.matchId === "null" && matchId) {

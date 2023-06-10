@@ -93,7 +93,7 @@ function TournamentAdmin() {
           name3.trim()
         )}&name4=${encodeURIComponent(
           name4.trim()
-        )}&matchid=${matchID}&tournamentid=${tournamentSlug}`
+        )}&matchId=${matchID}&tournamentId=${tournamentSlug}`
         : "";
 
       return (
