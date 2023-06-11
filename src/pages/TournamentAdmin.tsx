@@ -155,6 +155,14 @@ function TournamentAdmin() {
                     {getInitials(name3)} / {getInitials(name4)}
                   </Typography>
                 </Grid>
+
+                {match.ScoreboardId && <Grid item xs={12}>
+                  <Typography align='left' sx={{
+                    variant: 'button', lineHeight: 1, paddingTop: 1, paddingX: 1
+                  }}>
+                    {match.CurrentScore}
+                  </Typography>
+                </Grid>}
               </Grid>
             </Grid>
             <Grid item md={2} xs={4} sx={{ textAlign: 'right' }}>

@@ -1,7 +1,7 @@
 import { collection, getDocs, addDoc, getFirestore } from "@firebase/firestore";
 import { Event, EventType, Match } from "../components/types";
 import { getUID } from "./auth";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 
 export const addEventToMatchToFirestore = async (
   matchId: string,
@@ -121,4 +121,30 @@ export const initNewMatch = async (
       console.error("error adding tournament name:", error);
       throw error;
     });
+}
+
+export const setScoreboardId = async (
+  match: Match,
+  id: string
+) => {
+  let db = getFirestore()
+  const docRef = doc(db, "Tournaments", match.tournamentId, "Matches", match.matchId);
+
+  await updateDoc(docRef, {
+    ScoreboardId: id,
+    CurrentScore: "0-0 (0-0)"
+  });
+}
+
+export const setScoreboardScore = async (
+  tournamentId: string,
+  matchId: string,
+  currnetScore: string
+) => {
+  let db = getFirestore()
+  const docRef = doc(db, "Tournaments", tournamentId, "Matches", matchId);
+
+  await updateDoc(docRef, {
+    CurrentScore: "currnetScore"
+  });
 }

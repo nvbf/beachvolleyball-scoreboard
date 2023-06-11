@@ -1,10 +1,12 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import { all, call, CallEffect, delay, put, PutEffect, select, SelectEffect, takeEvery, takeLatest } from 'redux-saga/effects'
 import { TeamType, Team, Event, Match } from '../../components/types';
-import { addAwayTeam, AddEventPayload, addHomeTeam, addTeamError, evaluateEvents, insertEvent, MatchActionTypes, storeEvents, storeMatch, undoLastEvent } from "./actions";
+import { addAwayTeam, AddEventPayload, addHomeTeam, addTeamError, evaluateEvents, insertEvent, MatchActionTypes, publishScores, storeEvents, storeMatch, undoLastEvent } from "./actions";
 import { db } from '../../firebase/firebase-config';
-import { addEventToMatchToFirestore, getEventsFromMatch, getMatch, initNewMatch } from '../../firebase/match_service';
+import { addEventToMatchToFirestore, getEventsFromMatch, getMatch, initNewMatch, setScoreboardId, setScoreboardScore } from '../../firebase/match_service';
 import { v4 } from 'uuid';
+import { RootState } from '../store';
+import { matchState } from '../types';
 
 /*
  * Sagas intercept an action, and then dispatches API calls. When the API call resolves, it either dispatches a success action, or an error action.
@@ -34,6 +36,9 @@ export function* setAwayTeam(action: PayloadAction<Team>): Generator<CallEffect<
   }
 }
 
+const getSomePartOfState = (state: RootState) => state.match;
+
+
 export function* pushNewEvent(action: PayloadAction<AddEventPayload>): Generator<CallEffect | SelectEffect | PutEffect, void, string> {
 
   try {
@@ -44,6 +49,23 @@ export function* pushNewEvent(action: PayloadAction<AddEventPayload>): Generator
     console.log("Evaluated events");
 
     yield call(addEventToMatchToFirestore, action.payload.id, action.payload.event)
+
+    yield put(publishScores())
+
+  } catch (error) {
+    console.log("Error when pushing new event");
+  }
+}
+
+
+export function* publishScoresToTournaments(action: PayloadAction): Generator<CallEffect | SelectEffect | PutEffect, void, matchState> {
+
+  try {
+    const matchState: matchState = yield select(getSomePartOfState);
+    console.log("Evaluated events");
+    yield call(setScoreboardScore, matchState.tournamentId, matchState.id,
+      matchState.currentScore[TeamType.Home] + " - " + matchState.currentScore[TeamType.Home])
+
 
   } catch (error) {
     console.log("Error when pushing new event");
@@ -104,6 +126,7 @@ export function* initMatch(action: PayloadAction<Match>): Generator<CallEffect |
   try {
 
     yield call(initNewMatch, action.payload, action.payload.id)
+    yield call(setScoreboardId, action.payload, action.payload.id)
 
     window.location.href = "/match/" + action.payload.id;
 
@@ -121,7 +144,7 @@ export function* matchSagas() {
     takeEvery(MatchActionTypes.CHECK_DB, getOldMatch),
     takeEvery(MatchActionTypes.UNDO_EVENT, undoEvent),
     takeEvery(MatchActionTypes.INIT_MATCH, initMatch),
-
+    takeEvery(MatchActionTypes.PUBLISH_SCORES, publishScoresToTournaments)
   ])
 
 }

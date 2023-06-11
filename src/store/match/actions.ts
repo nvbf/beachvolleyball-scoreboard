@@ -18,6 +18,7 @@ export enum MatchActionTypes {
   CHECK_DB = 'CHECK_DB',
   STORE_EVENTS = 'STORE_EVENTS',
   STORE_MATCH = 'STORE_MATCH',
+  PUBLISH_SCORES = 'PUBLISH_SCORES',
 
   SET_MATCH_ID = 'SET_MATCH_ID',
   SET_TOURNEMENT_ID = 'SET_TOURNEMENT_ID',
@@ -60,6 +61,7 @@ export enum MatchActionTypes {
 export const checkDb = createAction<string>(MatchActionTypes.CHECK_DB)
 export const storeEvents = createAction<Event[]>(MatchActionTypes.STORE_EVENTS)
 export const storeMatch = createAction<Match>(MatchActionTypes.STORE_MATCH)
+export const publishScores = createAction(MatchActionTypes.PUBLISH_SCORES)
 
 export const setMatchId = createAction<string>(MatchActionTypes.SET_MATCH_ID)
 export const setTournamentId = createAction<string>(MatchActionTypes.SET_TOURNEMENT_ID)
@@ -98,6 +100,7 @@ export const initMatch = createAction<Match>(MatchActionTypes.INIT_MATCH)
 export type checkDbType = ReturnType<typeof checkDb>
 export type storeEventsType = ReturnType<typeof storeEvents>
 export type storeMatchType = ReturnType<typeof storeMatch>
+export type publishScoresType = ReturnType<typeof publishScores>
 
 export type setMatchIdType = ReturnType<typeof setMatchId>
 export type setTournamentIdType = ReturnType<typeof setTournamentId>
