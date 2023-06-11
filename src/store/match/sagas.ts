@@ -66,7 +66,7 @@ export function* publishScoresToTournaments(action: PayloadAction): Generator<Ca
     console.log((matchState.currentScore[TeamType.Home] + " - " + matchState.currentScore[TeamType.Home]))
     yield call(
       setScoreboardScore, matchState.tournamentId, matchState.matchId,
-      (matchState.currentScore[TeamType.Home] + " - " + matchState.currentScore[TeamType.Home])
+      (matchState.currentScore[TeamType.Home] + " - " + matchState.currentScore[TeamType.Away])
     )
 
 
