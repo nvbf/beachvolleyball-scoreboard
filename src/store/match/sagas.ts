@@ -62,13 +62,16 @@ export function* publishScoresToTournaments(action: PayloadAction): Generator<Ca
 
   try {
     const matchState: matchState = yield select(getSomePartOfState);
-    console.log("Evaluated events");
-    yield call(setScoreboardScore, matchState.tournamentId, matchState.id,
-      matchState.currentScore[TeamType.Home] + " - " + matchState.currentScore[TeamType.Home])
+    console.log("publishScoresToTournaments events %s", matchState.id);
+    console.log((matchState.currentScore[TeamType.Home] + " - " + matchState.currentScore[TeamType.Home]))
+    yield call(
+      setScoreboardScore, matchState.tournamentId, matchState.matchId,
+      (matchState.currentScore[TeamType.Home] + " - " + matchState.currentScore[TeamType.Home])
+    )
 
 
   } catch (error) {
-    console.log("Error when pushing new event");
+    console.log("Error when publishing scores");
   }
 }
 
@@ -86,7 +89,7 @@ export function* getOldEvents(action: PayloadAction<string>): Generator<CallEffe
     console.log("Store events");
     yield put(evaluateEvents())
   } catch (error) {
-    console.log("Error when pushing new event");
+    console.log("Error when getting old events");
   }
 }
 
@@ -103,7 +106,7 @@ export function* getOldMatch(action: PayloadAction<string>): Generator<CallEffec
     yield put(storeMatch(match))
     console.log("Store match");
   } catch (error) {
-    console.log("Error when pushing new event");
+    console.log("Error when getting old match");
   }
 }
 export function* undoEvent(action: PayloadAction<AddEventPayload>): Generator<CallEffect | SelectEffect | PutEffect, void, string> {
@@ -117,7 +120,7 @@ export function* undoEvent(action: PayloadAction<AddEventPayload>): Generator<Ca
     yield call(addEventToMatchToFirestore, action.payload.matchId, action.payload.event)
 
   } catch (error) {
-    console.log("Error when pushing new event");
+    console.log("Error when undoing event");
   }
 }
 
@@ -131,7 +134,7 @@ export function* initMatch(action: PayloadAction<Match>): Generator<CallEffect |
     window.location.href = "/match/" + action.payload.id;
 
   } catch (error) {
-    console.log("Error when pushing new event");
+    console.log("Error when init match");
   }
 }
 

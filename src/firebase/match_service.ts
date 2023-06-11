@@ -144,7 +144,9 @@ export const setScoreboardScore = async (
   let db = getFirestore()
   const docRef = doc(db, "Tournaments", tournamentId, "Matches", matchId);
 
+  console.log("MatchId: %s TournamentId: %s", matchId, tournamentId)
+
   await updateDoc(docRef, {
-    CurrentScore: "currnetScore"
+    CurrentScore: currnetScore
   });
 }
