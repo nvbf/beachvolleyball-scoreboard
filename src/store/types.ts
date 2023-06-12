@@ -14,6 +14,8 @@ export type matchState = {
   leftSideTeam: string,
   noMirrorSides: boolean,
   matchStarted: boolean,
+  technicalTimeout: boolean,
+  technicalTimeoutStart: number,
   currentSet: number,
   startTime: number,
   userMessage: string,

@@ -25,6 +25,7 @@ const initState = {
   finished: false,
   showNotification: true,
   technicalTimeout: false,
+  technicalTimeoutStart: 0,
   switchSide: false,
   noMirrorSides: false,
   matchStarted: false,
@@ -167,6 +168,7 @@ export const matchReducer = createReducer<matchState>(initState, {
     let matchStarted = false;
     let matchStartTime = 0;
     let userMessage = "";
+    let technicalTimeoutStart = 0;
     events.forEach((event) => {
       if (event.undone) {
         return;
@@ -197,7 +199,7 @@ export const matchReducer = createReducer<matchState>(initState, {
             userMessage = "switch sides"
           }
           if ((homeSetScore[setIndex] + awaySetScore[setIndex]) === 20) {
-            userMessage = "technical timout"
+            userMessage = "technical"
           }
           if (homeSetScore[setIndex] >= 21 && homeSetScore[setIndex] - awaySetScore[setIndex] >= 2) {
             sets[TeamType.Home] += 1;
@@ -273,7 +275,8 @@ export const matchReducer = createReducer<matchState>(initState, {
       matchStarted: matchStarted,
       noMirrorSides: noMirrorSides,
       startTime: matchStartTime,
-      userMessage: userMessage
+      userMessage: userMessage,
+      technicalTimeoutStart: technicalTimeoutStart
     }
   },
 

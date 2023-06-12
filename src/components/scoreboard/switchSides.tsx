@@ -27,6 +27,7 @@ export function SwitchSides() {
             justifyContent="center"
             columns={12}
             sx={{ alignSelf: 'center', textAlign: 'center' }}
+            marginTop={4}
         >
             <Grid item xs={12}>
                 <Typography sx={{ fontSize: 28 }}>Switch sides!!</Typography>

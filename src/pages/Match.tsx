@@ -17,6 +17,7 @@ import { addAwayTeam, addHomeTeam, checkDb, setId } from '../store/match/actions
 import SwitchSides from '../components/scoreboard/switchSides';
 import LinearProgress from '@mui/material/LinearProgress';
 import Loader from '../components/loader';
+import MatchButtons from '../components/scoreboard/matchButtons';
 
 
 function Match() {
@@ -41,15 +42,27 @@ function Match() {
   return (
     <main>
       <ScoreboardHeader />
+
       {getActiveDisplay(match) === DisplayType.SelectServeorder && <ServeOrder />}
       {getActiveDisplay(match) === DisplayType.SetLeftStartTeam && <SetLeftStartTeam />}
+
       {getActiveDisplay(match) === DisplayType.ScoreBoard && <Scoreboard />}
+      {getActiveDisplay(match) === DisplayType.ScoreBoard && <MatchButtons />}
+
+      {getActiveDisplay(match) === DisplayType.TeamTimeout && <Scoreboard />}
       {getActiveDisplay(match) === DisplayType.TeamTimeout && <TeamTimeout team={match.events.slice().reverse()[0].team} />}
-      {getActiveDisplay(match) === DisplayType.TechnicalTimeout && <TechnicalTimeout />}
+
+      {getActiveDisplay(match) === DisplayType.TechnicalTimeout && <Scoreboard />}
+      {getActiveDisplay(match) === DisplayType.TechnicalTimeout && <TechnicalTimeout startTime={match.events.slice().reverse()[0].timestamp} />}
+
+      {getActiveDisplay(match) === DisplayType.SwitchSides && <Scoreboard />}
       {getActiveDisplay(match) === DisplayType.SwitchSides && <SwitchSides />}
+
       {getActiveDisplay(match) === DisplayType.SetFinished && <SetFinished />}
       {getActiveDisplay(match) === DisplayType.MatchFinished && <MatchFinished />}
+
       {getActiveDisplay(match) === DisplayType.MatchFinalized && <Scoreboard />}
+      
       {getActiveDisplay(match) === DisplayType.Loading && < Loader />}
     </main>
   );

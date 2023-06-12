@@ -22,7 +22,7 @@ import { TeamType, Event, EventType } from './types';
 import Grid from "@mui/material/Grid"
 import EventList from "./eventList";
 import { getInitials } from "../util/names";
-import { getBackgroundColor, getTextColor, selectFirstServerEvent, selectFirstServingTeamEvent } from "./scoreboard/eventFunctions";
+import { selectFirstServerEvent, selectFirstServingTeamEvent } from "./scoreboard/eventFunctions";
 import { matchState } from "../store/types";
 import { getTextColorFromBackground } from "../util/color";
 
@@ -176,9 +176,6 @@ export function ServeOrder() {
               </Button>
             </Grid>
           </Grid>
-        </Grid>
-        <Grid item xs={12}>
-          <EventList events={match.events} />
         </Grid>
       </Grid>
     </ThemeProvider>

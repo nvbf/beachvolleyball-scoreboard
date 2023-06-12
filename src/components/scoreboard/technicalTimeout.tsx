@@ -5,8 +5,14 @@ import { Box, Button, Typography } from "@mui/material";
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import { addEvent, clearNotification } from "../../store/match/actions";
 import { pickTeamColorEvent } from "./eventFunctions";
+import TimeElapsed from "../timeElaped";
 
-export function TeamTimeout() {
+
+interface TechnicalTimeoutProps {
+    startTime: number;
+}
+
+export function TechnicalTimeout({ startTime }: TechnicalTimeoutProps) {
 
     const dispatch = useAppDispatch();
 
@@ -22,11 +28,15 @@ export function TeamTimeout() {
             columnSpacing={1}
             justifyContent="center"
             columns={12}
+            marginTop={4}
             sx={{ alignSelf: 'center', textAlign: 'center' }}
         >
             <Grid item xs={12}>
-                <Typography sx={{ fontSize: 28 }}>Technical timout</Typography>
+                <Typography sx={{ fontSize: 28 }}>Technical timeout</Typography>
             </Grid>
+            <Typography align='center' sx={{ fontSize: "2rem", variant: 'button', lineHeight: 1, paddingTop: 1, paddingX: 1 }}>
+                <TimeElapsed startTime={startTime} />
+            </Typography>
             <Grid item md={6} xs={12} sx={{ textAlign: 'left' }}>
                 <Button variant="contained" onClick={handleDone.bind(null)}
                     sx={{
@@ -41,8 +51,4 @@ export function TeamTimeout() {
     );
 };
 
-function getDefaultColorByTeam(team: TeamType) {
-    return team === TeamType.Home ? "#0000ff" : "#ff0000";
-}
-
-export default TeamTimeout;
+export default TechnicalTimeout;

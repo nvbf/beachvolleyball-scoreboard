@@ -21,7 +21,7 @@ import { TeamType, Event, EventType } from '../types';
 import Grid from "@mui/material/Grid"
 import EventList from "../eventList";
 import { getInitials } from "../../util/names";
-import { getBackgroundColor, getTextColor, selectFirstServerEvent, selectFirstServingTeamEvent } from "../scoreboard/eventFunctions";
+import { selectFirstServerEvent, selectFirstServingTeamEvent } from "../scoreboard/eventFunctions";
 import { matchState } from "../../store/types";
 import { setLeftStartTeamEvent } from "../scoreboard/eventFunctions";
 import { setNoSideSwitchEvent } from "../scoreboard/eventFunctions";

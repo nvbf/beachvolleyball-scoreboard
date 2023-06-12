@@ -19,7 +19,7 @@ import { TeamType, Event, EventType } from './types';
 import Grid from "@mui/material/Grid"
 import Clock from "./clock";
 import EventList from "./eventList";
-import { callTimeoutEvent, createAddPointEvent, getBackgroundColor, getTextColor } from "./scoreboard/eventFunctions";
+import { callTimeoutEvent, createAddPointEvent } from "./scoreboard/eventFunctions";
 import { getInitials } from "../util/names";
 import { matchState } from "../store/types";
 import { getTextColorFromBackground } from "../util/color";
@@ -151,64 +151,6 @@ export function Scoreboard() {
             }}> {getInitials(getPlayer(match, 2, getRightTeam(match)))}</Typography>
           </Grid>
         </Grid>
-      </Grid>
-      <Grid item xs={12}>
-        <Grid container
-          columnSpacing={0}
-          rowSpacing={2}
-          columns={13}
-          sx={{ alignSelf: 'center', textAlign: 'center' }}
-        >
-          <Grid item xs={6} sx={{ textAlign: 'right' }}>
-            <Button disabled={match.finished} variant="contained" onClick={addPoint.bind(null, getLeftTeam(match))}
-              sx={{
-                width: 1, height: 84, backgroundColor: match.teamColor[getLeftTeam(match)],
-                '&:hover': { backgroundColor: match.teamColor[getLeftTeam(match)] }
-              }}>
-              <Add sx={{ fontSize: 84, color: getTextColorFromBackground(match.teamColor[getLeftTeam(match)]) }} />
-            </Button>
-          </Grid>
-          <Grid item xs={1}>
-
-          </Grid>
-          <Grid item xs={6} sx={{ textAlign: 'left' }}>
-            <Button disabled={match.finished} variant="contained" onClick={addPoint.bind(null, getRightTeam(match))}
-              sx={{
-                width: 1, height: 84, backgroundColor: match.teamColor[getRightTeam(match)],
-                '&:hover': { backgroundColor: match.teamColor[getRightTeam(match)] }
-              }}>
-              <Add sx={{ fontSize: 84, color: getTextColorFromBackground(match.teamColor[getRightTeam(match)]) }} />
-            </Button>
-          </Grid>
-
-          <Grid item xs={6} sx={{ textAlign: 'right' }}>
-            <Button disabled={match.teamTimeout[getLeftTeam(match)] || match.finished} onClick={teamTimeout.bind(null, getLeftTeam(match))} variant="contained"
-              sx={{
-                width: 1, textTransform: 'none', backgroundColor: match.teamColor[getLeftTeam(match)],
-                '&:hover': { backgroundColor: match.teamColor[getLeftTeam(match)] }
-              }}>
-              <Typography sx={{ fontSize: 18, color: getTextColorFromBackground(match.teamColor[getLeftTeam(match)]) }}> TIMEOUT</Typography>
-            </Button>
-          </Grid>
-          <Grid item xs={1}>
-
-          </Grid>
-          <Grid item xs={6} sx={{ textAlign: 'left' }}>
-            <Button disabled={match.teamTimeout[getRightTeam(match)] || match.finished} onClick={teamTimeout.bind(null, getRightTeam(match))} variant="contained"
-              sx={{
-                width: 1, textTransform: 'none', backgroundColor: match.teamColor[getRightTeam(match)],
-                '&:hover': { backgroundColor: match.teamColor[getRightTeam(match)] }
-
-              }}>
-              <Typography sx={{ fontSize: 18, color: getTextColorFromBackground(match.teamColor[getRightTeam(match)]) }}> TIMEOUT</Typography>
-            </Button>
-          </Grid>
-        </Grid>
-      </Grid>
-      <Grid container columns={12}
-        sx={{ alignSelf: 'center', textAlign: 'center', marginTop: "20px" }}
-      >
-        <EventList events={match.events} />
       </Grid>
     </Grid>
   );
