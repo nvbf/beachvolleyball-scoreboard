@@ -117,7 +117,7 @@ export function* undoEvent(action: PayloadAction<AddEventPayload>): Generator<Ca
     yield put(evaluateEvents())
     console.log("Evaluated events");
 
-    yield call(addEventToMatchToFirestore, action.payload.matchId, action.payload.event)
+    yield call(addEventToMatchToFirestore, action.payload.id, action.payload.event)
 
   } catch (error) {
     console.log("Error when undoing event");

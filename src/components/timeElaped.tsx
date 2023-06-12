@@ -39,9 +39,9 @@ const TimeElapsed: React.FC<Props> = ({ startTime }) => {
   }, [startTime]);
 
   return (
-    <Typography variant="h3" component="span">
+    <div>
       {time}
-    </Typography>
+    </div>
   );
 };
 

@@ -29,6 +29,7 @@ const initState = {
   noMirrorSides: false,
   matchStarted: false,
   startTime: 0,
+  userMessage: "switch sides",
   firstServer: { "HOME": 0, "AWAY": 0 },
   firstServerTeam: TeamType.None,
   leftSideTeam: TeamType.None,
@@ -165,11 +166,13 @@ export const matchReducer = createReducer<matchState>(initState, {
     let noMirrorSides = false;
     let matchStarted = false;
     let matchStartTime = 0;
+    let userMessage = "";
     events.forEach((event) => {
       if (event.undone) {
         return;
       }
       if (event.eventType === EventType.Score) {
+        userMessage = "";
         if (!matchStarted) {
           matchStarted = true
         }
@@ -190,6 +193,12 @@ export const matchReducer = createReducer<matchState>(initState, {
               leftSideTeam = TeamType.Home
             }
           }
+          if ((homeSetScore[setIndex] + awaySetScore[setIndex]) % 7 === 6) {
+            userMessage = "switch sides"
+          }
+          if ((homeSetScore[setIndex] + awaySetScore[setIndex]) === 20) {
+            userMessage = "technical timout"
+          }
           if (homeSetScore[setIndex] >= 21 && homeSetScore[setIndex] - awaySetScore[setIndex] >= 2) {
             sets[TeamType.Home] += 1;
             teamTimeout = { "HOME": false, "AWAY": false }
@@ -199,6 +208,7 @@ export const matchReducer = createReducer<matchState>(initState, {
             homeSetScore[setIndex] = 0;
             awaySetScore[setIndex] = 0;
             currentSet += 1;
+            userMessage = "";
           } else if (awaySetScore[setIndex] >= 21 && awaySetScore[setIndex] - homeSetScore[setIndex] >= 2) {
             sets[TeamType.Away] += 1;
             teamTimeout = { "HOME": false, "AWAY": false }
@@ -208,6 +218,7 @@ export const matchReducer = createReducer<matchState>(initState, {
             homeSetScore[setIndex] = 0;
             awaySetScore[setIndex] = 0;
             currentSet += 1;
+            userMessage = "";
           }
         } else {
           if ((homeSetScore[setIndex] + awaySetScore[setIndex]) % 5 === 0) {
@@ -217,14 +228,19 @@ export const matchReducer = createReducer<matchState>(initState, {
               leftSideTeam = TeamType.Home
             }
           }
+          if ((homeSetScore[setIndex] + awaySetScore[setIndex]) % 5 === 4) {
+            userMessage = "switch sides"
+          }
           if (homeSetScore[setIndex] >= 15 && homeSetScore[setIndex] - awaySetScore[setIndex] >= 2) {
             sets[TeamType.Home] += 1;
             homeSetScore[setIndex] = 0;
             awaySetScore[setIndex] = 0;
+            userMessage = "";
           } else if (awaySetScore[setIndex] >= 15 && awaySetScore[setIndex] - homeSetScore[setIndex] >= 2) {
             sets[TeamType.Away] += 1;
             homeSetScore[setIndex] = 0;
             awaySetScore[setIndex] = 0;
+            userMessage = "";
           }
         }
       } else if (event.eventType === EventType.Timeout && event.team !== TeamType.None) {
@@ -256,7 +272,8 @@ export const matchReducer = createReducer<matchState>(initState, {
       leftSideTeam: leftSideTeam,
       matchStarted: matchStarted,
       noMirrorSides: noMirrorSides,
-      startTime: matchStartTime
+      startTime: matchStartTime,
+      userMessage: userMessage
     }
   },
 

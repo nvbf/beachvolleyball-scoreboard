@@ -47,11 +47,19 @@ export function ScoreboardHeader() {
               <Undo sx={{ fontSize: 42 }} />
             </Button>
           </Grid>
-          <Grid item xs={6}>
-            <Typography align='center' sx={{ fontSize: "2rem", variant: 'button', lineHeight: 1, paddingTop: 1, paddingX: 1 }}>
+          {!match.userMessage && <Grid item xs={6}>
+            <Typography align='center' sx={{ fontSize: "3rem", variant: 'button', lineHeight: 1, paddingTop: 1, paddingX: 1 }}>
               <TimeElapsed startTime={match.startTime} />
             </Typography>
-          </Grid>
+          </Grid> }
+          {match.userMessage && <Grid item xs={6}>
+            <Typography align='center' sx={{ fontSize: "1.2rem", variant: 'button', lineHeight: 1, paddingTop: 1, paddingX: 1 }}>
+              NEXT POINT: 
+            </Typography>
+            <Typography align='center' sx={{ fontSize: "1.2rem", variant: 'button', lineHeight: 1, paddingTop: 1, paddingX: 1 }}>
+             {match.userMessage.toUpperCase()}
+            </Typography>
+          </Grid>}
           <Grid item xs={3}>
             <Button variant="outlined" onClick={toggleSettings} sx={{ border: 2, borderRadius: '12px', color: 'black', borderColor: 'black' }}>
               <Settings sx={{ fontSize: 42 }} />

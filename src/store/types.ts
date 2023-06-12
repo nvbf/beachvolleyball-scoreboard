@@ -16,6 +16,7 @@ export type matchState = {
   matchStarted: boolean,
   currentSet: number,
   startTime: number,
+  userMessage: string,
   currentSetScore: { [key: string]: number },
   currentScore: { [key: string]: number },
   teamTimeout: { [key: string]: boolean },
