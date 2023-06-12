@@ -1,14 +1,7 @@
-import AddIcon from "@mui/icons-material/Add";
 import { v4 } from "uuid";
 import {
-  Add,
-  SportsVolleyball,
-  Undo,
-  Settings
-} from '@mui/icons-material';
-import {
   Box,
-  CardActions,
+  CircularProgress,
   ThemeProvider,
   Typography,
   createTheme,
@@ -16,41 +9,38 @@ import {
 } from "@mui/material";
 import Button from "@mui/material/Button";
 import React, { useState } from 'react';
-import { addEvent, clearNotification, initMatch, resetAwayPlayerName, resetHomePlayerName, resetMatchId, resetTeamColor, resetTournamentId } from '../../store/match/actions';
+import { initMatch, resetTeamColor } from '../../store/match/actions';
 import { useAppDispatch, useAppSelector } from '../../store/store';
-import { TeamType, Event, EventType } from './../types';
+import { TeamType } from './../types';
 import Grid from "@mui/material/Grid"
-import EventList from "./../eventList";
-import { getInitials } from "../../util/names";
-import { getBackgroundColor, getTextColor, selectFirstServerEvent, selectFirstServingTeamEvent } from "./../scoreboard/eventFunctions";
-import { matchState } from "../../store/types";
-import Clock from "../clock";
 import { getTextColorFromBackground } from "../../util/color";
 
 export function InitMatch() {
   const match = useAppSelector((state) => state.match);
+  const [loading, setLoading] = useState(false);
+
 
   const dispatch = useAppDispatch();
 
-  function setMatchId() {
-    dispatch(resetMatchId());
-  }
+  // function setMatchId() {
+  //   dispatch(resetMatchId());
+  // }
 
-  function setTournamentId() {
-    dispatch(resetTournamentId());
-  }
+  // function setTournamentId() {
+  //   dispatch(resetTournamentId());
+  // }
 
   function setTeamColors(team: TeamType) {
     dispatch(resetTeamColor(team));
   }
 
-  function setHomePlayerName(player: number) {
-    dispatch(resetHomePlayerName(player));
-  }
+  // function setHomePlayerName(player: number) {
+  //   dispatch(resetHomePlayerName(player));
+  // }
 
-  function setAwayPlayerName(player: number) {
-    dispatch(resetAwayPlayerName(player));
-  }
+  // function setAwayPlayerName(player: number) {
+  //   dispatch(resetAwayPlayerName(player));
+  // }
 
   function handleDone() {
     dispatch(initMatch({
@@ -63,6 +53,7 @@ export function InitMatch() {
       tournamentId: match.tournamentId,
       timestamp: Date.now()
     }));
+    setLoading(true)
   }
 
 
@@ -87,30 +78,9 @@ export function InitMatch() {
         rowSpacing={0}
         spacing={2}
         columns={12}
+        marginTop={15}
       >
-        <Grid item xs={12}>
-          <Grid container
-            spacing={2}
-            columns={12}
-            sx={{ alignSelf: 'center', textAlign: 'center' }}
-          >
-            <Grid item xs={12}>
-              <Typography align='center' variant="h2">
-                <Clock format="24h" />
-              </Typography>
-            </Grid>
-          </Grid>
-        </Grid>
-      </Grid>
-      <br></br>
-      <Grid container
-        justifyContent="center"
-        alignItems="center"
-        rowSpacing={0}
-        spacing={2}
-        columns={12}
-      >
-        <Grid item xs={12}>
+        {/* <Grid item xs={12}>
           <Grid container
             columnSpacing={2}
             rowSpacing={2}
@@ -166,7 +136,7 @@ export function InitMatch() {
               </Button>
             </Grid>
           </Grid>
-        </Grid>
+        </Grid> */}
         <Grid item xs={12}>
           <Grid container
             columnSpacing={2}
@@ -202,7 +172,7 @@ export function InitMatch() {
             </Grid>
           </Grid>
         </Grid>
-        <Grid item xs={12}>
+        {/* <Grid item xs={12}>
           <Grid container
             columnSpacing={2}
             rowSpacing={2}
@@ -238,19 +208,20 @@ export function InitMatch() {
               </Button>
             </Grid>
           </Grid>
-        </Grid>
-        <Grid item md={6} xs={12} sx={{ textAlign: 'left' }}>
+        </Grid> */}
+        <Grid item md={6} xs={12} sx={{ textAlign: 'left' }} marginTop={5}>
           <Grid item xs={12} sx={{ textAlign: 'center' }}>
-            <Typography variant="h4"> If all things looks good, click here:</Typography>
+            <Typography variant="h4"> When you are ready:</Typography>
           </Grid>
-          <Grid item xs={12} sx={{ textAlign: 'center' }}>
-            <Button variant="contained" onClick={handleDone.bind(null)}
+          <Grid item xs={12} sx={{ textAlign: 'center' }} marginTop={2}>
+            <Button variant="contained" disabled={loading} onClick={handleDone.bind(null)}
               sx={{
                 width: 1, height: 96
               }}>
-              <Typography variant="h3">
+              {!loading && <Typography variant="h3">
                 Start match!
-              </Typography>
+              </Typography>}
+              {loading && <CircularProgress color="inherit" />}
             </Button>
           </Grid>
         </Grid>
