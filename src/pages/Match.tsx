@@ -18,6 +18,8 @@ import SwitchSides from '../components/scoreboard/switchSides';
 import LinearProgress from '@mui/material/LinearProgress';
 import Loader from '../components/loader';
 import MatchButtons from '../components/scoreboard/matchButtons';
+import MatchFinalized from '../components/scoreboard/matchFinalized';
+import EventList from '../components/eventList';
 
 
 function Match() {
@@ -48,20 +50,31 @@ function Match() {
 
       {getActiveDisplay(match) === DisplayType.ScoreBoard && <Scoreboard />}
       {getActiveDisplay(match) === DisplayType.ScoreBoard && <MatchButtons />}
+      {getActiveDisplay(match) === DisplayType.ScoreBoard && <EventList />}
+
 
       {getActiveDisplay(match) === DisplayType.TeamTimeout && <Scoreboard />}
       {getActiveDisplay(match) === DisplayType.TeamTimeout && <TeamTimeout team={match.events.slice().reverse()[0].team} />}
+      {getActiveDisplay(match) === DisplayType.TeamTimeout && <EventList />}
+
 
       {getActiveDisplay(match) === DisplayType.TechnicalTimeout && <Scoreboard />}
       {getActiveDisplay(match) === DisplayType.TechnicalTimeout && <TechnicalTimeout startTime={match.events.slice().reverse()[0].timestamp} />}
+      {getActiveDisplay(match) === DisplayType.TechnicalTimeout && <EventList />}
+
 
       {getActiveDisplay(match) === DisplayType.SwitchSides && <Scoreboard />}
       {getActiveDisplay(match) === DisplayType.SwitchSides && <SwitchSides />}
 
       {getActiveDisplay(match) === DisplayType.SetFinished && <SetFinished />}
-      {getActiveDisplay(match) === DisplayType.MatchFinished && <MatchFinished />}
+      {getActiveDisplay(match) === DisplayType.SetFinished && <EventList />}
 
-      {getActiveDisplay(match) === DisplayType.MatchFinalized && <Scoreboard />}
+      {getActiveDisplay(match) === DisplayType.MatchFinished && <MatchFinished />}
+      {getActiveDisplay(match) === DisplayType.MatchFinished && <EventList />}
+
+
+      {getActiveDisplay(match) === DisplayType.MatchFinalized && <MatchFinalized />}
+      {getActiveDisplay(match) === DisplayType.MatchFinalized && <EventList/>}
 
       {getActiveDisplay(match) === DisplayType.Loading && < Loader />}
     </main>

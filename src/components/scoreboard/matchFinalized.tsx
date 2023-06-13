@@ -11,7 +11,7 @@ interface TeamColorPickerProps {
     team: TeamType;
 }
 
-export function MatchFinished() {
+export function MatchFinalized() {
 
     const match = useAppSelector((state) => state.match);
     const dispatch = useAppDispatch();
@@ -89,22 +89,6 @@ export function MatchFinished() {
                     </Grid>
                 </Grid>
             ))}
-            <Grid item xs={12}>
-                <Typography sx={{ fontSize: 22 }}>The match is done! </Typography>
-                <Typography sx={{ fontSize: 22 }}>Click on 'finalize' to finish.</Typography>
-                <br></br>
-                <Typography sx={{ fontSize: 22 }}>(Undo will be disabled when the match is finalized)</Typography>
-            </Grid>
-            <Grid item md={6} xs={12} sx={{ textAlign: 'left' }}>
-                <Button variant="contained" onClick={handleDone.bind(null)}
-                    sx={{
-                        width: 1, height: 64
-                    }}>
-                    <Typography sx={{ fontSize: 28 }}>
-                        Finalize!
-                    </Typography>
-                </Button>
-            </Grid>
         </Grid>
     );
 };
@@ -113,4 +97,4 @@ function getDefaultColorByTeam(team: TeamType) {
     return team === TeamType.Home ? "#0000ff" : "#ff0000";
 }
 
-export default MatchFinished;
+export default MatchFinalized;

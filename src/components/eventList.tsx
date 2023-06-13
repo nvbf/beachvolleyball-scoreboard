@@ -4,11 +4,8 @@ import { Box, Button, Grid, Typography } from "@mui/material";
 import { useAppSelector } from "../store/store";
 import moment from "moment";
 
-interface Props {
-  events: Event[];
-}
 
-const EventList: React.FC<Props> = ({ events }) => {
+const EventList: React.FC = () => {
   const match = useAppSelector((state) => state.match);
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
@@ -82,17 +79,17 @@ const EventList: React.FC<Props> = ({ events }) => {
     }
   };
 
-  const sortedEvents = [...events].sort((a, b) => b.timestamp - a.timestamp).filter(e => e.eventType !== EventType.Undo);
+  const sortedEvents = [...match.events].sort((a, b) => b.timestamp - a.timestamp).filter(e => e.eventType !== EventType.Undo);
   const slicedEvents = isExpanded ? sortedEvents : sortedEvents.slice(0, 3);
 
   return (
-    <Grid item xs={12} sx={{ alignSelf: 'center', textAlign: 'center' }}>
+    <Grid item xs={12} sx={{ alignSelf: 'center', textAlign: 'center' }} marginTop={4}>
       {slicedEvents.map((event) => (
         <Typography key={event.id} mb={1}>
           {formattedEvent(event)}
         </Typography>
       ))}
-      {events.length > 3 && (
+      {match.events.length > 3 && (
         <Button variant="contained" onClick={toggleExpansion}>
           {isExpanded ? "Show less" : "Show more"}
         </Button>
