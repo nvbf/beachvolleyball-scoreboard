@@ -21,6 +21,18 @@ export const createAddPointEvent = (team: TeamType): Event => {
         reference: ""
     }
 }
+export const finalizeSetEvent = (): Event => {
+    return {
+        id: v4(),
+        eventType: EventType.SetFinalized,
+        team: TeamType.None,
+        playerId: 0,
+        timestamp: Date.now(),
+        undone: "",
+        author: "",
+        reference: ""
+    }
+}
 
 export const finalizeMatchEvent = (): Event => {
     return {

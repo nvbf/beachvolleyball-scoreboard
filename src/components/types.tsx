@@ -42,7 +42,8 @@ export enum EventType {
   NoSideSwitch = "NO_SIDE_SWITCH",
   LeftSideStartTeam = "LEFT_SIDE_START_TEAM",
   PickColor = "TEAM_COLOR",
-  MatchFinalized = "MATCH_FINALIZED"
+  SetFinalized = "SET_FINALIZED",
+  MatchFinalized = "MATCH_FINALIZED",
 }
 
 export enum TeamType {

@@ -62,7 +62,7 @@ function Match() {
       {getActiveDisplay(match) === DisplayType.MatchFinished && <MatchFinished />}
 
       {getActiveDisplay(match) === DisplayType.MatchFinalized && <Scoreboard />}
-      
+
       {getActiveDisplay(match) === DisplayType.Loading && < Loader />}
     </main>
   );
@@ -155,9 +155,16 @@ function teamTimeout(state: matchState): boolean {
 function setFinished(state: matchState): boolean {
   return !state.finished && (
     state.currentScore[TeamType.Home] === 0 && state.currentScore[TeamType.Away] === 0 && state.currentSet !== 1
-  );
+  ) && canUndo(state);
 }
 
 function matchFinished(state: matchState): boolean {
   return state.finished;
+}
+
+function canUndo(state: matchState): boolean {
+  if (state.events.filter(e => !e.undone).slice().reverse()[0].eventType === EventType.SetFinalized) {
+    return false
+  }
+  return true
 }

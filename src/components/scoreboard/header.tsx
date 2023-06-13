@@ -28,6 +28,16 @@ export function ScoreboardHeader() {
     // dispatch(callTimeout(Actor.AwayTeam));
   }
 
+  function disableUndo(events: import("../types").Event[]): boolean {
+    if (events.filter(e => !e.undone).slice().reverse()[0] && events.filter(e => !e.undone).slice().reverse()[0].eventType === EventType.SetFinalized) {
+      return true
+    }
+    if (events.slice().reverse()[0] && events.slice().reverse()[0].eventType === EventType.MatchFinalized){
+      return true
+    }
+    return false
+  }
+
   return (
     <Grid container
       justifyContent="center"
@@ -43,7 +53,7 @@ export function ScoreboardHeader() {
           sx={{ alignSelf: 'center', textAlign: 'center' }}
         >
           <Grid item xs={3} >
-            <Button variant="outlined" onClick={undo} sx={{ border: 2, borderRadius: '12px', color: 'black', borderColor: 'black' }}>
+            <Button variant="outlined" disabled={disableUndo(match.events)} onClick={undo} sx={{ border: 2, borderRadius: '12px', color: 'black', borderColor: 'black' }}>
               <Undo sx={{ fontSize: 42 }} />
             </Button>
           </Grid>

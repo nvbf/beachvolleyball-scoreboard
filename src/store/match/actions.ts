@@ -24,6 +24,9 @@ export enum MatchActionTypes {
   SET_TOURNEMENT_ID = 'SET_TOURNEMENT_ID',
   SET_ID = 'SET_ID',
 
+  FINALIZE_SET = 'FINALIZE_SET',
+  FINALIZE_MATCH = 'FINALIZE_MATCH',
+
   ADD_HOME_TEAM = 'ADD_HOME_TEAM',
   ADD_AWAY_TEAM = 'ADD_AWAY_TEAM',
 
@@ -67,6 +70,9 @@ export const setMatchId = createAction<string>(MatchActionTypes.SET_MATCH_ID)
 export const setTournamentId = createAction<string>(MatchActionTypes.SET_TOURNEMENT_ID)
 export const setId = createAction<string>(MatchActionTypes.SET_ID)
 
+export const finalizeMatch = createAction(MatchActionTypes.FINALIZE_MATCH)
+export const finalizeSet = createAction(MatchActionTypes.FINALIZE_SET)
+
 export const addHomeTeam = createAction<Team>(MatchActionTypes.ADD_HOME_TEAM)
 export const addAwayTeam = createAction<Team>(MatchActionTypes.ADD_AWAY_TEAM)
 
@@ -105,6 +111,9 @@ export type publishScoresType = ReturnType<typeof publishScores>
 export type setMatchIdType = ReturnType<typeof setMatchId>
 export type setTournamentIdType = ReturnType<typeof setTournamentId>
 export type setIdType = ReturnType<typeof setId>
+
+export type finalizeMatchType = ReturnType<typeof finalizeMatch>
+export type finalizeSetType = ReturnType<typeof finalizeSet>
 
 export type addHomeTeamType = ReturnType<typeof addHomeTeam>
 export type addAwayTeamType = ReturnType<typeof addAwayTeam>
