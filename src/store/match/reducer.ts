@@ -30,11 +30,12 @@ const initState = {
   noMirrorSides: false,
   matchStarted: false,
   startTime: 0,
-  userMessage: "switch sides",
+  userMessage: "",
   firstServer: { "HOME": 0, "AWAY": 0 },
   firstServerTeam: TeamType.None,
   leftSideTeam: TeamType.None,
   currentSet: 0,
+  theCurrentSets: [],
   currentSetScore: { "HOME": 0, "AWAY": 0 },
   currentScore: { "HOME": 0, "AWAY": 0 },
   teamTimeout: { "HOME": false, "AWAY": false },
@@ -169,6 +170,7 @@ export const matchReducer = createReducer<matchState>(initState, {
     let matchStartTime = 0;
     let userMessage = "";
     let technicalTimeoutStart = 0;
+    let theCurrentSets = state.theCurrentSets.slice()
     events.forEach((event) => {
       if (event.undone) {
         return;
@@ -187,6 +189,7 @@ export const matchReducer = createReducer<matchState>(initState, {
         } else {
           awaySetScore[setIndex] += 1;
         }
+        theCurrentSets[currentSet - 1] = { "HOME": homeSetScore[currentSet - 1], "AWAY": awaySetScore[currentSet - 1] }
         if (currentSet === 1 || currentSet === 2) {
           if ((homeSetScore[setIndex] + awaySetScore[setIndex]) % 7 === 0) {
             if (leftSideTeam === TeamType.Home) {
@@ -276,7 +279,8 @@ export const matchReducer = createReducer<matchState>(initState, {
       noMirrorSides: noMirrorSides,
       startTime: matchStartTime,
       userMessage: userMessage,
-      technicalTimeoutStart: technicalTimeoutStart
+      technicalTimeoutStart: technicalTimeoutStart,
+      theCurrentSets: theCurrentSets,
     }
   },
 

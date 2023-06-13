@@ -20,6 +20,7 @@ export type matchState = {
   startTime: number,
   userMessage: string,
   currentSetScore: { [key: string]: number },
+  theCurrentSets: { [key: string]: number }[],
   currentScore: { [key: string]: number },
   teamTimeout: { [key: string]: boolean },
   firstServer: { [key: string]: number },

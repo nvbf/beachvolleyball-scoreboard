@@ -139,7 +139,8 @@ export const setScoreboardId = async (
 export const setScoreboardScore = async (
   tournamentId: string,
   matchId: string,
-  currnetScore: string
+  currentScore: { [key: string]: number }[],
+  currentSetScore: { [key: string]: number }
 ) => {
   let db = getFirestore()
   const docRef = doc(db, "Tournaments", tournamentId, "Matches", matchId);
@@ -147,6 +148,9 @@ export const setScoreboardScore = async (
   console.log("MatchId: %s TournamentId: %s", matchId, tournamentId)
 
   await updateDoc(docRef, {
-    CurrentScore: currnetScore
+    CurrentScore: currentScore
+  });
+  await updateDoc(docRef, {
+    CurrentSetScore: currentSetScore
   });
 }

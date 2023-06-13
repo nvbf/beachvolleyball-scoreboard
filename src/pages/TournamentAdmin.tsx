@@ -85,6 +85,7 @@ function TournamentAdmin() {
 
       const [name1, name2] = awayTeamName ? awayTeamName.split(" / ") : ["", ""];
       const [name3, name4] = homeTeamName ? homeTeamName.split(" / ") : ["", ""];
+      const currentScore: { [key: string]: number }[] = match.CurrentScore ? match.CurrentScore : []
 
       const url = showQRCode
         ? `https://${window.location.hostname}/match?name1=${encodeURIComponent(
@@ -117,7 +118,7 @@ function TournamentAdmin() {
                   <Typography align='left' sx={{
                     variant: 'button', lineHeight: 1, paddingTop: 1, paddingX: 1
                   }}>
-                  {match.Field.Name}
+                    {match.Field.Name}
                   </Typography>
                 </Grid>
                 <Grid item xs={6}>
@@ -131,7 +132,7 @@ function TournamentAdmin() {
                   <Typography align='left' sx={{
                     variant: 'button', lineHeight: 1, paddingTop: 1, paddingX: 1
                   }}>
-                  {match.Time}
+                    {match.Time}
                   </Typography>
                 </Grid>
                 <Grid item xs={6}>
@@ -156,11 +157,18 @@ function TournamentAdmin() {
                   </Typography>
                 </Grid>
 
-                {match.ScoreboardId && <Grid item xs={12}>
+                {(match.ScoreboardId && match.CurrentScore) && <Grid item xs={12}>
                   <Typography align='left' sx={{
                     variant: 'button', lineHeight: 1, paddingTop: 1, paddingX: 1
                   }}>
-                    {match.CurrentScore}
+                    <span key={"set"}>
+                      <b>{match.CurrentSetScore["HOME"]}-{match.CurrentSetScore["AWAY"]}{' '}</b>
+                    </span>
+                    {currentScore.map((score, index) => (
+                      <span key={index}>
+                        ({score.HOME}-{score.AWAY}){' '}
+                      </span>
+                    ))}
                   </Typography>
                 </Grid>}
               </Grid>
@@ -206,7 +214,7 @@ function TournamentAdmin() {
       </Collapse>
       <Dialog open={open} onClose={handleClose}>
         <Box p={3}>
-          <QRCode value={activeQrCode} size={Math.min( 512, window.outerWidth - 100)} />
+          <QRCode value={activeQrCode} size={Math.min(512, window.outerWidth - 100)} />
         </Box>
       </Dialog>
     </Box>
