@@ -21,24 +21,24 @@ export function TeamColorPicker({ team }: TeamColorPickerProps) {
     const dispatch = useAppDispatch();
 
     const colorList = [
-        { color: "#000000", key: "black" },
+        { color: "#333333", key: "black" },
         { color: "#999999", key: "gray" },
         { color: "#ffffff", key: "white" },
-        { color: "#ffff00", key: "yellow" },
-        { color: "#aaff00", key: "lime" },
-        { color: "#00ff55", key: "green" },
-        { color: "#00ffaa", key: "cyan" },
-        { color: "#00ffff", key: "light-blue" },
-        { color: "#00aaff", key: "sky-blue" },
-        { color: "#0055ff", key: "blue" },
-        { color: "#5500ff", key: "indigo" },
-        { color: "#aa00ff", key: "purple" },
-        { color: "#ff00ff", key: "pink" },
-        { color: "#ff00aa", key: "magenta" },
-        { color: "#ffaaaa", key: "light-pink" },
+        { color: "#eeee00", key: "yellow" },
+        // { color: "#aaff00", key: "lime" },
         { color: "#ffaa00", key: "amber" },
-        { color: "#ff5500", key: "orange" },
-        { color: "#ff0000", key: "red" }
+        { color: "#ff0000", key: "red" },
+        { color: "#bb22bb", key: "pink" },
+        { color: "#8800cc", key: "purple" },
+        { color: "#00aaff", key: "blue" },
+        { color: "#00eeee", key: "cyan" },
+        { color: "#00bb99", key: "forest" },
+        { color: "#00af00", key: "green" },
+        // { color: "#0055ff", key: "blue" },
+        // { color: "#5500ff", key: "indigo" },
+        // { color: "#ff00aa", key: "magenta" },
+        // { color: "#ffaaaa", key: "light-pink" },
+        // { color: "#ff5500", key: "orange" },
     ];
 
     function handleColorClick(color: string) {
@@ -58,10 +58,9 @@ export function TeamColorPicker({ team }: TeamColorPickerProps) {
             sx={{ alignSelf: 'center', textAlign: 'center' }}
         >
             <Grid item xs={12}>
-                <Typography sx={{ fontSize: 28 }}>Choose a color for the {team === TeamType.Home ? "home" : "away"} team:</Typography>
+                <Typography sx={{ fontSize: 28 }}>Choose a shirt color for the {team === TeamType.Home ? "home" : "away"} team:</Typography>
                 <Typography sx={{ fontSize: 28 }}>{team === TeamType.Home ? match.homeTeam.player1Name : match.awayTeam.player1Name}</Typography>
                 <Typography sx={{ fontSize: 28 }}>{team === TeamType.Home ? match.homeTeam.player2Name : match.awayTeam.player2Name}</Typography>
-
             </Grid>
             <Grid item xs={12}>
                 <Grid container
@@ -78,14 +77,16 @@ export function TeamColorPicker({ team }: TeamColorPickerProps) {
                                 disabled={taken === item.color}
 
                                 sx={{
-                                    width: 1, height: 42,
+                                    width: 1, height: 64,
                                     backgroundColor: taken === item.color ? "#cccccc" : item.color,
                                     '&:hover': { backgroundColor: item.color }
                                 }}
                                 onClick={handleColorClick.bind(null, item.color)}
                             >
-
-                                <Abc sx={{ fontSize: 42, color: getTextColorFromBackground(item.color) }} />
+                                <Typography sx={{ fontSize: 22, color: getTextColorFromBackground(item.color) }}>
+                                    {item.key}
+                                </Typography>
+                                {/* <Abc sx={{ fontSize: 42, color: getTextColorFromBackground(item.color) }} /> */}
                             </Button>
                         </Grid>
                     ))}

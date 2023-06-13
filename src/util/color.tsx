@@ -5,5 +5,5 @@ export function getTextColorFromBackground(bgColor: string): string {
     const blue = parseInt(hex.substring(4, 6), 16);
 
     const luminance = (0.299 * red + 0.587 * green + 0.114 * blue) / 255;
-    return luminance > 0.5 ? 'black' : 'white';
+    return luminance > 0.4 ? 'black' : 'white';
 }
