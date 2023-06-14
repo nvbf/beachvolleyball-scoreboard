@@ -1,18 +1,17 @@
 // Define the structure of match data
 export interface Match {
     awayTeam: {
+        split(arg0: string): [any, any];
         isWinner: boolean;
         name: string;
     };
-    currentScore: any;
-    currentSetScore: {
-        away: number;
-        home: number;
-    };
+    currentScore: { [key: string]: number }[];
+    currentSetScore: { [key: string]: number };
     date: string;
     arenaName: string;
     hasWinner: boolean;
     homeTeam: {
+        split(arg0: string): [any, any];
         isWinner: boolean;
         name: string;
     };
