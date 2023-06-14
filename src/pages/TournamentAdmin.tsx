@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import QRCode from "qrcode.react";
-import { Box, Dialog, Button, List, ListItem, ListItemText, Grid } from "@material-ui/core";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchMatchesRequest } from "./../store/tournamentAdmin/action"; // update the path
 import { RootState } from "./../store/store"; // update the path to your store file
 import MatchView from "../components/tournamentAdmin/matchView";
+import { Box, Button, Dialog, Grid } from "@mui/material";
 
 const TournamentAdmin = () => {
   const [showOngoing, setShowOngoing] = useState(true);
