@@ -6,8 +6,9 @@ import MatchView from "../components/tournamentAdmin/matchView";
 import { Box, Button, Grid } from "@mui/material";
 import { match } from "assert";
 import { useParams } from "react-router-dom";
-import { doc, getFirestore, onSnapshot } from "firebase/firestore";
+import { collection, doc, getFirestore, onSnapshot } from "firebase/firestore";
 import { parseAdminMatch } from "../components/tournamentAdmin/adminMatchFunctions";
+import { AdminMatch } from "../components/tournamentAdmin/types";
 
 
 
@@ -22,10 +23,6 @@ const TournamentAdmin = () => {
 
   const dispatch = useDispatch();
   let db = getFirestore()
-  useEffect(() => {
-
-
-  }, [onSnapshot]);
 
   // Retrieve the matches from the Redux store
   const matches = useSelector((state: RootState) => state.matches.matches);
@@ -38,22 +35,39 @@ const TournamentAdmin = () => {
     setFetchedMatches(true)
   }
 
+  // if (!createdCallbacks && tournamentSlug) {
+  //   onSnapshot(doc(db, "Tournaments", "osvb_test_2023", "Matches", "1"), (doc) => {
+  //     let data = doc.data()
+  //     console.log("Got this current data: ", doc.data());
+  //     if (data) {
+  //       let updatedMatch = parseAdminMatch(data)
+  //       console.log("Prepare data: ", updatedMatch);
+  //       dispatch(updateMatch({ match: updatedMatch, matchId: updatedMatch.matchId }))
+  //       console.log("Dispatched");
+  //     }
+  //   });
+  //   setCreatedCallbacks(true)
+  // }
+
   if (!createdCallbacks && tournamentSlug) {
-    onSnapshot(doc(db, "Tournaments", "osvb_test_2023", "Matches", "1"), (doc) => {
-      let data = doc.data()
-      console.log("Got this current data: ", doc.data());
-      if (data) {
-        let updatedMatch = parseAdminMatch(data)
-        console.log("Prepare data: ", updatedMatch);
-        dispatch(updateMatch({ match: updatedMatch, matchId: updatedMatch.matchId }))
-        console.log("Dispatched");
-      }
+    const matchCollection = collection(db, "Tournaments", tournamentSlug, "Matches");
+    onSnapshot(matchCollection, (querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        let data = doc.data()
+        if (data) {
+          let updatedMatch = parseAdminMatch(data)
+          console.log("Prepare data: ", updatedMatch);
+          dispatch(updateMatch({ match: updatedMatch, matchId: updatedMatch.matchId }))
+          console.log("Dispatched");
+        }
+      });
     });
     setCreatedCallbacks(true)
   }
 
 
-  const renderMatches = (matches: any[], tournamentSlug: string) => {
+
+  const renderMatches = (matches: AdminMatch[], tournamentSlug: string) => {
     return (
       <Grid container spacing={3} columns={12}>
         {matches.map((match, index) => (

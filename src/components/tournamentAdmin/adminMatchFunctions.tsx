@@ -3,13 +3,13 @@ import { AdminMatch } from "./types";
 
 export function parseAdminMatch(data: DocumentData): AdminMatch {
     return {
-        matchId: data.Number,
+        matchId: +(data.Number),
         awayTeam: {
             isWinner: data.AwayTeam?.IsWinner || false,
             name: data.AwayTeam?.Name
         },
-        currentScore: data.CurrentScore,
-        currentSetScore: data.CurrentSetScore,
+        currentScore: data.CurrentScore || { ["HOME"]: 0, ["AWAY"]: 0 },
+        currentSetScore: data.CurrentSetScore || [],
         startTime: convertToTimestamp(data.Time, data.Date),
         arenaName: data.Field?.Name,
         isStarted: data.IsStarted,

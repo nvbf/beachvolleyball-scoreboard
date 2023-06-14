@@ -38,7 +38,7 @@ export function MatchView({ match, tournamentSlug }: MatchViewProps) {
             name2.trim()
         )}&name3=${encodeURIComponent(name3.trim())}&name4=${encodeURIComponent(
             name4.trim()
-        )}&matchId=${match.scoreboardID}&tournamentId=${tournamentSlug}`;
+        )}&matchId=${match.matchId}&tournamentId=${tournamentSlug}`;
     ("");
 
     return (

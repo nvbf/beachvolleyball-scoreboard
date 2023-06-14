@@ -128,7 +128,7 @@ export const setScoreboardId = async (
 
   await updateDoc(docRef, {
     ScoreboardId: id,
-    CurrentScore: "0-0 (0-0)"
+    CurrentScore: []
   });
 }
 
