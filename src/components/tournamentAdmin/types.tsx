@@ -1,7 +1,7 @@
 // Define the structure of match data
-export interface Match {
+export interface AdminMatch {
+    matchId: number;
     awayTeam: {
-        split(arg0: string): [any, any];
         isWinner: boolean;
         name: string;
     };
@@ -11,7 +11,6 @@ export interface Match {
     arenaName: string;
     hasWinner: boolean;
     homeTeam: {
-        split(arg0: string): [any, any];
         isWinner: boolean;
         name: string;
     };

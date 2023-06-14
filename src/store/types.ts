@@ -1,3 +1,4 @@
+import { AdminMatch } from "../components/tournamentAdmin/types";
 import { Team, Event, Set, Match, TeamType } from "../components/types";
 
 export type matchState = {
@@ -31,7 +32,7 @@ export type matchState = {
 }
 
 export type matchesState = {
-  matches: Match[],
+  matches: { [key: number]: AdminMatch },
   lastUpdated: number,
   errorMessage: Error | null,
 }

@@ -1,41 +1,70 @@
 // reducer.tsx
-import { FETCH_MATCHES_SUCCESS, FETCH_MATCHES_FAILURE } from './action';
-import{Match} from "./../../components/tournamentAdmin/types"
+import { updateMatchType, TournamentAdminTypes, fetchMatchesSuccessType, fetchMatchesFailureType } from './action';
+import { AdminMatch } from "./../../components/tournamentAdmin/types"
+import { createReducer } from "@reduxjs/toolkit"
+import { matchesState } from '../types';
 
 
-// Define the shape of the state
-export interface MatchesState {
-    matches: Match[];
-    error: string | null;
+export interface MatchUpdatePayload {
+    matchId: string;
+    match: AdminMatch;
 }
 
-const initialState: MatchesState = {
-    matches: [],
-    error: null
+export interface MatchSuccessPayload {
+    matches: AdminMatch[];
+}
+
+// // Define the shape of the state
+// export interface MatchesState {
+//     matches: AdminMatch[];
+//     error: string | null;
+// }
+
+// const initialState: MatchesState = {
+//     matches: [],
+//     error: null
+// };
+
+const initState: matchesState = {
+    matches: {},
+    errorMessage: null,
+    lastUpdated: 0
 };
 
-// Define action types
-interface FetchMatchesSuccessAction {
-    type: typeof FETCH_MATCHES_SUCCESS;
-    payload: Match[];
-}
+// type MatchesActionTypes = FetchMatchesSuccessAction | FetchMatchesFailureAction;
 
-interface FetchMatchesFailureAction {
-    type: typeof FETCH_MATCHES_FAILURE;
-    payload: string;
-}
+// // Reducer
+// export const matchesReducer = (state = initialState, action: MatchesActionTypes): MatchesState => {
+//     switch (action.type) {
+//         case FETCH_MATCHES_SUCCESS:
+//             return { ...state, matches: action.payload };
+//         case FETCH_MATCHES_FAILURE:
+//             return { ...state, error: action.payload };
+//         case TournamentAdminTypes.UPDATE_MATCH:
+//             console.log(state.matches)
+//             return { ...state};
+//         default:
+//             return state;
+//     }
+// };
 
-type MatchesActionTypes = FetchMatchesSuccessAction | FetchMatchesFailureAction;
+export const matchesReducer = createReducer<matchesState>(initState, {
 
-// Reducer
-export const matchesReducer = (state = initialState, action: MatchesActionTypes): MatchesState => {
-    switch (action.type) {
-        case FETCH_MATCHES_SUCCESS:
-//console.log("Data received in reducer: ", action.payload);
-            return { ...state, matches: action.payload };
-        case FETCH_MATCHES_FAILURE:
-            return { ...state, error: action.payload };
-        default:
-            return state;
-    }
-};
+
+    [TournamentAdminTypes.FETCH_MATCHES_SUCCESS]: (state: matchesState, action: fetchMatchesSuccessType) => {
+        const matchesArray: AdminMatch[] = action.payload.matches;
+        state.matches = matchesArray.reduce((obj, match) => ({ ...obj, [match.matchId]: match }), {});
+
+    },
+
+    [TournamentAdminTypes.FETCH_MATCHES_FAILURE]: (state: matchesState, action: fetchMatchesFailureType) => {
+        return { ...state, error: action.payload };
+
+    },
+    [TournamentAdminTypes.UPDATE_MATCH]: (state: matchesState, action: updateMatchType) => {
+        return {
+            ...state,
+            homeTeam: action.payload
+        }
+    },
+})

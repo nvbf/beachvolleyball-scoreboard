@@ -85,9 +85,9 @@ const EventList: React.FC = () => {
   return (
     <Grid item xs={12} sx={{ alignSelf: 'center', textAlign: 'center' }} marginTop={4}>
       {slicedEvents.map((event) => (
-        <Typography key={event.id} mb={1}>
+        <div key={event.id}>
           {formattedEvent(event)}
-        </Typography>
+        </div>
       ))}
       {match.events.length > 3 && (
         <Button variant="contained" onClick={toggleExpansion}>

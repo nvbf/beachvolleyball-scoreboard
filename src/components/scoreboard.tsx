@@ -8,35 +8,16 @@ import {
   ArrowBackIosNew
 } from '@mui/icons-material';
 import {
-  CardActions,
   Typography
 } from "@mui/material";
-import Button from "@mui/material/Button";
-import React, { useState } from 'react';
-import { addEvent } from '../store/match/actions';
-import { useAppDispatch, useAppSelector } from '../store/store';
+import { useAppSelector } from '../store/store';
 import { TeamType, Event, EventType } from './types';
 import Grid from "@mui/material/Grid"
-import Clock from "./clock";
-import EventList from "./eventList";
-import { callTimeoutEvent, createAddPointEvent } from "./eventFunctions";
 import { getInitials } from "../util/names";
 import { matchState } from "../store/types";
-import { getTextColorFromBackground } from "../util/color";
 
 export function Scoreboard() {
   const match = useAppSelector((state) => state.match);
-
-  const dispatch = useAppDispatch();
-  const [infoCollapse, setInfoCollapse] = useState(false);
-
-  function addPoint(team: TeamType) {
-    dispatch(addEvent({ matchId: match.matchId, id: match.id, event: createAddPointEvent(team) }))
-  }
-
-  function teamTimeout(team: TeamType) {
-    dispatch(addEvent({ matchId: match.matchId, id: match.id, event: callTimeoutEvent(team) }))
-  }
 
   return (
     <Grid container

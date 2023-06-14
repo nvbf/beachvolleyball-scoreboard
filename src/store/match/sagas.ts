@@ -83,8 +83,6 @@ export function* getOldEvents(action: PayloadAction<string>): Generator<CallEffe
     // add a new document with a generated id
     let events = yield call(getEventsFromMatch, action.payload);
 
-    console.log(events)
-
     yield put(storeEvents(events))
     console.log("Store events");
     yield put(evaluateEvents())

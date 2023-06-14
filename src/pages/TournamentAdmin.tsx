@@ -6,6 +6,7 @@ import MatchView from "../components/tournamentAdmin/matchView";
 import { Box, Button, Grid } from "@mui/material";
 import { match } from "assert";
 import { useParams } from "react-router-dom";
+import { doc, getFirestore, onSnapshot } from "firebase/firestore";
 
 
 
@@ -16,26 +17,34 @@ const TournamentAdmin = () => {
   const [showFinished, setShowFinished] = useState(true);
 
   const dispatch = useDispatch();
+  let db = getFirestore()
+  useEffect(() => {
+
+    onSnapshot(doc(db, "Tournaments", "osvb_test_2023", "Matches", "1"), (doc) => {
+      console.log("Current data: ", doc.data());
+    });
+  }, [onSnapshot]);
 
   // Retrieve the matches from the Redux store
   const matches = useSelector((state: RootState) => state.matches.matches);
-  const ongoingMatches = matches.filter((match) => !match.hasWinner);
-  const finishedMatches = matches.filter((match) => match.hasWinner);
+  const ongoingMatches = Object.values(matches).filter(match => !match.hasWinner);
+  const finishedMatches = Object.values(matches).filter(match => match.hasWinner);
 
   // Fetch the matches when the component mounts
   useEffect(() => {
     dispatch(fetchMatchesRequest(tournamentSlug)); // replace with actual tournamentSlug
   }, [dispatch]);
 
-  const renderMatches = (matches: any[], hasWinner:boolean, tournamentSlug:string) => {
+
+  const renderMatches = (matches: any[], hasWinner: boolean, tournamentSlug: string) => {
     console.log("This is renderMatches" + ongoingMatches)
     console.log("This is renderMatches" + finishedMatches)
     return (
       <Grid container spacing={3} columns={12}>
         {matches.map((match, index) => (
-          
+
           <Grid item key={index} xs={12}>
-            <MatchView match={match} tournamentSlug = {tournamentSlug} />
+            <MatchView match={match} tournamentSlug={tournamentSlug} />
           </Grid>
         ))}
       </Grid>

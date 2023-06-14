@@ -25,7 +25,6 @@ export const getEventsFromMatch = async (
 ) => {
   let db = getFirestore()
   const uid = await getUID()
-  console.log('Logged in with uid', uid)
   const value = collection(db, "Matches", matchId, "events");
   const valueSnapshot = await getDocs(value);
   const eventList: Event[] = valueSnapshot.docs.map((doc) => ({
@@ -41,12 +40,9 @@ export const getEventsFromMatch = async (
   // Create a map of event IDs that have been undone and the IDs of the events that undid them
   const undoneEvents = new Map<string, string>();
   eventList.forEach((event) => {
-    console.log(event)
 
     if (event.eventType === EventType.Undo) {
-      console.log("undoneEvents")
       undoneEvents.set(event.reference, event.id);
-      console.log(undoneEvents)
     }
   });
 
@@ -144,8 +140,6 @@ export const setScoreboardScore = async (
 ) => {
   let db = getFirestore()
   const docRef = doc(db, "Tournaments", tournamentId, "Matches", matchId);
-
-  console.log("MatchId: %s TournamentId: %s", matchId, tournamentId)
 
   await updateDoc(docRef, {
     CurrentScore: currentScore
