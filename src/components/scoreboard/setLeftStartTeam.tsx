@@ -21,10 +21,10 @@ import { TeamType, Event, EventType } from '../types';
 import Grid from "@mui/material/Grid"
 import EventList from "../eventList";
 import { getInitials } from "../../util/names";
-import { selectFirstServerEvent, selectFirstServingTeamEvent } from "../scoreboard/eventFunctions";
+import { selectFirstServerEvent, selectFirstServingTeamEvent } from "../eventFunctions";
 import { matchState } from "../../store/types";
-import { setLeftStartTeamEvent } from "../scoreboard/eventFunctions";
-import { setNoSideSwitchEvent } from "../scoreboard/eventFunctions";
+import { setLeftStartTeamEvent } from "../eventFunctions";
+import { setNoSideSwitchEvent } from "../eventFunctions";
 import { getTextColorFromBackground } from "../../util/color";
 
 export function SetLeftStartTeam() {

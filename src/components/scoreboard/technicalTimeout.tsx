@@ -3,8 +3,8 @@ import { TeamType } from "../types";
 import Grid from "@mui/material/Grid";
 import { Box, Button, Typography } from "@mui/material";
 import { useAppDispatch, useAppSelector } from '../../store/store';
-import { addEvent, clearNotification } from "../../store/match/actions";
-import { pickTeamColorEvent } from "./eventFunctions";
+import { addEvent } from "../../store/match/actions";
+import { pickTeamColorEvent, setClearMessageEvent } from "../eventFunctions";
 import TimeElapsed from "../timeElaped";
 
 
@@ -15,10 +15,10 @@ interface TechnicalTimeoutProps {
 export function TechnicalTimeout({ startTime }: TechnicalTimeoutProps) {
 
     const dispatch = useAppDispatch();
+    const match = useAppSelector((state) => state.match);
 
     function handleDone() {
-        dispatch(clearNotification());
-        // dispatch(mirrorSides());
+        dispatch(addEvent({ matchId: match.matchId, id: match.id, event: setClearMessageEvent() }))
     }
 
     return (

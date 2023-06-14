@@ -40,8 +40,6 @@ export enum MatchActionTypes {
   TECHNICAL_TIMEOUT = 'CALL_TIMEOUT',
   EVALUATE_EVENTS = 'EVALUATE_EVENTS',
 
-  CLEAR_NOTIFICATION = 'CLEAR_NOTIFICATION',
-
   ADD_TEAM_ERROR = 'ADD_TEAM_ERROR',
 
   ADD_EVENT = 'ADD_EVENT',
@@ -79,8 +77,6 @@ export const addAwayTeam = createAction<Team>(MatchActionTypes.ADD_AWAY_TEAM)
 export const setTeamColor = createAction<AddTeamColorPayload>(MatchActionTypes.SET_TEAM_COLOR)
 
 export const updateScores = createAction<TeamType>(MatchActionTypes.UPDATE_SCORES)
-
-export const clearNotification = createAction(MatchActionTypes.CLEAR_NOTIFICATION)
 
 export const addTeamError = createAction<Error>(MatchActionTypes.ADD_TEAM_ERROR)
 
@@ -130,8 +126,6 @@ export type noMirrorSidesType = ReturnType<typeof noMirrorSides>
 export type teamStartLeftType = ReturnType<typeof teamStartLeft>
 
 export type evaluateEventsType = ReturnType<typeof evaluateEvents>
-
-export type clearNotificationType = ReturnType<typeof clearNotification>
 
 export type addTeamErrorType = ReturnType<typeof addTeamError>
 

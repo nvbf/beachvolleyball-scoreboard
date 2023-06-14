@@ -9,7 +9,7 @@ import {
 } from '@mui/icons-material';
 import { getTextColorFromBackground } from "../../util/color";
 import { addEvent, setTeamColor } from "../../store/match/actions";
-import { pickTeamColorEvent } from "./eventFunctions";
+import { pickTeamColorEvent } from "../eventFunctions";
 
 
 interface TeamColorPickerProps {

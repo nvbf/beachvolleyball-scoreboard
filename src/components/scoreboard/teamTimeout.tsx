@@ -3,8 +3,9 @@ import { EventType, TeamType } from "../types";
 import Grid from "@mui/material/Grid";
 import { Button, Typography } from "@mui/material";
 import { useAppDispatch, useAppSelector } from '../../store/store';
-import { clearNotification } from "../../store/match/actions";
+import { addEvent } from "../../store/match/actions";
 import TimeElapsed from "../timeElaped";
+import { setClearMessageEvent } from "../eventFunctions";
 
 
 interface TeamTimeoutProps {
@@ -17,7 +18,7 @@ export function TeamTimeout({ team }: TeamTimeoutProps) {
     const match = useAppSelector((state) => state.match);
 
     function handleDone() {
-        dispatch(clearNotification());
+        dispatch(addEvent({ matchId: match.matchId, id: match.id, event: setClearMessageEvent() }))
     }
 
     return (

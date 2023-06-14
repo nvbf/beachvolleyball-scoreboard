@@ -14,7 +14,7 @@ import { useAppDispatch, useAppSelector } from '../../store/store';
 import { TeamType, Event, EventType } from './../types';
 import Grid from "@mui/material/Grid"
 import EventList from "./../eventList";
-import { callTimeoutEvent, createAddPointEvent } from "./../scoreboard/eventFunctions";
+import { callTimeoutEvent, createAddPointEvent } from "../eventFunctions";
 import { getInitials } from "../../util/names";
 import { matchState } from "../../store/types";
 import { getTextColorFromBackground } from "../../util/color";

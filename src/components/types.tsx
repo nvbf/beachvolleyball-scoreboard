@@ -44,6 +44,7 @@ export enum EventType {
   PickColor = "TEAM_COLOR",
   SetFinalized = "SET_FINALIZED",
   MatchFinalized = "MATCH_FINALIZED",
+  ClearMessage = "CLEAR_MESSAGE",
 }
 
 export enum TeamType {

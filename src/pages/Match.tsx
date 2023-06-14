@@ -20,6 +20,7 @@ import Loader from '../components/loader';
 import MatchButtons from '../components/scoreboard/matchButtons';
 import MatchFinalized from '../components/scoreboard/matchFinalized';
 import EventList from '../components/eventList';
+import { getLastValidEvent } from '../components/eventFunctions';
 
 
 function Match() {
@@ -74,7 +75,7 @@ function Match() {
 
 
       {getActiveDisplay(match) === DisplayType.MatchFinalized && <MatchFinalized />}
-      {getActiveDisplay(match) === DisplayType.MatchFinalized && <EventList/>}
+      {getActiveDisplay(match) === DisplayType.MatchFinalized && <EventList />}
 
       {getActiveDisplay(match) === DisplayType.Loading && < Loader />}
     </main>
@@ -102,15 +103,17 @@ function getActiveDisplay(state: matchState): DisplayType {
     return DisplayType.MatchFinalized
   } else if (state.matchId === "null") {
     return DisplayType.Loading
-  } else if (technicalTimeout(state) && state.showNotification) {
+  } else if (technicalTimeout(state) && getLastValidEvent(state.events)?.eventType !== EventType.ClearMessage) {
     return DisplayType.TechnicalTimeout
-  } else if (teamTimeout(state) && state.showNotification) {
+  } else if (teamTimeout(state)) {
     return DisplayType.TeamTimeout
-  } else if (setFinished(state) && state.showNotification) {
+  } else if (setFinished(state)) {
     return DisplayType.SetFinished
-  } else if (matchFinished(state) && state.showNotification) {
+  } else if (matchFinished(state) &&
+    getLastValidEvent(state.events)?.eventType !== EventType.MatchFinalized
+  ) {
     return DisplayType.MatchFinished
-  } else if (switchSides(state) && state.showNotification) {
+  } else if (switchSides(state) && getLastValidEvent(state.events)?.eventType !== EventType.ClearMessage) {
     return DisplayType.SwitchSides
   } else if (serveOrderSet(state)) {
     return DisplayType.SelectServeorder
@@ -158,15 +161,15 @@ function technicalTimeout(state: matchState): boolean {
 }
 
 function matchFinalized(state: matchState): boolean {
-  return (state.events.find(e => !e.undone && e.eventType === EventType.MatchFinalized)?.eventType) === EventType.MatchFinalized || false;
+  return getLastValidEvent(state.events)?.eventType === EventType.MatchFinalized || false;
 }
 
 function teamTimeout(state: matchState): boolean {
-  return (state.events.slice().reverse().find(e => !e.undone)?.eventType) === EventType.Timeout || false;
+  return getLastValidEvent(state.events)?.eventType === EventType.Timeout || false;
 }
 
 function setFinished(state: matchState): boolean {
-  return !state.finished && (
+  return getLastValidEvent(state.events)?.eventType === EventType.Score && !state.finished && (
     state.currentScore[TeamType.Home] === 0 && state.currentScore[TeamType.Away] === 0 && state.currentSet !== 1
   ) && canUndo(state);
 }

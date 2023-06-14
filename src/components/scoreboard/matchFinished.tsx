@@ -3,8 +3,8 @@ import { TeamType } from "../types";
 import Grid from "@mui/material/Grid";
 import { Box, Button, Typography } from "@mui/material";
 import { useAppDispatch, useAppSelector } from '../../store/store';
-import { addEvent, clearNotification } from "../../store/match/actions";
-import { finalizeMatchEvent } from "./eventFunctions";
+import { addEvent } from "../../store/match/actions";
+import { finalizeMatchEvent } from "../eventFunctions";
 
 
 interface TeamColorPickerProps {
@@ -17,7 +17,6 @@ export function MatchFinished() {
     const dispatch = useAppDispatch();
 
     function handleDone() {
-        dispatch(clearNotification());
         dispatch(addEvent({ matchId: match.matchId, id: match.id, event: finalizeMatchEvent() }))
     }
 

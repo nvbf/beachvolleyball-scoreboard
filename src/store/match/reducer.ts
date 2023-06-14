@@ -1,9 +1,9 @@
 import { createReducer } from "@reduxjs/toolkit"
-import { TeamType, EventType, NotificationType, Event } from "../../components/types"
+import { TeamType, EventType, Event } from "../../components/types"
 import { matchState } from "../types"
 import {
-  addAwayTeamType, addHomeTeamType, clearNotificationType, evaluateEventsType, insertEventType,
-  MatchActionTypes, setMatchIdType, setTeamColorType, setTournamentIdType, storeEvents, storeEventsType, undoLastEventType,
+  addAwayTeamType, addHomeTeamType, evaluateEventsType, insertEventType,
+  MatchActionTypes, setMatchIdType, setTeamColorType, setTournamentIdType, storeEventsType, undoLastEventType,
   resetMatchIdType, resetAwayPlayerNameType, resetHomePlayerNameType, resetTeamColorType, resetTournamentIdType, storeMatchType, setIdType
 } from "./actions"
 import { v4 } from 'uuid';
@@ -308,12 +308,4 @@ export const matchReducer = createReducer<matchState>(initState, {
       timestamp: action.payload.timestamp,
     }
   },
-
-  [MatchActionTypes.CLEAR_NOTIFICATION]: (state: matchState, action: clearNotificationType) => {
-
-    return {
-      ...state,
-      showNotification: false
-    }
-  }
 })

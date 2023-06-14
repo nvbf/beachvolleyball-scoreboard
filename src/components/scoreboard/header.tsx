@@ -11,7 +11,7 @@ import { undoEvent } from '../../store/match/actions';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import Grid from "@mui/material/Grid"
 import Clock from "../clock";
-import { createUndoEvent } from "./eventFunctions";
+import { createUndoEvent, getLastValidEvent } from "../eventFunctions";
 import { EventType } from '../types';
 import TimeElapsed from '../timeElaped';
 
@@ -29,10 +29,10 @@ export function ScoreboardHeader() {
   }
 
   function disableUndo(events: import("../types").Event[]): boolean {
-    if (events.filter(e => !e.undone).slice().reverse()[0] && events.filter(e => !e.undone).slice().reverse()[0].eventType === EventType.SetFinalized) {
+    if (getLastValidEvent(match.events)?.eventType === EventType.SetFinalized) {
       return true
     }
-    if (events.slice().reverse()[0] && events.slice().reverse()[0].eventType === EventType.MatchFinalized){
+    if (getLastValidEvent(match.events)?.eventType === EventType.MatchFinalized){
       return true
     }
     return false

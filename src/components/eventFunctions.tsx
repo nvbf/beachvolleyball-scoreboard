@@ -1,5 +1,5 @@
 import { v4 } from "uuid";
-import { Event, EventType, TeamType } from "../types"
+import { Event, EventType, TeamType } from "./types"
 
 export const getDefaultColor = (team: TeamType): string => {
     if (team === TeamType.Home) {
@@ -125,6 +125,19 @@ export const setNoSideSwitchEvent = (): Event => {
     }
 }
 
+export const setClearMessageEvent = (): Event => {
+    return {
+        id: v4(),
+        eventType: EventType.ClearMessage,
+        team: TeamType.None,
+        playerId: 0,
+        timestamp: Date.now(),
+        undone: "",
+        author: "",
+        reference: ""
+    }
+}
+
 export const createUndoEvent = (events: Event[]): Event => {
     const reversedEvents = [...events].reverse();
     const undoneEventIndex = reversedEvents.findIndex((event: Event) => !event.undone && event.eventType !== EventType.Undo);
@@ -152,4 +165,14 @@ export const createUndoEvent = (events: Event[]): Event => {
         author: "",
         reference: events[actualIndex].id
     }
+}
+
+export const getLastValidEvent = (events: Event[]): Event | null => {
+    const reversedEvents = events.slice().reverse();
+    const undoneEventIndex = reversedEvents.findIndex((event: Event) => !event.undone && event.eventType !== EventType.Undo);
+
+    if (undoneEventIndex < 0) {
+        return null
+    }
+    return reversedEvents[undoneEventIndex]
 }

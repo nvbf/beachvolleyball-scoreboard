@@ -4,7 +4,9 @@ import Grid from "@mui/material/Grid";
 import { Box, Button, Typography } from "@mui/material";
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import { getTextColorFromBackground } from "../../util/color";
-import { clearNotification } from "../../store/match/actions";
+import { addEvent } from "../../store/match/actions";
+import { match } from "assert";
+import { setClearMessageEvent } from "../eventFunctions";
 
 
 interface TeamColorPickerProps {
@@ -14,9 +16,10 @@ interface TeamColorPickerProps {
 export function SwitchSides() {
 
     const dispatch = useAppDispatch();
+    const match = useAppSelector((state) => state.match);
 
     function handleDone() {
-        dispatch(clearNotification());
+        dispatch(addEvent({ matchId: match.matchId, id: match.id, event: setClearMessageEvent() }))
     }
 
     return (

@@ -22,7 +22,7 @@ import { TeamType, Event, EventType } from './types';
 import Grid from "@mui/material/Grid"
 import EventList from "./eventList";
 import { getInitials } from "../util/names";
-import { selectFirstServerEvent, selectFirstServingTeamEvent } from "./scoreboard/eventFunctions";
+import { selectFirstServerEvent, selectFirstServingTeamEvent } from "./eventFunctions";
 import { matchState } from "../store/types";
 import { getTextColorFromBackground } from "../util/color";
 
