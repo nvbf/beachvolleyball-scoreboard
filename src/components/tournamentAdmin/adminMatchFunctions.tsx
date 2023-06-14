@@ -10,16 +10,28 @@ export function parseAdminMatch(data: DocumentData): AdminMatch {
         },
         currentScore: data.CurrentScore,
         currentSetScore: data.CurrentSetScore,
-        date: data.Date,
-        arenaName: data.Field?.Arena?.ArenaName,
+        startTime: convertToTimestamp(data.Time, data.Date),
+        arenaName: data.Field?.Name,
+        isStarted: data.IsStarted,
+        isFinalized: data.IsFinalized,
         hasWinner: data.HasWinner,
         homeTeam: {
             isWinner: data.HomeTeam?.IsWinner || false,
             name: data.HomeTeam?.Name
         },
         matchCategory: data.MatchCategory?.CategoryCode,
-        matchGroup: data.MatchGroup?.DisplayName,
+        matchGroup: data.MatchGroup?.Name,
         name: data.Name,
-        scoreboardID: data.ScoreboardId
+        scoreboardID: data.ScoreboardId,
     };
+}
+
+function convertToTimestamp(time: string, date: string): number {
+    const dateStr = `${date}T${time}`;
+    const dateObj = new Date(dateStr);
+
+    // convert to milliseconds since epoch
+    const timestampInMilliseconds = dateObj.getTime();
+
+    return timestampInMilliseconds;
 }

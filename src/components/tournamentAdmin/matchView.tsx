@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import Grid from "@mui/material/Grid";
 import { Box, Button, Dialog, Typography } from "@mui/material";
 import {
-    QrCode2,
+    QrCodeScanner,
 } from '@mui/icons-material';
 import { getInitials } from "../../util/names";
 import { AdminMatch } from "./types";
 import QRCode from "qrcode.react";
+import { timestampToString } from "../../util/time";
 
 interface MatchViewProps {
     match: AdminMatch;
@@ -14,8 +15,6 @@ interface MatchViewProps {
 }
 
 export function MatchView({ match, tournamentSlug }: MatchViewProps) {
-    const [showOngoing, setShowOngoing] = useState(true);
-    const [showFinished, setShowFinished] = useState(true);
     const [open, setOpen] = useState(false);
     const [activeQrCode, setActiveQrCode] = useState("");
 
@@ -49,6 +48,10 @@ export function MatchView({ match, tournamentSlug }: MatchViewProps) {
                 border: 2,
                 borderRadius: "12px",
                 borderColor: "black",
+                borderLeftColor: getStatusColor(match),
+                borderLeftWidth: 10,
+                borderImage: "linear-gradient(to right, " + getStatusColor(match) +  ", black) 1",
+                // borderLeftWidth: 10,
             }}
         >
             <Grid
@@ -76,53 +79,53 @@ export function MatchView({ match, tournamentSlug }: MatchViewProps) {
                                     paddingX: 1,
                                 }}
                             >
+                                {timestampToString(match.startTime)}
+
+                            </Typography>
+
+                        </Grid>
+                        <Grid item xs={6}>
+                            <Typography
+                                align="left"
+                                sx={{
+                                    variant: "button",
+                                    lineHeight: 1,
+                                    paddingTop: 1,
+                                    paddingX: 1,
+                                }}
+                            >
                                 {match.arenaName}
                             </Typography>
-
                         </Grid>
                         <Grid item xs={6}>
-                            {(match.scoreboardID && match.currentScore) && <Grid item xs={12}>
-                                <Typography align='left' sx={{
-                                    variant: 'button', lineHeight: 1, paddingTop: 1, paddingX: 1
-                                }}>
-                                    <span key={"set"}>
-                                        <b>{match.currentSetScore["HOME"]}-{match.currentSetScore["AWAY"]}{' '}</b>
+                            <Typography
+                                align="left"
+                                sx={{
+                                    variant: "button",
+                                    lineHeight: 1,
+                                    paddingTop: 1,
+                                    paddingX: 1,
+                                }}
+                            >
+                                {match.matchCategory + " - " + (match.matchGroup !== "" ? (" Group " + match.matchGroup) : match.name)}
+                            </Typography>
+                        </Grid>
+
+
+                        <Grid item xs={6}>
+                            {(match.scoreboardID && match.currentScore) && <Typography align='left' sx={{
+                                variant: 'button', lineHeight: 1, paddingTop: 1, paddingX: 1
+                            }}>
+                                <span key={"set"}>
+                                    <b>{match.currentSetScore["HOME"]}-{match.currentSetScore["AWAY"]}{' '}</b>
+                                </span>
+                                {match.currentScore.map((score: { [key: string]: number }, index: number) => (
+                                    <span key={index}>
+                                        ({score.HOME}-{score.AWAY}){' '}
                                     </span>
-                                    {match.currentScore.map((score: { [key: string]: number }, index: number) => (
-                                        <span key={index}>
-                                            ({score.HOME}-{score.AWAY}){' '}
-                                        </span>
-                                    ))}
-                                </Typography>
-                            </Grid>}
+                                ))}
+                            </Typography>}
                         </Grid>
-                        <Grid item xs={6}>
-                            <Typography
-                                align="left"
-                                sx={{
-                                    variant: "button",
-                                    lineHeight: 1,
-                                    paddingTop: 1,
-                                    paddingX: 1,
-                                }}
-                            >
-                                Match: {match.matchCategory}
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={6}>
-                            <Typography
-                                align="left"
-                                sx={{
-                                    variant: "button",
-                                    lineHeight: 1,
-                                    paddingTop: 1,
-                                    paddingX: 1,
-                                }}
-                            >
-                                {match.date}
-                            </Typography>
-                        </Grid>
-
                         <Grid item xs={12}>
                             <Typography
                                 align="left"
@@ -157,14 +160,14 @@ export function MatchView({ match, tournamentSlug }: MatchViewProps) {
                         <Button
                             variant="outlined"
                             sx={{
-                                border: 2, borderRadius: '12px', color: 'black', borderColor: 'black',
+                                border: 0, borderRadius: '12px', color: 'black', borderColor: 'black',
                                 '&:hover': {
-                                    border: 2, borderRadius: '12px', color: 'black', borderColor: 'black' 
+                                    border: 0, borderRadius: '12px', color: 'black', borderColor: 'black', backgroundColor: "gray"
                                 }
                             }}
                             onClick={() => handleOpen(url)}
                         >
-                            <QrCode2 sx={{ fontSize: 84 }} />
+                            <QrCodeScanner sx={{ fontSize: 84 }} />
                         </Button>
                     </Box>
                 </Grid>
@@ -176,6 +179,18 @@ export function MatchView({ match, tournamentSlug }: MatchViewProps) {
             </Dialog>
         </Box>
     );
+
+    function getStatusColor(match: AdminMatch): string {
+        if (match.hasWinner) {
+            return "#FFEE93"
+        } else if (match.isFinalized) {
+            return "#ADF7B6"
+        } else if (match.isStarted) {
+            return "#A0CED9"
+        } else {
+            return "#FFC09F"
+        }
+    }
 }
 
 export default MatchView;

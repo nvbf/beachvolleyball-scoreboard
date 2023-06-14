@@ -15,6 +15,8 @@ const TournamentAdmin = () => {
   const tournamentSlug: string = params.tournamentSlug ? params.tournamentSlug : "dummy"
   const [showOngoing, setShowOngoing] = useState(true);
   const [showFinished, setShowFinished] = useState(true);
+  const [fetchedMatches, setFetchedMatches] = useState(false);
+
 
   const dispatch = useDispatch();
   let db = getFirestore()
@@ -31,10 +33,10 @@ const TournamentAdmin = () => {
   const finishedMatches = Object.values(matches).filter(match => match.hasWinner);
 
   // Fetch the matches when the component mounts
-  useEffect(() => {
+  if (!fetchedMatches && tournamentSlug) {
     dispatch(fetchMatchesRequest(tournamentSlug)); // replace with actual tournamentSlug
-  }, [dispatch]);
-
+    setFetchedMatches(true)
+  }
 
   const renderMatches = (matches: any[], hasWinner: boolean, tournamentSlug: string) => {
     console.log("This is renderMatches" + ongoingMatches)

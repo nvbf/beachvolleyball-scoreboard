@@ -7,9 +7,11 @@ export interface AdminMatch {
     };
     currentScore: { [key: string]: number }[];
     currentSetScore: { [key: string]: number };
-    date: string;
+    startTime: number;
     arenaName: string;
     hasWinner: boolean;
+    isFinalized: boolean;
+    isStarted: boolean;
     homeTeam: {
         isWinner: boolean;
         name: string;
