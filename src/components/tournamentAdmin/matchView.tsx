@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Match, TeamType } from "../types";
 import Grid from "@mui/material/Grid";
 import { Box, Button, Typography } from "@mui/material";
 import { useAppDispatch, useAppSelector } from '../../store/store';
@@ -10,16 +9,30 @@ import {
 import { getTextColorFromBackground } from "../../util/color";
 import { addEvent, setTeamColor } from "../../store/match/actions";
 import { getInitials } from "../../util/names";
+import { Match } from "./types";
+import QRCode from "qrcode.react";
 
 
 interface MatchViewProps {
     match: Match;
 }
 
-export function TeamColorPicker({ match }: MatchViewProps) {
+export function MatchView({ match }: MatchViewProps) {
+    const [showOngoing, setShowOngoing] = useState(true);
+  const [showFinished, setShowFinished] = useState(true);
+  const [open, setOpen] = useState(false);
+  const [activeQrCode, setActiveQrCode] = useState("");
+    const handleClose = () => {
+        setOpen(false);
+      };
 
+      const awayTeamName = match.awayTeam?.name?.replace(/^\#\d+\s/, "");
+      const homeTeamName = match.homeTeam?.name?.replace(/^\#\d+\s/, "");
+      const [name1, name2] = awayTeamName ? awayTeamName.split(" / ") : ["", ""];
+      const [name3, name4] = homeTeamName ? homeTeamName.split(" / ") : ["", ""];
+      
     return (
-        <Box mb={3} key={match.matchId} sx={{
+        <Box mb={3} key={match.scoreboardID} sx={{
             border: 2, borderRadius: '12px', borderColor: 'black'
         }} >
             <Grid container
@@ -39,28 +52,28 @@ export function TeamColorPicker({ match }: MatchViewProps) {
                             <Typography align='left' sx={{
                                 variant: 'button', lineHeight: 1, paddingTop: 1, paddingX: 1
                             }}>
-                                {match.Field.Name}
+                                {match.arenaName}
                             </Typography>
                         </Grid>
                         <Grid item xs={6}>
                             <Typography align='left' sx={{
                                 variant: 'button', lineHeight: 1, paddingTop: 1, paddingX: 1
                             }}>
-                                Match: {match.Number}
+                                Match: {match.matchCategory}
                             </Typography>
                         </Grid>
                         <Grid item xs={6}>
                             <Typography align='left' sx={{
                                 variant: 'button', lineHeight: 1, paddingTop: 1, paddingX: 1
                             }}>
-                                {match.Time}
+                                {match.date}
                             </Typography>
                         </Grid>
                         <Grid item xs={6}>
                             <Typography align='left' sx={{
                                 variant: 'button', lineHeight: 1, paddingTop: 1, paddingX: 1
                             }}>
-                                {match.Date}
+                                {match.date}
                             </Typography>
                         </Grid>
                         <Grid item xs={12}>
@@ -78,31 +91,27 @@ export function TeamColorPicker({ match }: MatchViewProps) {
                             </Typography>
                         </Grid>
 
-                        {(match.ScoreboardId && match.CurrentScore) && <Grid item xs={12}>
+                        {(match.scoreboardID && match.currentScore) && <Grid item xs={12}>
                             <Typography align='left' sx={{
                                 variant: 'button', lineHeight: 1, paddingTop: 1, paddingX: 1
                             }}>
                                 <span key={"set"}>
-                                    <b>{match.CurrentSetScore["HOME"]}-{match.CurrentSetScore["AWAY"]}{' '}</b>
+                                    <b>{match.currentSetScore.home}-{match.currentSetScore.away}{' '}</b>
                                 </span>
-                                {currentScore.map((score, index) => (
-                                    <span key={index}>
-                                        ({score.HOME}-{score.AWAY}){' '}
-                                    </span>
-                                ))}
+                                
                             </Typography>
                         </Grid>}
                     </Grid>
                 </Grid>
                 <Grid item md={2} xs={4} sx={{ textAlign: 'right' }}>
                     <Box display="flex" justifyContent="center" p={1}>
-                        <QRCode value={url} />
+                        "QR kode"
                     </Box>
                     <Box display="flex" justifyContent="center">
                         <Button
                             variant="outlined"
                             size="small"
-                            onClick={() => handleOpen(url)}
+                            onClick={() => console.log("knapp")}
                         >
                             Expand QR
                         </Button>
@@ -113,8 +122,5 @@ export function TeamColorPicker({ match }: MatchViewProps) {
     );
 };
 
-function getDefaultColorByTeam(team: TeamType) {
-    return team === TeamType.Home ? "#0000ff" : "#ff0000";
-}
 
-export default TeamColorPicker;
+export default MatchView;

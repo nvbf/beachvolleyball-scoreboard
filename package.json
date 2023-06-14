@@ -6,6 +6,7 @@
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
+    "@material-ui/core": "^4.12.4",
     "@mui/icons-material": "^5.11.11",
     "@mui/material": "^5.13.4",
     "@reduxjs/toolkit": "^1.9.3",
@@ -28,6 +29,7 @@
   },
   "devDependencies": {
     "@types/firebase": "^3.2.1",
+    "@types/material-ui": "^0.21.12",
     "@types/node": "^18.15.11",
     "@types/react": "^18.0.31",
     "@types/react-color": "^3.0.6",
