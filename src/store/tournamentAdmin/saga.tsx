@@ -7,6 +7,7 @@ import { PayloadAction } from '@reduxjs/toolkit';
 import { AdminMatch } from '../../components/tournamentAdmin/types';
 import { DocumentData } from 'firebase/firestore';
 import { parseAdminMatch } from '../../components/tournamentAdmin/adminMatchFunctions';
+import { MatchUpdatePayload } from './reducer';
 
 // interface MatchData {
 //     awayTeam: {

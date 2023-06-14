@@ -3,7 +3,7 @@ import { all, call, CallEffect, delay, put, PutEffect, select, SelectEffect, tak
 import { TeamType, Team, Event, Match } from '../../components/types';
 import { addAwayTeam, AddEventPayload, addHomeTeam, addTeamError, evaluateEvents, insertEvent, MatchActionTypes, publishScores, storeEvents, storeMatch, undoLastEvent } from "./actions";
 import { db } from '../../firebase/firebase-config';
-import { addEventToMatchToFirestore, getEventsFromMatch, getMatch, initNewMatch, setScoreboardId, setScoreboardScore } from '../../firebase/match_service';
+import { addEventToMatchToFirestore, getEventsFromMatch, getMatch, initNewMatch, setMatchFinalized, setScoreboardId, setScoreboardScore } from '../../firebase/match_service';
 import { v4 } from 'uuid';
 import { RootState } from '../store';
 import { matchState } from '../types';
@@ -136,6 +136,21 @@ export function* initMatch(action: PayloadAction<Match>): Generator<CallEffect |
   }
 }
 
+export function* finalizeMatch(action: PayloadAction): Generator<CallEffect | SelectEffect | PutEffect, void, matchState> {
+
+  try {
+    const matchState: matchState = yield select(getSomePartOfState);
+    console.log("To finalize");
+
+    yield call(setMatchFinalized, matchState.tournamentId, matchState.matchId)
+    console.log("Is Finalized");
+
+
+  } catch (error) {
+    console.log("Error when init match");
+  }
+}
+
 export function* matchSagas() {
   yield all([
     takeEvery(MatchActionTypes.ADD_HOME_TEAM, setHomeTeam),
@@ -145,7 +160,9 @@ export function* matchSagas() {
     takeEvery(MatchActionTypes.CHECK_DB, getOldMatch),
     takeEvery(MatchActionTypes.UNDO_EVENT, undoEvent),
     takeEvery(MatchActionTypes.INIT_MATCH, initMatch),
-    takeEvery(MatchActionTypes.PUBLISH_SCORES, publishScoresToTournaments)
+    takeEvery(MatchActionTypes.PUBLISH_SCORES, publishScoresToTournaments),
+    takeEvery(MatchActionTypes.FINALIZE_MATCH, finalizeMatch),
+
   ])
 
 }

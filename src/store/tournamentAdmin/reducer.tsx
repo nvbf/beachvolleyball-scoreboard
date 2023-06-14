@@ -6,7 +6,7 @@ import { matchesState } from '../types';
 
 
 export interface MatchUpdatePayload {
-    matchId: string;
+    matchId: number;
     match: AdminMatch;
 }
 
@@ -50,21 +50,18 @@ const initState: matchesState = {
 
 export const matchesReducer = createReducer<matchesState>(initState, {
 
-
     [TournamentAdminTypes.FETCH_MATCHES_SUCCESS]: (state: matchesState, action: fetchMatchesSuccessType) => {
         const matchesArray: AdminMatch[] = action.payload.matches;
         state.matches = matchesArray.reduce((obj, match) => ({ ...obj, [match.matchId]: match }), {});
-
     },
 
     [TournamentAdminTypes.FETCH_MATCHES_FAILURE]: (state: matchesState, action: fetchMatchesFailureType) => {
         return { ...state, error: action.payload };
-
     },
+
     [TournamentAdminTypes.UPDATE_MATCH]: (state: matchesState, action: updateMatchType) => {
-        return {
-            ...state,
-            homeTeam: action.payload
-        }
+        console.log("this should be updated: " + state.matches[action.payload.matchId])
+        state.matches[action.payload.matchId] = action.payload.match
+        console.log("with this:: " + action.payload.match)
     },
 })

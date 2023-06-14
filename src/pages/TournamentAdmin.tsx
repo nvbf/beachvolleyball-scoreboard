@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchMatchesRequest } from "./../store/tournamentAdmin/action"; // update the path
+import { fetchMatchesRequest, updateMatch } from "./../store/tournamentAdmin/action"; // update the path
 import { RootState } from "./../store/store"; // update the path to your store file
 import MatchView from "../components/tournamentAdmin/matchView";
 import { Box, Button, Grid } from "@mui/material";
 import { match } from "assert";
 import { useParams } from "react-router-dom";
 import { doc, getFirestore, onSnapshot } from "firebase/firestore";
+import { parseAdminMatch } from "../components/tournamentAdmin/adminMatchFunctions";
 
 
 
@@ -16,15 +17,14 @@ const TournamentAdmin = () => {
   const [showOngoing, setShowOngoing] = useState(true);
   const [showFinished, setShowFinished] = useState(true);
   const [fetchedMatches, setFetchedMatches] = useState(false);
+  const [createdCallbacks, setCreatedCallbacks] = useState(false);
 
 
   const dispatch = useDispatch();
   let db = getFirestore()
   useEffect(() => {
 
-    onSnapshot(doc(db, "Tournaments", "osvb_test_2023", "Matches", "1"), (doc) => {
-      console.log("Current data: ", doc.data());
-    });
+
   }, [onSnapshot]);
 
   // Retrieve the matches from the Redux store
@@ -38,9 +38,22 @@ const TournamentAdmin = () => {
     setFetchedMatches(true)
   }
 
-  const renderMatches = (matches: any[], hasWinner: boolean, tournamentSlug: string) => {
-    console.log("This is renderMatches" + ongoingMatches)
-    console.log("This is renderMatches" + finishedMatches)
+  if (!createdCallbacks && tournamentSlug) {
+    onSnapshot(doc(db, "Tournaments", "osvb_test_2023", "Matches", "1"), (doc) => {
+      let data = doc.data()
+      console.log("Got this current data: ", doc.data());
+      if (data) {
+        let updatedMatch = parseAdminMatch(data)
+        console.log("Prepare data: ", updatedMatch);
+        dispatch(updateMatch({ match: updatedMatch, matchId: updatedMatch.matchId }))
+        console.log("Dispatched");
+      }
+    });
+    setCreatedCallbacks(true)
+  }
+
+
+  const renderMatches = (matches: any[], tournamentSlug: string) => {
     return (
       <Grid container spacing={3} columns={12}>
         {matches.map((match, index) => (
@@ -62,7 +75,7 @@ const TournamentAdmin = () => {
             {showOngoing ? "Hide" : "Show"}
           </Button>
         </h2>
-        {showOngoing && renderMatches(ongoingMatches, true, tournamentSlug)}
+        {showOngoing && renderMatches(ongoingMatches, tournamentSlug)}
 
         <h2>
           Finished Matches{" "}
@@ -70,7 +83,7 @@ const TournamentAdmin = () => {
             {showFinished ? "Hide" : "Show"}
           </Button>
         </h2>
-        {showFinished && renderMatches(finishedMatches, false, tournamentSlug)}
+        {showFinished && renderMatches(finishedMatches, tournamentSlug)}
       </Box>
     </Box>
   );

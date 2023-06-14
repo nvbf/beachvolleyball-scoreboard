@@ -142,9 +142,20 @@ export const setScoreboardScore = async (
   const docRef = doc(db, "Tournaments", tournamentId, "Matches", matchId);
 
   await updateDoc(docRef, {
-    CurrentScore: currentScore
+    CurrentScore: currentScore,
+    CurrentSetScore: currentSetScore,
+    IsStarted: true
   });
+}
+
+export const setMatchFinalized = async (
+  tournamentId: string,
+  matchId: string,
+) => {
+  let db = getFirestore()
+  const docRef = doc(db, "Tournaments", tournamentId, "Matches", matchId);
+
   await updateDoc(docRef, {
-    CurrentSetScore: currentSetScore
+    IsFinalized: true
   });
 }

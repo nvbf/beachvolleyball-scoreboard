@@ -32,7 +32,8 @@ export function MatchView({ match, tournamentSlug }: MatchViewProps) {
     const [name1, name2] = awayTeamName ? awayTeamName.split(" / ") : ["", ""];
     const [name3, name4] = homeTeamName ? homeTeamName.split(" / ") : ["", ""];
 
-    const url = `https://${window.location.hostname
+    const url = match.scoreboardID ? `https://${window.location.hostname
+        }/match/${match.scoreboardID}` : `https://${window.location.hostname
         }/match?name1=${encodeURIComponent(name1.trim())}&name2=${encodeURIComponent(
             name2.trim()
         )}&name3=${encodeURIComponent(name3.trim())}&name4=${encodeURIComponent(
