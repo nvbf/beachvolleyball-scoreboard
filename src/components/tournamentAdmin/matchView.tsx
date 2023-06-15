@@ -3,6 +3,7 @@ import Grid from "@mui/material/Grid";
 import { Box, Button, Dialog, Typography } from "@mui/material";
 import {
     QrCodeScanner,
+    QrCode,
 } from '@mui/icons-material';
 import { getInitials } from "../../util/names";
 import { AdminMatch } from "./types";
@@ -47,58 +48,43 @@ export function MatchView({ match, tournamentSlug }: MatchViewProps) {
             key={match.scoreboardID}
             sx={{
                 border: 2,
-                borderRadius: "12px",
-                borderColor: "black",
-                borderLeftColor: getStatusColor(match),
                 borderLeftWidth: 10,
-                borderImage: "linear-gradient(to right, " + getStatusColor(match) +  ", black) 1",
+                borderBottomWidth: 3,
+                borderImage: "linear-gradient(to right, " + getStatusColor(match) + ", black) 1",
                 // borderLeftWidth: 10,
             }}
         >
             <Grid
                 container
-                spacing={2}
+                spacing={0}
+                rowSpacing={0}
                 columns={12}
                 justifyContent="space-evenly"
                 alignItems="center"
             >
-                <Grid item md={10} xs={8} sx={{ textAlign: "right" }}>
+                <Grid item md={11} xs={10} sx={{ textAlign: "right" }}>
                     <Grid
                         container
-                        spacing={2}
+                        spacing={1}
                         justifyContent="flex-end"
                         alignItems="center"
                         columns={12}
                     >
-                        <Grid item xs={6}>
+                        <Grid item xs={4}>
                             <Typography
                                 align="left"
                                 sx={{
                                     variant: "button",
                                     lineHeight: 1,
-                                    paddingTop: 1,
                                     paddingX: 1,
                                 }}
                             >
-                                {timestampToString(match.startTime)}
+                                #{match.matchId} | {timestampToString(match.startTime)}
 
                             </Typography>
 
                         </Grid>
-                        <Grid item xs={6}>
-                            <Typography
-                                align="left"
-                                sx={{
-                                    variant: "button",
-                                    lineHeight: 1,
-                                    paddingTop: 1,
-                                    paddingX: 1,
-                                }}
-                            >
-                                {match.arenaName}
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={4}>
                             <Typography
                                 align="left"
                                 sx={{
@@ -111,9 +97,48 @@ export function MatchView({ match, tournamentSlug }: MatchViewProps) {
                                 {match.matchCategory + " - " + (match.matchGroup !== "" ? (" Group " + match.matchGroup) : match.name)}
                             </Typography>
                         </Grid>
+                        <Grid item xs={4}>
+                            <Typography
+                                align="left"
+                                sx={{
+                                    variant: "button",
+                                    lineHeight: 1,
+                                    paddingTop: 1,
+                                    paddingX: 1,
+                                }}
+                            >
+                                {match.arenaName}
+                            </Typography>
+                        </Grid>
 
 
-                        <Grid item xs={6}>
+                        <Grid item xs={4}>
+                            <Typography
+                                align="left"
+                                sx={{
+                                    variant: "button",
+                                    lineHeight: 1,
+                                    paddingTop: 1,
+                                    paddingX: 1,
+                                }}
+                            >
+                                {getInitials(name1)} / {getInitials(name2)}
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={4}>
+                            <Typography
+                                align="left"
+                                sx={{
+                                    variant: "button",
+                                    lineHeight: 1,
+                                    paddingTop: 1,
+                                    paddingX: 1,
+                                }}
+                            >
+                                {getInitials(name3)} / {getInitials(name4)}
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={4}>
                             {(match.scoreboardID && match.currentScore) && <Typography align='left' sx={{
                                 variant: 'button', lineHeight: 1, paddingTop: 1, paddingX: 1
                             }}>
@@ -127,36 +152,10 @@ export function MatchView({ match, tournamentSlug }: MatchViewProps) {
                                 ))}
                             </Typography>}
                         </Grid>
-                        <Grid item xs={12}>
-                            <Typography
-                                align="left"
-                                sx={{
-                                    variant: "button",
-                                    lineHeight: 1,
-                                    paddingTop: 1,
-                                    paddingX: 1,
-                                }}
-                            >
-                                {getInitials(name1)} / {getInitials(name2)}
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Typography
-                                align="left"
-                                sx={{
-                                    variant: "button",
-                                    lineHeight: 1,
-                                    paddingTop: 1,
-                                    paddingX: 1,
-                                }}
-                            >
-                                {getInitials(name3)} / {getInitials(name4)}
-                            </Typography>
-                        </Grid>
 
                     </Grid>
                 </Grid>
-                <Grid item md={2} xs={4} sx={{ textAlign: "right" }}>
+                <Grid item md={1} xs={2} sx={{ textAlign: "right" }}>
                     <Box display="flex" justifyContent="center">
                         <Button
                             variant="outlined"
@@ -168,7 +167,9 @@ export function MatchView({ match, tournamentSlug }: MatchViewProps) {
                             }}
                             onClick={() => handleOpen(url)}
                         >
-                            <QrCodeScanner sx={{ fontSize: 84 }} />
+                            {!match.scoreboardID && <QrCodeScanner sx={{ fontSize: 64 }} />}
+                            {match.scoreboardID && <QrCode sx={{ fontSize: 64 }} />}
+
                         </Button>
                     </Box>
                 </Grid>

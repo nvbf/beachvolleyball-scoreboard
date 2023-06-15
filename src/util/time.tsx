@@ -10,7 +10,7 @@ export function timestampToString(timestamp: number) {
     const minutes = String(date.getMinutes()).padStart(2, '0');
     const seconds = String(date.getSeconds()).padStart(2, '0');
 
-    const formattedTime = `${hours}:${minutes}:${seconds} ${day}.${month}.${year}`;
+    const formattedTime = `${hours}:${minutes} - ${day}.${month}.${year}`;
     return formattedTime;
 
 }

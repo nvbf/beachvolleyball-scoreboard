@@ -69,7 +69,7 @@ const TournamentAdmin = () => {
 
   const renderMatches = (matches: AdminMatch[], tournamentSlug: string) => {
     return (
-      <Grid container spacing={3} columns={12}>
+      <Grid container spacing={0} columns={12}>
         {matches.map((match, index) => (
 
           <Grid item key={index} xs={12}>
