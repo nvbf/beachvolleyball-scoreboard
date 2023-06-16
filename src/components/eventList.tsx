@@ -84,7 +84,9 @@ const EventList: React.FC = () => {
 
   return (
     <Grid item xs={12} sx={{ alignSelf: 'center', textAlign: 'center' }} marginTop={4}>
-      {slicedEvents.map((event) => (
+      {slicedEvents.filter(e => {
+        return e.eventType === EventType.Score || e.eventType === EventType.Timeout
+      }).map((event) => (
         <div key={event.id}>
           {formattedEvent(event)}
         </div>

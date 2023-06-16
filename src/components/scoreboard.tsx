@@ -140,7 +140,7 @@ export function Scoreboard() {
 export default Scoreboard;
 
 export const getRightTeam = (match: matchState): TeamType => {
-  if (match.leftSideTeam === TeamType.None || match.leftSideTeam === TeamType.Home) {
+  if (match.leftSideTeam === TeamType.None || match.leftSideTeam === TeamType.Home || match.noMirrorSides) {
     return TeamType.Away
   } else {
     return TeamType.Home
@@ -148,7 +148,7 @@ export const getRightTeam = (match: matchState): TeamType => {
 }
 
 export const getLeftTeam = (match: matchState): TeamType => {
-  if (match.leftSideTeam === TeamType.None || match.leftSideTeam === TeamType.Home) {
+  if (match.leftSideTeam === TeamType.None || match.leftSideTeam === TeamType.Home || match.noMirrorSides) {
     return TeamType.Home
   } else {
     return TeamType.Away

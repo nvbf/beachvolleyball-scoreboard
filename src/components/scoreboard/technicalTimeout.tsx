@@ -34,9 +34,11 @@ export function TechnicalTimeout({ startTime }: TechnicalTimeoutProps) {
             <Grid item xs={12}>
                 <Typography sx={{ fontSize: 28 }}>Technical timeout</Typography>
             </Grid>
-            <Typography align='center' sx={{ fontSize: "2rem", variant: 'button', lineHeight: 1, paddingTop: 1, paddingX: 1 }}>
-                <TimeElapsed startTime={startTime} />
-            </Typography>
+            <Grid item xs={12} sx={{ textAlign: 'left' }}>
+                <Typography align='center' sx={{ fontSize: "2rem", variant: 'button', lineHeight: 1, paddingTop: 1, paddingX: 1 }}>
+                    <TimeElapsed startTime={startTime} />
+                </Typography>
+            </Grid>
             <Grid item md={6} xs={12} sx={{ textAlign: 'left' }}>
                 <Button variant="contained" onClick={handleDone.bind(null)}
                     sx={{
