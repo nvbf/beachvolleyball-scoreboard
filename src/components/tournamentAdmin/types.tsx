@@ -22,3 +22,10 @@ export interface AdminMatch {
     name: string;
     scoreboardID: string;
 }
+
+export enum MatchState {
+    Finished = "FINISHED",
+    Reported = "REPORTED",
+    Ongoing = "ONGOING",
+    Upcomming = "UPCOMMING",
+}

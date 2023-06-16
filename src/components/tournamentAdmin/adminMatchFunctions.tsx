@@ -1,5 +1,5 @@
 import { DocumentData } from "firebase/firestore";
-import { AdminMatch } from "./types";
+import { AdminMatch, MatchState } from "./types";
 import { getInitials } from "../../util/names";
 
 export function parseAdminMatch(data: DocumentData): AdminMatch {
@@ -53,4 +53,29 @@ function parseTeamString(team: string): string {
     }
 
     return `${getInitials(name1)} / ${getInitials(name2)}`;
+}
+
+export function getMatchState(match: AdminMatch): MatchState {
+    if (match.hasWinner) {
+        return MatchState.Reported
+    } else if (match.isFinalized) {
+        return MatchState.Finished
+    } else if (match.isStarted) {
+        return MatchState.Ongoing
+    } else {
+        return MatchState.Upcomming
+    }
+}
+
+export function getStatusColor(state: MatchState): string {
+    switch (state) {
+        case MatchState.Reported:
+            return "#FFEE93"
+        case MatchState.Finished:
+            return "#ADF7B6"
+        case MatchState.Ongoing:
+            return "#A0CED9"
+        default:
+            return "#FFC09F"
+    }
 }

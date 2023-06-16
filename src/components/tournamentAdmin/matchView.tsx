@@ -6,9 +6,10 @@ import {
     QrCode,
 } from '@mui/icons-material';
 import { getInitials } from "../../util/names";
-import { AdminMatch } from "./types";
+import { AdminMatch, MatchState } from "./types";
 import QRCode from "qrcode.react";
 import { timestampToString } from "../../util/time";
+import { getMatchState, getStatusColor } from "./adminMatchFunctions";
 
 interface MatchViewProps {
     match: AdminMatch;
@@ -50,7 +51,7 @@ export function MatchView({ match, tournamentSlug }: MatchViewProps) {
                 border: 2,
                 borderLeftWidth: 10,
                 borderBottomWidth: 3,
-                borderImage: "linear-gradient(to right, " + getStatusColor(match) + ", black) 1",
+                borderImage: "linear-gradient(to right, " + getStatusColor(getMatchState(match)) + ", black) 1",
                 // borderLeftWidth: 10,
             }}
         >
@@ -186,18 +187,6 @@ export function MatchView({ match, tournamentSlug }: MatchViewProps) {
             </Dialog>
         </Box>
     );
-
-    function getStatusColor(match: AdminMatch): string {
-        if (match.hasWinner) {
-            return "#FFEE93"
-        } else if (match.isFinalized) {
-            return "#ADF7B6"
-        } else if (match.isStarted) {
-            return "#A0CED9"
-        } else {
-            return "#FFC09F"
-        }
-    }
 }
 
 export default MatchView;
