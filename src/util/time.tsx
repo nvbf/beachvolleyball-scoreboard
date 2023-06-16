@@ -5,12 +5,14 @@ export function timestampToString(timestamp: number) {
     // padStart is used to add leading zeros
     const day = String(date.getDate()).padStart(2, '0');
     const month = String(date.getMonth() + 1).padStart(2, '0'); // January is 0!
-    const year = String(date.getFullYear()).substr(2);
     const hours = String(date.getHours()).padStart(2, '0');
     const minutes = String(date.getMinutes()).padStart(2, '0');
-    const seconds = String(date.getSeconds()).padStart(2, '0');
 
-    const formattedTime = `${hours}:${minutes} - ${day}.${month}.${year}`;
+    const monthNames = ["jan", "feb", "mar", "apr", "may", "jun",
+        "jul", "aug", "sep", "oct", "nov", "dec"
+    ];
+
+    const formattedTime = `${hours}:${minutes} - ${day}. ${monthNames[date.getMonth()]}`;
     return formattedTime;
-
 }
+

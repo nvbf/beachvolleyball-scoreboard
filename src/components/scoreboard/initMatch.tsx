@@ -14,6 +14,7 @@ import { useAppDispatch, useAppSelector } from '../../store/store';
 import { TeamType } from './../types';
 import Grid from "@mui/material/Grid"
 import { getTextColorFromBackground } from "../../util/color";
+import { getInitials } from "../../util/names";
 
 export function InitMatch() {
   const match = useAppSelector((state) => state.match);
@@ -151,11 +152,12 @@ export function InitMatch() {
             <Grid item xs={6} sx={{ textAlign: 'right' }}>
               <Button variant="contained" onClick={setTeamColors.bind(null, TeamType.Home)}
                 sx={{
-                  width: 1, height: 76, backgroundColor: match.teamColor[TeamType.Home],
+                  width: 1, height: 82, backgroundColor: match.teamColor[TeamType.Home],
                   '&:hover': { backgroundColor: match.teamColor[TeamType.Home] }
                 }}>
-                <Typography variant="h6" sx={{ color: getTextColorFromBackground(match.teamColor[TeamType.Home]) }}>
-                  <Box>{match.teamColor[TeamType.Home]}</Box>
+                <Typography sx={{ fontSize: 18, color: getTextColorFromBackground(match.teamColor[TeamType.Home]) }}>
+                  <Box>{getInitials(match.homeTeam.player1Name)}</Box>
+                  <Box>{getInitials(match.homeTeam.player2Name)}</Box>
                 </Typography>
               </Button>
             </Grid>
@@ -165,8 +167,9 @@ export function InitMatch() {
                   width: 1, height: 76, backgroundColor: match.teamColor[TeamType.Away],
                   '&:hover': { backgroundColor: match.teamColor[TeamType.Away] }
                 }}>
-                <Typography variant="h6" sx={{ color: getTextColorFromBackground(match.teamColor[TeamType.Away]) }}>
-                  <Box>{match.teamColor[TeamType.Away]}</Box>
+                <Typography sx={{ fontSize: 18, color: getTextColorFromBackground(match.teamColor[TeamType.Away]) }}>
+                  <Box>{getInitials(match.awayTeam.player1Name)}</Box>
+                  <Box>{getInitials(match.awayTeam.player2Name)}</Box>
                 </Typography>
               </Button>
             </Grid>
