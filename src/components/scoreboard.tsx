@@ -176,6 +176,7 @@ export const getServer = (events: Event[], team: TeamType): number => {
   let servingTeam = TeamType.Home;
   let lastServingTeam: TeamType;
   let lastServingPlayer: Number;
+  let firstSwitch = true;
 
   events.forEach((event) => {
     // check if the event was undone
@@ -185,13 +186,13 @@ export const getServer = (events: Event[], team: TeamType): number => {
         case EventType.Score:
           if (lastServingTeam !== event.team) {
             servingTeam = event.team
-            if (servingTeam !== team) {
-              break;
-            }
-            if (lastServingPlayer === 1) {
-              servingPlayer = 2;
+            if (firstSwitch) {
+              firstSwitch = false
             } else {
-              servingPlayer = 1;
+              if (servingTeam !== team) {
+                break;
+              }
+              servingPlayer = lastServingPlayer === 1 ? 2 : 1
             }
           }
           break;
@@ -209,7 +210,7 @@ export const getServer = (events: Event[], team: TeamType): number => {
     }
   });
 
-  if (servingTeam == team) {
+  if (servingTeam === team) {
     return servingPlayer
   } else {
     return 0
