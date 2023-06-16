@@ -14,12 +14,35 @@ import { AdminMatch } from "../components/tournamentAdmin/types";
 
 const TournamentAdmin = () => {
   const params = useParams();
-  const tournamentSlug: string = params.tournamentSlug ? params.tournamentSlug : "dummy"
+  const tournamentSlug: string = params.tournamentSlug ? params.tournamentSlug : ""
   const [showOngoing, setShowOngoing] = useState(true);
   const [showFinished, setShowFinished] = useState(true);
   const [fetchedMatches, setFetchedMatches] = useState(false);
   const [createdCallbacks, setCreatedCallbacks] = useState(false);
 
+  useEffect(() => {
+    // Define your async function
+    const fetchData = async (tournamentSlug: string) => {
+      try {
+        const response = await fetch(`https://tournament-sync.herokuapp.com/sync/v1/tournament/${tournamentSlug}`);
+        const data = await response.json();
+        console.log(data);
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
+
+    // Call it once on mount
+    if (tournamentSlug) {
+      fetchData(tournamentSlug);
+    }
+
+    // Then call it every 30 seconds
+    const intervalId = setInterval(fetchData, 30000, tournamentSlug);
+
+    // Clean up the interval on unmount
+    return () => clearInterval(intervalId);
+  }, [tournamentSlug]);
 
   const dispatch = useDispatch();
   let db = getFirestore()
@@ -34,20 +57,6 @@ const TournamentAdmin = () => {
     dispatch(fetchMatchesRequest(tournamentSlug)); // replace with actual tournamentSlug
     setFetchedMatches(true)
   }
-
-  // if (!createdCallbacks && tournamentSlug) {
-  //   onSnapshot(doc(db, "Tournaments", "osvb_test_2023", "Matches", "1"), (doc) => {
-  //     let data = doc.data()
-  //     console.log("Got this current data: ", doc.data());
-  //     if (data) {
-  //       let updatedMatch = parseAdminMatch(data)
-  //       console.log("Prepare data: ", updatedMatch);
-  //       dispatch(updateMatch({ match: updatedMatch, matchId: updatedMatch.matchId }))
-  //       console.log("Dispatched");
-  //     }
-  //   });
-  //   setCreatedCallbacks(true)
-  // }
 
   if (!createdCallbacks && tournamentSlug) {
     const matchCollection = collection(db, "Tournaments", tournamentSlug, "Matches");
@@ -64,8 +73,6 @@ const TournamentAdmin = () => {
     });
     setCreatedCallbacks(true)
   }
-
-
 
   const renderMatches = (matches: AdminMatch[], tournamentSlug: string) => {
     return (

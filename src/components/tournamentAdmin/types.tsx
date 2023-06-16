@@ -12,6 +12,7 @@ export interface AdminMatch {
     hasWinner: boolean;
     isFinalized: boolean;
     isStarted: boolean;
+    referee: string;
     homeTeam: {
         isWinner: boolean;
         name: string;

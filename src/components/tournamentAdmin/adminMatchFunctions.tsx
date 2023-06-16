@@ -1,5 +1,6 @@
 import { DocumentData } from "firebase/firestore";
 import { AdminMatch } from "./types";
+import { getInitials } from "../../util/names";
 
 export function parseAdminMatch(data: DocumentData): AdminMatch {
     return {
@@ -15,6 +16,7 @@ export function parseAdminMatch(data: DocumentData): AdminMatch {
         isStarted: data.IsStarted,
         isFinalized: data.IsFinalized,
         hasWinner: data.HasWinner,
+        referee: parseTeamString(data.RefereesTX[0]?.Text || ""),
         homeTeam: {
             isWinner: data.HomeTeam?.IsWinner || false,
             name: data.HomeTeam?.Name || ""
@@ -34,4 +36,21 @@ function convertToTimestamp(time: string, date: string): number {
     const timestampInMilliseconds = dateObj.getTime();
 
     return timestampInMilliseconds;
+}
+
+function parseTeamString(team: string): string {
+    if (team === ""){
+        return ""
+    }
+
+    // convert to milliseconds since epoch
+    const teamNames = team.replace(/^\#\d+\s/, "");
+
+    const [name1, name2] = teamNames ? teamNames.split(" / ") : ["", ""];
+
+    if (!name2) {
+        return name1;
+    }
+
+    return `${getInitials(name1)} / ${getInitials(name2)}`;
 }
