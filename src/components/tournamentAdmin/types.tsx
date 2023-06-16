@@ -7,6 +7,7 @@ export interface AdminMatch {
     };
     currentScore: { [key: string]: number }[];
     currentSetScore: { [key: string]: number };
+    sets: { [key: string]: number }[];
     startTime: number;
     arenaName: string;
     hasWinner: boolean;

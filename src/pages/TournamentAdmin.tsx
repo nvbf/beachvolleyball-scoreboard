@@ -38,7 +38,7 @@ const TournamentAdmin = () => {
     }
 
     // Then call it every 30 seconds
-    const intervalId = setInterval(fetchData, 30000, tournamentSlug);
+    const intervalId = setInterval(fetchData, 90000, tournamentSlug);
 
     // Clean up the interval on unmount
     return () => clearInterval(intervalId);
@@ -64,9 +64,7 @@ const TournamentAdmin = () => {
         let data = doc.data()
         if (data) {
           let updatedMatch = parseAdminMatch(data)
-          console.log("Prepare data: ", updatedMatch);
           dispatch(updateMatch({ match: updatedMatch, matchId: updatedMatch.matchId }))
-          console.log("Dispatched");
         }
       });
     });

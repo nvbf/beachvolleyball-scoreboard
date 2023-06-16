@@ -23,6 +23,7 @@ export function parseAdminMatch(data: DocumentData): AdminMatch {
         },
         matchCategory: data.MatchCategory?.CategoryCode || "",
         matchGroup: data.MatchGroup?.Name || "",
+        sets: data.Sets,
         name: data.Name,
         scoreboardID: data.ScoreboardId,
     };

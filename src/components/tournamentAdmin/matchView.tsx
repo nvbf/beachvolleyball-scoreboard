@@ -28,7 +28,7 @@ export function MatchView({ match, tournamentSlug }: MatchViewProps) {
         setActiveQrCode(url);
         setOpen(true);
     };
-
+    
     const awayTeamName = match.awayTeam?.name?.replace(/^\#\d+\s/, "");
     const homeTeamName = match.homeTeam?.name?.replace(/^\#\d+\s/, "");
     const [name1, name2] = homeTeamName ? homeTeamName.split(" / ") : ["", ""];
@@ -121,6 +121,7 @@ export function MatchView({ match, tournamentSlug }: MatchViewProps) {
                                     lineHeight: 1,
                                     paddingTop: 1,
                                     paddingX: 1,
+                                    fontWeight: (match.currentSetScore["HOME"] || 0) === 2 ? 'bold' : ""
                                 }}
                             >
                                 {getInitials(name1)} / {getInitials(name2)}
@@ -134,13 +135,26 @@ export function MatchView({ match, tournamentSlug }: MatchViewProps) {
                                     lineHeight: 1,
                                     paddingTop: 1,
                                     paddingX: 1,
+                                    fontWeight: (match.currentSetScore["AWAY"] || 0) === 2 ? 'bold' : ""
                                 }}
                             >
                                 {getInitials(name3)} / {getInitials(name4)}
                             </Typography>
                         </Grid>
                         <Grid item xs={4}>
-                            {(match.scoreboardID && match.currentScore) && <Typography align='left' sx={{
+                            {(match.scoreboardID && match.currentScore && match.hasWinner) && <Typography align='left' sx={{
+                                variant: 'button', lineHeight: 1, paddingTop: 1, paddingX: 1
+                            }}>
+                                <span key={"set"}>
+                                    <b>{match.currentSetScore["HOME"]}-{match.currentSetScore["AWAY"]}{' '}</b>
+                                </span>
+                                {match.sets.map((score: { [key: string]: number }, index: number) => (
+                                    <span key={index}>
+                                        ({score.PointsHomeTeam}-{score.PointsAwayTeam}){' '}
+                                    </span>
+                                ))}
+                            </Typography>}
+                            {(match.scoreboardID && match.currentScore && !match.hasWinner) && <Typography align='left' sx={{
                                 variant: 'button', lineHeight: 1, paddingTop: 1, paddingX: 1
                             }}>
                                 <span key={"set"}>
