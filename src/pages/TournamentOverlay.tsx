@@ -1,16 +1,62 @@
 import { Grid } from "@mui/material";
-import React from "react";
+import { collection, getFirestore, onSnapshot } from "firebase/firestore";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
+import { RootState } from "../store/store";
+import { fetchMatchesRequest, updateMatch } from "../store/tournamentAdmin/action";
+import { parseAdminMatch } from "../components/tournamentAdmin/adminMatchFunctions";
+import { AdminMatch } from "../components/tournamentAdmin/types";
+import { TeamType } from "../components/types";
 
 const TournamentOverlay = () => {
   const location = useLocation();
-
+  const [fetchedMatches, setFetchedMatches] = useState(false);
+  const [createdCallbacks, setCreatedCallbacks] = useState(false);
   // Extract the URL parameters
   const queryParams = new URLSearchParams(location.search);
-  const tournamentID = queryParams.get("tournamentID") || "default";
-  const matchID = queryParams.get("matchID") || "default";
-  const courtID = queryParams.get("courtID") || "default";
+  const tournamentSlug = queryParams.get("tournamentId") || "default";
+  const courtID = queryParams.get("courtId") || "default";
 
+  const dispatch = useDispatch();
+  let db = getFirestore()
+
+  // Retrieve the matches from the Redux store
+  const matches = useSelector((state: RootState) => state.matches.matches);
+  const matchesList = Object.values(matches);
+
+  // Fetch the matches when the component mounts
+  if (!fetchedMatches && tournamentSlug) {
+    dispatch(fetchMatchesRequest(tournamentSlug)); // replace with actual tournamentSlug
+    setFetchedMatches(true)
+  }
+
+  useEffect(() => {
+    // Save original body background color
+    const originalBodyBackgroundColor = document.body.style.backgroundColor;
+
+    // Change body background color to transparent
+    document.body.style.backgroundColor = 'transparent';
+
+    // Reset body background color after component unmount
+    return () => {
+      document.body.style.backgroundColor = originalBodyBackgroundColor;
+    };
+  }, []);
+
+  if (!createdCallbacks && tournamentSlug) {
+    const matchCollection = collection(db, "Tournaments", tournamentSlug, "Matches");
+    onSnapshot(matchCollection, (querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        let data = doc.data()
+        if (data) {
+          let updatedMatch = parseAdminMatch(data)
+          dispatch(updateMatch({ match: updatedMatch, matchId: updatedMatch.matchId }))
+        }
+      });
+    });
+    setCreatedCallbacks(true)
+  }
   // Hardcoded mapping of IDs to names
   const tournamentNames = {
     "12321": "Oslo Masters",
@@ -27,6 +73,9 @@ const TournamentOverlay = () => {
   const scoreTeam1 = 15;
   const scoreTeam2 = 20;
 
+
+  const currentMatch = getCurrentMatch(matchesList, courtID)
+
   return (
     <div
       style={{
@@ -35,13 +84,13 @@ const TournamentOverlay = () => {
         left: "0",
         right: "0",
         padding: "10px",
-        // backgroundColor: "rgba(0,0,0,0.7)",
+        backgroundColor: 'rgba(52, 52, 52, 0.0)',        // backgroundColor: "rgba(0,0,0,0.7)",
         textAlign: "center",
         width: '1920px', height: '1080px'
       }}
     >
 
-      <Grid
+      {currentMatch && <Grid
         container
         direction="row"
       >
@@ -57,10 +106,10 @@ const TournamentOverlay = () => {
             padding={1}
           >
             <Grid item>
-              L. Grændsen / O. Tørres
+              {currentMatch ? currentMatch.homeTeam.name : ""}
             </Grid>
             <Grid item>
-              Ø. Grændsen / H. Tørres
+              {currentMatch ? currentMatch.awayTeam.name : ""}
             </Grid>
           </Grid>
         </Grid>
@@ -78,73 +127,42 @@ const TournamentOverlay = () => {
 
           >            <Grid item>
               <b>
-                1
+                {currentMatch ? currentMatch.currentSetScore[TeamType.Home] : ""}
               </b>
             </Grid>
             <Grid item>
               <b>
-                1
+                {currentMatch ? currentMatch.currentSetScore[TeamType.Away] : ""}
               </b>
             </Grid>
           </Grid>
         </Grid>
+        {(currentMatch ? currentMatch.currentScore : []).map(
+          (score: { [key: string]: number }, index: number) => (
         <Grid item sx={{
           backgroundColor: "#eeeeee", borderColor: "#000000",
           border: 2
         }}>
-          <Grid
-            container
-            spacing={1}
-            padding={1}
-            direction="column"
-          >            <Grid item>
-              14
+              <Grid
+                container
+                spacing={1}
+                padding={1}
+                direction="column"
+              >            <Grid item>
+                  {score.HOME}
+                </Grid>
+                <Grid item>
+                  {score.AWAY}
+                </Grid>
+              </Grid>
             </Grid>
-            <Grid item>
-              13
-            </Grid>
-          </Grid>
-        </Grid>
-      </Grid>
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          fontSize: "16px",
-        }}
-      >
-        <div>
-          {tournamentNames[tournamentID as keyof typeof tournamentNames]}
-        </div>
-        <div>{matchNames[matchID as keyof typeof matchNames]}</div>
-        <div>{courtNames[courtID as keyof typeof courtNames]}</div>
-      </div>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          fontSize: "24px",
-          margin: "10px",
-        }}
-      >
-        <div style={{ marginRight: "10px" }}>
-          <div>
-            <strong>{player1}</strong> & <strong>{player2}</strong>
-          </div>
-          <div style={{ fontSize: "32px", marginTop: "5px" }}>{scoreTeam1}</div>
-        </div>
-        <div>vs</div>
-        <div style={{ marginLeft: "10px" }}>
-          <div>
-            <strong>{player3}</strong> & <strong>{player4}</strong>
-          </div>
-          <div style={{ fontSize: "32px", marginTop: "5px" }}>{scoreTeam2}</div>
-        </div>
-      </div>
+          ))}
+      </Grid>}
     </div>
   );
 };
+export const getCurrentMatch = (matches: AdminMatch[], courtID: string): AdminMatch => {
+  return matches.filter(e => !e.hasWinner && !e.isFinalized && e.isStarted && e.arenaName === courtID)[0]
+}
 
 export default TournamentOverlay;

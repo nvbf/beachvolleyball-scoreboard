@@ -258,6 +258,8 @@ export const matchReducer = createReducer<matchState>(initState, {
         leftSideTeam = event.team
       } else if (event.eventType === EventType.NoSideSwitch) {
         noMirrorSides = true
+      } else if (event.eventType === EventType.MatchFinalized) {
+        userMessage = "match done! thank you!"
       }
     });
     const currentSetScore = {

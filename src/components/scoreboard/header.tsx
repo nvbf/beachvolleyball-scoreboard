@@ -62,12 +62,20 @@ export function ScoreboardHeader() {
               <TimeElapsed startTime={match.startTime} />
             </Typography>
           </Grid> }
-          {match.userMessage && <Grid item xs={6}>
+          {match.userMessage && !match.finished && <Grid item xs={6}>
             <Typography align='center' sx={{ fontSize: "1.2rem", variant: 'button', lineHeight: 1, paddingTop: 1, paddingX: 1 }}>
               NEXT POINT: 
             </Typography>
             <Typography align='center' sx={{ fontSize: "1.2rem", variant: 'button', lineHeight: 1, paddingTop: 1, paddingX: 1 }}>
              {match.userMessage.toUpperCase()}
+            </Typography>
+          </Grid>}
+          {match.finished && <Grid item xs={6}>
+            <Typography align='center' sx={{ fontSize: "1.2rem", variant: 'button', lineHeight: 1, paddingTop: 1, paddingX: 1 }}>
+              {"match done!".toUpperCase()}
+            </Typography>
+            <Typography align='center' sx={{ fontSize: "1.2rem", variant: 'button', lineHeight: 1, paddingTop: 1, paddingX: 1 }}>
+              {"thank you!".toUpperCase()}
             </Typography>
           </Grid>}
           <Grid item xs={3}>

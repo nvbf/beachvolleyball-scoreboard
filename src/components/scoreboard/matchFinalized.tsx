@@ -50,7 +50,7 @@ export function MatchFinalized() {
                     </Grid>
                 </Grid>
             </Grid>
-            <Grid item xs={12} sm={8} md={6}>
+            <Grid item xs={12} >
                 <Grid container
                     spacing={2}
                     columns={12}
@@ -79,7 +79,7 @@ export function MatchFinalized() {
                 </Grid>
             </Grid>
             {match.theCurrentSets.map((score, index) => (
-                <Grid item xs={12} sm={8} md={6} key={index}>
+                <Grid item xs={12}  key={index}>
                     <Grid container
                         spacing={2}
                         columns={12}
