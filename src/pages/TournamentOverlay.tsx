@@ -1,3 +1,4 @@
+import { Grid } from "@mui/material";
 import React from "react";
 import { useLocation } from "react-router-dom";
 
@@ -34,10 +35,77 @@ const TournamentOverlay = () => {
         left: "0",
         right: "0",
         padding: "10px",
-        backgroundColor: "rgba(0,0,0,0.7)",
+        // backgroundColor: "rgba(0,0,0,0.7)",
         textAlign: "center",
+        width: '1920px', height: '1080px'
       }}
     >
+
+      <Grid
+        container
+        direction="row"
+      >
+        <Grid item sx={{
+          backgroundColor: "#eeeeee", borderColor: "#000000",
+          border: 2
+        }}
+        >
+          <Grid
+            container
+            spacing={1}
+            direction="column"
+            padding={1}
+          >
+            <Grid item>
+              L. Grændsen / O. Tørres
+            </Grid>
+            <Grid item>
+              Ø. Grændsen / H. Tørres
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item sx={{
+          backgroundColor: "#eeeeee",
+          borderColor: "#000000",
+          border: 2,
+        }}
+        >
+          <Grid
+            container
+            spacing={1}
+            direction="column"
+            padding={1}
+
+          >            <Grid item>
+              <b>
+                1
+              </b>
+            </Grid>
+            <Grid item>
+              <b>
+                1
+              </b>
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item sx={{
+          backgroundColor: "#eeeeee", borderColor: "#000000",
+          border: 2
+        }}>
+          <Grid
+            container
+            spacing={1}
+            padding={1}
+            direction="column"
+          >            <Grid item>
+              14
+            </Grid>
+            <Grid item>
+              13
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
       <div
         style={{
           display: "flex",
