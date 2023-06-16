@@ -5,6 +5,8 @@ import { Box, Button, Typography } from "@mui/material";
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import { addEvent } from "../../store/match/actions";
 import { finalizeMatchEvent } from "../eventFunctions";
+import { getInitials } from "../../util/names";
+import { getPlayer } from "../scoreboard";
 
 
 interface TeamColorPickerProps {
@@ -25,12 +27,35 @@ export function MatchFinalized() {
             marginTop={1}
             sx={{ alignSelf: 'center', textAlign: 'center' }}
         >
+            <Grid item xs={12}>
+                <Grid container
+                    columnSpacing={2}
+                    columns={12}
+                    sx={{ alignSelf: 'center', textAlign: 'center' }}
+                >
+                    <Grid item xs={6} sx={{ textAlign: 'right' }}>
+                        <Typography sx={{
+                            fontSize: 18,
+                            fontWeight: (match.currentSetScore[TeamType.Home] || 0) === 2 ? 'bold' : ""
+
+                        }}> {getInitials(getPlayer(match, 1, TeamType.Home))} / {getInitials(getPlayer(match, 2, TeamType.Home))}</Typography>
+                    </Grid>
+
+                    <Grid item xs={6} sx={{ textAlign: 'left' }}>
+                        <Typography sx={{
+                            fontSize: 18,
+                            fontWeight: (match.currentSetScore[TeamType.Away] || 0) === 2 ? 'bold' : ""
+
+                        }}> {getInitials(getPlayer(match, 1, TeamType.Away))} / {getInitials(getPlayer(match, 2, TeamType.Away))}</Typography>
+                    </Grid>
+                </Grid>
+            </Grid>
             <Grid item xs={12} sm={8} md={6}>
                 <Grid container
                     spacing={2}
                     columns={12}
                     justifyContent="center"
-                    // alignItems="flex-end"
+                // alignItems="flex-end"
                 >
                     <Grid item >
                         <Typography align='right' sx={{
