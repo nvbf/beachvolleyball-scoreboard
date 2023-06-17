@@ -144,7 +144,7 @@ export function MatchView({ match, tournamentSlug }: MatchViewProps) {
                                     fontWeight: (match.currentSetScore["HOME"] || 0) === 2 ? 'bold' : ""
                                 }}
                             >
-                                {getInitials(name1)} / {getInitials(name2)}
+                                {getInitials(match.homeTeam.player1)} / {getInitials(match.homeTeam.player2)}
                             </Typography>
                         </Grid>
                         <Grid item xs={4}>
@@ -158,7 +158,7 @@ export function MatchView({ match, tournamentSlug }: MatchViewProps) {
                                     fontWeight: (match.currentSetScore["AWAY"] || 0) === 2 ? 'bold' : ""
                                 }}
                             >
-                                {getInitials(name3)} / {getInitials(name4)}
+                                {getInitials(match.awayTeam.player1)} / {getInitials(match.awayTeam.player2)}
                             </Typography>
                         </Grid>
                         <Grid item xs={4}>

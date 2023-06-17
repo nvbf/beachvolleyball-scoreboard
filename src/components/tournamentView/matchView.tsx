@@ -45,6 +45,7 @@ export function MatchView({ match, tournamentSlug }: MatchViewProps) {
                 borderLeftWidth: 10,
                 borderBottomWidth: 3,
                 marginBottom: 1,
+                padding: 1,
                 borderImage: "linear-gradient(to right, " + getStatusColor(getMatchState(match)) + ", black) 1",
                 // borderLeftWidth: 10,
             }}
@@ -54,19 +55,21 @@ export function MatchView({ match, tournamentSlug }: MatchViewProps) {
                 spacing={0}
                 rowSpacing={0}
                 columns={12}
+                marginBottom={0}
                 justifyContent="space-evenly"
                 alignItems="center"
             >
-                <Grid item xs={12} sx={{ textAlign: "right" }}>
+                <Grid item md={8} xs={12} sx={{ textAlign: "left" }}>
                     <Grid
                         container
                         spacing={0}
                         justifyContent="flex-end"
                         alignItems="center"
                         columns={12}
-                        padding={1}
+                        padding={0}
+                        marginBottom={0}
                     >
-                        <Grid item xs={4}>
+                        <Grid item md={6} xs={6}>
                             <Typography
                                 align="left"
                                 sx={{
@@ -82,7 +85,7 @@ export function MatchView({ match, tournamentSlug }: MatchViewProps) {
                             </Typography>
 
                         </Grid>
-                        <Grid item xs={4}>
+                        <Grid item md={6} xs={6}>
                             <Typography
                                 align="left"
                                 sx={{
@@ -95,22 +98,7 @@ export function MatchView({ match, tournamentSlug }: MatchViewProps) {
                                 {match.matchCategory + " - " + (match.matchGroup !== "" ? (" Group " + match.matchGroup) : match.name)}
                             </Typography>
                         </Grid>
-                        <Grid item xs={4}>
-                            <Typography
-                                align="left"
-                                sx={{
-                                    variant: "button",
-                                    lineHeight: 1,
-                                    paddingTop: 1,
-                                    paddingX: 1,
-                                }}
-                            >
-                                {match.arenaName}
-                            </Typography>
-                        </Grid>
-
-
-                        <Grid item xs={4}>
+                        <Grid item md={6} xs={6}>
                             <Typography
                                 align="left"
                                 sx={{
@@ -124,7 +112,7 @@ export function MatchView({ match, tournamentSlug }: MatchViewProps) {
                                 {getInitials(match.homeTeam.player1)} / {getInitials(match.homeTeam.player2)}
                             </Typography>
                         </Grid>
-                        <Grid item xs={4}>
+                        <Grid item md={6} xs={6}>
                             <Typography
                                 align="left"
                                 sx={{
@@ -138,7 +126,32 @@ export function MatchView({ match, tournamentSlug }: MatchViewProps) {
                                 {getInitials(match.awayTeam.player1)} / {getInitials(match.awayTeam.player2)}
                             </Typography>
                         </Grid>
-                        <Grid item xs={4}>
+                    </Grid>
+                </Grid>
+                <Grid item md={4} xs={12} sx={{ textAlign: "right" }}>
+                    <Grid
+                        container
+                        spacing={0}
+                        justifyContent="flex-end"
+                        alignItems="center"
+                        columns={12}
+                        marginBottom={0}
+                        padding={0}
+                    >
+                        <Grid item md={12} xs={6}>
+                            <Typography
+                                align="left"
+                                sx={{
+                                    variant: "button",
+                                    lineHeight: 1,
+                                    paddingTop: 1,
+                                    paddingX: 1,
+                                }}
+                            >
+                                {match.arenaName}
+                            </Typography>
+                        </Grid>
+                        <Grid item md={12} xs={6}>
                             {(match.scoreboardID && match.currentScore && match.hasWinner) && <Typography align='left' sx={{
                                 variant: 'button', lineHeight: 1, paddingTop: 1, paddingX: 1
                             }}>
