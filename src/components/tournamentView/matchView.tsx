@@ -9,8 +9,8 @@ import { getInitials } from "../../util/names";
 import { AdminMatch, MatchState } from "../tournamentAdmin/types";
 import QRCode from "qrcode.react";
 import { getDelayString, getLateStart, timestampToString } from "../../util/time";
-import { getMatchState, getStatusColor } from "./viewMatchFunctions";
 import { TeamType } from "../types";
+import { getMatchState, getStatusColor } from "../tournamentAdmin/adminMatchFunctions";
 
 interface MatchViewProps {
     match: AdminMatch;
