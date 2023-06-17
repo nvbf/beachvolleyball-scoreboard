@@ -132,6 +132,19 @@ export const setScoreboardId = async (
   });
 }
 
+export const setStartTime = async (
+  tournamentId: string,
+  matchId: string,
+  startTime: number
+) => {
+  let db = getFirestore()
+  const docRef = doc(db, "Tournaments", tournamentId, "Matches", matchId);
+
+  await updateDoc(docRef, {
+    MatchStartTimestamp: startTime
+  });
+}
+
 export const setScoreboardScore = async (
   tournamentId: string,
   matchId: string,

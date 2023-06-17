@@ -3,7 +3,7 @@ import { all, call, CallEffect, delay, put, PutEffect, select, SelectEffect, tak
 import { TeamType, Team, Event, Match } from '../../components/types';
 import { addAwayTeam, AddEventPayload, addHomeTeam, addTeamError, evaluateEvents, insertEvent, MatchActionTypes, publishScores, storeEvents, storeMatch, undoLastEvent } from "./actions";
 import { db } from '../../firebase/firebase-config';
-import { addEventToMatchToFirestore, getEventsFromMatch, getMatch, initNewMatch, setMatchFinalized, setScoreboardId, setScoreboardScore } from '../../firebase/match_service';
+import { addEventToMatchToFirestore, getEventsFromMatch, getMatch, initNewMatch, setMatchFinalized, setScoreboardId, setScoreboardScore, setStartTime } from '../../firebase/match_service';
 import { v4 } from 'uuid';
 import { RootState } from '../store';
 import { matchState } from '../types';
@@ -69,6 +69,9 @@ export function* publishScoresToTournaments(action: PayloadAction): Generator<Ca
       matchState.theCurrentSets, matchState.currentSetScore
     )
 
+    if (matchState.currentSet === 1 && (matchState.currentScore[TeamType.Home] + matchState.currentScore[TeamType.Away]) === 1) {
+      yield call(setStartTime, matchState.tournamentId, matchState.matchId, matchState.startTime)
+    }
 
   } catch (error) {
     console.log("Error when publishing scores");

@@ -6,10 +6,10 @@ import {
     QrCode,
 } from '@mui/icons-material';
 import { getInitials } from "../../util/names";
-import { AdminMatch, MatchState } from "./types";
+import { AdminMatch, MatchState } from "../tournamentAdmin/types";
 import QRCode from "qrcode.react";
 import { getDelayString, getLateStart, timestampToString } from "../../util/time";
-import { getMatchState, getStatusColor } from "./adminMatchFunctions";
+import { getMatchState, getStatusColor } from "./viewMatchFunctions";
 import { TeamType } from "../types";
 
 interface MatchViewProps {
@@ -18,31 +18,6 @@ interface MatchViewProps {
 }
 
 export function MatchView({ match, tournamentSlug }: MatchViewProps) {
-    const [open, setOpen] = useState(false);
-    const [activeQrCode, setActiveQrCode] = useState("");
-
-    const handleClose = () => {
-        setOpen(false);
-    };
-
-    const handleOpen = (url: React.SetStateAction<string>) => {
-        setActiveQrCode(url);
-        setOpen(true);
-    };
-
-    const awayTeamName = match.awayTeam?.name?.replace(/^\#\d+\s/, "");
-    const homeTeamName = match.homeTeam?.name?.replace(/^\#\d+\s/, "");
-    const [name1, name2] = homeTeamName ? homeTeamName.split(" / ") : ["", ""];
-    const [name3, name4] = awayTeamName ? awayTeamName.split(" / ") : ["", ""];
-
-    const url = match.scoreboardID ? `https://${window.location.hostname
-        }/match/${match.scoreboardID}` : `https://${window.location.hostname
-        }/match?name1=${encodeURIComponent(name1.trim())}&name2=${encodeURIComponent(
-            name2.trim()
-        )}&name3=${encodeURIComponent(name3.trim())}&name4=${encodeURIComponent(
-            name4.trim()
-        )}&matchId=${match.matchId}&tournamentId=${tournamentSlug}`;
-    ("");
 
     function getProfixioSets(sets: { [key: string]: number; }[], team: TeamType): number {
         let score = 0;
@@ -69,6 +44,7 @@ export function MatchView({ match, tournamentSlug }: MatchViewProps) {
                 border: 2,
                 borderLeftWidth: 10,
                 borderBottomWidth: 3,
+                marginBottom: 1,
                 borderImage: "linear-gradient(to right, " + getStatusColor(getMatchState(match)) + ", black) 1",
                 // borderLeftWidth: 10,
             }}
@@ -81,13 +57,14 @@ export function MatchView({ match, tournamentSlug }: MatchViewProps) {
                 justifyContent="space-evenly"
                 alignItems="center"
             >
-                <Grid item md={11} xs={10} sx={{ textAlign: "right" }}>
+                <Grid item xs={12} sx={{ textAlign: "right" }}>
                     <Grid
                         container
-                        spacing={1}
+                        spacing={0}
                         justifyContent="flex-end"
                         alignItems="center"
                         columns={12}
+                        padding={1}
                     >
                         <Grid item xs={4}>
                             <Typography
@@ -144,7 +121,7 @@ export function MatchView({ match, tournamentSlug }: MatchViewProps) {
                                     fontWeight: (match.currentSetScore["HOME"] || 0) === 2 ? 'bold' : ""
                                 }}
                             >
-                                {getInitials(name1)} / {getInitials(name2)}
+                                {getInitials(match.homeTeam.player1)} / {getInitials(match.homeTeam.player2)}
                             </Typography>
                         </Grid>
                         <Grid item xs={4}>
@@ -158,7 +135,7 @@ export function MatchView({ match, tournamentSlug }: MatchViewProps) {
                                     fontWeight: (match.currentSetScore["AWAY"] || 0) === 2 ? 'bold' : ""
                                 }}
                             >
-                                {getInitials(name3)} / {getInitials(name4)}
+                                {getInitials(match.awayTeam.player1)} / {getInitials(match.awayTeam.player2)}
                             </Typography>
                         </Grid>
                         <Grid item xs={4}>
@@ -195,30 +172,7 @@ export function MatchView({ match, tournamentSlug }: MatchViewProps) {
 
                     </Grid>
                 </Grid>
-                <Grid item md={1} xs={2} sx={{ textAlign: "right" }}>
-                    <Box display="flex" justifyContent="center">
-                        <Button
-                            variant="outlined"
-                            sx={{
-                                border: 0, borderRadius: '12px', color: 'black', borderColor: 'black',
-                                '&:hover': {
-                                    border: 0, borderRadius: '12px', color: 'black', borderColor: 'black', backgroundColor: "gray"
-                                }
-                            }}
-                            onClick={() => handleOpen(url)}
-                        >
-                            {!match.scoreboardID && <QrCodeScanner sx={{ fontSize: 64 }} />}
-                            {match.scoreboardID && <QrCode sx={{ fontSize: 64 }} />}
-
-                        </Button>
-                    </Box>
-                </Grid>
             </Grid>
-            <Dialog open={open} onClose={handleClose}>
-                <Box p={3}>
-                    <QRCode value={activeQrCode} size={Math.min(512, window.outerWidth - 100)} />
-                </Box>
-            </Dialog>
         </Box>
     );
 }

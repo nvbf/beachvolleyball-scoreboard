@@ -8,6 +8,7 @@ import { fetchMatchesRequest, updateMatch } from "../store/tournamentAdmin/actio
 import { parseAdminMatch } from "../components/tournamentAdmin/adminMatchFunctions";
 import { AdminMatch } from "../components/tournamentAdmin/types";
 import { TeamType } from "../components/types";
+import { getInitials } from "../util/names";
 
 const TournamentOverlay = () => {
   const location = useLocation();
@@ -106,10 +107,10 @@ const TournamentOverlay = () => {
             padding={1}
           >
             <Grid item>
-              {currentMatch ? currentMatch.homeTeam.name : ""}
+              {currentMatch ? `${getInitials(currentMatch.homeTeam.player1)} / ${getInitials(currentMatch.homeTeam.player2)}`  : ""}
             </Grid>
             <Grid item>
-              {currentMatch ? currentMatch.awayTeam.name : ""}
+              {currentMatch ? `${getInitials(currentMatch.awayTeam.player1)} / ${getInitials(currentMatch.awayTeam.player2)}` : ""}
             </Grid>
           </Grid>
         </Grid>

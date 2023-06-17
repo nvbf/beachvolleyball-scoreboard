@@ -4,11 +4,14 @@ export interface AdminMatch {
     awayTeam: {
         isWinner: boolean;
         name: string;
+        player1: string;
+        player2: string;
     };
     currentScore: { [key: string]: number }[];
     currentSetScore: { [key: string]: number };
     sets: { [key: string]: number }[];
     startTime: number;
+    startTimestamp: number;
     arenaName: string;
     hasWinner: boolean;
     isFinalized: boolean;
@@ -17,6 +20,8 @@ export interface AdminMatch {
     homeTeam: {
         isWinner: boolean;
         name: string;
+        player1: string;
+        player2: string;
     };
     matchCategory: string;
     matchGroup: string;

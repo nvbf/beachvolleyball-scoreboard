@@ -60,8 +60,6 @@ export const matchesReducer = createReducer<matchesState>(initState, {
     },
 
     [TournamentAdminTypes.UPDATE_MATCH]: (state: matchesState, action: updateMatchType) => {
-        console.log("this should be updated: " + state.matches[action.payload.matchId])
         state.matches[action.payload.matchId] = action.payload.match
-        console.log("with this:: " + action.payload.match)
     },
 })

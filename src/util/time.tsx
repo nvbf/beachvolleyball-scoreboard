@@ -30,6 +30,19 @@ export function getDelayString(timestamp: number) {
     let hours = elapsed.hours().toString()
     let minutes = elapsed.minutes().toString().padStart(2, '0');
 
-    const formattedTime = `(+${hours}:${minutes} late)`
+    const formattedTime = ` (+${hours}:${minutes} late)`
+    return formattedTime;
+}
+
+export function getLateStart(startTime: number, started: number) {
+    if (started < startTime) {
+        return "";
+    }
+
+    const elapsed = startTime === 0 ? moment.duration(0) : moment.duration(started - startTime)
+    let hours = elapsed.hours().toString()
+    let minutes = elapsed.minutes().toString().padStart(2, '0');
+
+    const formattedTime = ` (+${hours}:${minutes} late)`
     return formattedTime;
 }

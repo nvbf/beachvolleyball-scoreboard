@@ -3,15 +3,22 @@ import { AdminMatch, MatchState } from "./types";
 import { getInitials } from "../../util/names";
 
 export function parseAdminMatch(data: DocumentData): AdminMatch {
+    const awayTeamName = data.AwayTeam?.Name?.replace(/^\#\d+\s/, "");
+    const homeTeamName = data.HomeTeam?.Name?.replace(/^\#\d+\s/, "");
+    const [name1, name2] = homeTeamName ? homeTeamName.split(" / ") : ["", ""];
+    const [name3, name4] = awayTeamName ? awayTeamName.split(" / ") : ["", ""];
     return {
         matchId: +(data.Number),
         awayTeam: {
             isWinner: data.AwayTeam?.IsWinner || false,
-            name: data.AwayTeam?.Name
+            name: data.AwayTeam?.Name,
+            player1: name1,
+            player2: name2
         },
         currentScore: data.CurrentScore || { ["HOME"]: 0, ["AWAY"]: 0 },
         currentSetScore: data.CurrentSetScore || [],
         startTime: convertToTimestamp(data.Time, data.Date),
+        startTimestamp: data.MatchStartTimestamp || 0,
         arenaName: data.Field?.Name || "",
         isStarted: data.IsStarted,
         isFinalized: data.IsFinalized,
@@ -19,7 +26,9 @@ export function parseAdminMatch(data: DocumentData): AdminMatch {
         referee: parseTeamString(data.RefereesTX[0]?.Text || ""),
         homeTeam: {
             isWinner: data.HomeTeam?.IsWinner || false,
-            name: data.HomeTeam?.Name || ""
+            name: data.HomeTeam?.Name || "",
+            player1: name3,
+            player2: name4
         },
         matchCategory: data.MatchCategory?.CategoryCode || "",
         matchGroup: data.MatchGroup?.Name || "",
