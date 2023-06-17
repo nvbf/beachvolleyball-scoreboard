@@ -1,3 +1,5 @@
+import moment from "moment";
+
 export function timestampToString(timestamp: number) {
     // Create a new Date object from the timestamp
     const date = new Date(timestamp);
@@ -16,3 +18,18 @@ export function timestampToString(timestamp: number) {
     return formattedTime;
 }
 
+export function getDelayString(timestamp: number) {
+    // Create a new Date object from the timestamp
+    const date = new Date(timestamp);
+    let now = Date.now();
+    if (now < timestamp) {
+        return "";
+    }
+
+    const elapsed = timestamp === 0 ? moment.duration(0) : moment.duration(now - timestamp)
+    let hours = elapsed.hours().toString()
+    let minutes = elapsed.minutes().toString().padStart(2, '0');
+
+    const formattedTime = `(+${hours}:${minutes} late)`
+    return formattedTime;
+}

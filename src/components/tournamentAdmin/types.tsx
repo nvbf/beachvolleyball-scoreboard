@@ -28,5 +28,5 @@ export enum MatchState {
     Finished = "FINISHED",
     Reported = "REPORTED",
     Ongoing = "ONGOING",
-    Upcomming = "UPCOMMING",
+    Upcoming = "UPCOMING",
 }

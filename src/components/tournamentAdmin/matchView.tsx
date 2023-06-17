@@ -8,7 +8,7 @@ import {
 import { getInitials } from "../../util/names";
 import { AdminMatch, MatchState } from "./types";
 import QRCode from "qrcode.react";
-import { timestampToString } from "../../util/time";
+import { getDelayString, timestampToString } from "../../util/time";
 import { getMatchState, getStatusColor } from "./adminMatchFunctions";
 
 interface MatchViewProps {
@@ -80,7 +80,7 @@ export function MatchView({ match, tournamentSlug }: MatchViewProps) {
                                     paddingX: 1,
                                 }}
                             >
-                                #{match.matchId} | {timestampToString(match.startTime)}
+                                #{match.matchId} | {timestampToString(match.startTime)} {(getMatchState(match) === MatchState.Upcoming) && getDelayString(match.startTime)}
 
                             </Typography>
 

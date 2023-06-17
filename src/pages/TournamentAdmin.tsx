@@ -15,10 +15,11 @@ const TournamentAdmin = () => {
   const [fetchedMatches, setFetchedMatches] = useState(false);
   const [createdCallbacks, setCreatedCallbacks] = useState(false);
 
-  const [seeUpcomming, setSeeUpcomming] = useState(true);
+  const [seeUpcoming, setSeeUpcoming] = useState(true);
   const [seeOngoing, setSeeOngoing] = useState(true);
   const [seeFinished, setSeeFinished] = useState(true);
   const [seeReported, setSeeReported] = useState(false);
+  const [descending, setDescending] = useState(true);
 
   useEffect(() => {
     // Define your async function
@@ -71,7 +72,7 @@ const TournamentAdmin = () => {
     setCreatedCallbacks(true)
   }
 
-  const renderMatches = (matches: AdminMatch[], tournamentSlug: string) => {
+  const renderMatches = (matches: AdminMatch[], tournamentSlug: string, descending: boolean) => {
     return (
       <Grid container
         spacing={0}
@@ -80,8 +81,8 @@ const TournamentAdmin = () => {
         justifyContent="space-evenly"
         alignItems="center">
 
-        {matches.sort((a, b) => a.startTime - b.startTime).filter(e => {
-          return seeUpcomming && isUpcomming(e) ||
+        {matches.sort((a, b) => (descending ? (a.startTime - b.startTime) : (b.startTime - a.startTime))).filter(e => {
+          return seeUpcoming && isUpcoming(e) ||
             seeOngoing && isOngoing(e) ||
             seeFinished && isFinished(e) ||
             seeReported && isReported(e)
@@ -94,8 +95,8 @@ const TournamentAdmin = () => {
     );
   };
 
-  const isUpcomming = (match: AdminMatch) => {
-    return getMatchState(match) === MatchState.Upcomming
+  const isUpcoming = (match: AdminMatch) => {
+    return getMatchState(match) === MatchState.Upcoming
   }
 
   const isOngoing = (match: AdminMatch) => {
@@ -119,18 +120,18 @@ const TournamentAdmin = () => {
       marginTop={1}
     >
       <Grid item >
-        <Button variant={seeUpcomming ? "contained" : "outlined"}
+        <Button variant={seeUpcoming ? "contained" : "outlined"}
           sx={{
-            backgroundColor: seeUpcomming ? getStatusColor(MatchState.Upcomming) : "",
-            borderColor: !seeUpcomming ? getStatusColor(MatchState.Upcomming) : "",
+            backgroundColor: seeUpcoming ? getStatusColor(MatchState.Upcoming) : "",
+            borderColor: !seeUpcoming ? getStatusColor(MatchState.Upcoming) : "",
             color: "#333333",
             '&:hover': {
-              backgroundColor: seeUpcomming ? getStatusColor(MatchState.Upcomming) : "",
-              borderColor: !seeUpcomming ? getStatusColor(MatchState.Upcomming) : "",
+              backgroundColor: seeUpcoming ? getStatusColor(MatchState.Upcoming) : "",
+              borderColor: !seeUpcoming ? getStatusColor(MatchState.Upcoming) : "",
             }
           }}
-          onClick={() => setSeeUpcomming(!seeUpcomming)}>
-          upcomming
+          onClick={() => setSeeUpcoming(!seeUpcoming)}>
+          upcoming
         </Button>
       </Grid>
       <Grid item >
@@ -180,8 +181,23 @@ const TournamentAdmin = () => {
           reported
         </Button>
       </Grid>
+      <Grid item >
+        <Button variant={descending ? "contained" : "outlined"}
+          sx={{
+            backgroundColor: descending ? "#999999" : "",
+            borderColor: !descending ? "#999999" : "",
+            color: "#333333",
+            '&:hover': {
+              backgroundColor: descending ? "#999999" : "",
+              borderColor: !descending ? "#999999" : "",
+            }
+          }}
+          onClick={() => setDescending(!descending)}>
+          descending
+        </Button>
+      </Grid>
       <Grid item xs={12}>
-        {renderMatches(matchesList, tournamentSlug)}
+        {renderMatches(matchesList, tournamentSlug, descending)}
       </Grid>
     </Grid>
   );

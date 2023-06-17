@@ -64,7 +64,7 @@ export function getMatchState(match: AdminMatch): MatchState {
     } else if (match.isStarted) {
         return MatchState.Ongoing
     } else {
-        return MatchState.Upcomming
+        return MatchState.Upcoming
     }
 }
 
