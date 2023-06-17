@@ -80,7 +80,7 @@ const TournamentAdmin = () => {
         justifyContent="space-evenly"
         alignItems="center">
 
-        {matches.filter(e => {
+        {matches.sort((a, b) => a.startTime - b.startTime).filter(e => {
           return seeUpcomming && isUpcomming(e) ||
             seeOngoing && isOngoing(e) ||
             seeFinished && isFinished(e) ||

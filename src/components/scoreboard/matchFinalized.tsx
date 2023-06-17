@@ -50,6 +50,22 @@ export function MatchFinalized() {
                     </Grid>
                 </Grid>
             </Grid>
+            <Grid item xs={12}>
+                <Grid container
+                    columnSpacing={2}
+                    columns={12}
+                    sx={{ alignSelf: 'center', textAlign: 'center' }}
+                >
+
+                    <Grid item xs={12} sx={{ textAlign: 'center' }}>
+                        <Typography sx={{
+                            fontSize: 18,
+                            fontWeight: (match.currentSetScore[TeamType.Away] || 0) === 2 ? 'bold' : ""
+
+                        }}> Match: #{match.matchId}</Typography>
+                    </Grid>
+                </Grid>
+            </Grid>
             <Grid item xs={12} >
                 <Grid container
                     spacing={2}

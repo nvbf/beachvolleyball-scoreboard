@@ -70,7 +70,7 @@ export function ScoreboardHeader() {
              {match.userMessage.toUpperCase()}
             </Typography>
           </Grid>}
-          {match.finished && <Grid item xs={6}>
+          {(getLastValidEvent(match.events)?.eventType === EventType.MatchFinalized || false) && <Grid item xs={6}>
             <Typography align='center' sx={{ fontSize: "1.2rem", variant: 'button', lineHeight: 1, paddingTop: 1, paddingX: 1 }}>
               {"match done!".toUpperCase()}
             </Typography>
