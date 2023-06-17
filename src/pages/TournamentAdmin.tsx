@@ -38,7 +38,7 @@ const TournamentAdmin = () => {
     }
 
     // Then call it every 30 seconds
-    const intervalId = setInterval(fetchData, 90000, tournamentSlug);
+    const intervalId = setInterval(fetchData, 360000, tournamentSlug);
 
     // Clean up the interval on unmount
     return () => clearInterval(intervalId);

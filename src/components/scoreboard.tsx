@@ -203,6 +203,7 @@ export const getServer = (events: Event[], team: TeamType): number => {
           break;
         case EventType.FirstTeamServer:
           servingTeam = event.team;
+          firstSwitch = true;
           break;
       }
       lastServingTeam = servingTeam;
