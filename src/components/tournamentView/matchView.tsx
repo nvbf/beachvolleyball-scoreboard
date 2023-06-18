@@ -69,7 +69,7 @@ export function MatchView({ match, tournamentSlug }: MatchViewProps) {
                         padding={0}
                         marginBottom={0}
                     >
-                        <Grid item md={6} xs={6}>
+                        <Grid item md={6} xs={8}>
                             <Typography
                                 align="left"
                                 sx={{
@@ -85,7 +85,7 @@ export function MatchView({ match, tournamentSlug }: MatchViewProps) {
                             </Typography>
 
                         </Grid>
-                        <Grid item md={6} xs={6}>
+                        <Grid item md={6} xs={4}>
                             <Typography
                                 align="left"
                                 sx={{
@@ -138,7 +138,7 @@ export function MatchView({ match, tournamentSlug }: MatchViewProps) {
                         marginBottom={0}
                         padding={0}
                     >
-                        <Grid item md={12} xs={6}>
+                        <Grid item md={12} xs={4}>
                             <Typography
                                 align="left"
                                 sx={{
@@ -151,7 +151,7 @@ export function MatchView({ match, tournamentSlug }: MatchViewProps) {
                                 {match.arenaName}
                             </Typography>
                         </Grid>
-                        <Grid item md={12} xs={6}>
+                        <Grid item md={12} xs={8}>
                             {(match.scoreboardID && match.currentScore && match.hasWinner) && <Typography align='left' sx={{
                                 variant: 'button', lineHeight: 1, paddingTop: 1, paddingX: 1
                             }}>

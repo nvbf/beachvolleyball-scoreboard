@@ -12,8 +12,8 @@ export function parseAdminMatch(data: DocumentData): AdminMatch {
         awayTeam: {
             isWinner: data.AwayTeam?.IsWinner || false,
             name: data.AwayTeam?.Name,
-            player1: name1.trim(),
-            player2: name2.trim()
+            player1: name3.trim(),
+            player2: name4.trim()
         },
         currentScore: data.CurrentScore || { ["HOME"]: 0, ["AWAY"]: 0 },
         currentSetScore: data.CurrentSetScore || [],
@@ -27,8 +27,8 @@ export function parseAdminMatch(data: DocumentData): AdminMatch {
         homeTeam: {
             isWinner: data.HomeTeam?.IsWinner || false,
             name: data.HomeTeam?.Name || "",
-            player1: name3.trim(),
-            player2: name4.trim()
+            player1: name1.trim(),
+            player2: name2.trim()
         },
         matchCategory: data.MatchCategory?.CategoryCode || "",
         matchGroup: data.MatchGroup?.Name || "",
