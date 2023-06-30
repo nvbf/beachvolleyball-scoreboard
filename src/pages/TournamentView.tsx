@@ -11,7 +11,7 @@ import { AdminMatch, MatchState } from "../components/tournamentAdmin/types";
 
 const TournamentView = () => {
   const params = useParams();
-  const tournamentSlug: string = params.tournamentSlug ? params.tournamentSlug : "oslo_masters_l_23"
+  const tournamentSlug: string = params.tournamentSlug ? params.tournamentSlug : "oddanesand_open_23"
   const [fetchedMatches, setFetchedMatches] = useState(false);
   const [createdCallbacks, setCreatedCallbacks] = useState(false);
 
