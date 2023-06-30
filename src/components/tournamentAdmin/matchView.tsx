@@ -30,18 +30,13 @@ export function MatchView({ match, tournamentSlug }: MatchViewProps) {
         setOpen(true);
     };
 
-    const awayTeamName = match.awayTeam?.name?.replace(/^\#\d+\s/, "");
-    const homeTeamName = match.homeTeam?.name?.replace(/^\#\d+\s/, "");
-    const [name1, name2] = homeTeamName ? homeTeamName.split(" / ") : ["", ""];
-    const [name3, name4] = awayTeamName ? awayTeamName.split(" / ") : ["", ""];
-
     const url = match.scoreboardID ? `https://${window.location.hostname
         }/match/${match.scoreboardID}` : `https://${window.location.hostname
-        }/match?name1=${encodeURIComponent(name1.trim())}&name2=${encodeURIComponent(
-            name2.trim()
-        )}&name3=${encodeURIComponent(name3.trim())}&name4=${encodeURIComponent(
-            name4.trim()
-        )}&matchId=${match.matchId}&tournamentId=${tournamentSlug}`;
+        }/match?name1=${encodeURIComponent(match.homeTeam.player1)
+    }&name2=${encodeURIComponent(match.homeTeam.player2)
+    }&name3=${encodeURIComponent(match.awayTeam.player1)
+    }&name4=${encodeURIComponent(match.awayTeam.player2)
+    }&matchId=${match.matchId}&tournamentId=${tournamentSlug}`;
     ("");
 
     function getProfixioSets(sets: { [key: string]: number; }[], team: TeamType): number {
