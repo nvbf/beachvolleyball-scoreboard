@@ -152,7 +152,7 @@ export function MatchView({ match, tournamentSlug }: MatchViewProps) {
                             </Typography>
                         </Grid>
                         <Grid item md={12} xs={8}>
-                            {(match.scoreboardID && match.currentScore && match.hasWinner) && <Typography align='left' sx={{
+                            {(match.hasWinner) && <Typography align='left' sx={{
                                 variant: 'button', lineHeight: 1, paddingTop: 1, paddingX: 1
                             }}>
                                 <span key={"set"}>
@@ -176,7 +176,7 @@ export function MatchView({ match, tournamentSlug }: MatchViewProps) {
                                     </span>
                                 ))}
                             </Typography>}
-                            {!(match.scoreboardID && match.currentScore) && <Typography align='left' sx={{
+                            {!(match.scoreboardID && match.currentScore || match.hasWinner) && <Typography align='left' sx={{
                                 variant: 'button', lineHeight: 1, paddingTop: 1, paddingX: 1
                             }}>
                                 Ref: {match.referee}
