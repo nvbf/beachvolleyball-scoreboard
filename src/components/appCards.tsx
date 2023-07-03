@@ -26,10 +26,6 @@ interface AppCardsProps {
     size: number,
 }
 
-const IMAGES = {
-    cardImage: new URL('../static/img/match.jpg', import.meta.url).href
-}
-
 export function AppCards({ title, subHeader, path, iconName, size }: AppCardsProps) {
     return (
         <Grid xs={12} md={6} item>
