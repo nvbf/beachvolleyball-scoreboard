@@ -14,6 +14,7 @@ import Clock from "../clock";
 import { createUndoEvent, getLastValidEvent } from "../eventFunctions";
 import { EventType } from '../types';
 import TimeElapsed from '../timeElaped';
+import logo from '../../osvb_full_logo.svg';
 
 export function ScoreboardHeader() {
   const match = useAppSelector((state) => state.match);
@@ -79,9 +80,7 @@ export function ScoreboardHeader() {
             </Typography>
           </Grid>}
           <Grid item xs={3}>
-            <Button variant="outlined" onClick={toggleSettings} sx={{ border: 2, borderRadius: '12px', color: 'black', borderColor: 'black' }}>
-              <Settings sx={{ fontSize: 42 }} />
-            </Button>
+            <img src={logo} alt="logo" style={{ height: '3rem' }} />
           </Grid>
         </Grid>
       </Grid>

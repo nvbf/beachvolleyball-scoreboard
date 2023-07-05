@@ -18,6 +18,7 @@ const iconSize = 80
 function StartPage() {
   return (
     <div>
+
       {/* <ThemeProvider> */}
       <div>
         <AppBarMain />

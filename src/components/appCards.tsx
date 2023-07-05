@@ -7,11 +7,6 @@ import SportsVolleyballIcon from '@mui/icons-material/SportsVolleyball';
 import SportsHandballIcon from '@mui/icons-material/SportsHandball';
 import TimerIcon from '@mui/icons-material/Timer';
 
-
-
-
-
-
 import {
     Card,
     CardActionArea,
