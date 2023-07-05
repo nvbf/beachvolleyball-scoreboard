@@ -14,7 +14,7 @@ import Clock from "../clock";
 import { createUndoEvent, getLastValidEvent } from "../eventFunctions";
 import { EventType } from '../types';
 import TimeElapsed from '../timeElaped';
-import logo from '../../osvb_full_logo.svg';
+import logo from '../../osvb_logo_hi_res.png';
 
 export function ScoreboardHeader() {
   const match = useAppSelector((state) => state.match);

@@ -2,7 +2,7 @@ import React from "react";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import logo from '../osvb_full_logo.svg';
+import logo from '../osvb_logo_hi_res.png';
 
 
 /**
