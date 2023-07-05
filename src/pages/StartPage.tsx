@@ -35,10 +35,6 @@ function StartPage() {
             {" "}We offer you all of the above for free! You can also create a
             tournament with livescore{" "}
           </p>
-          <p>
-            {" "}PS: want to go hardcore and setup streaming also? see{" "}
-            <a href="https://volleystream.no">Volleystream.no</a>{" "}
-          </p>
         </div>
         <main>
           <Grid container
