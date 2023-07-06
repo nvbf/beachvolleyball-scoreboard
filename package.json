@@ -27,7 +27,6 @@
     "vite-plugin-svgr": "^3.2.0"
   },
   "devDependencies": {
-    "@types/firebase": "^3.2.1",
     "@types/node": "^20.3.3",
     "@types/react": "^18.0.31",
     "@types/react-color": "^3.0.6",
