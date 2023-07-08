@@ -5,7 +5,7 @@ import { RootState } from "./../store/store"; // update the path to your store f
 import MatchView from "../components/tournamentView/matchView";
 import { Box, Button, Grid } from "@mui/material";
 import { useParams } from "react-router-dom";
-import { collection, doc, getFirestore, onSnapshot } from "firebase/firestore";
+import { collection, doc, getFirestore, onSnapshot, query, where } from "firebase/firestore";
 import { getMatchState, getStatusColor, parseAdminMatch } from "../components/tournamentAdmin/adminMatchFunctions";
 import { AdminMatch, MatchState } from "../components/tournamentAdmin/types";
 
@@ -53,23 +53,29 @@ const TournamentView = () => {
   const matchesList = Object.values(matches);
 
   // Fetch the matches when the component mounts
-  if (!fetchedMatches && tournamentSlug) {
-    dispatch(fetchMatchesRequest(tournamentSlug)); // replace with actual tournamentSlug
-    setFetchedMatches(true)
-  }
+  useEffect(() => {
+
+    if (!fetchedMatches && tournamentSlug) {
+      setFetchedMatches(true)
+      dispatch(fetchMatchesRequest(tournamentSlug)); // replace with actual tournamentSlug
+    }
+  })
 
   if (!createdCallbacks && tournamentSlug) {
-    const matchCollection = collection(db, "Tournaments", tournamentSlug, "Matches");
-    onSnapshot(matchCollection, (querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        let data = doc.data()
+    const currentDate: string = new Date().toISOString().split('T')[0];
+    const q = query(collection(db, "Tournaments", tournamentSlug, "Matches"), where("Date", "==", currentDate), where("HasWinner", "==", false));
+
+    setCreatedCallbacks(true)
+    onSnapshot(q, (querySnapshot) => {
+      querySnapshot.docChanges().forEach((doc) => {
+        let data = doc.doc.data()
         if (data) {
           let updatedMatch = parseAdminMatch(data)
+          console.log("got update for match %s", updatedMatch.matchId)
           dispatch(updateMatch({ match: updatedMatch, matchId: updatedMatch.matchId }))
         }
       });
     });
-    setCreatedCallbacks(true)
   }
 
   const renderMatches = (matches: AdminMatch[], tournamentSlug: string, descending: boolean) => {
