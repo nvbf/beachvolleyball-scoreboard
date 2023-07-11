@@ -5,17 +5,31 @@ export function timestampToString(timestamp: number) {
     const date = new Date(timestamp);
 
     // padStart is used to add leading zeros
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // January is 0!
     const hours = String(date.getHours()).padStart(2, '0');
     const minutes = String(date.getMinutes()).padStart(2, '0');
 
-    const monthNames = ["jan", "feb", "mar", "apr", "may", "jun",
+    const formattedTime = `${hours}:${minutes} - ${date.getDate()}. ${getMonthName(date.getMonth())}`;
+    return formattedTime;
+}
+
+export function dateStringToString(dateString: string) {
+    // Split the dateString into year, month, and day components
+    const [year, month, day] = dateString.split('-');
+
+    // Create a new Date object using the year, month, and day values
+    const date = new Date(Number(year), Number(month) - 1, Number(day));
+
+    // padStart is used to add leading zeros
+    const formattedDate = `${String(date.getDate())}. ${getMonthName(date.getMonth())}`;
+    return formattedDate;
+}
+
+function getMonthName(month: number) {
+    const monthNames = [
+        "jan", "feb", "mar", "apr", "may", "jun",
         "jul", "aug", "sep", "oct", "nov", "dec"
     ];
-
-    const formattedTime = `${hours}:${minutes} - ${day}. ${monthNames[date.getMonth()]}`;
-    return formattedTime;
+    return monthNames[month];
 }
 
 export function getDelayString(timestamp: number) {

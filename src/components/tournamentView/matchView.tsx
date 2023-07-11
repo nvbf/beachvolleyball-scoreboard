@@ -46,7 +46,9 @@ export function MatchView({ match, tournamentSlug }: MatchViewProps) {
                 borderBottomWidth: 3,
                 marginBottom: 1,
                 padding: 1,
-                borderImage: "linear-gradient(to right, " + getStatusColor(getMatchState(match)) + ", black) 1",
+                borderImage: "linear-gradient(to right, " + getStatusColor(
+                    getMatchState(match) === MatchState.Reported ? MatchState.Finished : getMatchState(match)
+                    ) + ", black) 1",
                 // borderLeftWidth: 10,
             }}
         >

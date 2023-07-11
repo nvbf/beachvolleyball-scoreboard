@@ -34,5 +34,9 @@ export type matchState = {
 export type matchesState = {
   matches: { [key: number]: AdminMatch },
   lastUpdated: number,
+  dates: string[],
+  fields: string[],
+  selectedDay: string,
+  selectedCourt: string,
   errorMessage: Error | null,
 }
