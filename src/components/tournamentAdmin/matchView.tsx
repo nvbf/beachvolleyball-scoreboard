@@ -64,6 +64,7 @@ export function MatchView({ match, tournamentSlug }: MatchViewProps) {
                 border: 2,
                 borderLeftWidth: 10,
                 borderBottomWidth: 3,
+                marginBottom: 2,
                 borderImage: "linear-gradient(to right, " + getStatusColor(getMatchState(match)) + ", black) 1",
                 // borderLeftWidth: 10,
             }}
