@@ -3,7 +3,7 @@ import { TeamType } from "../types";
 import Grid from "@mui/material/Grid";
 import { Box, Button, Typography } from "@mui/material";
 import { useAppDispatch, useAppSelector } from '../../store/store';
-import { addEvent, finalizeMatch } from "../../store/match/actions";
+import { addEvent, finalizeMatch } from "../../store/match/reducer";
 import { finalizeMatchEvent } from "../eventFunctions";
 
 

@@ -27,6 +27,12 @@ tasks:
     cmds:
       - npm run build
 
+  test:
+    desc: Test the node app
+    dir: .
+    cmds:
+      - npm test
+
   help:
     desc: Display this help
     silent: true

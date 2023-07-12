@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { useAppSelector, useAppDispatch } from '../../store/store'
-import { addAwayTeam, addHomeTeam, resetTournamentId, setMatchId, setTournamentId } from '../../store/match/actions';
+import { addAwayTeam, addHomeTeam, resetTournamentId, setMatchId, setTournamentId } from '../../store/match/reducer';
 import { Team, TeamType } from '../types';
 import { Grid, Typography } from '@mui/material';
 

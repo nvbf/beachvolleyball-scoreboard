@@ -8,7 +8,7 @@ import {
     Abc,
 } from '@mui/icons-material';
 import { getTextColorFromBackground } from "../../util/color";
-import { addEvent, setTeamColor } from "../../store/match/actions";
+import { addEvent, setTeamColor } from "../../store/match/reducer";
 import { pickTeamColorEvent } from "../eventFunctions";
 
 

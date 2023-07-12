@@ -3,7 +3,7 @@ import { TeamType } from "../types";
 import Grid from "@mui/material/Grid";
 import { Box, Button, Typography } from "@mui/material";
 import { useAppDispatch, useAppSelector } from '../../store/store';
-import { addEvent } from "../../store/match/actions";
+import { addEvent } from "../../store/match/reducer";
 import { pickTeamColorEvent, setClearMessageEvent } from "../eventFunctions";
 import TimeElapsed from "../timeElaped";
 

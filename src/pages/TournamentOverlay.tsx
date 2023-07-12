@@ -4,11 +4,11 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { RootState } from "../store/store";
-import { fetchMatchesRequest, updateMatch } from "../store/tournamentAdmin/action";
 import { parseAdminMatch } from "../components/tournamentAdmin/adminMatchFunctions";
 import { AdminMatch } from "../components/tournamentAdmin/types";
 import { TeamType } from "../components/types";
 import { getInitials } from "../util/names";
+import { fetchMatchesRequest, updateMatch } from "../store/tournamentAdmin/reducer";
 
 const TournamentOverlay = () => {
   const location = useLocation();

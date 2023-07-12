@@ -8,9 +8,7 @@ export type matchState = {
   id: string,
   matchId: string,
   tournamentId: string,
-  checkedDb: boolean,
   finished: boolean,
-  showNotification: boolean,
   switchSide: boolean,
   leftSideTeam: string,
   noMirrorSides: boolean,
@@ -28,15 +26,15 @@ export type matchState = {
   firstServerTeam: string,
   events: Event[],
   shouldUpdate: boolean,
-  errorMessage: Error | null,
+  errorMessage: string,
 }
 
-export type matchesState = {
+export type adminState = {
   matches: { [key: number]: AdminMatch },
   lastUpdated: number,
   dates: string[],
   fields: string[],
   selectedDay: string,
   selectedCourt: string,
-  errorMessage: Error | null,
+  errorMessage: string,
 }

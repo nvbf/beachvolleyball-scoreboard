@@ -1,9 +1,6 @@
-// reducer.tsx
-import { updateMatchType, TournamentAdminTypes, fetchMatchesSuccessType, fetchMatchesFailureType, fetchFieldsSuccessType, fetchDatesSuccessType, chooseCourtType, chooseDayType } from './action';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AdminMatch } from "./../../components/tournamentAdmin/types"
-import { createReducer } from "@reduxjs/toolkit"
-import { matchesState } from '../types';
-
+import { adminState } from '../types';
 
 export interface MatchUpdatePayload {
     matchId: number;
@@ -14,49 +11,61 @@ export interface MatchSuccessPayload {
     matches: AdminMatch[];
 }
 
-const initState: matchesState = {
+const initState: adminState = {
     matches: {},
     dates: [],
     fields: [],
     selectedDay: "all",
     selectedCourt: "all",
-    errorMessage: null,
+    errorMessage: "",
     lastUpdated: 0
 };
 
-export const matchesReducer = createReducer<matchesState>(initState, {
+const adminSlice = createSlice({
+    name: 'admin',
+    initialState: initState,
+    reducers: {
+        fetchMatchesRequest: (state, action: PayloadAction<string>) => { }, // dummy reducer
+        fetchMatchesSuccess: (state, action: PayloadAction<MatchSuccessPayload>) => {
+            const matchesArray: AdminMatch[] = action.payload.matches;
+            state.matches = matchesArray.reduce((obj, match) => ({ ...obj, [match.matchId]: match }), {});
+        },
+        fetchMatchesFailure: (state, action: PayloadAction<string>) => {
+            state.errorMessage = action.payload;
+        },
+        updateMatch: (state, action: PayloadAction<MatchUpdatePayload>) => {
+            state.matches[action.payload.matchId] = action.payload.match;
+        },
+        chooseCourt: (state, action: PayloadAction<string>) => {
+            state.selectedCourt = action.payload;
+        },
+        chooseDay: (state, action: PayloadAction<string>) => {
+            state.selectedDay = action.payload;
+        },
+        fetchMatchDatesSuccess: (state, action: PayloadAction<string[]>) => {
+            let today = new Date().toISOString().split('T')[0];
+            let selectedDay = "all";
+            if (action.payload.includes(today)) {
+                selectedDay = today;
+            }
+            state.dates = action.payload;
+            state.selectedDay = selectedDay;
+        },
+        fetchMatchFieldsSuccess: (state, action: PayloadAction<string[]>) => {
+            state.fields = action.payload;
+        },
+    }
+});
 
-    [TournamentAdminTypes.FETCH_MATCHES_SUCCESS]: (state: matchesState, action: fetchMatchesSuccessType) => {
-        const matchesArray: AdminMatch[] = action.payload.matches;
-        state.matches = matchesArray.reduce((obj, match) => ({ ...obj, [match.matchId]: match }), {});
-    },
+export const {
+    fetchMatchesSuccess,
+    fetchMatchesFailure,
+    fetchMatchesRequest,
+    updateMatch,
+    chooseCourt,
+    chooseDay,
+    fetchMatchDatesSuccess,
+    fetchMatchFieldsSuccess
+} = adminSlice.actions;
 
-    [TournamentAdminTypes.FETCH_MATCHES_FAILURE]: (state: matchesState, action: fetchMatchesFailureType) => {
-        return { ...state, error: action.payload };
-    },
-
-    [TournamentAdminTypes.UPDATE_MATCH]: (state: matchesState, action: updateMatchType) => {
-        state.matches[action.payload.matchId] = action.payload.match
-    },
-
-    [TournamentAdminTypes.CHOOSE_COURT]: (state: matchesState, action: chooseCourtType) => {
-        return { ...state, selectedCourt: action.payload };
-    },
-
-    [TournamentAdminTypes.CHOOSE_DAY]: (state: matchesState, action: chooseDayType) => {
-        return { ...state, selectedDay: action.payload };
-    },
-
-    [TournamentAdminTypes.FETCH_MATCH_DATES_SUCCESS]: (state: matchesState, action: fetchDatesSuccessType) => {
-        let today = new Date().toISOString().split('T')[0]
-        let selectedDay = "all"
-        if (action.payload.includes(today)) {
-            selectedDay = today
-        }
-        return { ...state, dates: action.payload, selectedDay: selectedDay };
-    },
-
-    [TournamentAdminTypes.FETCH_MATCH_FIELDS_SUCCESS]: (state: matchesState, action: fetchFieldsSuccessType) => {
-        return { ...state, fields: action.payload };
-    },
-})
+export default adminSlice.reducer;

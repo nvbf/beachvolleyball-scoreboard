@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 import Button from "@mui/material/Button";
 import React, { useState } from 'react';
-import { addEvent } from '../../store/match/actions';
+import { addEvent } from '../../store/match/reducer';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import { TeamType, Event, EventType } from '../types';
 import Grid from "@mui/material/Grid"
