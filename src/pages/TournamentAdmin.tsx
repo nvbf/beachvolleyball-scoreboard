@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { chooseCourt, chooseDay, fetchMatchesRequest, updateMatch } from "./../store/tournamentAdmin/action"; // update the path
 import { RootState } from "./../store/store"; // update the path to your store file
 import MatchView from "../components/tournamentAdmin/matchView";
 import { Box, Button, Grid } from "@mui/material";
@@ -10,6 +9,7 @@ import { collection, doc, getFirestore, onSnapshot, query, where } from "firebas
 import { getMatchState, getStatusColor, parseAdminMatch } from "../components/tournamentAdmin/adminMatchFunctions";
 import { AdminMatch, MatchState } from "../components/tournamentAdmin/types";
 import { dateStringToString } from "../util/time";
+import { chooseCourt, chooseDay, fetchMatchesRequest, updateMatch } from "../store/tournamentAdmin/reducer";
 
 const TournamentAdmin = () => {
   const params = useParams();
@@ -64,7 +64,7 @@ const TournamentAdmin = () => {
 
   // Retrieve the matches from the Redux store
   const matches = useSelector((state: RootState) => state.matches);
-  const matchesList = Object.values(matches.matches);
+  const matchesList: AdminMatch[] = Object.values(matches.matches);
 
   // Fetch the matches when the component mounts
   if (!fetchedMatches && tournamentSlug) {
@@ -288,7 +288,7 @@ const TournamentAdmin = () => {
             all days
           </Button>
         </Grid>
-        {matches.dates.map((date) => (
+        {matches.dates.map((date: string) => (
           <Grid item key={date}>
             <Button variant={date === matches.selectedDay ? "contained" : "outlined"}
               sx={{
@@ -331,7 +331,7 @@ const TournamentAdmin = () => {
             all courts
           </Button>
         </Grid>
-        {matches.fields.map((court) => (
+        {matches.fields.map((court: string) => (
           <Grid item key={court}>
             <Button variant={court === matches.selectedCourt ? "contained" : "outlined"}
               sx={{

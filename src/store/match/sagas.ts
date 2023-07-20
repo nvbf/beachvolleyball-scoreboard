@@ -1,7 +1,7 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import { all, call, CallEffect, delay, put, PutEffect, select, SelectEffect, takeEvery, takeLatest } from 'redux-saga/effects'
 import { TeamType, Team, Event, Match } from '../../components/types';
-import { addAwayTeam, AddEventPayload, addHomeTeam, addTeamError, evaluateEvents, insertEvent, MatchActionTypes, publishScores, storeEvents, storeMatch, undoLastEvent } from "./actions";
+import { addAwayTeam, addEvent, AddEventPayload, addHomeTeam, addTeamError, checkDb, evaluateEvents, finalizeMatch, initMatch, insertEvent, publishScores, storeEvents, storeMatch, undoEvent, undoLastEvent } from "./reducer";
 import { db } from '../../firebase/firebase-config';
 import { addEventToMatchToFirestore, getEventsFromMatch, getMatch, initNewMatch, setMatchFinalized, setScoreboardId, setScoreboardScore, setStartTime } from '../../firebase/match_service';
 import { v4 } from 'uuid';
@@ -110,7 +110,7 @@ export function* getOldMatch(action: PayloadAction<string>): Generator<CallEffec
     console.log("Error when getting old match");
   }
 }
-export function* undoEvent(action: PayloadAction<AddEventPayload>): Generator<CallEffect | SelectEffect | PutEffect, void, string> {
+export function* undoGivenEvent(action: PayloadAction<AddEventPayload>): Generator<CallEffect | SelectEffect | PutEffect, void, string> {
   try {
     yield put(undoLastEvent())
     console.log("Undo event");
@@ -125,7 +125,7 @@ export function* undoEvent(action: PayloadAction<AddEventPayload>): Generator<Ca
   }
 }
 
-export function* initMatch(action: PayloadAction<Match>): Generator<CallEffect | SelectEffect | PutEffect, void, string> {
+export function* initializeMatch(action: PayloadAction<Match>): Generator<CallEffect | SelectEffect | PutEffect, void, string> {
 
   try {
 
@@ -139,7 +139,7 @@ export function* initMatch(action: PayloadAction<Match>): Generator<CallEffect |
   }
 }
 
-export function* finalizeMatch(action: PayloadAction): Generator<CallEffect | SelectEffect | PutEffect, void, matchState> {
+export function* finalizeEndedMatch(action: PayloadAction): Generator<CallEffect | SelectEffect | PutEffect, void, matchState> {
 
   try {
     const matchState: matchState = yield select(getSomePartOfState);
@@ -156,16 +156,15 @@ export function* finalizeMatch(action: PayloadAction): Generator<CallEffect | Se
 
 export function* matchSagas() {
   yield all([
-    takeEvery(MatchActionTypes.ADD_HOME_TEAM, setHomeTeam),
-    takeEvery(MatchActionTypes.ADD_AWAY_TEAM, setAwayTeam),
-    takeEvery(MatchActionTypes.ADD_EVENT, pushNewEvent),
-    takeEvery(MatchActionTypes.CHECK_DB, getOldEvents),
-    takeEvery(MatchActionTypes.CHECK_DB, getOldMatch),
-    takeEvery(MatchActionTypes.UNDO_EVENT, undoEvent),
-    takeEvery(MatchActionTypes.INIT_MATCH, initMatch),
-    takeEvery(MatchActionTypes.PUBLISH_SCORES, publishScoresToTournaments),
-    takeEvery(MatchActionTypes.FINALIZE_MATCH, finalizeMatch),
+    takeEvery(addHomeTeam.type, setHomeTeam),
+    takeEvery(addAwayTeam.type, setAwayTeam),
+    takeEvery(addEvent.type, pushNewEvent),
+    takeEvery(checkDb.type, getOldEvents),
+    takeEvery(checkDb.type, getOldMatch),
+    takeEvery(undoEvent.type, undoGivenEvent),
+    takeEvery(initMatch.type, initializeMatch),
+    takeEvery(publishScores.type, publishScoresToTournaments),
+    takeEvery(finalizeMatch.type, finalizeEndedMatch),
 
   ])
-
 }

@@ -5,7 +5,7 @@ import { matchState } from '../store/types';
 import { EventType, TeamType, Event } from '../components/types';
 import { TeamColorPicker } from '../components/scoreboard/teamColorPicker';
 import { useLocation } from 'react-router-dom';
-import { addAwayTeam, addHomeTeam, checkDb, setMatchId, setTournamentId } from '../store/match/actions';
+import { addAwayTeam, addHomeTeam, checkDb, setMatchId, setTournamentId } from '../store/match/reducer';
 import InitMatch from '../components/scoreboard/initMatch';
 import Settings from '../components/scoreboard/settings';
 

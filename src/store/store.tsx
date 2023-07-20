@@ -3,16 +3,16 @@ import { all } from "redux-saga/effects";
 import { useDispatch, TypedUseSelectorHook, useSelector } from "react-redux";
 import { select } from "redux-saga/effects";
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import { matchReducer } from "./match/reducer";
 import { matchSagas } from "./match/sagas";
-import { createTournamentSlice } from "./tournament/reducer";
-import { matchesReducer } from "./../store/tournamentAdmin/reducer";
+import tournamentReducer from "./tournament/reducer";
+import adminReducer from "./tournamentAdmin/reducer";
+import matchReducer from "./match/reducer";
 import { tournamentAdminSagas } from "./tournamentAdmin/saga";
 
 export const rootReducer = combineReducers({
   match: matchReducer,
-  tournament: createTournamentSlice.reducer,
-  matches:matchesReducer,
+  matches: adminReducer,
+  tournament: tournamentReducer,
 });
 
 const sagaMiddleware = saga();
@@ -26,7 +26,7 @@ export const store = configureStore({
 });
 
 function* rootSaga() {
-  yield all([matchSagas(),tournamentAdminSagas()]);
+  yield all([matchSagas(), tournamentAdminSagas()]);
 }
 
 sagaMiddleware.run(rootSaga);

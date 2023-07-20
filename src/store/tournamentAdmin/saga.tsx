@@ -1,6 +1,7 @@
 import { all, call, put, takeEvery, takeLatest } from 'redux-saga/effects';
 import { SagaIterator } from 'redux-saga';
-import { fetchMatchesSuccess, fetchMatchesFailure, TournamentAdminTypes, fetchFieldsSuccess, fetchDatesSuccess } from './action';
+// import { fetchMatchesSuccess, fetchMatchesFailure, TournamentAdminTypes, fetchFieldsSuccess, fetchDatesSuccess } from './action';
+import { fetchMatchesSuccess, fetchMatchesFailure, fetchMatchDatesSuccess, fetchMatchesRequest, fetchMatchFieldsSuccess } from './reducer'
 import { collection, getDocs, doc, QuerySnapshot } from "@firebase/firestore";
 import { db } from './../../firebase/firebase-config';
 import { PayloadAction } from '@reduxjs/toolkit';
@@ -32,7 +33,7 @@ function* fetchDatesFromFirestore(action: PayloadAction<string>): SagaIterator {
         }
 
         console.log("Dates fetched from Firestore: ", datesList);
-        yield put(fetchDatesSuccess(datesList));
+        yield put(fetchMatchDatesSuccess(datesList));
 
     } catch (error) {
         yield put(fetchMatchesFailure((error as Error).message));
@@ -73,7 +74,7 @@ function* fetchArenaNamesFromFirestore(action: PayloadAction<string>): SagaItera
         });
         // yield put(fetchMatchesSuccess({ matches: matchesData }));
         console.log("Fields fetched from Firestore: ", sortedArenaNames);
-        yield put(fetchFieldsSuccess(sortedArenaNames));
+        yield put(fetchMatchFieldsSuccess(sortedArenaNames));
 
     } catch (error) {
         yield put(fetchMatchesFailure((error as Error).message));
@@ -109,9 +110,9 @@ function* fetchMatchesFromFirestore(action: PayloadAction<string>): SagaIterator
 
 export function* tournamentAdminSagas() {
     yield all([
-        takeEvery(TournamentAdminTypes.FETCH_MATCHES_REQUEST, fetchMatchesFromFirestore),
-        takeEvery(TournamentAdminTypes.FETCH_MATCHES_REQUEST, fetchDatesFromFirestore),
-        takeEvery(TournamentAdminTypes.FETCH_MATCHES_REQUEST, fetchArenaNamesFromFirestore),
+        takeEvery(fetchMatchesRequest.type, fetchMatchesFromFirestore),
+        takeEvery(fetchMatchesRequest.type, fetchDatesFromFirestore),
+        takeEvery(fetchMatchesRequest.type, fetchArenaNamesFromFirestore),
     ])
 
 }

@@ -7,7 +7,7 @@ import {
 } from "@mui/material";
 import Button from "@mui/material/Button";
 import React, { useState } from 'react';
-import { undoEvent } from '../../store/match/actions';
+import { undoEvent } from '../../store/match/reducer';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import Grid from "@mui/material/Grid"
 import Clock from "../clock";

@@ -8,7 +8,7 @@ import {
   VolleyCard, VolleyCardHeader, VolleyStack, VolleyFormControl, ShirtColors,
   RightBox, VolleyAlert
 } from "../../util/styles"
-import { addAwayTeam, addHomeTeam } from '../../store/match/actions';
+import { addAwayTeam, addHomeTeam } from '../../store/match/reducer';
 import { Team, TeamType } from '../types';
 import { Grid, Typography } from '@mui/material';
 

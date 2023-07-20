@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import Button from "@mui/material/Button";
 import React, { useState } from 'react';
-import { initMatch, resetTeamColor } from '../../store/match/actions';
+import { initMatch, resetTeamColor } from '../../store/match/reducer';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import { TeamType } from './../types';
 import Grid from "@mui/material/Grid"
