@@ -5,7 +5,7 @@ import MatchView from "../components/tournamentAdmin/matchView";
 import { Box, Button, Grid } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { Sort } from '@mui/icons-material';
-import { collection, doc, getFirestore, onSnapshot, query, where } from "firebase/firestore";
+import { QueryFieldFilterConstraint, collection, doc, getFirestore, onSnapshot, query, where } from "firebase/firestore";
 import { getMatchState, getStatusColor, parseAdminMatch } from "../components/tournamentAdmin/adminMatchFunctions";
 import { AdminMatch, MatchState } from "../components/tournamentAdmin/types";
 import { dateStringToString } from "../util/time";
@@ -13,6 +13,7 @@ import { chooseCourt, chooseDay, fetchMatchesRequest, updateMatch } from "../sto
 
 const TournamentAdmin = () => {
   const params = useParams();
+  const searchParams = new URLSearchParams(location.search);
   const tournamentSlug: string = params.tournamentSlug ? params.tournamentSlug : ""
   const [fetchedMatches, setFetchedMatches] = useState(false);
   const [createdCallbacks, setCreatedCallbacks] = useState(false);
@@ -24,6 +25,8 @@ const TournamentAdmin = () => {
   const [descending, setDescending] = useState(true);
   const [selectDay, setSelectDay] = useState(false);
   const [selectCourt, setSelectCourt] = useState(false);
+
+  const playerClass = searchParams.get('class');
 
   function handleSelectDay(day: string) {
     dispatch(chooseDay(day));
@@ -69,12 +72,19 @@ const TournamentAdmin = () => {
   // Fetch the matches when the component mounts
   if (!fetchedMatches && tournamentSlug) {
     setFetchedMatches(true)
-    dispatch(fetchMatchesRequest(tournamentSlug)); // replace with actual tournamentSlug
+    dispatch(fetchMatchesRequest({ tournamentSlug: tournamentSlug, class: playerClass })); // replace with actual tournamentSlug
   }
 
   if (!createdCallbacks && tournamentSlug) {
     const currentDate: string = new Date().toISOString().split('T')[0];
-    const q = query(collection(db, "Tournaments", tournamentSlug, "Matches"), where("Date", "==", currentDate), where("HasWinner", "==", false));
+
+    let collectionQuery: QueryFieldFilterConstraint[] = []
+    collectionQuery.push(where("Date", "==", currentDate))
+    collectionQuery.push(where("HasWinner", "==", false))
+    if (playerClass != null) {
+      collectionQuery.push(where("MatchCategory.CategoryCode", "==", playerClass))
+    }
+    const q = query(collection(db, "Tournaments", tournamentSlug, "Matches"), ...collectionQuery);
 
     setCreatedCallbacks(true)
     onSnapshot(q, (querySnapshot) => {

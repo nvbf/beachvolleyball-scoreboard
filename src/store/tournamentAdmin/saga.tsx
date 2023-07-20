@@ -1,18 +1,18 @@
 import { all, call, put, takeEvery, takeLatest } from 'redux-saga/effects';
 import { SagaIterator } from 'redux-saga';
 // import { fetchMatchesSuccess, fetchMatchesFailure, TournamentAdminTypes, fetchFieldsSuccess, fetchDatesSuccess } from './action';
-import { fetchMatchesSuccess, fetchMatchesFailure, fetchMatchDatesSuccess, fetchMatchesRequest, fetchMatchFieldsSuccess } from './reducer'
+import { fetchMatchesSuccess, fetchMatchesFailure, fetchMatchDatesSuccess, fetchMatchesRequest, fetchMatchFieldsSuccess, FetchMatchsPayload } from './reducer'
 import { collection, getDocs, doc, QuerySnapshot } from "@firebase/firestore";
 import { db } from './../../firebase/firebase-config';
 import { PayloadAction } from '@reduxjs/toolkit';
 import { AdminMatch } from '../../components/tournamentAdmin/types';
-import { getDoc } from 'firebase/firestore';
+import { QueryFieldFilterConstraint, getDoc, query, where } from 'firebase/firestore';
 import { parseAdminMatch } from '../../components/tournamentAdmin/adminMatchFunctions';
 
-function* fetchDatesFromFirestore(action: PayloadAction<string>): SagaIterator {
+function* fetchDatesFromFirestore(action: PayloadAction<FetchMatchsPayload>): SagaIterator {
     try {
         console.log("fetching dates");
-        const tournamentSlug = action.payload;
+        const tournamentSlug = action.payload.tournamentSlug;
 
         const tournamentDocRef = doc(db, "Tournaments", tournamentSlug);
         // Get the result of the query
@@ -40,14 +40,20 @@ function* fetchDatesFromFirestore(action: PayloadAction<string>): SagaIterator {
     }
 }
 
-function* fetchArenaNamesFromFirestore(action: PayloadAction<string>): SagaIterator {
+function* fetchArenaNamesFromFirestore(action: PayloadAction<FetchMatchsPayload>): SagaIterator {
     try {
         console.log("fetching arnea names");
-        const tournamentSlug = action.payload;
+        const tournamentSlug = action.payload.tournamentSlug;
+        const playerClass = action.payload.class;
 
-        const matchesCollection = collection(db, "Tournaments", tournamentSlug, "Matches");
+        let collectionQuery: QueryFieldFilterConstraint[] = []
+        if (playerClass != null) {
+            collectionQuery.push(where("MatchCategory.CategoryCode", "==", playerClass))
+        }
+
+        const q = query(collection(db, "Tournaments", tournamentSlug, "Matches"), ...collectionQuery);
         // Get the result of the query
-        const matchesSnapshot: QuerySnapshot = yield call(getDocs, matchesCollection);
+        const matchesSnapshot: QuerySnapshot = yield call(getDocs, q);
 
 
         const uniqueArenaNames = new Set<string>();
@@ -81,15 +87,20 @@ function* fetchArenaNamesFromFirestore(action: PayloadAction<string>): SagaItera
     }
 }
 
-function* fetchMatchesFromFirestore(action: PayloadAction<string>): SagaIterator {
+function* fetchMatchesFromFirestore(action: PayloadAction<FetchMatchsPayload>): SagaIterator {
     try {
         console.log("fetching matches");
-        const tournamentSlug = action.payload;
+        const tournamentSlug = action.payload.tournamentSlug;
+        const playerClass = action.payload.class;
 
-        const matchesCollection = collection(db, "Tournaments", tournamentSlug, "Matches");
-        console.log("Matches Collection Path: ", matchesCollection.path); // Log the path to the Matches Collection
+        let collectionQuery: QueryFieldFilterConstraint[] = []
+        if (playerClass != null){
+            collectionQuery.push(where("MatchCategory.CategoryCode", "==", playerClass))
+        }
+
+        const q = query(collection(db, "Tournaments", tournamentSlug, "Matches"), ...collectionQuery);
         // Get the result of the query
-        const matchesSnapshot: QuerySnapshot = yield call(getDocs, matchesCollection);
+        const matchesSnapshot: QuerySnapshot = yield call(getDocs, q);
 
         const matchesData: AdminMatch[] = [];
 

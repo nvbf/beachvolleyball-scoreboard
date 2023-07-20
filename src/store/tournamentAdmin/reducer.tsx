@@ -7,6 +7,11 @@ export interface MatchUpdatePayload {
     match: AdminMatch;
 }
 
+export interface FetchMatchsPayload {
+    tournamentSlug: string;
+    class: string | null;
+}
+
 export interface MatchSuccessPayload {
     matches: AdminMatch[];
 }
@@ -25,7 +30,7 @@ const adminSlice = createSlice({
     name: 'admin',
     initialState: initState,
     reducers: {
-        fetchMatchesRequest: (state, action: PayloadAction<string>) => { }, // dummy reducer
+        fetchMatchesRequest: (state, action: PayloadAction<FetchMatchsPayload>) => { }, // dummy reducer
         fetchMatchesSuccess: (state, action: PayloadAction<MatchSuccessPayload>) => {
             const matchesArray: AdminMatch[] = action.payload.matches;
             state.matches = matchesArray.reduce((obj, match) => ({ ...obj, [match.matchId]: match }), {});

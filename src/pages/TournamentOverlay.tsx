@@ -1,5 +1,5 @@
 import { Grid, Typography } from "@mui/material";
-import { collection, getFirestore, onSnapshot } from "firebase/firestore";
+import { QueryFieldFilterConstraint, collection, getFirestore, onSnapshot, query, where } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
@@ -17,7 +17,7 @@ const TournamentOverlay = () => {
   // Extract the URL parameters
   const queryParams = new URLSearchParams(location.search);
   const tournamentSlug = queryParams.get("tournamentId") || "default";
-  const courtID = queryParams.get("courtId") || "default";
+  const courtID = queryParams.get("courtId");
   const numberSize = 32
   const nameSize = 12
 
@@ -30,7 +30,7 @@ const TournamentOverlay = () => {
 
   // Fetch the matches when the component mounts
   if (!fetchedMatches && tournamentSlug) {
-    dispatch(fetchMatchesRequest(tournamentSlug)); // replace with actual tournamentSlug
+    dispatch(fetchMatchesRequest({ tournamentSlug: tournamentSlug, class: null })); // replace with actual tournamentSlug
     setFetchedMatches(true)
   }
 
@@ -48,8 +48,14 @@ const TournamentOverlay = () => {
   }, []);
 
   if (!createdCallbacks && tournamentSlug) {
-    const matchCollection = collection(db, "Tournaments", tournamentSlug, "Matches");
-    onSnapshot(matchCollection, (querySnapshot) => {
+    const collectionQuery: QueryFieldFilterConstraint[] = []
+    collectionQuery.push(where("HasWinner", "==", false))
+    if (courtID != null) {
+      collectionQuery.push(where("Field.Name", "==", courtID))
+    }
+    const q = query(collection(db, "Tournaments", tournamentSlug, "Matches"), ...collectionQuery);
+
+    onSnapshot(q, (querySnapshot) => {
       querySnapshot.forEach((doc) => {
         let data = doc.data()
         if (data) {
@@ -77,7 +83,7 @@ const TournamentOverlay = () => {
   const scoreTeam2 = 20;
 
 
-  const currentMatch = getCurrentMatch(matchesList, courtID)
+  const currentMatch = getCurrentMatch(matchesList, courtID || "")
 
   return (
     <div
