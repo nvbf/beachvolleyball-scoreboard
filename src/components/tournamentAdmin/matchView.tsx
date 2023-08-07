@@ -166,7 +166,7 @@ export function MatchView({ match, tournamentSlug }: MatchViewProps) {
                                 </span>
                                 {match.sets.map((score: { [key: string]: number }, index: number) => (
                                     <span key={index}>
-                                        ({score.PointsAwayTeam}-{score.PointsHomeTeam}){' '}
+                                        ({score.PointsHomeTeam}-{score.PointsAwayTeam}){' '}
                                     </span>
                                 ))}
                             </Typography>}
