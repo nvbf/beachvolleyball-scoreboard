@@ -162,7 +162,7 @@ export function MatchView({ match, tournamentSlug }: MatchViewProps) {
                                 variant: 'button', lineHeight: 1, paddingTop: 1, paddingX: 1
                             }}>
                                 <span key={"set"}>
-                                    <b>{getProfixioSets(match.sets, TeamType.Away)}-{getProfixioSets(match.sets, TeamType.Home)}{' '}</b>
+                                    <b>{getProfixioSets(match.sets, TeamType.Home)}-{getProfixioSets(match.sets, TeamType.Away)}{' '}</b>
                                 </span>
                                 {match.sets.map((score: { [key: string]: number }, index: number) => (
                                     <span key={index}>
