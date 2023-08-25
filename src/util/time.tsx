@@ -12,6 +12,18 @@ export function timestampToString(timestamp: number) {
     return formattedTime;
 }
 
+export function timestampToStringHours(timestamp: number) {
+    // Create a new Date object from the timestamp
+    const date = new Date(timestamp);
+
+    // padStart is used to add leading zeros
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+
+    const formattedTime = `${hours}:${minutes}`;
+    return formattedTime;
+}
+
 export function dateStringToString(dateString: string) {
     // Split the dateString into year, month, and day components
     const [year, month, day] = dateString.split('-');

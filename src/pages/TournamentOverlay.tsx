@@ -9,6 +9,7 @@ import { AdminMatch } from "../components/tournamentAdmin/types";
 import { TeamType } from "../components/types";
 import { getInitials } from "../util/names";
 import { fetchMatchesRequest, updateMatch } from "../store/tournamentAdmin/reducer";
+import { timestampToString, timestampToStringHours } from "../util/time";
 
 const TournamentOverlay = () => {
   const location = useLocation();
@@ -18,6 +19,7 @@ const TournamentOverlay = () => {
   const queryParams = new URLSearchParams(location.search);
   const tournamentSlug = queryParams.get("tournamentId") || "default";
   const courtID = queryParams.get("courtId");
+  const noDate = queryParams.get('noDate');
   const numberSize = 32
   const nameSize = 12
 
@@ -48,42 +50,34 @@ const TournamentOverlay = () => {
   }, []);
 
   if (!createdCallbacks && tournamentSlug) {
-    const collectionQuery: QueryFieldFilterConstraint[] = []
-    collectionQuery.push(where("HasWinner", "==", false))
+    const currentDate: string = new Date().toISOString().split('T')[0];
+    let collectionQuery: QueryFieldFilterConstraint[] = []
+    if (noDate === null) {
+      collectionQuery.push(where("Date", "==", currentDate))
+    }
     if (courtID != null) {
       collectionQuery.push(where("Field.Name", "==", courtID))
     }
+    collectionQuery.push(where("HasWinner", "==", false))
+
     const q = query(collection(db, "Tournaments", tournamentSlug, "Matches"), ...collectionQuery);
 
+    setCreatedCallbacks(true)
     onSnapshot(q, (querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        let data = doc.data()
+      querySnapshot.docChanges().forEach((change) => {
+        let data = change.doc.data()
         if (data) {
           let updatedMatch = parseAdminMatch(data)
+          console.log("got update for match %s", updatedMatch.matchId)
           dispatch(updateMatch({ match: updatedMatch, matchId: updatedMatch.matchId }))
         }
       });
     });
     setCreatedCallbacks(true)
   }
-  // Hardcoded mapping of IDs to names
-  const tournamentNames = {
-    "12321": "Oslo Masters",
-    default: "Unknown Tournament",
-  };
-  const matchNames = { "12333": "Gruppespill A", default: "Unknown Match" };
-  const courtNames = { "1222": "Bane 1", default: "Unknown Court" };
-
-  // Players and scores
-  const player1 = "Player1";
-  const player2 = "Player2";
-  const player3 = "Player3";
-  const player4 = "Player4";
-  const scoreTeam1 = 15;
-  const scoreTeam2 = 20;
-
 
   const currentMatch = getCurrentMatch(matchesList, courtID || "")
+  const commingMatches = getCommingMatches(matchesList, courtID || "")
 
   return (
     <div
@@ -93,7 +87,7 @@ const TournamentOverlay = () => {
         left: "0",
         right: "0",
         padding: "10px",
-        backgroundColor: 'rgba(52, 52, 52, 0.0)',        // backgroundColor: "rgba(0,0,0,0.7)",
+        backgroundColor: 'rgba(52, 52, 52, 1.0)',        // backgroundColor: "rgba(0,0,0,0.7)",
         textAlign: "center",
         width: '1920px', height: '1080px'
       }}
@@ -265,11 +259,139 @@ const TournamentOverlay = () => {
           </Grid>
         </Grid>
       </Grid>}
-    </div>
+      {!currentMatch && <Grid
+        container
+        direction="column"
+        padding={0}
+        rowGap={2}
+        spacing={0}
+        columns={12}
+        sx={{
+          position: "absolute",
+          width: "887px",
+          bottom: "0",
+          left: "25%",
+          top: "167px",
+          right: "0",
+        }}
+      >
+        <Grid item height={104} width={1} padding={0} sx={{
+          backgroundColor: "#00A3DA", borderColor: "#000000",
+          borderRadius: "15px", paddingX: "48px", paddingY: "20px"
+        }}
+        >
+          <Grid
+            container
+            direction="row"
+            alignItems="center"
+            padding={0}
+            rowGap={0}
+            spacing={0}
+            columns={12}
+            height={1}
+          ><Grid item padding={0} marginTop={"10px"} sx={{
+            // backgroundColor: "#ddA3DA",
+          }}
+          >
+              <Typography color={"#FBF9F9"} fontWeight={"bold"} align="left" textTransform={"uppercase"} margin={0} padding={0} fontSize={"50px"} lineHeight={1.0}>
+                Next matches
+              </Typography>
+            </Grid>
+          </Grid>
+
+        </Grid>
+
+        {commingMatches.filter(e => {
+          // return !e.isFinalized
+          return true
+        }).map((match) => (
+          <Grid item key={match.matchId} width={1} height={88} padding={0} sx={{
+            backgroundColor: "rgba(233, 237, 233, 0.9)", borderColor: "#000000",
+            borderRadius: "15px", paddingX: "48px", paddingY: "20px"
+          }}>
+            {formattedMatch(match)}
+          </Grid>
+        ))}
+      </Grid>}
+    </div >
+  );
+};
+
+const formattedMatch = (match: AdminMatch): JSX.Element => {
+  const formattedTime = timestampToStringHours(match.startTime)
+  return (
+    <Grid
+      container
+      direction="row"
+      alignItems="center"
+      padding={0}
+      rowGap={0}
+      spacing={0}
+      columns={12}
+      height={1}
+    >
+      <Grid item xs={3} padding={0} marginTop={"10px"}  sx={{
+        // backgroundColor: "#ddA3DA",
+        borderColor: "#000000", borderWidth: "2px",
+      }}
+      >
+        <Typography color={"#000000"} fontWeight={"bold"} align="left" textTransform={"uppercase"} margin={0} padding={0} fontSize={"24px"} lineHeight={1.0}>
+          {match.matchCategory + " - " + (match.matchGroup !== "" ? (" Group " + match.matchGroup) : match.name)}
+        </Typography>
+      </Grid>
+      <Grid item xs={4} padding={0} marginTop={"10px"}  sx={{
+        // backgroundColor: "#ddA3DA",
+        borderColor: "#000000", borderWidth: "2px",
+      }}
+      >
+        <Grid
+          direction="column"
+        >
+          <Grid item>
+            {match.homeTeam.player1}
+          </Grid>
+          <Grid item>
+            {match.homeTeam.player2}
+          </Grid>
+        </Grid>
+      </Grid>
+      <Grid item xs={1} padding={0} marginTop={"10px"}  sx={{
+        // backgroundColor: "#ddA3DA",
+        borderColor: "#000000", borderWidth: "2px",
+      }}
+      >
+        <Typography color={"#000000"} fontWeight={"bold"} align="left" textTransform={"uppercase"} margin={0} padding={0} fontSize={"24px"} lineHeight={1.0}>
+          {formattedTime}
+        </Typography>
+      </Grid>
+      <Grid item xs={4} padding={0} marginTop={"10px"}sx={{
+        // backgroundColor: "#ddA3DA",
+        borderColor: "#000000", borderWidth: "2px",
+      }}
+      >
+        <Grid
+          direction="column"
+        >
+          <Grid item>
+            {match.awayTeam.player1}
+          </Grid>
+          <Grid item>
+            {match.awayTeam.player2}
+          </Grid>
+        </Grid>
+      </Grid>
+    </Grid>
   );
 };
 export const getCurrentMatch = (matches: AdminMatch[], courtID: string): AdminMatch => {
   return matches.filter(e => !e.hasWinner && !e.isFinalized && e.isStarted && e.arenaName === courtID)[0]
+}
+
+export const getCommingMatches = (matches: AdminMatch[], courtID: string): AdminMatch[] => {
+  console.log(matches)
+  return matches.filter(e => !e.hasWinner && !e.isFinalized && !e.isStarted && e.arenaName === courtID).sort(
+    (a, b) => (a.startTime - b.startTime)
+  ).slice(0, 5)
 }
 
 export default TournamentOverlay;
