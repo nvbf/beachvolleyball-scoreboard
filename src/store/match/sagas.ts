@@ -110,6 +110,7 @@ export function* getOldMatch(action: PayloadAction<string>): Generator<CallEffec
     console.log("Error when getting old match");
   }
 }
+
 export function* undoGivenEvent(action: PayloadAction<AddEventPayload>): Generator<CallEffect | SelectEffect | PutEffect, void, string> {
   try {
     yield put(undoLastEvent())

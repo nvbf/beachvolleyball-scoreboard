@@ -8,6 +8,8 @@ import Tournaments from "./pages/Tournaments";
 import TournamentAdmin from "./pages/TournamentAdmin";
 import TournamentOverlay from "./pages/TournamentOverlay";
 import TournamentView from "./pages/TournamentView";
+import GrantAdminAccess from "./pages/GrantAdminAccess";
+import ClaimAccess from "./pages/ClaimAccess";
 
 function App() {
   return (
@@ -22,6 +24,8 @@ function App() {
         <Route path="/tournament/" element={<TournamentView />} />
         <Route path="/tournamentadmin/:tournamentSlug" element={<TournamentAdmin />} />
         <Route path="/tournamentoverlay" element={<TournamentOverlay />} />
+        <Route path="/get-access/:accessCode" element={<GrantAdminAccess />} />
+        <Route path="/claim-access/:tournamentSlug" element={<ClaimAccess />} />
       </Routes>
     </BrowserRouter>
   );

@@ -10,6 +10,7 @@ import {
     getAuth,
     signInWithPopup,
     FacebookAuthProvider,
+    GoogleAuthProvider,
 } from 'firebase/auth';
 import { firebaseConfig } from './firebase-config';
 
@@ -38,7 +39,7 @@ export function init() {
 export default async function startAuth(): Promise<User> {
     return new Promise((resolve, reject) => {
         init();
-        const provider = new FacebookAuthProvider();
+        const provider = new GoogleAuthProvider();
         signInWithPopup(getAuth(), provider)
             .then((result) => {
                 resolve(result.user);

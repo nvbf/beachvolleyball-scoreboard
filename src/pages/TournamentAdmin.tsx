@@ -14,10 +14,9 @@ import { chooseCourt, chooseDay, fetchMatchesRequest, updateMatch } from "../sto
 const TournamentAdmin = () => {
   const params = useParams();
   const searchParams = new URLSearchParams(location.search);
-  const tournamentSlug: string = params.tournamentSlug ? params.tournamentSlug : ""
   const [fetchedMatches, setFetchedMatches] = useState(false);
   const [createdCallbacks, setCreatedCallbacks] = useState(false);
-
+  
   const [seeUpcoming, setSeeUpcoming] = useState(true);
   const [seeOngoing, setSeeOngoing] = useState(true);
   const [seeFinished, setSeeFinished] = useState(true);
@@ -25,7 +24,8 @@ const TournamentAdmin = () => {
   const [descending, setDescending] = useState(true);
   const [selectDay, setSelectDay] = useState(false);
   const [selectCourt, setSelectCourt] = useState(false);
-
+  
+  const tournamentSlug: string = params.tournamentSlug ? params.tournamentSlug : ""
   const playerClass = searchParams.get('class');
 
   function handleSelectDay(day: string) {
@@ -72,7 +72,7 @@ const TournamentAdmin = () => {
   // Fetch the matches when the component mounts
   if (!fetchedMatches && tournamentSlug) {
     setFetchedMatches(true)
-    dispatch(fetchMatchesRequest({ tournamentSlug: tournamentSlug, class: playerClass })); // replace with actual tournamentSlug
+    dispatch(fetchMatchesRequest({ tournamentSlug: tournamentSlug, class: playerClass })); 
   }
 
   if (!createdCallbacks && tournamentSlug) {

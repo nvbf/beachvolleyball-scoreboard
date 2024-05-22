@@ -1,13 +1,14 @@
 import { all, call, put, takeEvery, takeLatest } from 'redux-saga/effects';
 import { SagaIterator } from 'redux-saga';
-// import { fetchMatchesSuccess, fetchMatchesFailure, TournamentAdminTypes, fetchFieldsSuccess, fetchDatesSuccess } from './action';
-import { fetchMatchesSuccess, fetchMatchesFailure, fetchMatchDatesSuccess, fetchMatchesRequest, fetchMatchFieldsSuccess, FetchMatchsPayload } from './reducer'
+import { fetchMatchesSuccess, fetchMatchesFailure, fetchMatchDatesSuccess, fetchMatchesRequest, fetchMatchFieldsSuccess, FetchMatchsPayload, addSecrets } from './reducer'
 import { collection, getDocs, doc, QuerySnapshot } from "@firebase/firestore";
 import { db } from './../../firebase/firebase-config';
 import { PayloadAction } from '@reduxjs/toolkit';
 import { AdminMatch } from '../../components/tournamentAdmin/types';
 import { QueryFieldFilterConstraint, getDoc, query, where } from 'firebase/firestore';
 import { parseAdminMatch } from '../../components/tournamentAdmin/adminMatchFunctions';
+import { getTournamentSecrets } from '../../firebase/match_service';
+import { TournamentSecrets } from '../../components/types';
 
 function* fetchDatesFromFirestore(action: PayloadAction<FetchMatchsPayload>): SagaIterator {
     try {
@@ -94,7 +95,7 @@ function* fetchMatchesFromFirestore(action: PayloadAction<FetchMatchsPayload>): 
         const playerClass = action.payload.class;
 
         let collectionQuery: QueryFieldFilterConstraint[] = []
-        if (playerClass != null){
+        if (playerClass != null) {
             collectionQuery.push(where("MatchCategory.CategoryCode", "==", playerClass))
         }
 
@@ -119,9 +120,26 @@ function* fetchMatchesFromFirestore(action: PayloadAction<FetchMatchsPayload>): 
     }
 }
 
+function* getMatcheSecretFromFirestore(action: PayloadAction<FetchMatchsPayload>): SagaIterator {
+    try {
+        console.log("check events with id %s", action.payload.tournamentSlug);
+
+        // add a new document with a generated id
+        let tournamentSecrets = yield call(getTournamentSecrets, action.payload.tournamentSlug);
+
+        console.log(tournamentSecrets)
+
+        yield put(addSecrets(tournamentSecrets))
+        console.log("Saved secrets");
+    } catch (error) {
+        console.log("Error when getting secrets ", error);
+    }
+}
+
 export function* tournamentAdminSagas() {
     yield all([
         takeEvery(fetchMatchesRequest.type, fetchMatchesFromFirestore),
+        takeEvery(fetchMatchesRequest.type, getMatcheSecretFromFirestore),
         takeEvery(fetchMatchesRequest.type, fetchDatesFromFirestore),
         takeEvery(fetchMatchesRequest.type, fetchArenaNamesFromFirestore),
     ])

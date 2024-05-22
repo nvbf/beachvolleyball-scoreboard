@@ -34,6 +34,8 @@ export type adminState = {
   lastUpdated: number,
   dates: string[],
   fields: string[],
+  id: string,
+  secret: string,
   selectedDay: string,
   selectedCourt: string,
   errorMessage: string,
