@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AdminMatch } from "./../../components/tournamentAdmin/types"
 import { adminState } from '../types';
+import { TournamentSecrets } from "../../components/types";
 
 export interface MatchUpdatePayload {
     matchId: number;
@@ -20,6 +21,8 @@ const initState: adminState = {
     matches: {},
     dates: [],
     fields: [],
+    id: "",
+    secret: "",
     selectedDay: "all",
     selectedCourt: "all",
     errorMessage: "",
@@ -47,6 +50,10 @@ const adminSlice = createSlice({
         chooseDay: (state, action: PayloadAction<string>) => {
             state.selectedDay = action.payload;
         },
+        addSecrets: (state, action: PayloadAction<TournamentSecrets>) => {
+            state.secret = action.payload.secret;
+            state.id = action.payload.id;
+        },
         fetchMatchDatesSuccess: (state, action: PayloadAction<string[]>) => {
             let today = new Date().toISOString().split('T')[0];
             let selectedDay = "all";
@@ -70,7 +77,8 @@ export const {
     chooseCourt,
     chooseDay,
     fetchMatchDatesSuccess,
-    fetchMatchFieldsSuccess
+    fetchMatchFieldsSuccess,
+    addSecrets
 } = adminSlice.actions;
 
 export default adminSlice.reducer;

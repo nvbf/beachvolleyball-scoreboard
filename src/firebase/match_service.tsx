@@ -1,5 +1,5 @@
 import { collection, getDocs, addDoc, getFirestore } from "@firebase/firestore";
-import { Event, EventType, Match } from "../components/types";
+import { Event, EventType, Match, TournamentSecrets } from "../components/types";
 import { getUID } from "./auth";
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 
@@ -9,6 +9,9 @@ export const addEventToMatchToFirestore = async (
 ) => {
   let db = getFirestore()
   const eventCollection = collection(db, "Matches", matchId, "events");
+  const uid = await getUID()
+  let eventWithUserID = Event
+  eventWithUserID.author = uid || ""
   return addDoc(eventCollection, Event)
     .then((docRef) => {
       console.log("Document written to match: %s with ID: %s", matchId, docRef.id);
@@ -100,6 +103,33 @@ export const getMatch = async (
   }
   return match
 }
+
+export const getTournamentSecrets = async (
+  slug: string
+) => {
+  console.log('Getting secrets for ', slug)
+
+  let db = getFirestore()
+  const uid = await getUID()
+  console.log('Logged in with uid', uid)
+  const value = doc(db, "TournamentSecrets", slug);
+  const document = await getDoc(value);
+  if (document.exists()) {
+    let tournamentSecrets: TournamentSecrets = {
+      id: document.data().ID,
+      secret: document.data().Secret,
+    }
+    console.log('Got secret from tournament with id', tournamentSecrets.id)
+
+    return tournamentSecrets
+  }
+  let tournamentSecrets: TournamentSecrets = {
+    id: "nan",
+    secret: ""
+  }
+  return tournamentSecrets
+}
+
 
 export const initNewMatch = async (
   match: Match,

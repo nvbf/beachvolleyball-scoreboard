@@ -21,6 +21,11 @@ export type Match = {
   timestamp: number,
 }
 
+export type TournamentSecrets = {
+  id: string,
+  secret: string,
+}
+
 export type Event = {
   id: string
   timestamp: number
