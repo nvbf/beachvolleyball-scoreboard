@@ -49,16 +49,13 @@ const GrantAdminAccess = () => {
 
         if (response.redirected) {
           console.log('Redirected to:', response.url);
-          navigate(response.url); // Use navigate to handle the redirection
+          window.location.href = response.url; // Use navigate to handle the redirection
           return;
         }
 
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
-
-        const data = await response.json();
-        console.log(data);
       } catch (error) {
         console.error('Error:', error);
       }
