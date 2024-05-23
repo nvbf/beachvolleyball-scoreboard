@@ -47,14 +47,16 @@ const GrantAdminAccess = () => {
           throw new Error('Forbidden: Access is denied');
         }
 
-        if (response.redirected) {
-          console.log('Redirected to:', response.url);
-          window.location.href = response.url; // Use navigate to handle the redirection
-          return;
-        }
-
         if (!response.ok) {
           throw new Error('Network response was not ok');
+        }
+
+        const data = await response.json();
+
+        if (data.slug) {
+          window.location.href = `/tournamentadmin/${data.slug}`; // Use navigate to handle the redirection
+        } else {
+          console.error('Error: No slug returned in the response');
         }
       } catch (error) {
         console.error('Error:', error);
