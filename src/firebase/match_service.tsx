@@ -2,6 +2,7 @@ import { collection, getDocs, addDoc, getFirestore } from "@firebase/firestore";
 import { Event, EventType, Match, TournamentSecrets } from "../components/types";
 import { getUID } from "./auth";
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
 
 export const addEventToMatchToFirestore = async (
   matchId: string,
@@ -201,4 +202,38 @@ export const setMatchFinalized = async (
   await updateDoc(docRef, {
     IsFinalized: true
   });
+}
+
+export const setMatchResult = async (
+  matchId: string,
+) => {
+  const uid = await getUID()
+  console.log('Logged in with uid', uid)
+
+  const auth = getAuth();
+  const user = auth.currentUser;
+
+  if (!user) {
+    throw new Error('User is not authenticated');
+  }
+
+  const idToken = await user.getIdToken(); // Retrieve the Firebase ID token
+
+  console.log('Logged in with uid', user.uid);
+
+  const response = await fetch(`https://tournament-sync.herokuapp.com/sync/v1/result/${matchId}`, {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${idToken}`, // Include the ID token in the Authorization header
+      'Content-Type': 'application/json', // Set Content-Type header to application/json
+    },
+  });
+
+  if (response.status === 403) {
+    throw new Error('Forbidden: Access is denied');
+  }
+
+  if (!response.ok) {
+    throw new Error('Network response was not ok');
+  }
 }
