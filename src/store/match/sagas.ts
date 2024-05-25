@@ -3,7 +3,7 @@ import { all, call, CallEffect, delay, put, PutEffect, select, SelectEffect, tak
 import { TeamType, Team, Event, Match } from '../../components/types';
 import { addAwayTeam, addEvent, AddEventPayload, addHomeTeam, addTeamError, checkDb, evaluateEvents, finalizeMatch, initMatch, insertEvent, publishScores, storeEvents, storeMatch, undoEvent, undoLastEvent } from "./reducer";
 import { db } from '../../firebase/firebase-config';
-import { addEventToMatchToFirestore, getEventsFromMatch, getMatch, initNewMatch, setMatchFinalized, setScoreboardId, setScoreboardScore, setStartTime } from '../../firebase/match_service';
+import { addEventToMatchToFirestore, getEventsFromMatch, getMatch, initNewMatch, setMatchFinalized, setMatchResult, setScoreboardId, setScoreboardScore, setStartTime } from '../../firebase/match_service';
 import { v4 } from 'uuid';
 import { RootState } from '../store';
 import { matchState } from '../types';
@@ -149,6 +149,8 @@ export function* finalizeEndedMatch(action: PayloadAction): Generator<CallEffect
     yield call(setMatchFinalized, matchState.tournamentId, matchState.matchId)
     console.log("Is Finalized");
 
+    yield call(setMatchResult, matchState.matchId)
+    console.log("Report sent");
 
   } catch (error) {
     console.log("Error when init match");
