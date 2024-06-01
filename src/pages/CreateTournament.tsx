@@ -14,25 +14,32 @@ function CreateTournament(excelInputData: AdminMatch) {
   //submit state
   const [excelData, setExcelData] = useState(null);
   
-  const handleFile= (e: React.ChangeEvent<HTMLInputElement>)=>{
-    const fileTypes = ['application/vnd.ms-excel','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet','text/csv'];
-    const selectedFile = e.target.files?.[0];
-    if(selectedFile&&fileTypes.includes(selectedFile.type)){
+  const handleFile= (excelUploadFile: React.ChangeEvent<HTMLInputElement>)=>{
+    const selectedFile = excelUploadFile.target.files?.[0];
+    const reader = new FileReader();
+
+    if(selectedFile){
       setTypeError(null);
-      const reader = new FileReader();
-      reader.readAsArrayBuffer(selectedFile);
+      if(selectedFile.type.includes('sheet') || selectedFile.type.includes('excel')){
+        reader.readAsArrayBuffer(selectedFile);
+      }else if(selectedFile.type == 'text/csv'){
+        reader.readAsText(selectedFile)
+      }
+
       reader.onload=(e: any)=>{
         //setExcelFile(e.target.result);
         //console.log(e.target.result)
-        const bufferArray  = e.target.result;
-        const workbook  = XLSX.read(bufferArray,{type: 'buffer'});
+        
+        const data  = e.target.result;
+        const dataType = selectedFile.type === 'text/csv' ? 'string' : 'buffer';        
+        const workbook  = XLSX.read(data,{type: dataType});
         const worksheetname = workbook.SheetNames[0];
         const worksheet = workbook.Sheets[worksheetname];
-        const data = XLSX.utils.sheet_to_json(worksheet);
-        const matches = data.map((row) => {
+        const jsonData = XLSX.utils.sheet_to_json(worksheet);
+        const matches = jsonData.map((row: any) => {
           console.log(row);
         })
-
+        console.log(matches);
 
       }
     }
