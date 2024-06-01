@@ -1,10 +1,11 @@
 import { useState } from "react";
 import * as XLSX from 'xlsx';
 import { AdminMatch, MatchState } from "../components/tournamentAdmin/types";
+import { collection, addDoc } from "firebase/firestore";
+import { db } from "../firebase/firebase-config";
 
 
-
-function CreateTournament(excelInputData: AdminMatch) {
+function CreateTournament() {
 
   // onchange states
   const [excelFile, setExcelFile] = useState<ArrayBuffer | null>(null);
@@ -12,7 +13,7 @@ function CreateTournament(excelInputData: AdminMatch) {
 
 
   //submit state
-  const [excelData, setExcelData] = useState(null);
+  const [jsonData, setJSONData] = useState<AdminMatch[]>([])
   
   const handleFile= (excelUploadFile: React.ChangeEvent<HTMLInputElement>)=>{
     const selectedFile = excelUploadFile.target.files?.[0];
@@ -35,11 +36,14 @@ function CreateTournament(excelInputData: AdminMatch) {
         const workbook  = XLSX.read(data,{type: dataType});
         const worksheetname = workbook.SheetNames[0];
         const worksheet = workbook.Sheets[worksheetname];
-        const jsonData = XLSX.utils.sheet_to_json(worksheet);
+        const jsonDataTemp = XLSX.utils.sheet_to_json<AdminMatch>(worksheet, {header: 1});
+
+        setJSONData(jsonDataTemp.slice(1))
+        /*
         const matches = jsonData.map((row: any) => {
           console.log(row);
         })
-        console.log(matches);
+*/
 
       }
     }
@@ -52,6 +56,9 @@ function CreateTournament(excelInputData: AdminMatch) {
 
   const handleSubmit=(e: any)=>{
     e.preventDefault(); //prevent the page frome reloading
+    const matches = jsonData.map((row) =>{
+      console.log(row);
+    })
     console.log("handleSubmit");
   } 
   
