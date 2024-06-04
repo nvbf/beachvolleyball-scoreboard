@@ -49,7 +49,7 @@ function convertToTimestamp(time: string, date: string): number {
 }
 
 function parseTeamString(team: string): string {
-    if (team === ""){
+    if (team === "") {
         return ""
     }
 

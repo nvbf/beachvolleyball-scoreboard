@@ -16,7 +16,7 @@ const TournamentAdmin = () => {
   const searchParams = new URLSearchParams(location.search);
   const [fetchedMatches, setFetchedMatches] = useState(false);
   const [createdCallbacks, setCreatedCallbacks] = useState(false);
-  
+
   const [seeUpcoming, setSeeUpcoming] = useState(true);
   const [seeOngoing, setSeeOngoing] = useState(true);
   const [seeFinished, setSeeFinished] = useState(true);
@@ -24,7 +24,7 @@ const TournamentAdmin = () => {
   const [descending, setDescending] = useState(true);
   const [selectDay, setSelectDay] = useState(false);
   const [selectCourt, setSelectCourt] = useState(false);
-  
+
   const tournamentSlug: string = params.tournamentSlug ? params.tournamentSlug : ""
   const playerClass = searchParams.get('class');
 
@@ -42,7 +42,8 @@ const TournamentAdmin = () => {
     // Define your async function
     const fetchData = async (tournamentSlug: string) => {
       try {
-        const response = await fetch(`https://tournament-sync.herokuapp.com/sync/v1/tournament/${tournamentSlug}`);
+        console.log("Env var: " + import.meta.env.VITE_BACKEND_URL);
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/sync/v1/tournament/${tournamentSlug}`);
         const data = await response.json();
         console.log(data);
       } catch (error) {
@@ -72,7 +73,7 @@ const TournamentAdmin = () => {
   // Fetch the matches when the component mounts
   if (!fetchedMatches && tournamentSlug) {
     setFetchedMatches(true)
-    dispatch(fetchMatchesRequest({ tournamentSlug: tournamentSlug, class: playerClass })); 
+    dispatch(fetchMatchesRequest({ tournamentSlug: tournamentSlug, class: playerClass }));
   }
 
   if (!createdCallbacks && tournamentSlug) {

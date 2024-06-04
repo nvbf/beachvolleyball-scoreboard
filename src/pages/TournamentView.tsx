@@ -52,7 +52,7 @@ const TournamentView = () => {
     // Define your async function
     const fetchData = async (tournamentSlug: string) => {
       try {
-        const response = await fetch(`https://tournament-sync.herokuapp.com/sync/v1/tournament/${tournamentSlug}`);
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/sync/v1/tournament/${tournamentSlug}`);
         const data = await response.json();
         console.log(data);
       } catch (error) {

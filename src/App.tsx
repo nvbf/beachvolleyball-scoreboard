@@ -1,5 +1,5 @@
 import "./App.css";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import StartPage from "./pages/StartPage";
 import Match from "./pages/Match";
 import CreateMatch from "./pages/CreateMatch";
@@ -10,10 +10,18 @@ import TournamentOverlay from "./pages/TournamentOverlay";
 import TournamentView from "./pages/TournamentView";
 import GrantAdminAccess from "./pages/GrantAdminAccess";
 import ClaimAccess from "./pages/ClaimAccess";
+import { useEffect } from "react";
+import { initGA, logPageView } from "./analytics";
+import AnalyticsTracker from "./AnalyticsTracker";
 
-function App() {
+const App: React.FC = () => {
+  useEffect(() => {
+    initGA('G-7MSH9M06FP');
+  }, []);
+
   return (
     <BrowserRouter>
+      <AnalyticsTracker />
       <Routes>
         <Route path="/" element={<StartPage />} />
         <Route path="/match" element={<CreateMatch />} />
