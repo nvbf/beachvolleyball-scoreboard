@@ -14,10 +14,11 @@ import { TeamType } from "../types";
 
 interface MatchViewProps {
     match: AdminMatch;
-    tournamentSlug: string
+    tournamentSlug: string;
+    secret: string;
 }
 
-export function MatchView({ match, tournamentSlug }: MatchViewProps) {
+export function MatchView({ match, tournamentSlug, secret }: MatchViewProps) {
     const [open, setOpen] = useState(false);
     const [activeQrCode, setActiveQrCode] = useState("");
 
@@ -36,7 +37,9 @@ export function MatchView({ match, tournamentSlug }: MatchViewProps) {
     }&name2=${encodeURIComponent(match.homeTeam.player2)
     }&name3=${encodeURIComponent(match.awayTeam.player1)
     }&name4=${encodeURIComponent(match.awayTeam.player2)
-    }&matchId=${match.matchId}&tournamentId=${tournamentSlug}`;
+    }&matchId=${match.matchId
+    }&tournamentId=${tournamentSlug
+    }&secret=${secret}}`;
     ("");
 
     function getProfixioSets(sets: { [key: string]: number; }[], team: TeamType): number {

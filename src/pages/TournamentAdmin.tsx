@@ -9,7 +9,7 @@ import { QueryFieldFilterConstraint, collection, doc, getFirestore, onSnapshot, 
 import { getMatchState, getStatusColor, parseAdminMatch } from "../components/tournamentAdmin/adminMatchFunctions";
 import { AdminMatch, MatchState } from "../components/tournamentAdmin/types";
 import { dateStringToString } from "../util/time";
-import { chooseCourt, chooseDay, fetchMatchesRequest, updateMatch } from "../store/tournamentAdmin/reducer";
+import { chooseCourt, chooseDay, fetchMatchSecrets, fetchMatchesRequest, updateMatch } from "../store/tournamentAdmin/reducer";
 
 const TournamentAdmin = () => {
   const params = useParams();
@@ -74,6 +74,7 @@ const TournamentAdmin = () => {
   if (!fetchedMatches && tournamentSlug) {
     setFetchedMatches(true)
     dispatch(fetchMatchesRequest({ tournamentSlug: tournamentSlug, class: playerClass }));
+    dispatch(fetchMatchSecrets({ tournamentSlug: tournamentSlug, class: playerClass }));
   }
 
   if (!createdCallbacks && tournamentSlug) {
@@ -100,7 +101,7 @@ const TournamentAdmin = () => {
     });
   }
 
-  const renderMatches = (matches: AdminMatch[], tournamentSlug: string, descending: boolean, selectedDay: string, selectedCourt: string) => {
+  const renderMatches = (matches: AdminMatch[], tournamentSlug: string, descending: boolean, selectedDay: string, selectedCourt: string, secret: string) => {
     return (
       <Grid container
         spacing={0}
@@ -122,9 +123,26 @@ const TournamentAdmin = () => {
           return selectedCourt === "all" ? true : e.arenaName === selectedCourt
         }).map((match, index) => (
           <Grid item key={index} xs={12}>
-            <MatchView match={match} tournamentSlug={tournamentSlug} />
+            <MatchView match={match} tournamentSlug={tournamentSlug} secret={secret} />
           </Grid>
         ))}
+      </Grid>
+    );
+  };
+
+  const renderNoAccess = () => {
+    return (
+      <Grid container
+        spacing={0}
+        rowSpacing={0}
+        columns={12}
+        justifyContent="space-evenly"
+        alignItems="center">
+
+        <br></br>
+        No access to admin for this tournament...
+        <br></br>
+        Ask owner of tournament to get a authorization link.
       </Grid>
     );
   };
@@ -363,7 +381,8 @@ const TournamentAdmin = () => {
       </Grid>
     </Grid>}
     <Grid item xs={12}>
-      {renderMatches(matchesList, tournamentSlug, descending, matches.selectedDay, matches.selectedCourt)}
+      {matches.secret && renderMatches(matchesList, tournamentSlug, descending, matches.selectedDay, matches.selectedCourt, matches.secret)}
+      {!matches.secret && renderNoAccess()}
     </Grid>
   </Grid>
   );

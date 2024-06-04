@@ -1,6 +1,6 @@
 import { all, call, put, takeEvery, takeLatest } from 'redux-saga/effects';
 import { SagaIterator } from 'redux-saga';
-import { fetchMatchesSuccess, fetchMatchesFailure, fetchMatchDatesSuccess, fetchMatchesRequest, fetchMatchFieldsSuccess, FetchMatchsPayload, addSecrets } from './reducer'
+import { fetchMatchesSuccess, fetchMatchesFailure, fetchMatchDatesSuccess, fetchMatchesRequest, fetchMatchFieldsSuccess, FetchMatchsPayload, addSecrets, fetchMatchSecrets } from './reducer'
 import { collection, getDocs, doc, QuerySnapshot } from "@firebase/firestore";
 import { db } from './../../firebase/firebase-config';
 import { PayloadAction } from '@reduxjs/toolkit';
@@ -139,9 +139,9 @@ function* getMatcheSecretFromFirestore(action: PayloadAction<FetchMatchsPayload>
 export function* tournamentAdminSagas() {
     yield all([
         takeEvery(fetchMatchesRequest.type, fetchMatchesFromFirestore),
-        takeEvery(fetchMatchesRequest.type, getMatcheSecretFromFirestore),
         takeEvery(fetchMatchesRequest.type, fetchDatesFromFirestore),
         takeEvery(fetchMatchesRequest.type, fetchArenaNamesFromFirestore),
+        takeEvery(fetchMatchSecrets.type, getMatcheSecretFromFirestore),
     ])
 
 }
