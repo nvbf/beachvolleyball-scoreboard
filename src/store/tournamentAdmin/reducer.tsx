@@ -34,6 +34,7 @@ const adminSlice = createSlice({
     initialState: initState,
     reducers: {
         fetchMatchesRequest: (state, action: PayloadAction<FetchMatchsPayload>) => { }, // dummy reducer
+        fetchMatchSecrets: (state, action: PayloadAction<FetchMatchsPayload>) => { },
         fetchMatchesSuccess: (state, action: PayloadAction<MatchSuccessPayload>) => {
             const matchesArray: AdminMatch[] = action.payload.matches;
             state.matches = matchesArray.reduce((obj, match) => ({ ...obj, [match.matchId]: match }), {});
@@ -73,6 +74,7 @@ export const {
     fetchMatchesSuccess,
     fetchMatchesFailure,
     fetchMatchesRequest,
+    fetchMatchSecrets,
     updateMatch,
     chooseCourt,
     chooseDay,
