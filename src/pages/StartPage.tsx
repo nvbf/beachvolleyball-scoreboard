@@ -72,6 +72,20 @@ function StartPage() {
               iconName="volleyball"
               size={iconSize}
             />
+            <AppCards
+              title="Admin"
+              subHeader="Go to a tournament you can admin"
+              path="admin-tournament"
+              iconName="admin"
+              size={iconSize}
+            />
+            <AppCards
+              title="Access"
+              subHeader="Get access to your tournament"
+              path="claim-tournament"
+              iconName="access"
+              size={iconSize}
+            />
           </Grid>
         </main>
       </div>

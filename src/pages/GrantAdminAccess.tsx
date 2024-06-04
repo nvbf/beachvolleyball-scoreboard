@@ -36,7 +36,7 @@ const GrantAdminAccess = () => {
 
         console.log('Logged in with uid', user.uid);
 
-        const response = await fetch(`https://tournament-sync.herokuapp.com/admin/v1/access/${accessCode}`, {
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/admin/v1/access/${accessCode}`, {
           redirect: 'follow', // Ensure redirects are followed
           headers: {
             'Authorization': `Bearer ${idToken}`, // Include the ID token in the Authorization header

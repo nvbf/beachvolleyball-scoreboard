@@ -6,6 +6,8 @@ import SportsIcon from '@mui/icons-material/Sports';
 import SportsVolleyballIcon from '@mui/icons-material/SportsVolleyball';
 import SportsHandballIcon from '@mui/icons-material/SportsHandball';
 import TimerIcon from '@mui/icons-material/Timer';
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
+import EnhancedEncryptionIcon from '@mui/icons-material/EnhancedEncryption';
 
 import {
     Card,
@@ -54,6 +56,10 @@ const getIconFromName = (iconName: string, size: number) => {
             return <TimerIcon sx={{ fontSize: size }} />
         case 'player':
             return <SportsHandballIcon sx={{ fontSize: size }} />
+        case 'admin':
+            return <ManageAccountsIcon sx={{ fontSize: size }} />
+        case 'access':
+            return <EnhancedEncryptionIcon sx={{ fontSize: size }} />
 
         // all other supported icons 
     }
