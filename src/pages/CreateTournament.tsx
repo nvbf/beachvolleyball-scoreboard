@@ -108,7 +108,7 @@ const CreateTournament = () => {
                 id: row[0],
                 number: (row[0] as number).toString().trim(),
                 name: row[6],
-                date: row[1],
+                date: convertDateToISO(row[1]),
                 time: row[2].trim(),
                 homeTeam: parseTeam(row[7]),
                 awayTeam: parseTeam(row[8]),
@@ -152,6 +152,11 @@ const CreateTournament = () => {
         const idToken = await user.getIdToken(); // Retrieve the Firebase ID token
 
         console.log('Logged in with uid', user.uid);
+
+        console.log(tournament);
+
+        console.log(JSON.stringify(tournament));
+
         
         const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/sync/v1/custom/tournament/aa_test`, {
           method: 'POST',
@@ -188,6 +193,14 @@ const CreateTournament = () => {
 };
 const isRowEmpty = (row: any[]) => row.every(cell => cell === "" || cell === null || cell === undefined);
 
+function convertDateToISO(dateString: any) {
+  const parts = dateString.split(".");
+  if (parts.length === 3) {
+      // parts[2] er året, parts[1] er måneden, og parts[0] er dagen
+      return `${parts[2]}-${parts[1]}-${parts[0]}`;
+  }
+  return null; // returner null hvis formatet ikke er som forventet
+}
 
 
 
