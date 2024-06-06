@@ -133,7 +133,11 @@ const CreateTournament = () => {
         reader.readAsArrayBuffer(file);
     };
 
-    const sendTournament = async (tournament:CustomTournament) => {
+    const sendTournament = async (tournament:CustomTournament | null) => {
+      if(tournament === null){
+        return;
+      }
+      
       try {
         const uid = await getUID()
         console.log('Logged in with uid', uid)
