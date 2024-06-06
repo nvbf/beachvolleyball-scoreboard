@@ -106,10 +106,10 @@ const CreateTournament = () => {
               // If the row is not empty, process it normally
               return {
                 id: row[0],
-                number: row[0],
+                number: row[0] as string,
                 name: row[6],
                 date: row[1],
-                time: row[2],
+                time: row[2] as string,
                 homeTeam: parseTeam(row[7]),
                 awayTeam: parseTeam(row[8]),
                 hasWinner: false,
@@ -137,7 +137,7 @@ const CreateTournament = () => {
       if(tournament === null){
         return;
       }
-      
+
       try {
         const uid = await getUID()
         console.log('Logged in with uid', uid)
@@ -156,7 +156,7 @@ const CreateTournament = () => {
         const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/sync/v1/custom/tournament/aa_test`, {
           method: 'POST',
           headers: {
-            'Authorization': `Bearer ${idToken}`, // Include the ID token in the Authorization header
+          //  'Authorization': `Bearer ${idToken}`, // Include the ID token in the Authorization header
             'Content-Type': 'application/json', // Set Content-Type header to application/json
           },
           body: JSON.stringify(tournament),
