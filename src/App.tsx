@@ -10,18 +10,10 @@ import TournamentOverlay from "./pages/TournamentOverlay";
 import TournamentView from "./pages/TournamentView";
 import GrantAdminAccess from "./pages/GrantAdminAccess";
 import ClaimAccess from "./pages/ClaimAccess";
-import { useEffect } from "react";
-import { initGA, logPageView } from "./analytics";
-import AnalyticsTracker from "./AnalyticsTracker";
 
 const App: React.FC = () => {
-  useEffect(() => {
-    initGA('G-7MSH9M06FP');
-  }, []);
-
   return (
     <BrowserRouter>
-      <AnalyticsTracker />
       <Routes>
         <Route path="/" element={<StartPage />} />
         <Route path="/match" element={<CreateMatch />} />

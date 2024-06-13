@@ -40,6 +40,7 @@ const GrantAdminAccess = () => {
           redirect: 'follow', // Ensure redirects are followed
           headers: {
             'Authorization': `Bearer ${idToken}`, // Include the ID token in the Authorization header
+            'Content-Type': 'application/json', // Set Content-Type header to application/json
           },
         });
 

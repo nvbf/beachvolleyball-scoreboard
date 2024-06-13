@@ -42,8 +42,12 @@ const TournamentAdmin = () => {
     // Define your async function
     const fetchData = async (tournamentSlug: string) => {
       try {
-        console.log("Env var: " + import.meta.env.VITE_BACKEND_URL);
-        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/sync/v1/tournament/${tournamentSlug}`);
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/sync/v1/tournament/${tournamentSlug}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json', // Set Content-Type header to application/json
+          },
+        });
         const data = await response.json();
         console.log(data);
       } catch (error) {
