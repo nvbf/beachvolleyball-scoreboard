@@ -53,6 +53,7 @@ export function* pushNewEvent(action: PayloadAction<AddEventPayload>): Generator
     yield put(publishScores())
 
   } catch (error) {
+    console.log(error)
     console.log("Error when pushing new event");
   }
 }
