@@ -12,7 +12,6 @@ export const addEventToMatchToFirestore = async (
   const eventCollection = collection(db, "Matches", matchId, "events");
   const uid = await getUID()
   let eventWithUserID = Event
-  eventWithUserID.author = uid || ""
   return addDoc(eventCollection, Event)
     .then((docRef) => {
       console.log("Document written to match: %s with ID: %s", matchId, docRef.id);
