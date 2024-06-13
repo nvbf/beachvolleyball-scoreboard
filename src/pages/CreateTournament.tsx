@@ -162,6 +162,7 @@ const CreateTournament = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json', // Set Content-Type header to application/json
+          'Authorization': `Bearer ${idToken}`, // Include the ID token in the Authorization header
         },
         body: JSON.stringify(tournament),
       });
