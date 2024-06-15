@@ -17,7 +17,7 @@ export function MatchFinished() {
     const dispatch = useAppDispatch();
 
     function handleDone() {
-        dispatch(addEvent({ matchId: match.matchId, id: match.id, event: finalizeMatchEvent() }))
+        dispatch(addEvent({ matchId: match.matchId, id: match.id, event: finalizeMatchEvent(match.authUserId) }))
         dispatch(finalizeMatch())
     }
 
@@ -36,7 +36,7 @@ export function MatchFinished() {
                     spacing={2}
                     columns={12}
                     justifyContent="center"
-                    // alignItems="flex-end"
+                // alignItems="flex-end"
                 >
                     <Grid item >
                         <Typography align='right' sx={{

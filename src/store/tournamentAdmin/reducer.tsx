@@ -22,6 +22,7 @@ const initState: adminState = {
     dates: [],
     fields: [],
     id: "",
+    authToken: "",
     secret: "",
     selectedDay: "all",
     selectedCourt: "all",

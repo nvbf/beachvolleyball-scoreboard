@@ -64,13 +64,13 @@ describe('match reducer', () => {
         const initialState = {
             ...initMatchState,
             events: [
-                setLeftStartTeamEvent(TeamType.Home),
-                createAddPointEvent(TeamType.Home),
-                createAddPointEvent(TeamType.Away),
-                createAddPointEvent(TeamType.Home),
-                createAddPointEvent(TeamType.Away),
-                createAddPointEvent(TeamType.Away),
-                createAddPointEvent(TeamType.Home),
+                setLeftStartTeamEvent(TeamType.Home, initMatchState.authUserId),
+                createAddPointEvent(TeamType.Home, initMatchState.authUserId),
+                createAddPointEvent(TeamType.Away, initMatchState.authUserId),
+                createAddPointEvent(TeamType.Home, initMatchState.authUserId),
+                createAddPointEvent(TeamType.Away, initMatchState.authUserId),
+                createAddPointEvent(TeamType.Away, initMatchState.authUserId),
+                createAddPointEvent(TeamType.Home, initMatchState.authUserId),
             ],
         };
         let state = matchReducer(initialState, evaluateEvents());
@@ -78,20 +78,20 @@ describe('match reducer', () => {
         expect(state.currentScore[TeamType.Away]).toEqual(3);
         expect(state.leftSideTeam).toEqual(TeamType.Home);
         expect(state.currentSet).toEqual(1);
-        state = matchReducer(state, insertEvent(createAddPointEvent(TeamType.Home)));
+        state = matchReducer(state, insertEvent(createAddPointEvent(TeamType.Home, initMatchState.authUserId)));
         state = matchReducer(state, evaluateEvents());
         expect(state.currentScore[TeamType.Home]).toEqual(4);
         expect(state.currentScore[TeamType.Away]).toEqual(3);
         expect(state.leftSideTeam).toEqual(TeamType.Away);
         for (let i = 0; i < 20; i++) {
-            state = matchReducer(state, insertEvent(createAddPointEvent(TeamType.Away)));
-            state = matchReducer(state, insertEvent(createAddPointEvent(TeamType.Home)));
+            state = matchReducer(state, insertEvent(createAddPointEvent(TeamType.Away, initMatchState.authUserId)));
+            state = matchReducer(state, insertEvent(createAddPointEvent(TeamType.Home, initMatchState.authUserId)));
         }
         state = matchReducer(state, evaluateEvents());
         expect(state.currentScore[TeamType.Home]).toEqual(24);
         expect(state.currentScore[TeamType.Away]).toEqual(23);
         expect(state.leftSideTeam).toEqual(TeamType.Home);
-        state = matchReducer(state, insertEvent(createAddPointEvent(TeamType.Home)));
+        state = matchReducer(state, insertEvent(createAddPointEvent(TeamType.Home, initMatchState.authUserId)));
         state = matchReducer(state, evaluateEvents());
         expect(state.currentSet).toEqual(2);
         expect(state.currentScore[TeamType.Home]).toEqual(0);
@@ -100,7 +100,7 @@ describe('match reducer', () => {
         expect(state.currentSetScore[TeamType.Away]).toEqual(0);
         expect(state.finished).toEqual(false);
         for (let i = 0; i < 21; i++) {
-            state = matchReducer(state, insertEvent(createAddPointEvent(TeamType.Home)));
+            state = matchReducer(state, insertEvent(createAddPointEvent(TeamType.Home, initMatchState.authUserId)));
         }
         state = matchReducer(state, evaluateEvents());
         expect(state.currentSet).toEqual(3);
@@ -116,7 +116,7 @@ describe('match reducer', () => {
         const initialState = {
             ...initMatchState,
             events: [
-                callTimeoutEvent(TeamType.Home),
+                callTimeoutEvent(TeamType.Home, initMatchState.authUserId),
             ],
         };
         const state = matchReducer(initialState, evaluateEvents());
@@ -127,7 +127,7 @@ describe('match reducer', () => {
         const initialState = {
             ...initMatchState,
             events: [
-                finalizeMatchEvent(),
+                finalizeMatchEvent(initMatchState.authUserId),
             ],
         };
         const state = matchReducer(initialState, evaluateEvents());

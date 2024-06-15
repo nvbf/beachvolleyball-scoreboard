@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { TeamType, EventType, Event, Team, Match } from "../../components/types"
 import { matchState } from "../types"
 import { v4 } from 'uuid';
+import { User } from "firebase/auth";
 
 export interface AddEventPayload {
   matchId: string;
@@ -27,6 +28,7 @@ export const initMatchState: matchState = {
   matchId: "null",
   tournamentId: "null",
   id: "",
+  authUserId: "",
   finished: false,
   technicalTimeout: false,
   technicalTimeoutStart: 0,
@@ -99,6 +101,9 @@ const matchSlice = createSlice({
     },
     insertEvent: (state, action: PayloadAction<Event>) => {
       state.events.push(action.payload);
+    },
+    persistUser: (state, action: PayloadAction<string>) => {
+      state.authUserId = action.payload
     },
     undoLastEvent: (state) => {
       const { events } = state;
@@ -279,6 +284,7 @@ const matchSlice = createSlice({
     finalizeMatch: (state) => { }, // dummy reducer
     finalizeSet: (state) => { }, // dummy reducer
     updateScores: (state, action: PayloadAction<TeamType>) => { }, // dummy reducer
+    authorize: (state) => { }, // dummy reducer
     addTeamError: (state, action: PayloadAction<Error>) => { }, // dummy reducer
     addEvent: (state, action: PayloadAction<AddEventPayload>) => { }, // dummy reducer
     undoEvent: (state, action: PayloadAction<AddEventPayload>) => { }, // dummy reducer
@@ -294,6 +300,7 @@ export const {
   setMatchId,
   setTournamentId,
   setId,
+  persistUser,
   addHomeTeam,
   addAwayTeam,
   setTeamColor,
@@ -310,6 +317,7 @@ export const {
   finalizeMatch,
   finalizeSet,
   updateScores,
+  authorize,
   addTeamError,
   addEvent,
   undoEvent,
