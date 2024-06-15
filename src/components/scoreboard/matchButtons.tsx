@@ -26,11 +26,11 @@ export function MatchButtons() {
   const [infoCollapse, setInfoCollapse] = useState(false);
 
   function addPoint(team: TeamType) {
-    dispatch(addEvent({ matchId: match.matchId, id: match.id, event: createAddPointEvent(team) }))
+    dispatch(addEvent({ matchId: match.matchId, id: match.id, event: createAddPointEvent(team, match.authUserId) }))
   }
 
   function teamTimeout(team: TeamType) {
-    dispatch(addEvent({ matchId: match.matchId, id: match.id, event: callTimeoutEvent(team) }))
+    dispatch(addEvent({ matchId: match.matchId, id: match.id, event: callTimeoutEvent(team, match.authUserId) }))
   }
 
   return (

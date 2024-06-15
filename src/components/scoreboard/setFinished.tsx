@@ -16,7 +16,7 @@ export function SetFinished() {
     const dispatch = useAppDispatch();
 
     function handleDone() {
-        dispatch(addEvent({ matchId: match.matchId, id: match.id, event: finalizeSetEvent() }))
+        dispatch(addEvent({ matchId: match.matchId, id: match.id, event: finalizeSetEvent(match.authUserId) }))
     }
 
     return (

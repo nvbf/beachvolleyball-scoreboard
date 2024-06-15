@@ -19,7 +19,7 @@ export function SwitchSides() {
     const match = useAppSelector((state) => state.match);
 
     function handleDone() {
-        dispatch(addEvent({ matchId: match.matchId, id: match.id, event: setClearMessageEvent() }))
+        dispatch(addEvent({ matchId: match.matchId, id: match.id, event: setClearMessageEvent(match.authUserId) }))
     }
 
     return (

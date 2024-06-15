@@ -22,7 +22,7 @@ export function ScoreboardHeader() {
   const dispatch = useAppDispatch();
 
   function undo() {
-    dispatch(undoEvent({ matchId: match.matchId, id: match.id, event: createUndoEvent(match.events) }));
+    dispatch(undoEvent({ matchId: match.matchId, id: match.id, event: createUndoEvent(match.events, match.authUserId) }));
   }
 
   function toggleSettings() {
@@ -33,7 +33,7 @@ export function ScoreboardHeader() {
     if (getLastValidEvent(match.events)?.eventType === EventType.SetFinalized) {
       return true
     }
-    if (getLastValidEvent(match.events)?.eventType === EventType.MatchFinalized){
+    if (getLastValidEvent(match.events)?.eventType === EventType.MatchFinalized) {
       return true
     }
     return false
@@ -62,13 +62,13 @@ export function ScoreboardHeader() {
             <Typography align='center' sx={{ fontSize: "3rem", variant: 'button', lineHeight: 1, paddingTop: 1, paddingX: 1 }}>
               <TimeElapsed startTime={match.startTime} />
             </Typography>
-          </Grid> }
+          </Grid>}
           {match.userMessage && !match.finished && <Grid item xs={6}>
             <Typography align='center' sx={{ fontSize: "1.2rem", variant: 'button', lineHeight: 1, paddingTop: 1, paddingX: 1 }}>
-              NEXT POINT: 
+              NEXT POINT:
             </Typography>
             <Typography align='center' sx={{ fontSize: "1.2rem", variant: 'button', lineHeight: 1, paddingTop: 1, paddingX: 1 }}>
-             {match.userMessage.toUpperCase()}
+              {match.userMessage.toUpperCase()}
             </Typography>
           </Grid>}
           {(getLastValidEvent(match.events)?.eventType === EventType.MatchFinalized || false) && <Grid item xs={6}>

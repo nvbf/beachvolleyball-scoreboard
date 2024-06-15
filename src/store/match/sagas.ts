@@ -1,12 +1,13 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import { all, call, CallEffect, delay, put, PutEffect, select, SelectEffect, takeEvery, takeLatest } from 'redux-saga/effects'
 import { TeamType, Team, Event, Match } from '../../components/types';
-import { addAwayTeam, addEvent, AddEventPayload, addHomeTeam, addTeamError, checkDb, evaluateEvents, finalizeMatch, initMatch, insertEvent, publishScores, storeEvents, storeMatch, undoEvent, undoLastEvent } from "./reducer";
+import { addAwayTeam, addEvent, AddEventPayload, addHomeTeam, addTeamError, authorize, checkDb, evaluateEvents, finalizeMatch, initMatch, insertEvent, persistUser, publishScores, storeEvents, storeMatch, undoEvent, undoLastEvent } from "./reducer";
 import { db } from '../../firebase/firebase-config';
 import { addEventToMatchToFirestore, getEventsFromMatch, getMatch, initNewMatch, setMatchFinalized, setMatchResult, setScoreboardId, setScoreboardScore, setStartTime } from '../../firebase/match_service';
 import { v4 } from 'uuid';
 import { RootState } from '../store';
 import { matchState } from '../types';
+import { getAuth } from 'firebase/auth';
 
 /*
  * Sagas intercept an action, and then dispatches API calls. When the API call resolves, it either dispatches a success action, or an error action.
@@ -76,6 +77,24 @@ export function* publishScoresToTournaments(action: PayloadAction): Generator<Ca
 
   } catch (error) {
     console.log("Error when publishing scores");
+  }
+}
+
+
+export function* authorizeFirestore(action: PayloadAction): Generator<CallEffect | SelectEffect | PutEffect, void, matchState> {
+
+  try {
+    const auth = getAuth();
+    const user = auth.currentUser;
+    if (user === null) {
+      throw Error("Could not get userId")
+    } else {
+      console.log("authorizeFirestore for %s", user.uid);
+      yield put(persistUser(user.uid))
+    }
+
+  } catch (error) {
+    console.log("Error when authorization");
   }
 }
 
@@ -168,7 +187,9 @@ export function* matchSagas() {
     takeEvery(undoEvent.type, undoGivenEvent),
     takeEvery(initMatch.type, initializeMatch),
     takeEvery(publishScores.type, publishScoresToTournaments),
+    takeEvery(authorize.type, authorizeFirestore),
     takeEvery(finalizeMatch.type, finalizeEndedMatch),
 
   ])
 }
+

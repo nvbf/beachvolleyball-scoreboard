@@ -11,7 +11,7 @@ import MatchFinished from '../components/scoreboard/matchFinished';
 import TeamTimeout from '../components/scoreboard/teamTimeout';
 import TechnicalTimeout from '../components/scoreboard/technicalTimeout';
 import { useLocation, useParams } from 'react-router-dom';
-import { checkDb, setId } from '../store/match/reducer';
+import { authorize, checkDb, resetTeamColor, setId } from '../store/match/reducer';
 import SwitchSides from '../components/scoreboard/switchSides';
 import Loader from '../components/loader';
 import MatchButtons from '../components/scoreboard/matchButtons';
@@ -27,6 +27,8 @@ function Match() {
   const [checkedDb, setCheckedDb] = useState(false);
 
   const params = useParams();
+
+  dispatch(authorize());
 
   if (!match.id && params.matchId) {
     console.log('set match id : %s', params.matchId)

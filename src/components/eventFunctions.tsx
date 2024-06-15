@@ -9,7 +9,7 @@ export const getDefaultColor = (team: TeamType): string => {
     }
 }
 
-export const createAddPointEvent = (team: TeamType): Event => {
+export const createAddPointEvent = (team: TeamType, userId: string): Event => {
     return {
         id: v4(),
         eventType: EventType.Score,
@@ -17,11 +17,11 @@ export const createAddPointEvent = (team: TeamType): Event => {
         playerId: 0,
         timestamp: Date.now(),
         undone: "",
-        author: "",
+        author: userId,
         reference: ""
     }
 }
-export const finalizeSetEvent = (): Event => {
+export const finalizeSetEvent = (userId: string): Event => {
     return {
         id: v4(),
         eventType: EventType.SetFinalized,
@@ -29,12 +29,12 @@ export const finalizeSetEvent = (): Event => {
         playerId: 0,
         timestamp: Date.now(),
         undone: "",
-        author: "",
+        author: userId,
         reference: ""
     }
 }
 
-export const finalizeMatchEvent = (): Event => {
+export const finalizeMatchEvent = (userId: string): Event => {
     return {
         id: v4(),
         eventType: EventType.MatchFinalized,
@@ -42,12 +42,12 @@ export const finalizeMatchEvent = (): Event => {
         playerId: 0,
         timestamp: Date.now(),
         undone: "",
-        author: "",
+        author: userId,
         reference: ""
     }
 }
 
-export const callTimeoutEvent = (team: TeamType): Event => {
+export const callTimeoutEvent = (team: TeamType, userId: string): Event => {
     return {
         id: v4(),
         eventType: EventType.Timeout,
@@ -55,12 +55,12 @@ export const callTimeoutEvent = (team: TeamType): Event => {
         playerId: 0,
         timestamp: Date.now(),
         undone: "",
-        author: "",
+        author: userId,
         reference: ""
     }
 }
 
-export const selectFirstServerEvent = (team: TeamType, player: number): Event => {
+export const selectFirstServerEvent = (team: TeamType, player: number, userId: string): Event => {
     return {
         id: v4(),
         eventType: EventType.FirstPlayerServer,
@@ -68,12 +68,12 @@ export const selectFirstServerEvent = (team: TeamType, player: number): Event =>
         playerId: player,
         timestamp: Date.now(),
         undone: "",
-        author: "",
+        author: userId,
         reference: ""
     }
 }
 
-export const selectFirstServingTeamEvent = (team: TeamType): Event => {
+export const selectFirstServingTeamEvent = (team: TeamType, userId: string): Event => {
     return {
         id: v4(),
         eventType: EventType.FirstTeamServer,
@@ -81,12 +81,12 @@ export const selectFirstServingTeamEvent = (team: TeamType): Event => {
         playerId: 0,
         timestamp: Date.now(),
         undone: "",
-        author: "",
+        author: userId,
         reference: ""
     }
 }
 
-export const pickTeamColorEvent = (team: TeamType, color: string): Event => {
+export const pickTeamColorEvent = (team: TeamType, color: string, userId: string): Event => {
     return {
         id: v4(),
         eventType: EventType.PickColor,
@@ -94,12 +94,12 @@ export const pickTeamColorEvent = (team: TeamType, color: string): Event => {
         playerId: 0,
         timestamp: Date.now(),
         undone: "",
-        author: "",
+        author: userId,
         reference: color
     }
 }
 
-export const setLeftStartTeamEvent = (team: TeamType): Event => {
+export const setLeftStartTeamEvent = (team: TeamType, userId: string): Event => {
     return {
         id: v4(),
         eventType: EventType.LeftSideStartTeam,
@@ -107,12 +107,12 @@ export const setLeftStartTeamEvent = (team: TeamType): Event => {
         playerId: 0,
         timestamp: Date.now(),
         undone: "",
-        author: "",
+        author: userId,
         reference: ""
     }
 }
 
-export const setNoSideSwitchEvent = (): Event => {
+export const setNoSideSwitchEvent = (userId: string): Event => {
     return {
         id: v4(),
         eventType: EventType.NoSideSwitch,
@@ -120,12 +120,12 @@ export const setNoSideSwitchEvent = (): Event => {
         playerId: 0,
         timestamp: Date.now(),
         undone: "",
-        author: "",
+        author: userId,
         reference: ""
     }
 }
 
-export const setClearMessageEvent = (): Event => {
+export const setClearMessageEvent = (userId: string): Event => {
     return {
         id: v4(),
         eventType: EventType.ClearMessage,
@@ -133,12 +133,12 @@ export const setClearMessageEvent = (): Event => {
         playerId: 0,
         timestamp: Date.now(),
         undone: "",
-        author: "",
+        author: userId,
         reference: ""
     }
 }
 
-export const createUndoEvent = (events: Event[]): Event => {
+export const createUndoEvent = (events: Event[], userId: string): Event => {
     const reversedEvents = [...events].reverse();
     const undoneEventIndex = reversedEvents.findIndex((event: Event) => !event.undone && event.eventType !== EventType.Undo);
 
@@ -150,7 +150,7 @@ export const createUndoEvent = (events: Event[]): Event => {
             playerId: 0,
             timestamp: Date.now(),
             undone: "",
-            author: "",
+            author: userId,
             reference: ""
         }
     }
@@ -162,7 +162,7 @@ export const createUndoEvent = (events: Event[]): Event => {
         playerId: 0,
         timestamp: Date.now(),
         undone: "",
-        author: "",
+        author: userId,
         reference: events[actualIndex].id
     }
 }
