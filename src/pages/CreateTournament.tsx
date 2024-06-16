@@ -178,9 +178,6 @@ function parseTeamString(team: string): string {
 
     const handleFile = (event: React.ChangeEvent<HTMLInputElement>) => {
 
-        
-
-
         const file = event.target.files ? event.target.files[0] : null;
         if (!file) {
             return;
@@ -229,18 +226,10 @@ function parseTeamString(team: string): string {
             setAdminMatches((filteredMatches as Match[]).map(e => parseAdminMatch(e)));
 
         };
-      }).filter(match => match !== null); // Remove null entries
 
-      setTournament({
-        slug: "tournament-2024",
-        matches: filteredMatches as Match[]
-      });
-
-      console.log(filteredMatches);
+      isParsed(true);
+      reader.readAsArrayBuffer(file);
     };
-    isParsed(true);
-    reader.readAsArrayBuffer(file);
-  };
 
   const sendTournament = async (tournament: CustomTournament | null) => {
     if (tournament === null) {
