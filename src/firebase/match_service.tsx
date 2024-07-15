@@ -8,7 +8,7 @@ export const addEventToMatchToFirestore = async (
   matchId: string,
   Event: Event
 ) => {
-  let db = getFirestore()
+  let db = getFirestore(import.meta.env.VITE_FIREBASE_DATABASE)
   const eventCollection = collection(db, "Matches", matchId, "events");
   const uid = await getUID()
   let eventWithUserID = Event
@@ -26,7 +26,7 @@ export const addEventToMatchToFirestore = async (
 export const getEventsFromMatch = async (
   matchId: string
 ) => {
-  let db = getFirestore()
+  let db = getFirestore(import.meta.env.VITE_FIREBASE_DATABASE)
   const uid = await getUID()
   const value = collection(db, "Matches", matchId, "events");
   const valueSnapshot = await getDocs(value);
@@ -65,7 +65,7 @@ export const getMatch = async (
 ) => {
   console.log('Looking for id', matchId)
 
-  let db = getFirestore()
+  let db = getFirestore(import.meta.env.VITE_FIREBASE_DATABASE)
   const uid = await getUID()
   console.log('Logged in with uid', uid)
   const value = doc(db, "Matches", matchId);
@@ -109,7 +109,7 @@ export const getTournamentSecrets = async (
 ) => {
   console.log('Getting secrets for ', slug)
 
-  let db = getFirestore()
+  let db = getFirestore(import.meta.env.VITE_FIREBASE_DATABASE)
   const uid = await getUID()
   console.log('Logged in with uid', uid)
   const value = doc(db, "TournamentSecrets", slug);
@@ -135,7 +135,7 @@ export const initNewMatch = async (
   match: Match,
   id: string
 ) => {
-  let db = getFirestore()
+  let db = getFirestore(import.meta.env.VITE_FIREBASE_DATABASE)
   const matches = doc(db, "Matches", id);
 
   return setDoc(matches, match)
@@ -153,7 +153,7 @@ export const setScoreboardId = async (
   match: Match,
   id: string
 ) => {
-  let db = getFirestore()
+  let db = getFirestore(import.meta.env.VITE_FIREBASE_DATABASE)
   const docRef = doc(db, "Tournaments", match.tournamentId, "Matches", match.matchId);
 
   await updateDoc(docRef, {
@@ -167,7 +167,7 @@ export const setStartTime = async (
   matchId: string,
   startTime: number
 ) => {
-  let db = getFirestore()
+  let db = getFirestore(import.meta.env.VITE_FIREBASE_DATABASE)
   const docRef = doc(db, "Tournaments", tournamentId, "Matches", matchId);
 
   await updateDoc(docRef, {
@@ -181,7 +181,7 @@ export const setScoreboardScore = async (
   currentScore: { [key: string]: number }[],
   currentSetScore: { [key: string]: number }
 ) => {
-  let db = getFirestore()
+  let db = getFirestore(import.meta.env.VITE_FIREBASE_DATABASE)
   const docRef = doc(db, "Tournaments", tournamentId, "Matches", matchId);
 
   await updateDoc(docRef, {
@@ -195,7 +195,7 @@ export const setMatchFinalized = async (
   tournamentId: string,
   matchId: string,
 ) => {
-  let db = getFirestore()
+  let db = getFirestore(import.meta.env.VITE_FIREBASE_DATABASE)
   const docRef = doc(db, "Tournaments", tournamentId, "Matches", matchId);
 
   await updateDoc(docRef, {
