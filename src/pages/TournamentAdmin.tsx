@@ -68,7 +68,7 @@ const TournamentAdmin = () => {
   }, [tournamentSlug]);
 
   const dispatch = useDispatch();
-  let db = getFirestore()
+  let db = getFirestore(import.meta.env.VITE_FIREBASE_DATABASE)
 
   // Retrieve the matches from the Redux store
   const matches = useSelector((state: RootState) => state.matches);

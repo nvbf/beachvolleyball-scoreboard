@@ -163,7 +163,7 @@ function parseTeamString(team: string): string {
 
   const tournamentSlug: string = params.tournamentSlug ? params.tournamentSlug : "nevza_oddanesand_24";
   const dispatch = useDispatch();
-  let db = getFirestore()
+  let db = getFirestore(import.meta.env.VITE_FIREBASE_DATABASE)
 
   // Retrieve the matches from the Redux store
   const matches = useSelector((state: RootState) => state.matches);
