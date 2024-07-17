@@ -220,7 +220,7 @@ export const setMatchResult = async (
 
   console.log('Logged in with uid', user.uid);
 
-  const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/sync/v1/result/${matchId}`, {
+  const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/match/v1/result/${matchId}`, {
     method: 'GET',
     headers: {
       'Authorization': `Bearer ${idToken}`, // Include the ID token in the Authorization header
