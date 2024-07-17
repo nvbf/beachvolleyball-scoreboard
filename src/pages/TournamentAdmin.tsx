@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "./../store/store"; // update the path to your store file
 import MatchView from "../components/tournamentAdmin/matchView";
-import { Box, Button, Grid } from "@mui/material";
+import { Alert, Box, Button, Grid } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { Sort } from '@mui/icons-material';
 import { QueryFieldFilterConstraint, collection, doc, getFirestore, onSnapshot, query, where } from "firebase/firestore";
@@ -10,6 +10,7 @@ import { getMatchState, getStatusColor, parseAdminMatch } from "../components/to
 import { AdminMatch, MatchState } from "../components/tournamentAdmin/types";
 import { dateStringToString } from "../util/time";
 import { chooseCourt, chooseDay, fetchMatchSecrets, fetchMatchesRequest, updateMatch } from "../store/tournamentAdmin/reducer";
+import { useNavigate } from 'react-router-dom';
 
 const TournamentAdmin = () => {
   const params = useParams();
@@ -24,6 +25,8 @@ const TournamentAdmin = () => {
   const [descending, setDescending] = useState(true);
   const [selectDay, setSelectDay] = useState(false);
   const [selectCourt, setSelectCourt] = useState(false);
+
+  const navigate = useNavigate();
 
   const tournamentSlug: string = params.tournamentSlug ? params.tournamentSlug : ""
   const playerClass = searchParams.get('class');
@@ -134,19 +137,29 @@ const TournamentAdmin = () => {
     );
   };
 
+  const handleClaimAccess = () => {
+    navigate("/claim-access/" + tournamentSlug);
+  };
+
   const renderNoAccess = () => {
     return (
       <Grid container
         spacing={0}
         rowSpacing={0}
         columns={12}
-        justifyContent="space-evenly"
+        // justifyContent="space-evenly"
+        sx={{ alignSelf: 'center', textAlign: 'center' }}
         alignItems="center">
-
-        <br></br>
-        No access to admin for this tournament...
-        <br></br>
-        Ask owner of tournament to get a authorization link.
+        <Alert severity="warning">
+          <Grid item key="warning" >
+            No access to admin for this tournament...
+            Ask owner of tournament to get a authorization link.
+            <br></br>
+          </Grid>
+        </Alert >
+        <Grid item key="claim" >
+          <Button onClick={handleClaimAccess}>claim access</Button>
+        </Grid>
       </Grid>
     );
   };
@@ -175,7 +188,7 @@ const TournamentAdmin = () => {
     alignItems="center"
     marginTop={1}
   >
-    <Grid item xs={12}>
+    {matches.secret && <Grid item xs={12}>
       <Grid container
         rowSpacing={1}
         columnSpacing={0}
@@ -261,8 +274,8 @@ const TournamentAdmin = () => {
           </Button>
         </Grid>
       </Grid>
-    </Grid>
-    {!(selectDay || selectCourt) && <Grid item xs={12}>
+    </Grid>}
+    {!(!matches.secret || (selectDay || selectCourt)) && <Grid item xs={12}>
       <Grid container
         rowSpacing={1}
         columnSpacing={2}
@@ -298,7 +311,7 @@ const TournamentAdmin = () => {
         </Grid>
       </Grid>
     </Grid>}
-    {selectDay && <Grid item xs={12}>
+    {(matches.secret && selectDay) && <Grid item xs={12}>
       <Grid container
         rowSpacing={1}
         columnSpacing={1}
@@ -341,7 +354,7 @@ const TournamentAdmin = () => {
         }
       </Grid>
     </Grid>}
-    {selectCourt && <Grid item xs={12}>
+    {(matches.secret && selectCourt) && <Grid item xs={12}>
       <Grid container
         rowSpacing={1}
         columnSpacing={1}
