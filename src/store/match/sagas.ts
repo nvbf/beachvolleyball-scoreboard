@@ -169,7 +169,7 @@ export function* finalizeEndedMatch(action: PayloadAction): Generator<CallEffect
     yield call(setMatchFinalized, matchState.tournamentId, matchState.matchId)
     console.log("Is Finalized");
 
-    yield call(setMatchResult, matchState.matchId)
+    yield call(setMatchResult, matchState.id)
     console.log("Report sent");
 
   } catch (error) {
