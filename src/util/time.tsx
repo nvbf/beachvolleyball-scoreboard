@@ -24,6 +24,38 @@ export function timestampToStringHours(timestamp: number) {
     return formattedTime;
 }
 
+export function isOngoing(startDate: string, endDate: string): boolean {
+    const today = new Date();
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+
+    // Set the time part of the dates to the beginning and end of the day
+    start.setHours(0, 0, 0, 0);
+    end.setHours(23, 59, 59, 999);
+
+    return today >= start && today <= end;
+}
+
+export function isIncoming(startDate: string): boolean {
+    const today = new Date();
+    const start = new Date(startDate);
+
+    // Set the time part of the dates to the beginning and end of the day
+    start.setHours(0, 0, 0, 0);
+
+    return today < start;
+}
+
+export function isPast(endDate: string): boolean {
+    const today = new Date();
+    const end = new Date(endDate);
+
+    // Set the time part of the dates to the beginning and end of the day
+    end.setHours(23, 59, 59, 999);
+
+    return today > end;
+}
+
 export function dateStringToString(dateString: string) {
     // Split the dateString into year, month, and day components
     const [year, month, day] = dateString.split('-');
