@@ -24,6 +24,7 @@ const initState: adminState = {
     id: "",
     authToken: "",
     secret: "",
+    showLoader: true,
     selectedDay: "all",
     selectedCourt: "all",
     errorMessage: "",
@@ -54,7 +55,11 @@ const adminSlice = createSlice({
         },
         addSecrets: (state, action: PayloadAction<TournamentSecrets>) => {
             state.secret = action.payload.secret;
+            state.showLoader = false;
             state.id = action.payload.id;
+        },
+        setLoader: (state, action: PayloadAction<boolean>) => {
+            state.showLoader = action.payload;
         },
         fetchMatchDatesSuccess: (state, action: PayloadAction<string[]>) => {
             let today = new Date().toISOString().split('T')[0];
@@ -81,7 +86,8 @@ export const {
     chooseDay,
     fetchMatchDatesSuccess,
     fetchMatchFieldsSuccess,
-    addSecrets
+    addSecrets,
+    setLoader
 } = adminSlice.actions;
 
 export default adminSlice.reducer;

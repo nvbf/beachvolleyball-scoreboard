@@ -1,6 +1,6 @@
 import { all, call, put, takeEvery, takeLatest } from 'redux-saga/effects';
 import { SagaIterator } from 'redux-saga';
-import { fetchMatchesSuccess, fetchMatchesFailure, fetchMatchDatesSuccess, fetchMatchesRequest, fetchMatchFieldsSuccess, FetchMatchsPayload, addSecrets, fetchMatchSecrets } from './reducer'
+import { fetchMatchesSuccess, fetchMatchesFailure, fetchMatchDatesSuccess, fetchMatchesRequest, fetchMatchFieldsSuccess, FetchMatchsPayload, addSecrets, fetchMatchSecrets, setLoader } from './reducer'
 import { collection, getDocs, doc, QuerySnapshot } from "@firebase/firestore";
 import { db } from './../../firebase/firebase-config';
 import { PayloadAction } from '@reduxjs/toolkit';
@@ -130,8 +130,10 @@ function* getMatcheSecretFromFirestore(action: PayloadAction<FetchMatchsPayload>
         console.log(tournamentSecrets)
 
         yield put(addSecrets(tournamentSecrets))
+        yield put(setLoader(false))
         console.log("Saved secrets");
     } catch (error) {
+        yield put(setLoader(false))
         console.log("Error when getting secrets ", error);
     }
 }

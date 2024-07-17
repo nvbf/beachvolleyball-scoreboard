@@ -38,6 +38,7 @@ export type adminState = {
   id: string,
   authToken: string,
   secret: string,
+  showLoader: boolean,
   selectedDay: string,
   selectedCourt: string,
   errorMessage: string,

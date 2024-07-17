@@ -11,6 +11,7 @@ import { AdminMatch, MatchState } from "../components/tournamentAdmin/types";
 import { dateStringToString } from "../util/time";
 import { chooseCourt, chooseDay, fetchMatchSecrets, fetchMatchesRequest, updateMatch } from "../store/tournamentAdmin/reducer";
 import { useNavigate } from 'react-router-dom';
+import Loader from "../components/loader";
 
 const TournamentAdmin = () => {
   const params = useParams();
@@ -399,7 +400,8 @@ const TournamentAdmin = () => {
     </Grid>}
     <Grid item xs={12}>
       {matches.secret && renderMatches(matchesList, tournamentSlug, descending, matches.selectedDay, matches.selectedCourt, matches.secret)}
-      {!matches.secret && renderNoAccess()}
+      {(!matches.secret && !matches.showLoader) && renderNoAccess()}
+      {matches.showLoader && <Loader />}
     </Grid>
   </Grid>
   );
