@@ -100,7 +100,7 @@ export enum DisplayType {
 function getActiveDisplay(state: matchState): DisplayType {
   if (matchFinalized(state)) {
     return DisplayType.MatchFinalized
-  } else if (state.matchId === "null") {
+  } else if (state.matchId === "null" || state.authUserId === "") {
     return DisplayType.Loading
   } else if (technicalTimeout(state) && getLastValidEvent(state.events)?.eventType !== EventType.ClearMessage) {
     return DisplayType.TechnicalTimeout
