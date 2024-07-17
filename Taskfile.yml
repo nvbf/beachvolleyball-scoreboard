@@ -1,6 +1,17 @@
 version: "3"
 
 tasks:
+  run-local:
+    desc: Run the app locally
+    cmds:
+      - npm run dev
+    env:
+      NODE_ENV: development
+      DEBUG: "*,-babel"
+      VITE_BACKEND_URL: http://localhost:8080
+      VITE_FIREBASE_DATABASE: development
+      PORT: 4000
+
   run:
     desc: Run the app locally
     cmds:
