@@ -21,22 +21,23 @@ interface AppCardsProps {
     path: string,
     iconName: string,
     size: number,
+    deactivated?: boolean,
 }
 
-export function AppCards({ title, subHeader, path, iconName, size }: AppCardsProps) {
+export function AppCards({ title, subHeader, path, iconName, size, deactivated = false }: AppCardsProps) {
     return (
         <Grid xs={12} md={6} item>
             <Card sx={{ maxWidth: 820, display: 'flex', justifyContent: 'center' }}>
-                <CardActionArea href={path}>
+                <CardActionArea href={!deactivated ? path : ""}>
                     <CardContent sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
                         <Typography sx={{ fontSize: 24, alignSelf: 'center', textAlign: 'center' }} variant="h1" color="text.secondary" gutterBottom>
                             {getIconFromName(iconName, size)}
                         </Typography>
-                        <Typography sx={{ alignSelf: 'center', textAlign: 'center' }} variant="h4" component="div">
+                        <Typography sx={{ alignSelf: 'center', textAlign: 'center', textDecoration: deactivated ? 'line-through' : 'none' }} variant="h4" component="div">
                             {title}
                         </Typography>
 
-                        <Typography sx={{ mb: 1.5, alignSelf: 'center', textAlign: 'center' }} color="text.secondary">
+                        <Typography sx={{ mb: 1.5, alignSelf: 'center', textAlign: 'center', textDecoration: deactivated ? 'line-through' : 'none' }} color="text.secondary">
                             {subHeader}
                         </Typography>
                     </CardContent>

@@ -50,6 +50,7 @@ function StartPage() {
               path="match"
               iconName="timer"
               size={iconSize}
+              deactivated
             />
             <AppCards
               title="Create Tournament"
@@ -64,6 +65,7 @@ function StartPage() {
               path="tournaments"
               iconName="player"
               size={iconSize}
+              deactivated
             />
             <AppCards
               title="See Tournaments"
@@ -78,6 +80,7 @@ function StartPage() {
               path="admin-tournament"
               iconName="admin"
               size={iconSize}
+              deactivated
             />
             <AppCards
               title="Access"
@@ -85,6 +88,7 @@ function StartPage() {
               path="claim-tournament"
               iconName="access"
               size={iconSize}
+              deactivated
             />
           </Grid>
         </main>
