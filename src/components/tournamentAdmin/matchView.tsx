@@ -15,6 +15,7 @@ import { getDelayString, getLateStart, timestampToString } from "../../util/time
 import { getMatchState, getStatusColor } from "./adminMatchFunctions";
 import { TeamType } from "../types";
 import { fetchMatchesRequest } from "../../store/tournamentAdmin/reducer";
+import { useDispatch } from "react-redux";
 
 interface MatchViewProps {
     match: AdminMatch;
@@ -27,6 +28,8 @@ export function MatchView({ match, tournamentSlug, secret }: MatchViewProps) {
     const [activeQrCode, setActiveQrCode] = useState("");
     const [isUpdating, setIsUpdating] = useState(false);
     const [updateFailed, setUpdateFailed] = useState(false);
+
+    const dispatch = useDispatch();
 
 
     const handleClose = () => {
@@ -45,6 +48,7 @@ export function MatchView({ match, tournamentSlug, secret }: MatchViewProps) {
 
         if (response.ok) {
             dispatch(fetchMatchesRequest({ tournamentSlug: tournamentSlug, class: null }));
+            setUpdateFailed(false)
         } else {
             setUpdateFailed(true)
         }
@@ -275,9 +279,3 @@ export function MatchView({ match, tournamentSlug, secret }: MatchViewProps) {
         </Box>
     );
 }
-
-export default MatchView;
-function dispatch(arg0: { payload: import("../../store/tournamentAdmin/reducer").FetchMatchsPayload; type: "admin/fetchMatchesRequest"; }) {
-    throw new Error("Function not implemented.");
-}
-
