@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Scoreboard from '../components/scoreboard';
 import { useAppDispatch, useAppSelector } from '../store/store';
 import ScoreboardHeader from '../components/scoreboard/header';
@@ -28,7 +28,29 @@ function Match() {
 
   const params = useParams();
 
-  dispatch(authorize());
+  useEffect(() => {
+    // Define your async function
+    const checkAuth = async (match: matchState) => {
+      try {
+        if (!match.authUserId) {
+          dispatch(authorize());
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
+
+    // Call it if no auth
+    if (!match.authUserId) {
+      checkAuth(match);
+    }
+
+    // Then call it every 2 seconds
+    const intervalId = setInterval(checkAuth, 2000, match);
+
+    // Clean up the interval on unmount
+    return () => clearInterval(intervalId);
+  }, [match]);
 
   if (!match.id && params.matchId) {
     console.log('set match id : %s', params.matchId)

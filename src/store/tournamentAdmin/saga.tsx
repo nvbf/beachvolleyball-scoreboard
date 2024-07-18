@@ -82,7 +82,6 @@ function* fetchArenaNamesFromFirestore(action: PayloadAction<FetchMatchsPayload>
         // yield put(fetchMatchesSuccess({ matches: matchesData }));
         console.log("Fields fetched from Firestore: ", sortedArenaNames);
         yield put(fetchMatchFieldsSuccess(sortedArenaNames));
-
     } catch (error) {
         yield put(fetchMatchesFailure((error as Error).message));
     }
