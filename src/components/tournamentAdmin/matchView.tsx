@@ -279,3 +279,5 @@ export function MatchView({ match, tournamentSlug, secret }: MatchViewProps) {
         </Box>
     );
 }
+
+export default MatchView;

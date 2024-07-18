@@ -30,7 +30,7 @@ tasks:
     env:
       NODE_ENV: development
       DEBUG: "*,-babel"
-      VITE_BACKEND_URL: https://tournament-sync-dev-48024539e01a.herokuapp.com
+      VITE_BACKEND_URL: https://tournament-sync.herokuapp.com
       VITE_FIREBASE_DATABASE: (default)
       PORT: 4000
 
