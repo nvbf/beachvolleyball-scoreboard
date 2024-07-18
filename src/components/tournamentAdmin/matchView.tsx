@@ -4,6 +4,9 @@ import { Box, Button, Dialog, Typography } from "@mui/material";
 import {
     QrCodeScanner,
     QrCode,
+    Sync,
+    CloudSync,
+    SyncProblem,
 } from '@mui/icons-material';
 import { getInitials } from "../../util/names";
 import { AdminMatch, MatchState } from "./types";
@@ -11,6 +14,7 @@ import QRCode from "qrcode.react";
 import { getDelayString, getLateStart, timestampToString } from "../../util/time";
 import { getMatchState, getStatusColor } from "./adminMatchFunctions";
 import { TeamType } from "../types";
+import { fetchMatchesRequest } from "../../store/tournamentAdmin/reducer";
 
 interface MatchViewProps {
     match: AdminMatch;
@@ -21,9 +25,30 @@ interface MatchViewProps {
 export function MatchView({ match, tournamentSlug, secret }: MatchViewProps) {
     const [open, setOpen] = useState(false);
     const [activeQrCode, setActiveQrCode] = useState("");
+    const [isUpdating, setIsUpdating] = useState(false);
+    const [updateFailed, setUpdateFailed] = useState(false);
+
 
     const handleClose = () => {
         setOpen(false);
+    };
+
+    const handleSync = async () => {
+        setIsUpdating(true)
+
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/sync/v1/tournament/${tournamentSlug}/match/${match.matchId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json', // Set Content-Type header to application/json
+            },
+        });
+
+        if (response.ok) {
+            dispatch(fetchMatchesRequest({ tournamentSlug: tournamentSlug, class: null }));
+        } else {
+            setUpdateFailed(true)
+        }
+        setIsUpdating(false)
     };
 
     const handleOpen = (url: React.SetStateAction<string>) => {
@@ -80,7 +105,7 @@ export function MatchView({ match, tournamentSlug, secret }: MatchViewProps) {
                 justifyContent="space-evenly"
                 alignItems="center"
             >
-                <Grid item md={11} xs={10} sx={{ textAlign: "right" }}>
+                <Grid item md={10} xs={10} sx={{ textAlign: "right" }}>
                     <Grid
                         container
                         spacing={1}
@@ -194,23 +219,52 @@ export function MatchView({ match, tournamentSlug, secret }: MatchViewProps) {
 
                     </Grid>
                 </Grid>
-                <Grid item md={1} xs={2} sx={{ textAlign: "right" }}>
-                    <Box display="flex" justifyContent="center">
-                        <Button
-                            variant="outlined"
-                            sx={{
-                                border: 0, borderRadius: '12px', color: 'black', borderColor: 'black',
-                                '&:hover': {
-                                    border: 0, borderRadius: '12px', color: 'black', borderColor: 'black', backgroundColor: "gray"
-                                }
-                            }}
-                            onClick={() => handleOpen(url)}
-                        >
-                            {!match.scoreboardID && <QrCodeScanner sx={{ fontSize: 64 }} />}
-                            {match.scoreboardID && <QrCode sx={{ fontSize: 64 }} />}
+                <Grid item md={2} xs={2} sx={{ textAlign: "right" }}>
+                    <Grid
+                        container
+                        spacing={1}
+                        justifyContent="flex-end"
+                        alignItems="center"
+                        columns={12}
+                    >
+                        <Grid item md={6} xs={12} sx={{ textAlign: "right" }}>
+                            <Box display="flex" justifyContent="center">
+                                <Button
+                                    variant="outlined"
+                                    sx={{
+                                        border: 0, borderRadius: '12px', color: 'black', borderColor: 'black',
+                                        '&:hover': {
+                                            border: 0, borderRadius: '12px', color: 'black', borderColor: 'black', backgroundColor: "gray"
+                                        }
+                                    }}
+                                    onClick={() => handleSync()}
+                                >
+                                    {(!isUpdating && !updateFailed) && <Sync sx={{ fontSize: 52 }} />}
+                                    {(isUpdating && !updateFailed) && <CloudSync sx={{ fontSize: 52 }} />}
+                                    {(updateFailed) && <SyncProblem sx={{ fontSize: 52 }} />}
+                                </Button>
+                            </Box>
+                        </Grid>
+                        <Grid item md={6} xs={12} sx={{ textAlign: "right" }}>
 
-                        </Button>
-                    </Box>
+                            <Box display="flex" justifyContent="center">
+                                <Button
+                                    variant="outlined"
+                                    sx={{
+                                        border: 0, borderRadius: '12px', color: 'black', borderColor: 'black',
+                                        '&:hover': {
+                                            border: 0, borderRadius: '12px', color: 'black', borderColor: 'black', backgroundColor: "gray"
+                                        }
+                                    }}
+                                    onClick={() => handleOpen(url)}
+                                >
+                                    {!match.scoreboardID && <QrCodeScanner sx={{ fontSize: 64 }} />}
+                                    {match.scoreboardID && <QrCode sx={{ fontSize: 64 }} />}
+
+                                </Button>
+                            </Box>
+                        </Grid>
+                    </Grid>
                 </Grid>
             </Grid>
             <Dialog open={open} onClose={handleClose}>
@@ -223,3 +277,7 @@ export function MatchView({ match, tournamentSlug, secret }: MatchViewProps) {
 }
 
 export default MatchView;
+function dispatch(arg0: { payload: import("../../store/tournamentAdmin/reducer").FetchMatchsPayload; type: "admin/fetchMatchesRequest"; }) {
+    throw new Error("Function not implemented.");
+}
+
