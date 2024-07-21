@@ -24,6 +24,17 @@ export function timestampToStringHours(timestamp: number) {
     return formattedTime;
 }
 
+export function getYear(dateString: string, blankIfThisYear: boolean): string {
+    const today = new Date();
+    const date = new Date(dateString);
+
+    if (today.getFullYear() === date.getFullYear() && blankIfThisYear) {
+        return ""
+    }
+
+    return date.getFullYear().toString();
+}
+
 export function isOngoing(startDate: string, endDate: string): boolean {
     const today = new Date();
     const start = new Date(startDate);

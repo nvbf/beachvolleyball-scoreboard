@@ -123,7 +123,7 @@ const YourReactComponent: React.FC = () => {
       {tournaments.sort(
         (a, b) => ((a.startDate < b.startDate) ? 1 : 0)
       ).filter((e) =>
-        isPast(e.startDate)
+        isPast(e.endDate)
       ).map((tournament, index) => (
         <Grid item key={tournament.slug} xs={12}>
           <Grid container

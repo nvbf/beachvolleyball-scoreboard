@@ -7,7 +7,7 @@ import {
 } from '@mui/icons-material';
 import { getInitials } from "../../util/names";
 import QRCode from "qrcode.react";
-import { dateStringToString, getDelayString, getLateStart, timestampToString } from "../../util/time";
+import { dateStringToString, getDelayString, getLateStart, getYear, timestampToString } from "../../util/time";
 import { TeamType } from "../types";
 import { Link } from "react-router-dom";
 
@@ -76,7 +76,7 @@ export function TournamentView({ tournament }: TournamentViewProps) {
                                 lineHeight: 1,
                                 paddingX: 1,
                             }}
-                        > {tournament.startDate === tournament.endDate ? dateStringToString(tournament.startDate) : dateStringToString(tournament.startDate) + " - " + dateStringToString(tournament.endDate)}
+                        > {tournament.startDate === tournament.endDate ? dateStringToString(tournament.startDate) : dateStringToString(tournament.startDate) + " - " + dateStringToString(tournament.endDate)} {getYear(tournament.endDate, true)}
                         </Typography>
 
                     </Grid>
