@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "./../store/store"; // update the path to your store file
 import MatchView from "../components/tournamentAdmin/matchView";
-import { Alert, Box, Button, Grid } from "@mui/material";
+import { Alert, Box, Button, Grid, Link } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { Sort } from '@mui/icons-material';
 import { QueryFieldFilterConstraint, collection, doc, getFirestore, onSnapshot, query, where } from "firebase/firestore";
@@ -30,7 +30,7 @@ const TournamentAdmin = () => {
   const navigate = useNavigate();
 
   const tournamentSlug: string = params.tournamentSlug ? params.tournamentSlug : ""
-  const playerClass = searchParams.get('class');
+  const selectedPlayerClass = searchParams.get('class');
 
   function handleSelectDay(day: string) {
     dispatch(chooseDay(day));
@@ -40,6 +40,9 @@ const TournamentAdmin = () => {
   function handleSelectCourt(court: string) {
     dispatch(chooseCourt(court));
     setSelectCourt(false);
+  }
+
+  function handleSelectClass(court: string) {
   }
 
   useEffect(() => {
@@ -81,8 +84,8 @@ const TournamentAdmin = () => {
   // Fetch the matches when the component mounts
   if (!fetchedMatches && tournamentSlug) {
     setFetchedMatches(true)
-    dispatch(fetchMatchesRequest({ tournamentSlug: tournamentSlug, class: playerClass }));
-    dispatch(fetchMatchSecrets({ tournamentSlug: tournamentSlug, class: playerClass }));
+    dispatch(fetchMatchesRequest({ tournamentSlug: tournamentSlug, class: selectedPlayerClass }));
+    dispatch(fetchMatchSecrets({ tournamentSlug: tournamentSlug, class: selectedPlayerClass }));
   }
 
   if (!createdCallbacks && tournamentSlug) {
@@ -91,8 +94,8 @@ const TournamentAdmin = () => {
     let collectionQuery: QueryFieldFilterConstraint[] = []
     collectionQuery.push(where("Date", "==", currentDate))
     collectionQuery.push(where("HasWinner", "==", false))
-    if (playerClass != null) {
-      collectionQuery.push(where("MatchCategory.CategoryCode", "==", playerClass))
+    if (selectedPlayerClass != null) {
+      collectionQuery.push(where("MatchCategory.CategoryCode", "==", selectedPlayerClass))
     }
     const q = query(collection(db, "Tournaments", tournamentSlug, "Matches"), ...collectionQuery);
 
@@ -187,8 +190,32 @@ const TournamentAdmin = () => {
     columns={12}
     justifyContent="space-evenly"
     alignItems="center"
-    marginTop={1}
+    marginTop={0.5}
   >
+    {matches.secret && <Grid item xs={12}>
+      <Grid container
+        rowSpacing={1}
+        columnSpacing={1}
+        columns={12}
+        justifyContent="center"
+        alignItems="center"
+      >
+        <Grid item>
+          <Link href={`/tournamentadmin/${tournamentSlug}`} style={{ color: selectedPlayerClass === null ? 'black' : 'gray' }}>
+            all classes
+          </Link>
+        </Grid>
+
+        {matches.classes.map((playerClass: string) => (
+          <Grid item key={playerClass}>
+            <Link href={`/tournamentadmin/${tournamentSlug}?class=${playerClass}`} style={{ color: playerClass === selectedPlayerClass ? 'black' : 'gray' }}>
+              {playerClass}
+            </Link>
+          </Grid>
+        ))
+        }
+      </Grid>
+    </Grid>}
     {matches.secret && <Grid item xs={12}>
       <Grid container
         rowSpacing={1}

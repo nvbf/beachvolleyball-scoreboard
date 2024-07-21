@@ -8,7 +8,7 @@ export interface MatchUpdatePayload {
     match: AdminMatch;
 }
 
-export interface FetchMatchsPayload {
+export interface FetchMatchesPayload {
     tournamentSlug: string;
     class: string | null;
 }
@@ -21,6 +21,7 @@ const initState: adminState = {
     matches: {},
     dates: [],
     fields: [],
+    classes: [],
     id: "",
     authToken: "",
     secret: "",
@@ -35,8 +36,8 @@ const adminSlice = createSlice({
     name: 'admin',
     initialState: initState,
     reducers: {
-        fetchMatchesRequest: (state, action: PayloadAction<FetchMatchsPayload>) => { }, // dummy reducer
-        fetchMatchSecrets: (state, action: PayloadAction<FetchMatchsPayload>) => { },
+        fetchMatchesRequest: (state, action: PayloadAction<FetchMatchesPayload>) => { }, // dummy reducer
+        fetchMatchSecrets: (state, action: PayloadAction<FetchMatchesPayload>) => { },
         fetchMatchesSuccess: (state, action: PayloadAction<MatchSuccessPayload>) => {
             const matchesArray: AdminMatch[] = action.payload.matches;
             state.matches = matchesArray.reduce((obj, match) => ({ ...obj, [match.matchId]: match }), {});
@@ -73,6 +74,9 @@ const adminSlice = createSlice({
         fetchMatchFieldsSuccess: (state, action: PayloadAction<string[]>) => {
             state.fields = action.payload;
         },
+        fetchMatchClassesSuccess: (state, action: PayloadAction<string[]>) => {
+            state.classes = action.payload;
+        },
     }
 });
 
@@ -86,6 +90,7 @@ export const {
     chooseDay,
     fetchMatchDatesSuccess,
     fetchMatchFieldsSuccess,
+    fetchMatchClassesSuccess,
     addSecrets,
     setLoader
 } = adminSlice.actions;

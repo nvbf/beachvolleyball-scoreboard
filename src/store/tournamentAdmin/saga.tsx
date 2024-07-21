@@ -1,6 +1,6 @@
 import { all, call, put, takeEvery, takeLatest } from 'redux-saga/effects';
 import { SagaIterator } from 'redux-saga';
-import { fetchMatchesSuccess, fetchMatchesFailure, fetchMatchDatesSuccess, fetchMatchesRequest, fetchMatchFieldsSuccess, FetchMatchsPayload, addSecrets, fetchMatchSecrets, setLoader } from './reducer'
+import { fetchMatchesSuccess, fetchMatchesFailure, fetchMatchDatesSuccess, fetchMatchesRequest, fetchMatchFieldsSuccess, FetchMatchesPayload, addSecrets, fetchMatchSecrets, setLoader, fetchMatchClassesSuccess } from './reducer'
 import { collection, getDocs, doc, QuerySnapshot } from "@firebase/firestore";
 import { db } from './../../firebase/firebase-config';
 import { PayloadAction } from '@reduxjs/toolkit';
@@ -10,7 +10,7 @@ import { parseAdminMatch } from '../../components/tournamentAdmin/adminMatchFunc
 import { getTournamentSecrets } from '../../firebase/match_service';
 import { TournamentSecrets } from '../../components/types';
 
-function* fetchDatesFromFirestore(action: PayloadAction<FetchMatchsPayload>): SagaIterator {
+function* fetchDatesFromFirestore(action: PayloadAction<FetchMatchesPayload>): SagaIterator {
     try {
         console.log("fetching dates");
         const tournamentSlug = action.payload.tournamentSlug;
@@ -41,7 +41,37 @@ function* fetchDatesFromFirestore(action: PayloadAction<FetchMatchsPayload>): Sa
     }
 }
 
-function* fetchArenaNamesFromFirestore(action: PayloadAction<FetchMatchsPayload>): SagaIterator {
+function* fetchClassesFromFirestore(action: PayloadAction<FetchMatchesPayload>): SagaIterator {
+    try {
+        console.log("fetching dates");
+        const tournamentSlug = action.payload.tournamentSlug;
+
+        const q = query(collection(db, "Tournaments", tournamentSlug, "Matches"));
+        // Get the result of the query
+        const matchesSnapshot: QuerySnapshot = yield call(getDocs, q);
+
+
+        const uniqueClassesNames = new Set<string>();
+
+        // Loop through the documents in the result
+        matchesSnapshot.docs.forEach((doc) => {
+            const matchData = doc.data();
+            if (matchData && matchData.MatchCategory && matchData.MatchCategory.CategoryCode) {
+                uniqueClassesNames.add(matchData.MatchCategory.CategoryCode);
+            }
+        });
+
+        const sortedPlayerClasses = [...uniqueClassesNames].sort((a, b) => (a > b ? 0 : 1))
+
+        console.log("Classes fetched from Firestore: ", uniqueClassesNames);
+        yield put(fetchMatchClassesSuccess(sortedPlayerClasses));
+
+    } catch (error) {
+        yield put(fetchMatchesFailure((error as Error).message));
+    }
+}
+
+function* fetchArenaNamesFromFirestore(action: PayloadAction<FetchMatchesPayload>): SagaIterator {
     try {
         console.log("fetching arnea names");
         const tournamentSlug = action.payload.tournamentSlug;
@@ -87,7 +117,7 @@ function* fetchArenaNamesFromFirestore(action: PayloadAction<FetchMatchsPayload>
     }
 }
 
-function* fetchMatchesFromFirestore(action: PayloadAction<FetchMatchsPayload>): SagaIterator {
+function* fetchMatchesFromFirestore(action: PayloadAction<FetchMatchesPayload>): SagaIterator {
     try {
         console.log("fetching matches");
         const tournamentSlug = action.payload.tournamentSlug;
@@ -119,7 +149,7 @@ function* fetchMatchesFromFirestore(action: PayloadAction<FetchMatchsPayload>): 
     }
 }
 
-function* getMatcheSecretFromFirestore(action: PayloadAction<FetchMatchsPayload>): SagaIterator {
+function* getMatcheSecretFromFirestore(action: PayloadAction<FetchMatchesPayload>): SagaIterator {
     try {
         console.log("check events with id %s", action.payload.tournamentSlug);
 
@@ -142,6 +172,7 @@ export function* tournamentAdminSagas() {
         takeEvery(fetchMatchesRequest.type, fetchMatchesFromFirestore),
         takeEvery(fetchMatchesRequest.type, fetchDatesFromFirestore),
         takeEvery(fetchMatchesRequest.type, fetchArenaNamesFromFirestore),
+        takeEvery(fetchMatchesRequest.type, fetchClassesFromFirestore),
         takeEvery(fetchMatchSecrets.type, getMatcheSecretFromFirestore),
     ])
 

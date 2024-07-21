@@ -35,6 +35,7 @@ export type adminState = {
   lastUpdated: number,
   dates: string[],
   fields: string[],
+  classes: string[],
   id: string,
   authToken: string,
   secret: string,
