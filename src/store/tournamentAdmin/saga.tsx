@@ -145,6 +145,8 @@ function* fetchMatchesFromFirestore(action: PayloadAction<FetchMatchesPayload>):
         yield put(fetchMatchesSuccess({ matches: matchesData }));
         console.log("Data fetched from Firestore: ", matchesData);
     } catch (error) {
+        console.log("Data fetched from Firestore error: ", error);
+
         yield put(fetchMatchesFailure((error as Error).message));
     }
 }

@@ -23,7 +23,7 @@ export function parseAdminMatch(data: DocumentData): AdminMatch {
         isStarted: data.IsStarted,
         isFinalized: data.IsFinalized,
         hasWinner: data.HasWinner,
-        referee: parseTeamString(data.RefereesTX[0]?.Text || ""),
+        referee: data.RefereesTX === null ? "" : parseTeamString(data.RefereesTX[0]?.Text || ""),
         homeTeam: {
             isWinner: data.HomeTeam?.IsWinner || false,
             name: data.HomeTeam?.Name || "",
