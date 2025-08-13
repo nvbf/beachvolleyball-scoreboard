@@ -6,10 +6,11 @@ import CreateMatch from "./pages/CreateMatch";
 import CreateTournament from "./pages/CreateTournament";
 import Tournaments from "./pages/Tournaments";
 import TournamentAdmin from "./pages/TournamentAdmin";
-import TournamentOverlay from "./pages/TournamentOverlay";
 import TournamentView from "./pages/TournamentView";
 import GrantAdminAccess from "./pages/GrantAdminAccess";
 import ClaimAccess from "./pages/ClaimAccess";
+import TournamentOverlayPage from './pages/TournamentOverlayPage'
+import TestTournamentOverlay from "./pages/testTournamentOverlay";
 
 const App: React.FC = () => {
   return (
@@ -23,7 +24,8 @@ const App: React.FC = () => {
         <Route path="/tournament/:tournamentSlug" element={<TournamentView />} />
         <Route path="/tournament/" element={<TournamentView />} />
         <Route path="/tournamentadmin/:tournamentSlug" element={<TournamentAdmin />} />
-        <Route path="/tournamentoverlay" element={<TournamentOverlay />} />
+        <Route path="/testtournamentoverlay" element={<TestTournamentOverlay />} />
+        <Route path="/tournamentoverlay" element={<TournamentOverlayPage />} />
         <Route path="/get-access/:accessCode" element={<GrantAdminAccess />} />
         <Route path="/claim-access/:tournamentSlug" element={<ClaimAccess />} />
       </Routes>

@@ -1,4 +1,18 @@
 // Define the structure of match data
+import {TeamType} from "../types";
+
+
+export type HomeAndAwayTeamScore = {
+    [TeamType.Home]: number,
+    [TeamType.Away]: number,
+};
+
+type SetScore = {
+        "PointsHomeTeam": number,
+        "PointsAwayTeam": number,
+        "Number": number
+    };
+
 export interface AdminMatch {
     matchId: number;
     awayTeam: {
@@ -7,15 +21,15 @@ export interface AdminMatch {
         player1: string;
         player2: string;
     };
-    currentScore: { [key: string]: number }[];
-    currentSetScore: { [key: string]: number };
-    sets: { [key: string]: number }[];
+    currentScore: HomeAndAwayTeamScore[];
+    currentSetScore: HomeAndAwayTeamScore;
+    sets: SetScore[];
     startTime: number;
     startTimestamp: number;
     arenaName: string;
     hasWinner: boolean;
-    isFinalized: boolean;
-    isStarted: boolean;
+    isFinalized?: boolean;
+    isStarted?: boolean;
     referee: string;
     homeTeam: {
         isWinner: boolean;
@@ -26,7 +40,13 @@ export interface AdminMatch {
     matchCategory: string;
     matchGroup: string;
     name: string;
-    scoreboardID: string;
+    scoreboardID?: string;
+}
+
+// The server send some broken data, we normalize it before use
+export type AdminMatchServerResponse = Omit<AdminMatch, "currentScore" | "currentSetScore"> & {
+    currentScore: HomeAndAwayTeamScore[]|HomeAndAwayTeamScore;
+    currentSetScore: HomeAndAwayTeamScore|[];
 }
 
 export enum MatchState {
