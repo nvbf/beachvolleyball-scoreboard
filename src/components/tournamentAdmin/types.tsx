@@ -13,14 +13,16 @@ type SetScore = {
         "Number": number
     };
 
+export type Team = {
+    isWinner: boolean;
+    name: string;
+    player1: string;
+    player2: string;
+}
+
 export interface AdminMatch {
     matchId: number;
-    awayTeam: {
-        isWinner: boolean;
-        name: string;
-        player1: string;
-        player2: string;
-    };
+    awayTeam: Team;
     currentScore: HomeAndAwayTeamScore[];
     currentSetScore: HomeAndAwayTeamScore;
     sets: SetScore[];
@@ -31,12 +33,7 @@ export interface AdminMatch {
     isFinalized?: boolean;
     isStarted?: boolean;
     referee: string;
-    homeTeam: {
-        isWinner: boolean;
-        name: string;
-        player1: string;
-        player2: string;
-    };
+    homeTeam: Team;
     matchCategory: string;
     matchGroup: string;
     name: string;
