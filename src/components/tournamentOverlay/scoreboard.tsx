@@ -64,7 +64,7 @@ const Scoreboard = ({ match }: { match: AdminMatch }) => {
 
           <TeamPoints
             points={
-              match.currentScore[match.currentScore.length - 1][TeamType.Home]
+              match.currentScore[match.currentScore.length - 1]?.[TeamType.Home] || 0
             }
           />
         </SetsAndPointsContainer>
@@ -74,7 +74,7 @@ const Scoreboard = ({ match }: { match: AdminMatch }) => {
         <SetsAndPointsContainer reverse={true}>
           <TeamPoints
             points={
-              match.currentScore[match.currentScore.length - 1][TeamType.Away]
+              match.currentScore[match.currentScore.length - 1]?.[TeamType.Away] || 0
             }
           />
           <TeamSetsWon setsWon={match.currentSetScore[TeamType.Away]} />
