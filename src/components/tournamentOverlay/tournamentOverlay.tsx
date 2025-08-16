@@ -112,7 +112,7 @@ const TournamentOverlay = ({
                   fontSize={"50px"}
                   lineHeight={1.0}
                 >
-                  Next matches {courtID}
+                  Neste kamper {courtID}
                 </Typography>
               </Grid>
             </Grid>
