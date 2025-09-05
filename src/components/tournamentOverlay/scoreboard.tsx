@@ -98,7 +98,7 @@ interface TeamNameProps {
 }
 const TeamName = forwardRef<HTMLDivElement, TeamNameProps>(
   ({ team, width, position }, ref) => {
-    const nameSize = 12;
+    const nameSize = 17;
 
     console.log("Width is currently ", width);
 
@@ -114,10 +114,10 @@ const TeamName = forwardRef<HTMLDivElement, TeamNameProps>(
         <Grid
           container
           ref={ref}
-          spacing={1}
+          spacing={0}
           direction="column"
-          paddingRight={position === "left" ? 2 : 2}
-          paddingLeft={position === "left" ? 2 : 2}
+          paddingRight={position === "left" ? 2 : 3}
+          paddingLeft={position === "left" ? 3 : 2}
           textAlign={position === "left" ? "right" : "left"}
           sx={{ backgroundColor: "transparent" }}
           width={width ? width : "auto"}
@@ -125,22 +125,20 @@ const TeamName = forwardRef<HTMLDivElement, TeamNameProps>(
         >
           <Grid item padding={0}>
             <Typography
-              textTransform={"uppercase"}
               padding={0}
               fontSize={nameSize}
               lineHeight={1.4}
-              whiteSpace="no-wrap"
+              whiteSpace="nowrap"
             >
               {getInitials(team.player1)}
             </Typography>
           </Grid>
           <Grid item padding={0}>
             <Typography
-              textTransform={"uppercase"}
               padding={0}
               fontSize={nameSize}
               lineHeight={1.0}
-              whiteSpace="no-wrap"
+              whiteSpace="nowrap"
             >
               {getInitials(team.player2)}
             </Typography>
