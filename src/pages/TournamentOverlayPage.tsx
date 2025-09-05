@@ -6,21 +6,18 @@ import {
   QueryFieldFilterConstraint,
   where,
 } from "firebase/firestore";
-import React, {useMemo, useState} from "react";
-import {useDispatch, useSelector} from "react-redux";
-import {useLocation} from "react-router-dom";
-import {RootState} from "../store/store";
-import {
-  parseAdminMatch
-} from "../components/tournamentAdmin/adminMatchFunctions";
+import React, { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
+import { RootState } from "../store/store";
+import { parseAdminMatch } from "../components/tournamentAdmin/adminMatchFunctions";
 import {
   fetchMatchesRequest,
   updateMatch,
 } from "../store/tournamentAdmin/reducer";
-import TournamentOverlay
-  from "../components/tournamentOverlay/tournamentOverlay";
-import {normalizeServerMatches} from "../util/overlay";
-
+import TournamentOverlay from "../components/tournamentOverlay/tournamentOverlay";
+import { normalizeServerMatches } from "../util/overlay";
+import { AdminMatch } from "../components/tournamentAdmin/types";
 
 const TournamentOverlayPage = () => {
   const location = useLocation();
@@ -31,26 +28,38 @@ const TournamentOverlayPage = () => {
   const tournamentSlug = queryParams.get("tournamentId") || "default";
   const courtID = queryParams.get("courtId");
   const noDate = queryParams.get("noDate");
-
+  const delay = parseInt(queryParams.get("delay") || "0");
+  const [visibleMatches, setVisibleMatches] = useState<AdminMatch[]>([]);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const dispatch = useDispatch();
   let db = getFirestore(import.meta.env.VITE_FIREBASE_DATABASE);
 
   // Retrieve the matches from the Redux store
   const matches = useSelector((state: RootState) => state.matches.matches);
-  const matchesList = useMemo (() => {
-    return normalizeServerMatches(Object.values(matches));
-  }, [matches]);
 
+  // Support delay of score for cameras like Reolink with long delay
+  useEffect(() => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    timeoutRef.current = setTimeout(() => {
+      setVisibleMatches(normalizeServerMatches(Object.values(matches)));
+    }, delay);
+    return () => {
+      if (timeoutRef.current !== null) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, [matches, delay]);
 
   // Fetch the matches when the component mounts
   if (!fetchedMatches && tournamentSlug) {
     dispatch(
-        fetchMatchesRequest({tournamentSlug: tournamentSlug, class: null}),
+      fetchMatchesRequest({ tournamentSlug: tournamentSlug, class: null }),
     ); // replace with actual tournamentSlug
     setFetchedMatches(true);
   }
-
 
   if (!createdCallbacks && tournamentSlug) {
     const currentDate: string = new Date().toISOString().split("T")[0];
@@ -64,8 +73,8 @@ const TournamentOverlayPage = () => {
     //collectionQuery.push(where("HasWinner", "==", false));
 
     const q = query(
-        collection(db, "Tournaments", tournamentSlug, "Matches"),
-        ...collectionQuery,
+      collection(db, "Tournaments", tournamentSlug, "Matches"),
+      ...collectionQuery,
     );
 
     setCreatedCallbacks(true);
@@ -76,10 +85,10 @@ const TournamentOverlayPage = () => {
           let updatedMatch = parseAdminMatch(data);
           console.log("got update for match %s", updatedMatch.matchId);
           dispatch(
-              updateMatch({
-                match: updatedMatch,
-                matchId: updatedMatch.matchId
-              }),
+            updateMatch({
+              match: updatedMatch,
+              matchId: updatedMatch.matchId,
+            }),
           );
         }
       });
@@ -87,7 +96,7 @@ const TournamentOverlayPage = () => {
     setCreatedCallbacks(true);
   }
 
-  return <TournamentOverlay matchesList={matchesList} courtID={courtID} />;
-}
+  return <TournamentOverlay matchesList={visibleMatches} courtID={courtID} />;
+};
 
 export default TournamentOverlayPage;
