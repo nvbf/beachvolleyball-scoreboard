@@ -140,6 +140,7 @@ const TeamName = forwardRef<HTMLDivElement, TeamNameProps>(
           </Grid>
           <Grid item padding={0}>
             <Typography
+              textTransform={"uppercase"}
               padding={0}
               fontSize={nameSize}
               lineHeight={1.0}
