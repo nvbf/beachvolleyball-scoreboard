@@ -28,29 +28,48 @@ const Scoreboard = ({ match }: { match: AdminMatch }) => {
   }, []);
 
   return (
-    <Grid
-      container
-      direction="row"
-      justifyContent="center"
-      alignItems="center"
-      padding={0}
-      spacing={0}
-      columns={12}
+    <Box
       sx={{
         position: "absolute",
-        width: 1,
-        bottom: "60px",
-        left: "0",
-        right: "0",
+        width: "100%",
+        height: "100%",
+        left: 0,
+        top: 0,
+        backgroundColor: "#123452",
       }}
     >
+      <Box display="flex" justifyContent="center" mt={12}>
+        <Box display="flex">
+          <SetsAndPointsContainer reverse={false}>
+            <TeamSetsWon setsWon={match.currentSetScore[TeamType.Home]} />
+
+            <TeamPoints
+              points={
+                match.currentScore[match.currentScore.length - 1][TeamType.Home]
+              }
+            />
+          </SetsAndPointsContainer>
+
+          <Box style={{ width: "100px" }} />
+
+          <SetsAndPointsContainer reverse={true}>
+            <TeamPoints
+              points={
+                match.currentScore[match.currentScore.length - 1][TeamType.Away]
+              }
+            />
+            <TeamSetsWon setsWon={match.currentSetScore[TeamType.Away]} />
+          </SetsAndPointsContainer>
+        </Box>
+      </Box>
       <Box
+        display="flex"
+        mt={8}
         sx={{
           backgroundColor: "#123452",
           color: "rgb(246, 251, 255)",
           padding: "4px",
         }}
-        display="flex"
       >
         <TeamName
           team={match.homeTeam}
@@ -59,26 +78,7 @@ const Scoreboard = ({ match }: { match: AdminMatch }) => {
           position="left"
         />
 
-        <SetsAndPointsContainer reverse={false}>
-          <TeamSetsWon setsWon={match.currentSetScore[TeamType.Home]} />
-
-          <TeamPoints
-            points={
-              match.currentScore[match.currentScore.length - 1][TeamType.Home]
-            }
-          />
-        </SetsAndPointsContainer>
-
-        <TournamentLogo />
-
-        <SetsAndPointsContainer reverse={true}>
-          <TeamPoints
-            points={
-              match.currentScore[match.currentScore.length - 1][TeamType.Away]
-            }
-          />
-          <TeamSetsWon setsWon={match.currentSetScore[TeamType.Away]} />
-        </SetsAndPointsContainer>
+        <Box style={{ width: "100px" }} />
 
         <TeamName
           team={match.awayTeam}
@@ -87,7 +87,7 @@ const Scoreboard = ({ match }: { match: AdminMatch }) => {
           position="right"
         />
       </Box>
-    </Grid>
+    </Box>
   );
 };
 
@@ -98,18 +98,17 @@ interface TeamNameProps {
 }
 const TeamName = forwardRef<HTMLDivElement, TeamNameProps>(
   ({ team, width, position }, ref) => {
-    const nameSize = 12;
+    const nameSize = 64;
 
     console.log("Width is currently ", width);
 
     return (
-      <Grid
-        item
-        padding={0}
+      <Box
         sx={{ backgroundColor: "transparent" }}
         display="flex"
         alignItems="center"
-        justifyContent={"center"}
+        justifyContent={position === "left" ? "flex-end" : "flex-start"}
+        flex={1}
       >
         <Grid
           container
@@ -119,8 +118,9 @@ const TeamName = forwardRef<HTMLDivElement, TeamNameProps>(
           paddingRight={position === "left" ? 2 : 2}
           paddingLeft={position === "left" ? 2 : 2}
           textAlign={position === "left" ? "right" : "left"}
+          alignItems={position === "left" ? "flex-end" : "flex-start"}
           sx={{ backgroundColor: "transparent" }}
-          width={width ? width : "auto"}
+          width={"auto"}
           flexShrink={0}
         >
           <Grid item padding={0}>
@@ -146,22 +146,21 @@ const TeamName = forwardRef<HTMLDivElement, TeamNameProps>(
             </Typography>
           </Grid>
         </Grid>
-      </Grid>
+      </Box>
     );
   },
 );
 
 const TeamSetsWon = ({ setsWon }: { setsWon: number }) => {
-  const numberSize = 26;
+  const numberSize = 200;
 
   return (
-    <Grid
-      item
-      width={40}
+    <Box
       sx={{
         backgroundColor: "#123452",
         color: "#ffffff",
-        margin: "2px",
+        margin: "6px",
+        width: "240px",
       }}
       display="flex"
       alignItems="center"
@@ -171,12 +170,12 @@ const TeamSetsWon = ({ setsWon }: { setsWon: number }) => {
         <Box>
           <Typography
             textTransform={"uppercase"}
-            fontSize={8}
+            fontSize={72}
             padding={0}
             margin={0}
             noWrap
           >
-            sets
+            set
           </Typography>
         </Box>
         <Box>
@@ -185,24 +184,21 @@ const TeamSetsWon = ({ setsWon }: { setsWon: number }) => {
           </Typography>
         </Box>
       </Box>
-    </Grid>
+    </Box>
   );
 };
 
 const TeamPoints = ({ points }: { points: number }) => {
-  const numberSize = 32;
+  const numberSize = 300;
   return (
-    <Grid
-      item
-      height={1}
-      width={50}
+    <Box
       display="flex"
       alignItems="center"
       justifyContent="center" // center horizontally
-      sx={{ textAlign: "right" }}
+      sx={{ textAlign: "right", minWidth: "400px", color: "white" }}
     >
       <Typography fontSize={numberSize}>{points}</Typography>
-    </Grid>
+    </Box>
   );
 };
 
