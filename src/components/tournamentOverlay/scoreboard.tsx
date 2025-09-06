@@ -38,14 +38,16 @@ const Scoreboard = ({ match }: { match: AdminMatch }) => {
         backgroundColor: "#123452",
       }}
     >
-      <Box display="flex" justifyContent="center" mt={12}>
+      <Box display="flex" justifyContent="center" mt={14}>
         <Box display="flex">
           <SetsAndPointsContainer reverse={false}>
             <TeamSetsWon setsWon={match.currentSetScore[TeamType.Home]} />
 
             <TeamPoints
               points={
-                match.currentScore[match.currentScore.length - 1][TeamType.Home]
+                match.currentScore[match.currentScore.length - 1]?.[
+                  TeamType.Home
+                ] ?? 0
               }
             />
           </SetsAndPointsContainer>
@@ -55,7 +57,9 @@ const Scoreboard = ({ match }: { match: AdminMatch }) => {
           <SetsAndPointsContainer reverse={true}>
             <TeamPoints
               points={
-                match.currentScore[match.currentScore.length - 1][TeamType.Away]
+                match.currentScore[match.currentScore.length - 1]?.[
+                  TeamType.Away
+                ] ?? 0
               }
             />
             <TeamSetsWon setsWon={match.currentSetScore[TeamType.Away]} />
@@ -98,7 +102,7 @@ interface TeamNameProps {
 }
 const TeamName = forwardRef<HTMLDivElement, TeamNameProps>(
   ({ team, width, position }, ref) => {
-    const nameSize = 64;
+    const nameSize = 72;
 
     console.log("Width is currently ", width);
 
@@ -129,18 +133,17 @@ const TeamName = forwardRef<HTMLDivElement, TeamNameProps>(
               padding={0}
               fontSize={nameSize}
               lineHeight={1.4}
-              whiteSpace="no-wrap"
+              whiteSpace="nowrap"
             >
               {getInitials(team.player1)}
             </Typography>
           </Grid>
           <Grid item padding={0}>
             <Typography
-              textTransform={"uppercase"}
               padding={0}
               fontSize={nameSize}
               lineHeight={1.0}
-              whiteSpace="no-wrap"
+              whiteSpace="nowrap"
             >
               {getInitials(team.player2)}
             </Typography>
