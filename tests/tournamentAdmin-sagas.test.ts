@@ -16,11 +16,13 @@ import {
 // Helper
 // ---------------------------------------------------------------------------
 
+import { AllEffect, ForkEffect } from "redux-saga/effects";
+
 /** Run the watcher generator one step and return the first yielded ALL effect. */
 function getWatcherAllEffect() {
     const gen = tournamentAdminSagas();
     const { value, done } = gen.next();
-    return { value, done };
+    return { value: value as AllEffect<ForkEffect<never>>, done };
 }
 
 // ---------------------------------------------------------------------------
@@ -44,9 +46,10 @@ describe("tournamentAdminSagas — watcher structure", () => {
 
     it("the ALL effect contains exactly 5 FORK watchers", () => {
         const { value } = getWatcherAllEffect();
-        expect(Array.isArray(value.payload)).toBe(true);
-        expect(value.payload).toHaveLength(5);
-        value.payload.forEach((effect: any) => {
+        const payload = value.payload as any[];
+        expect(Array.isArray(payload)).toBe(true);
+        expect(payload).toHaveLength(5);
+        payload.forEach((effect: any) => {
             expect(effect).toMatchObject({
                 "@@redux-saga/IO": true,
                 combinator: false,

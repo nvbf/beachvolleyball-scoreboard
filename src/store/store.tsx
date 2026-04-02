@@ -19,10 +19,7 @@ const sagaMiddleware = saga();
 
 export const store = configureStore({
   reducer: rootReducer,
-  middleware: (getDefaultMiddleware) => [
-    ...getDefaultMiddleware(),
-    sagaMiddleware,
-  ],
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(sagaMiddleware),
 });
 
 function* rootSaga() {
