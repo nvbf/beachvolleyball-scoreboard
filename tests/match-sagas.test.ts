@@ -1,137 +1,345 @@
-import { callTimeoutEvent, createAddPointEvent, finalizeMatchEvent, setLeftStartTeamEvent } from "../src/components/eventFunctions";
+import { expectSaga } from "redux-saga-test-plan";
+import * as matchers from "redux-saga-test-plan/matchers";
+import { throwError } from "redux-saga-test-plan/providers";
 import { TeamType } from "../src/components/types";
-import { addAwayTeam, addEvent, addHomeTeam, evaluateEvents, insertEvent, setId, setMatchId } from "../src/store/match/reducer";
-import matchReducer, { initMatchState } from "../src/store/match/reducer";
+import {
+    createAddPointEvent,
+} from "../src/components/eventFunctions";
+import {
+    evaluateEvents,
+    initMatchState,
+    insertEvent,
+    persistUser,
+    publishScores,
+    storeEvents,
+    storeMatch,
+    undoLastEvent,
+} from "../src/store/match/reducer";
+import {
+    authorizeFirestore,
+    finalizeEndedMatch,
+    getOldEvents,
+    getOldMatch,
+    pushNewEvent,
+    publishScoresToTournaments,
+    undoGivenEvent,
+} from "../src/store/match/sagas";
+import {
+    addEventToMatchToFirestore,
+    getEventsFromMatch,
+    getMatch,
+    setMatchFinalized,
+    setMatchResult,
+    setScoreboardScore,
+    setStartTime,
+} from "../src/firebase/match_service";
+import { matchState } from "../src/store/types";
 
 
-describe('match reducer', () => {
+// ---------------------------------------------------------------------------
+// Mocks
+// ---------------------------------------------------------------------------
 
-    it('should handle ADD_HOME_TEAM', () => {
-        const initialState = {
-            ...initMatchState,
-            //... rest of your initial state
-        };
+vi.mock("firebase/auth", () => ({
+    getAuth: vi.fn(() => ({
+        currentUser: { uid: "test-uid-123" },
+    })),
+}));
 
-        const homeTeam = {
-            player1Name: 'Player 1',
-            player2Name: 'Player 2',
-        };
+vi.mock("../src/firebase/firebase-config", () => ({
+    db: {},
+    auth: {},
+}));
 
-        const state = matchReducer(initialState, addHomeTeam(homeTeam));
-        expect(state.homeTeam).toEqual(homeTeam);
+vi.mock("../src/firebase/match_service", () => ({
+    addEventToMatchToFirestore: vi.fn(),
+    getEventsFromMatch: vi.fn(),
+    getMatch: vi.fn(),
+    initNewMatch: vi.fn(),
+    setMatchFinalized: vi.fn(),
+    setMatchResult: vi.fn(),
+    setScoreboardId: vi.fn(),
+    setScoreboardScore: vi.fn(),
+    setStartTime: vi.fn(),
+}));
+
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
+
+const USER_ID = "test-uid-123";
+
+const makeEventPayload = (team = TeamType.Home) => ({
+    matchId: "match-1",
+    id: "doc-1",
+    event: createAddPointEvent(team, USER_ID),
+});
+
+const makeUndoPayload = () => ({
+    matchId: "match-1",
+    id: "doc-1",
+    event: {
+        id: "undo-id",
+        eventType: "UNDO" as any,
+        team: TeamType.None,
+        playerId: 0,
+        timestamp: Date.now(),
+        undone: "",
+        author: USER_ID,
+        reference: "ref-event-id",
+    },
+});
+
+const sampleMatch = {
+    id: "doc-1",
+    matchId: "m-1",
+    tournamentId: "t-1",
+    homeTeam: { player1Name: "A", player2Name: "B" },
+    awayTeam: { player1Name: "C", player2Name: "D" },
+    homeColor: "#111",
+    awayColor: "#222",
+    timestamp: 1000,
+};
+
+// ---------------------------------------------------------------------------
+// pushNewEvent saga
+// ---------------------------------------------------------------------------
+
+describe("pushNewEvent saga", () => {
+    it("inserts the event, evaluates, calls Firestore, then publishes scores", () => {
+        const payload = makeEventPayload();
+        return expectSaga(pushNewEvent, { type: "addEvent", payload })
+            .provide([
+                [matchers.call.fn(addEventToMatchToFirestore), "firestore-doc-id"],
+            ])
+            .put(insertEvent(payload.event))
+            .put(evaluateEvents())
+            .call(addEventToMatchToFirestore, payload.id, payload.event)
+            .put(publishScores())
+            .run();
     });
 
-    it('should handle ADD_AWAY_TEAM', () => {
-        const initialState = {
-            ...initMatchState,
-            //... rest of your initial state
-        };
-
-        const awayTeam = {
-            player1Name: 'Player 1',
-            player2Name: 'Player 2',
-        };
-
-        const state = matchReducer(initialState, addAwayTeam(awayTeam));
-        expect(state.awayTeam).toEqual(awayTeam);
+    it("handles Firestore errors gracefully (does not throw)", () => {
+        const payload = makeEventPayload();
+        return expectSaga(pushNewEvent, { type: "addEvent", payload })
+            .provide([
+                [matchers.call.fn(addEventToMatchToFirestore), throwError(new Error("Firestore down"))],
+            ])
+            .put(insertEvent(payload.event))
+            .put(evaluateEvents())
+            .run();
     });
 
-    it('should handle SET_ID', () => {
-        const initialState = {
-            ...initMatchState,
-            //... rest of your initial state
-        };
+    it("works for away team events too", () => {
+        const payload = makeEventPayload(TeamType.Away);
+        return expectSaga(pushNewEvent, { type: "addEvent", payload })
+            .provide([
+                [matchers.call.fn(addEventToMatchToFirestore), "doc-id"],
+            ])
+            .put(insertEvent(payload.event))
+            .put(evaluateEvents())
+            .run();
+    });
+});
 
-        const id = '1234';
+// ---------------------------------------------------------------------------
+// getOldEvents saga
+// ---------------------------------------------------------------------------
 
-        const state = matchReducer(initialState, setId(id));
-        expect(state.id).toEqual(id);
+describe("getOldEvents saga", () => {
+    const events = [
+        createAddPointEvent(TeamType.Home, USER_ID),
+        createAddPointEvent(TeamType.Away, USER_ID),
+    ];
+
+    it("fetches events from Firestore, stores them, then evaluates", () => {
+        return expectSaga(getOldEvents, { type: "checkDb", payload: "doc-1" })
+            .provide([
+                [matchers.call.fn(getEventsFromMatch), events],
+            ])
+            .call(getEventsFromMatch, "doc-1")
+            .put(storeEvents(events))
+            .put(evaluateEvents())
+            .run();
     });
 
-    it('should handle SET_MATCH_ID', () => {
-        const initialState = {
-            ...initMatchState,
-            //... rest of your initial state
-        };
-        const matchId = '1234';
+    it("handles fetch errors gracefully", () => {
+        return expectSaga(getOldEvents, { type: "checkDb", payload: "doc-1" })
+            .provide([
+                [matchers.call.fn(getEventsFromMatch), throwError(new Error("Network error"))],
+            ])
+            .run();
+    });
+});
 
-        const state = matchReducer(initialState, setMatchId(matchId));
+// ---------------------------------------------------------------------------
+// getOldMatch saga
+// ---------------------------------------------------------------------------
 
-        expect(state.matchId).toEqual(matchId);
+describe("getOldMatch saga", () => {
+    it("fetches the match and dispatches storeMatch", () => {
+        return expectSaga(getOldMatch, { type: "checkDb", payload: "doc-1" })
+            .provide([
+                [matchers.call.fn(getMatch), sampleMatch],
+            ])
+            .call(getMatch, "doc-1")
+            .put(storeMatch(sampleMatch))
+            .run();
     });
 
-    it('should correctly handle scoring events', () => {
-        const initialState = {
-            ...initMatchState,
-            events: [
-                setLeftStartTeamEvent(TeamType.Home, initMatchState.authUserId),
-                createAddPointEvent(TeamType.Home, initMatchState.authUserId),
-                createAddPointEvent(TeamType.Away, initMatchState.authUserId),
-                createAddPointEvent(TeamType.Home, initMatchState.authUserId),
-                createAddPointEvent(TeamType.Away, initMatchState.authUserId),
-                createAddPointEvent(TeamType.Away, initMatchState.authUserId),
-                createAddPointEvent(TeamType.Home, initMatchState.authUserId),
-            ],
-        };
-        let state = matchReducer(initialState, evaluateEvents());
-        expect(state.currentScore[TeamType.Home]).toEqual(3);
-        expect(state.currentScore[TeamType.Away]).toEqual(3);
-        expect(state.leftSideTeam).toEqual(TeamType.Home);
-        expect(state.currentSet).toEqual(1);
-        state = matchReducer(state, insertEvent(createAddPointEvent(TeamType.Home, initMatchState.authUserId)));
-        state = matchReducer(state, evaluateEvents());
-        expect(state.currentScore[TeamType.Home]).toEqual(4);
-        expect(state.currentScore[TeamType.Away]).toEqual(3);
-        expect(state.leftSideTeam).toEqual(TeamType.Away);
-        for (let i = 0; i < 20; i++) {
-            state = matchReducer(state, insertEvent(createAddPointEvent(TeamType.Away, initMatchState.authUserId)));
-            state = matchReducer(state, insertEvent(createAddPointEvent(TeamType.Home, initMatchState.authUserId)));
-        }
-        state = matchReducer(state, evaluateEvents());
-        expect(state.currentScore[TeamType.Home]).toEqual(24);
-        expect(state.currentScore[TeamType.Away]).toEqual(23);
-        expect(state.leftSideTeam).toEqual(TeamType.Home);
-        state = matchReducer(state, insertEvent(createAddPointEvent(TeamType.Home, initMatchState.authUserId)));
-        state = matchReducer(state, evaluateEvents());
-        expect(state.currentSet).toEqual(2);
-        expect(state.currentScore[TeamType.Home]).toEqual(0);
-        expect(state.currentScore[TeamType.Away]).toEqual(0);
-        expect(state.currentSetScore[TeamType.Home]).toEqual(1);
-        expect(state.currentSetScore[TeamType.Away]).toEqual(0);
-        expect(state.finished).toEqual(false);
-        for (let i = 0; i < 21; i++) {
-            state = matchReducer(state, insertEvent(createAddPointEvent(TeamType.Home, initMatchState.authUserId)));
-        }
-        state = matchReducer(state, evaluateEvents());
-        expect(state.currentSet).toEqual(3);
-        expect(state.currentScore[TeamType.Home]).toEqual(0);
-        expect(state.currentScore[TeamType.Away]).toEqual(0);
-        expect(state.currentSetScore[TeamType.Home]).toEqual(2);
-        expect(state.currentSetScore[TeamType.Away]).toEqual(0);
-        expect(state.finished).toEqual(true);
+    it("handles fetch errors gracefully", () => {
+        return expectSaga(getOldMatch, { type: "checkDb", payload: "doc-1" })
+            .provide([
+                [matchers.call.fn(getMatch), throwError(new Error("Not found"))],
+            ])
+            .run();
+    });
+});
 
+// ---------------------------------------------------------------------------
+// undoGivenEvent saga
+// ---------------------------------------------------------------------------
+
+describe("undoGivenEvent saga", () => {
+    it("dispatches undoLastEvent, evaluateEvents, then calls Firestore", () => {
+        const payload = makeUndoPayload();
+        return expectSaga(undoGivenEvent, { type: "undoEvent", payload })
+            .provide([
+                [matchers.call.fn(addEventToMatchToFirestore), "undo-doc-id"],
+            ])
+            .put(undoLastEvent())
+            .put(evaluateEvents())
+            .call(addEventToMatchToFirestore, payload.id, payload.event)
+            .run();
     });
 
-    it('should correctly handle timeout events', () => {
-        const initialState = {
-            ...initMatchState,
-            events: [
-                callTimeoutEvent(TeamType.Home, initMatchState.authUserId),
-            ],
-        };
-        const state = matchReducer(initialState, evaluateEvents());
-        expect(state.teamTimeout[TeamType.Home]).toEqual(true);
+    it("handles Firestore errors gracefully", () => {
+        const payload = makeUndoPayload();
+        return expectSaga(undoGivenEvent, { type: "undoEvent", payload })
+            .provide([
+                [matchers.call.fn(addEventToMatchToFirestore), throwError(new Error("Write failed"))],
+            ])
+            .put(undoLastEvent())
+            .put(evaluateEvents())
+            .run();
+    });
+});
+
+// ---------------------------------------------------------------------------
+// authorizeFirestore saga
+// ---------------------------------------------------------------------------
+
+describe("authorizeFirestore saga", () => {
+    it("dispatches persistUser with the current user uid", () => {
+        return expectSaga(authorizeFirestore, { type: "authorize", payload: undefined })
+            .put(persistUser(USER_ID))
+            .run();
+    });
+});
+
+// ---------------------------------------------------------------------------
+// publishScoresToTournaments saga
+// ---------------------------------------------------------------------------
+
+describe("publishScoresToTournaments saga", () => {
+    const matchStateWith1Point: matchState = {
+        ...initMatchState,
+        tournamentId: "t-1",
+        matchId: "m-1",
+        currentSet: 1,
+        currentScore: { HOME: 1, AWAY: 0 },
+        theCurrentSets: [{ HOME: 1, AWAY: 0 }],
+        currentSetScore: { HOME: 0, AWAY: 0 },
+        startTime: 5000,
+    };
+
+    // The saga uses select(getSomePartOfState) which reads state.match.
+    // withState provides the full Redux state shape to make the selector work.
+    const reduxState = { match: matchStateWith1Point };
+
+    it("calls setScoreboardScore with current match state", () => {
+        return expectSaga(publishScoresToTournaments, { type: "publishScores", payload: undefined })
+            .withState(reduxState)
+            .provide([
+                [matchers.call.fn(setScoreboardScore), undefined],
+                [matchers.call.fn(setStartTime), undefined],
+            ])
+            .call(
+                setScoreboardScore,
+                matchStateWith1Point.tournamentId,
+                matchStateWith1Point.matchId,
+                matchStateWith1Point.theCurrentSets,
+                matchStateWith1Point.currentSetScore
+            )
+            .run();
     });
 
-    it('should correctly handle MatchFinalized events', () => {
-        const initialState = {
-            ...initMatchState,
-            events: [
-                finalizeMatchEvent(initMatchState.authUserId),
-            ],
+    it("calls setStartTime on the very first point of the match (set 1, total = 1)", () => {
+        return expectSaga(publishScoresToTournaments, { type: "publishScores", payload: undefined })
+            .withState(reduxState)
+            .provide([
+                [matchers.call.fn(setScoreboardScore), undefined],
+                [matchers.call.fn(setStartTime), undefined],
+            ])
+            .call(setStartTime, "t-1", "m-1", matchStateWith1Point.startTime)
+            .run();
+    });
+
+    it("does NOT call setStartTime after the first point", () => {
+        const later: matchState = {
+            ...matchStateWith1Point,
+            currentScore: { HOME: 5, AWAY: 3 },
         };
-        const state = matchReducer(initialState, evaluateEvents());
-        expect(state.userMessage).toEqual('match done! thank you!');
-        // Continue checking the rest of the state properties...
+        return expectSaga(publishScoresToTournaments, { type: "publishScores", payload: undefined })
+            .withState({ match: later })
+            .provide([
+                [matchers.call.fn(setScoreboardScore), undefined],
+            ])
+            .not.call.fn(setStartTime)
+            .run();
+    });
+
+    it("handles errors gracefully", () => {
+        return expectSaga(publishScoresToTournaments, { type: "publishScores", payload: undefined })
+            .withState(reduxState)
+            .provide([
+                [matchers.call.fn(setScoreboardScore), throwError(new Error("Publish failed"))],
+            ])
+            .run();
+    });
+});
+
+// ---------------------------------------------------------------------------
+// finalizeEndedMatch saga
+// ---------------------------------------------------------------------------
+
+describe("finalizeEndedMatch saga", () => {
+    const finishedState: matchState = {
+        ...initMatchState,
+        tournamentId: "t-1",
+        matchId: "m-1",
+        id: "doc-1",
+        finished: true,
+    };
+
+    it("calls setMatchFinalized and setMatchResult", () => {
+        return expectSaga(finalizeEndedMatch, { type: "finalizeMatch", payload: undefined })
+            .withState({ match: finishedState })
+            .provide([
+                [matchers.call.fn(setMatchFinalized), undefined],
+                [matchers.call.fn(setMatchResult), undefined],
+            ])
+            .call(setMatchFinalized, finishedState.tournamentId, finishedState.matchId)
+            .call(setMatchResult, finishedState.id)
+            .run();
+    });
+
+    it("handles errors gracefully", () => {
+        return expectSaga(finalizeEndedMatch, { type: "finalizeMatch", payload: undefined })
+            .withState({ match: finishedState })
+            .provide([
+                [matchers.call.fn(setMatchFinalized), throwError(new Error("Finalize failed"))],
+            ])
+            .run();
     });
 });
