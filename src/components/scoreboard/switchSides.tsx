@@ -5,7 +5,6 @@ import { Box, Button, Typography } from "@mui/material";
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import { getTextColorFromBackground } from "../../util/color";
 import { addEvent } from "../../store/match/reducer";
-import { match } from "assert";
 import { setClearMessageEvent } from "../eventFunctions";
 
 
