@@ -61,10 +61,10 @@ export function AddTeam({ teamType }: AddTeamProps) {
       columns={12}
       sx={{ alignSelf: 'center', textAlign: 'center' }}
     >
-      <Grid item xs={12}>
+      <Grid size={12}>
         <Typography sx={{ fontSize: 28 }}>Add {teamType === TeamType.Home ? "home" : "away"} team!</Typography>
       </Grid>
-      <Grid item xs={12}>
+      <Grid size={12}>
 
         <TextField
           sx={{
@@ -83,7 +83,7 @@ export function AddTeam({ teamType }: AddTeamProps) {
           onChange={(e) => handlePlayer2Name(e.target.value)}
         />
       </Grid>
-      <Grid item md={6} xs={12} sx={{ textAlign: 'left' }}>
+      <Grid size={{ xs: 12, md: 6 }} sx={{ textAlign: 'left' }}>
         <Button variant="contained" onClick={handleSubmit.bind(null)}
           sx={{
             width: 1, height: 64

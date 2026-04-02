@@ -31,15 +31,15 @@ export function TeamTimeout({ team }: TeamTimeoutProps) {
             marginTop={4}
             sx={{ alignSelf: 'center', textAlign: 'center' }}
         >
-            <Grid item xs={12}>
+            <Grid size={12}>
                 <Typography sx={{ fontSize: 28 }}>The {team === TeamType.Home ? "home" : "away"} team called for a timeout</Typography>
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={12}>
                 <Typography align='center' sx={{ fontSize: "2rem", variant: 'button', lineHeight: 1, paddingTop: 1, paddingX: 1 }}>
                     <TimeElapsed startTime={match.events.slice().reverse().find(e => e.eventType === EventType.Timeout && !e.undone)?.timestamp || 0} />
                 </Typography>
             </Grid>
-            <Grid item md={6} xs={12} sx={{ textAlign: 'left' }}>
+            <Grid size={{ xs: 12, md: 6 }} sx={{ textAlign: 'left' }}>
                 <Button variant="contained" onClick={handleDone.bind(null)}
                     sx={{
                         width: 1, height: 64

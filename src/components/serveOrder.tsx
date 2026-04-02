@@ -65,7 +65,7 @@ export function ServeOrder() {
         spacing={2}
         columns={12}
       >
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Grid container
             columnSpacing={2}
             rowSpacing={2}
@@ -73,10 +73,10 @@ export function ServeOrder() {
             columns={12}
             sx={{ alignSelf: 'center', textAlign: 'center' }}
           >
-            <Grid item xs={12} sx={{ textAlign: 'center' }}>
+            <Grid size={12} sx={{ textAlign: 'center' }}>
               <Typography variant="h4"> First team to serve </Typography>
             </Grid>
-            <Grid item xs={6} sx={{ textAlign: 'right', display: showServer(match, TeamType.Home, 0) }}>
+            <Grid size={6} sx={{ textAlign: 'right', display: showServer(match, TeamType.Home, 0) }}>
               <Button disabled={match.firstServerTeam !== TeamType.None} variant="contained" onClick={setFirstServerTeam.bind(null, TeamType.Home)}
                 sx={{
                   width: 1, height: 96, backgroundColor: match.teamColor[TeamType.Home],
@@ -88,7 +88,7 @@ export function ServeOrder() {
                 </Typography>
               </Button>
             </Grid>
-            <Grid item xs={6} sx={{ textAlign: 'left', display: showServer(match, TeamType.Away, 0) }}>
+            <Grid size={6} sx={{ textAlign: 'left', display: showServer(match, TeamType.Away, 0) }}>
               <Button disabled={match.firstServerTeam !== TeamType.None} variant="contained" onClick={setFirstServerTeam.bind(null, TeamType.Away)}
                 sx={{
                   width: 1, height: 96, backgroundColor: match.teamColor[TeamType.Away],
@@ -102,7 +102,7 @@ export function ServeOrder() {
             </Grid>
           </Grid>
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Grid container
             columnSpacing={2}
             rowSpacing={2}
@@ -110,10 +110,10 @@ export function ServeOrder() {
             justifyContent="center"
             sx={{ alignSelf: 'center', textAlign: 'center' }}
           >
-            <Grid item xs={12} sx={{ textAlign: 'center' }}>
+            <Grid size={12} sx={{ textAlign: 'center' }}>
               <Typography variant="h4"> First home team server</Typography>
             </Grid>
-            <Grid item xs={6} sx={{ textAlign: 'right', display: showServer(match, TeamType.Home, 1) }}>
+            <Grid size={6} sx={{ textAlign: 'right', display: showServer(match, TeamType.Home, 1) }}>
               <Button disabled={match.firstServer[TeamType.Home] !== 0} variant="contained" onClick={setHomeServer.bind(null, 1)}
                 sx={{
                   width: 1, height: 76, backgroundColor: match.teamColor[TeamType.Home],
@@ -124,7 +124,7 @@ export function ServeOrder() {
                 </Typography>
               </Button>
             </Grid>
-            <Grid item xs={6} sx={{ textAlign: 'left', display: showServer(match, TeamType.Home, 2) }}>
+            <Grid size={6} sx={{ textAlign: 'left', display: showServer(match, TeamType.Home, 2) }}>
               <Button disabled={match.firstServer[TeamType.Home] !== 0} variant="contained" onClick={setHomeServer.bind(null, 2)}
                 sx={{
                   display: showServer(match, TeamType.Home, 2),
@@ -138,7 +138,7 @@ export function ServeOrder() {
             </Grid>
           </Grid>
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Grid container
             columnSpacing={2}
             rowSpacing={2}
@@ -146,10 +146,10 @@ export function ServeOrder() {
             justifyContent="center"
             sx={{ alignSelf: 'center', textAlign: 'center' }}
           >
-            <Grid item xs={12} sx={{ textAlign: 'center' }}>
+            <Grid size={12} sx={{ textAlign: 'center' }}>
               <Typography variant="h4"> First away team server</Typography>
             </Grid>
-            <Grid item xs={6} sx={{ textAlign: 'right', display: showServer(match, TeamType.Away, 1) }}>
+            <Grid size={6} sx={{ textAlign: 'right', display: showServer(match, TeamType.Away, 1) }}>
               <Button
                 disabled={match.firstServer[TeamType.Away] !== 0}
                 variant="contained" onClick={setAwayServer.bind(null, 1)}
@@ -163,7 +163,7 @@ export function ServeOrder() {
                 </Typography>
               </Button>
             </Grid>
-            <Grid item xs={6} sx={{ textAlign: 'left', display: showServer(match, TeamType.Away, 2) }}>
+            <Grid size={6} sx={{ textAlign: 'left', display: showServer(match, TeamType.Away, 2) }}>
               <Button disabled={match.firstServer[TeamType.Away] !== 0} variant="contained" onClick={setAwayServer.bind(null, 2)}
                 sx={{
                   display: showServer(match, TeamType.Away, 2),

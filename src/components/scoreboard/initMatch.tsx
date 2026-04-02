@@ -81,7 +81,7 @@ export function InitMatch() {
         columns={12}
         marginTop={15}
       >
-        {/* <Grid item xs={12}>
+        {/* <Grid size={12}>
           <Grid container
             columnSpacing={2}
             rowSpacing={2}
@@ -89,10 +89,10 @@ export function InitMatch() {
             columns={12}
             sx={{ alignSelf: 'center', textAlign: 'center' }}
           >
-            <Grid item xs={12} sx={{ textAlign: 'center' }}>
+            <Grid size={12} sx={{ textAlign: 'center' }}>
               <Typography variant="h4">Change player names:</Typography>
             </Grid>
-            <Grid item xs={6} sx={{ textAlign: 'right' }}>
+            <Grid size={6} sx={{ textAlign: 'right' }}>
               <Button variant="contained" onClick={setHomePlayerName.bind(null, 1)}
                 sx={{
                   width: 1, height: 54, backgroundColor: match.teamColor[TeamType.Home],
@@ -103,7 +103,7 @@ export function InitMatch() {
                 </Typography>
               </Button>
             </Grid>
-            <Grid item xs={6} sx={{ textAlign: 'left' }}>
+            <Grid size={6} sx={{ textAlign: 'left' }}>
               <Button variant="contained" onClick={setAwayPlayerName.bind(null, 1)}
                 sx={{
                   width: 1, height: 54, backgroundColor: match.teamColor[TeamType.Away],
@@ -114,7 +114,7 @@ export function InitMatch() {
                 </Typography>
               </Button>
             </Grid>
-            <Grid item xs={6} sx={{ textAlign: 'right' }}>
+            <Grid size={6} sx={{ textAlign: 'right' }}>
               <Button variant="contained" onClick={setHomePlayerName.bind(null, 2)}
                 sx={{
                   width: 1, height: 54, backgroundColor: match.teamColor[TeamType.Home],
@@ -125,7 +125,7 @@ export function InitMatch() {
                 </Typography>
               </Button>
             </Grid>
-            <Grid item xs={6} sx={{ textAlign: 'left' }}>
+            <Grid size={6} sx={{ textAlign: 'left' }}>
               <Button variant="contained" onClick={setAwayPlayerName.bind(null, 2)}
                 sx={{
                   width: 1, height: 54, backgroundColor: match.teamColor[TeamType.Away],
@@ -138,7 +138,7 @@ export function InitMatch() {
             </Grid>
           </Grid>
         </Grid> */}
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Grid container
             columnSpacing={2}
             rowSpacing={2}
@@ -146,10 +146,10 @@ export function InitMatch() {
             justifyContent="center"
             sx={{ alignSelf: 'center', textAlign: 'center' }}
           >
-            <Grid item xs={12} sx={{ textAlign: 'center' }}>
+            <Grid size={12} sx={{ textAlign: 'center' }}>
               <Typography variant="h4">Change team colors:</Typography>
             </Grid>
-            <Grid item xs={6} sx={{ textAlign: 'right' }}>
+            <Grid size={6} sx={{ textAlign: 'right' }}>
               <Button variant="contained" onClick={setTeamColors.bind(null, TeamType.Home)}
                 sx={{
                   width: 1, height: 82, backgroundColor: match.teamColor[TeamType.Home],
@@ -161,7 +161,7 @@ export function InitMatch() {
                 </Typography>
               </Button>
             </Grid>
-            <Grid item xs={6} sx={{ textAlign: 'left' }}>
+            <Grid size={6} sx={{ textAlign: 'left' }}>
               <Button variant="contained" onClick={setTeamColors.bind(null, TeamType.Away)}
                 sx={{
                   width: 1, height: 76, backgroundColor: match.teamColor[TeamType.Away],
@@ -175,7 +175,7 @@ export function InitMatch() {
             </Grid>
           </Grid>
         </Grid>
-        {/* <Grid item xs={12}>
+        {/* <Grid size={12}>
           <Grid container
             columnSpacing={2}
             rowSpacing={2}
@@ -183,10 +183,10 @@ export function InitMatch() {
             justifyContent="center"
             sx={{ alignSelf: 'center', textAlign: 'center' }}
           >
-            <Grid item xs={12} sx={{ textAlign: 'center' }}>
+            <Grid size={12} sx={{ textAlign: 'center' }}>
               <Typography variant="h4"> Change values for:</Typography>
             </Grid>
-            <Grid item xs={6} sx={{ textAlign: 'right' }}>
+            <Grid size={6} sx={{ textAlign: 'right' }}>
               <Button
                 variant="contained" onClick={setMatchId.bind(null)}
                 sx={{
@@ -198,7 +198,7 @@ export function InitMatch() {
                 </Typography>
               </Button>
             </Grid>
-            <Grid item xs={6} sx={{ textAlign: 'left' }}>
+            <Grid size={6} sx={{ textAlign: 'left' }}>
               <Button variant="contained" onClick={setTournamentId.bind(null)}
                 sx={{
                   width: 1, height: 96
@@ -212,11 +212,11 @@ export function InitMatch() {
             </Grid>
           </Grid>
         </Grid> */}
-        <Grid item md={6} xs={12} sx={{ textAlign: 'left' }} marginTop={5}>
-          <Grid item xs={12} sx={{ textAlign: 'center' }}>
+        <Grid size={{ xs: 12, md: 6 }} sx={{ textAlign: 'left' }} marginTop={5}>
+          <Grid size={12} sx={{ textAlign: 'center' }}>
             <Typography variant="h4"> When you are ready:</Typography>
           </Grid>
-          <Grid item xs={12} sx={{ textAlign: 'center' }} marginTop={2}>
+          <Grid size={12} sx={{ textAlign: 'center' }} marginTop={2}>
             <Button variant="contained" disabled={loading} onClick={handleDone.bind(null)}
               sx={{
                 width: 1, height: 96

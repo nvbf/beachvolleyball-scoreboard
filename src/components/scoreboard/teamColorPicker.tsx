@@ -57,12 +57,12 @@ export function TeamColorPicker({ team }: TeamColorPickerProps) {
             columns={12}
             sx={{ alignSelf: 'center', textAlign: 'center' }}
         >
-            <Grid item xs={12}>
+            <Grid size={12}>
                 <Typography sx={{ fontSize: 28 }}>Choose a shirt color for the {team === TeamType.Home ? "home" : "away"} team:</Typography>
                 <Typography sx={{ fontSize: 28 }}>{team === TeamType.Home ? match.homeTeam.player1Name : match.awayTeam.player1Name}</Typography>
                 <Typography sx={{ fontSize: 28 }}>{team === TeamType.Home ? match.homeTeam.player2Name : match.awayTeam.player2Name}</Typography>
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={12}>
                 <Grid container
                     columnSpacing={1}
                     rowSpacing={1}
@@ -71,8 +71,7 @@ export function TeamColorPicker({ team }: TeamColorPickerProps) {
                     sx={{ alignSelf: 'center', textAlign: 'center' }}
                 >
                     {colorList.map((item) => (
-                        <Grid item sm={2} xs={4} key={item.key}
-                        >
+                        <Grid size={{ xs: 4, sm: 2 }} key={item.key}>
                             <Button
                                 disabled={taken === item.color}
 
@@ -92,7 +91,7 @@ export function TeamColorPicker({ team }: TeamColorPickerProps) {
                     ))}
                 </Grid>
             </Grid>
-            <Grid item md={6} xs={12} sx={{ textAlign: 'left' }}>
+            <Grid size={{ xs: 12, md: 6 }} sx={{ textAlign: 'left' }}>
                 <Button variant="contained" onClick={handleColorClick.bind(null, getDefaultColorByTeam(team))}
                     sx={{
                         width: 1, height: 64, backgroundColor: getDefaultColorByTeam(team),

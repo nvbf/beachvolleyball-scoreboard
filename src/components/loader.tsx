@@ -9,7 +9,7 @@ const Loader = () =>
     rowSpacing={0}
     spacing={2}
     columns={12}>
-    <Grid item xs={12}>
+    <Grid size={12}>
       < LinearProgress color="inherit" sx={{marginTop: "150px", padding: "2px"}} />
     </Grid>
   </Grid>

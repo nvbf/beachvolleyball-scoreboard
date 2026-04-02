@@ -61,7 +61,7 @@ export function MatchView({ match, tournamentSlug }: MatchViewProps) {
                 justifyContent="space-evenly"
                 alignItems="center"
             >
-                <Grid item md={8} xs={12} sx={{ textAlign: "left" }}>
+                <Grid size={{ xs: 12, md: 8 }} sx={{ textAlign: "left" }}>
                     <Grid
                         container
                         spacing={0}
@@ -71,7 +71,7 @@ export function MatchView({ match, tournamentSlug }: MatchViewProps) {
                         padding={0}
                         marginBottom={0}
                     >
-                        <Grid item md={6} xs={8}>
+                        <Grid size={{ xs: 8, md: 6 }}>
                             <Typography
                                 align="left"
                                 sx={{
@@ -87,7 +87,7 @@ export function MatchView({ match, tournamentSlug }: MatchViewProps) {
                             </Typography>
 
                         </Grid>
-                        <Grid item md={6} xs={4}>
+                        <Grid size={{ xs: 4, md: 6 }}>
                             <Typography
                                 align="left"
                                 sx={{
@@ -100,7 +100,7 @@ export function MatchView({ match, tournamentSlug }: MatchViewProps) {
                                 {match.matchCategory + " - " + (match.matchGroup !== "" ? (" Group " + match.matchGroup) : match.name)}
                             </Typography>
                         </Grid>
-                        <Grid item md={6} xs={6}>
+                        <Grid size={{ xs: 6, md: 6 }}>
                             <Typography
                                 align="left"
                                 sx={{
@@ -114,7 +114,7 @@ export function MatchView({ match, tournamentSlug }: MatchViewProps) {
                                 {getInitials(match.homeTeam.player1)} / {getInitials(match.homeTeam.player2)}
                             </Typography>
                         </Grid>
-                        <Grid item md={6} xs={6}>
+                        <Grid size={{ xs: 6, md: 6 }}>
                             <Typography
                                 align="left"
                                 sx={{
@@ -130,7 +130,7 @@ export function MatchView({ match, tournamentSlug }: MatchViewProps) {
                         </Grid>
                     </Grid>
                 </Grid>
-                <Grid item md={4} xs={12} sx={{ textAlign: "right" }}>
+                <Grid size={{ xs: 12, md: 4 }} sx={{ textAlign: "right" }}>
                     <Grid
                         container
                         spacing={0}
@@ -140,7 +140,7 @@ export function MatchView({ match, tournamentSlug }: MatchViewProps) {
                         marginBottom={0}
                         padding={0}
                     >
-                        <Grid item md={12} xs={4}>
+                        <Grid size={{ xs: 4, md: 12 }}>
                             <Typography
                                 align="left"
                                 sx={{
@@ -153,7 +153,7 @@ export function MatchView({ match, tournamentSlug }: MatchViewProps) {
                                 {match.arenaName}
                             </Typography>
                         </Grid>
-                        <Grid item md={12} xs={8}>
+                        <Grid size={{ xs: 8, md: 12 }}>
                             {(match.hasWinner) && <Typography align='left' sx={{
                                 variant: 'button', lineHeight: 1, paddingTop: 1, paddingX: 1
                             }}>

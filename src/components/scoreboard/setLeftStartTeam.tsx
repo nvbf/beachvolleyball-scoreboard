@@ -99,7 +99,7 @@ export function SetLeftStartTeam() {
                 spacing={2}
                 columns={12}
             >
-                <Grid item xs={12}>
+                <Grid size={12}>
 
                     <Grid container
                         columnSpacing={2}
@@ -108,10 +108,10 @@ export function SetLeftStartTeam() {
                         columns={12}
                         sx={{ alignSelf: 'center', textAlign: 'center' }}
                     >
-                        <Grid item xs={12} sx={{ textAlign: 'center' }}>
+                        <Grid size={12} sx={{ textAlign: 'center' }}>
                             <Typography variant="h4"> Choose team sides</Typography>
                         </Grid>
-                        <Grid item xs={12}>
+                        <Grid size={12}>
                             <Grid container
                                 columnSpacing={2}
                                 rowSpacing={2}
@@ -119,7 +119,7 @@ export function SetLeftStartTeam() {
                                 justifyContent="center"
                                 sx={{ alignSelf: 'center', textAlign: 'center' }}
                             >
-                                <Grid item xs={6} sx={{ textAlign: 'left' }}>
+                                <Grid size={6} sx={{ textAlign: 'left' }}>
                                     <Button variant="contained" sx={{
                                         width: 1
                                     }}
@@ -129,7 +129,7 @@ export function SetLeftStartTeam() {
                                 </Grid>
                             </Grid>
                         </Grid>
-                        <Grid item xs={6} sx={{ textAlign: 'right' }}>
+                        <Grid size={6} sx={{ textAlign: 'right' }}>
                             <Button variant="contained"
                                 sx={{
                                     width: 1, height: 96, backgroundColor: match.teamColor[getLeftTeam()],
@@ -141,7 +141,7 @@ export function SetLeftStartTeam() {
                                 </Typography>
                             </Button>
                         </Grid>
-                        <Grid item xs={6} sx={{ textAlign: 'left' }}>
+                        <Grid size={6} sx={{ textAlign: 'left' }}>
                             <Button variant="contained"
                                 sx={{
                                     width: 1, height: 96, backgroundColor: match.teamColor[getRightTeam()],
@@ -156,7 +156,7 @@ export function SetLeftStartTeam() {
                     </Grid>
                 </Grid>
 
-                <Grid item xs={12}>
+                <Grid size={12}>
                     <Grid container
                         columnSpacing={2}
                         rowSpacing={2}
@@ -164,7 +164,7 @@ export function SetLeftStartTeam() {
                         justifyContent="center"
                         sx={{ alignSelf: 'center', textAlign: 'center' }}
                     >
-                        <Grid item xs={6} sx={{ textAlign: 'left' }}>
+                        <Grid size={6} sx={{ textAlign: 'left' }}>
                             <Button variant="contained" onClick={setLeftTeam.bind(null)}
                                 sx={{
                                     width: 1, height: 64
@@ -177,7 +177,7 @@ export function SetLeftStartTeam() {
                     </Grid>
                 </Grid>
 
-                <Grid item xs={12}>
+                <Grid size={12}>
                     <Grid container
                         columnSpacing={2}
                         rowSpacing={2}
@@ -185,10 +185,10 @@ export function SetLeftStartTeam() {
                         justifyContent="center"
                         sx={{ alignSelf: 'center', textAlign: 'center' }}
                     >
-                        <Grid item xs={12} sx={{ textAlign: 'center' }}>
+                        <Grid size={12} sx={{ textAlign: 'center' }}>
                             <Typography variant="h4"> If you don't want auto-swap enabled: </Typography>
                         </Grid>
-                        <Grid item xs={6} sx={{ textAlign: 'left' }}>
+                        <Grid size={6} sx={{ textAlign: 'left' }}>
                             <Button variant="contained" onClick={setNoSideSwitch.bind(null)}
                                 sx={{
                                     width: 1, height: 64

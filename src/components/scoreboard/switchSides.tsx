@@ -31,10 +31,10 @@ export function SwitchSides() {
             sx={{ alignSelf: 'center', textAlign: 'center' }}
             marginTop={4}
         >
-            <Grid item xs={12}>
+            <Grid size={12}>
                 <Typography sx={{ fontSize: 28 }}>Switch sides!!</Typography>
             </Grid>
-            <Grid item md={6} xs={12} sx={{ textAlign: 'left' }}>
+            <Grid size={{ xs: 12, md: 6 }} sx={{ textAlign: 'left' }}>
                 <Button variant="contained" onClick={handleDone.bind(null)}
                     sx={{
                         width: 1, height: 64

@@ -83,7 +83,7 @@ const EventList: React.FC = () => {
   const slicedEvents = isExpanded ? sortedEvents : sortedEvents.slice(0, 3);
 
   return (
-    <Grid item xs={12} sx={{ alignSelf: 'center', textAlign: 'center' }} marginTop={4}>
+    <Grid size={12} sx={{ alignSelf: 'center', textAlign: 'center' }} marginTop={4}>
       {slicedEvents.filter(e => {
         return e.eventType === EventType.Score || e.eventType === EventType.Timeout
       }).map((event) => (

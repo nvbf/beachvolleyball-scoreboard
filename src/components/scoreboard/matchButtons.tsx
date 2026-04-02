@@ -42,14 +42,14 @@ export function MatchButtons() {
       columns={12}
       marginTop={1}
     >
-      <Grid item xs={12}>
+      <Grid size={12}>
         <Grid container
           columnSpacing={0}
           rowSpacing={2}
           columns={13}
           sx={{ alignSelf: 'center', textAlign: 'center' }}
         >
-          <Grid item xs={6} sx={{ textAlign: 'right' }}>
+          <Grid size={6} sx={{ textAlign: 'right' }}>
             <Button disabled={match.finished} variant="contained" onClick={addPoint.bind(null, getLeftTeam(match))}
               sx={{
                 width: 1, height: 84, backgroundColor: match.teamColor[getLeftTeam(match)],
@@ -58,10 +58,10 @@ export function MatchButtons() {
               <Add sx={{ fontSize: 84, color: getTextColorFromBackground(match.teamColor[getLeftTeam(match)]) }} />
             </Button>
           </Grid>
-          <Grid item xs={1}>
+          <Grid size={1}>
 
           </Grid>
-          <Grid item xs={6} sx={{ textAlign: 'left' }}>
+          <Grid size={6} sx={{ textAlign: 'left' }}>
             <Button disabled={match.finished} variant="contained" onClick={addPoint.bind(null, getRightTeam(match))}
               sx={{
                 width: 1, height: 84, backgroundColor: match.teamColor[getRightTeam(match)],
@@ -71,7 +71,7 @@ export function MatchButtons() {
             </Button>
           </Grid>
 
-          <Grid item xs={6} sx={{ textAlign: 'right' }}>
+          <Grid size={6} sx={{ textAlign: 'right' }}>
             <Button disabled={match.teamTimeout[getLeftTeam(match)] || match.finished} onClick={teamTimeout.bind(null, getLeftTeam(match))} variant="contained"
               sx={{
                 width: 1, textTransform: 'none', backgroundColor: match.teamColor[getLeftTeam(match)],
@@ -80,10 +80,10 @@ export function MatchButtons() {
               <Typography sx={{ fontSize: 18, color: getTextColorFromBackground(match.teamColor[getLeftTeam(match)]) }}> TIMEOUT</Typography>
             </Button>
           </Grid>
-          <Grid item xs={1}>
+          <Grid size={1}>
 
           </Grid>
-          <Grid item xs={6} sx={{ textAlign: 'left' }}>
+          <Grid size={6} sx={{ textAlign: 'left' }}>
             <Button disabled={match.teamTimeout[getRightTeam(match)] || match.finished} onClick={teamTimeout.bind(null, getRightTeam(match))} variant="contained"
               sx={{
                 width: 1, textTransform: 'none', backgroundColor: match.teamColor[getRightTeam(match)],

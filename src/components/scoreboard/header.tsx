@@ -47,23 +47,23 @@ export function ScoreboardHeader() {
       spacing={2}
       columns={12}
     >
-      <Grid item xs={12}>
+      <Grid size={12}>
         <Grid container
           spacing={2}
           columns={12}
           sx={{ alignSelf: 'center', textAlign: 'center' }}
         >
-          <Grid item xs={3} >
+          <Grid size={3}>
             <Button variant="outlined" disabled={disableUndo(match.events)} onClick={undo} sx={{ border: 2, borderRadius: '12px', color: 'black', borderColor: 'black' }}>
               <Undo sx={{ fontSize: 42 }} />
             </Button>
           </Grid>
-          {!match.userMessage && <Grid item xs={6}>
+          {!match.userMessage && <Grid size={6}>
             <Typography align='center' sx={{ fontSize: "3rem", variant: 'button', lineHeight: 1, paddingTop: 1, paddingX: 1 }}>
               <TimeElapsed startTime={match.startTime} />
             </Typography>
           </Grid>}
-          {match.userMessage && !match.finished && <Grid item xs={6}>
+          {match.userMessage && !match.finished && <Grid size={6}>
             <Typography align='center' sx={{ fontSize: "1.2rem", variant: 'button', lineHeight: 1, paddingTop: 1, paddingX: 1 }}>
               NEXT POINT:
             </Typography>
@@ -71,7 +71,7 @@ export function ScoreboardHeader() {
               {match.userMessage.toUpperCase()}
             </Typography>
           </Grid>}
-          {(getLastValidEvent(match.events)?.eventType === EventType.MatchFinalized || false) && <Grid item xs={6}>
+          {(getLastValidEvent(match.events)?.eventType === EventType.MatchFinalized || false) && <Grid size={6}>
             <Typography align='center' sx={{ fontSize: "1.2rem", variant: 'button', lineHeight: 1, paddingTop: 1, paddingX: 1 }}>
               {"match done!".toUpperCase()}
             </Typography>
@@ -79,7 +79,7 @@ export function ScoreboardHeader() {
               {"thank you!".toUpperCase()}
             </Typography>
           </Grid>}
-          <Grid item xs={3}>
+          <Grid size={3}>
             <img src={logo} alt="logo" style={{ height: '3rem' }} />
           </Grid>
         </Grid>

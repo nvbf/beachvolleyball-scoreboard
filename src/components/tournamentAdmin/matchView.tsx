@@ -109,7 +109,7 @@ export function MatchView({ match, tournamentSlug, secret }: MatchViewProps) {
                 justifyContent="space-evenly"
                 alignItems="center"
             >
-                <Grid item md={10} xs={10} sx={{ textAlign: "right" }}>
+                <Grid size={{ xs: 10, md: 10 }} sx={{ textAlign: "right" }}>
                     <Grid
                         container
                         spacing={1}
@@ -117,7 +117,7 @@ export function MatchView({ match, tournamentSlug, secret }: MatchViewProps) {
                         alignItems="center"
                         columns={12}
                     >
-                        <Grid item xs={4}>
+                        <Grid size={4}>
                             <Typography
                                 align="left"
                                 sx={{
@@ -133,7 +133,7 @@ export function MatchView({ match, tournamentSlug, secret }: MatchViewProps) {
                             </Typography>
 
                         </Grid>
-                        <Grid item xs={4}>
+                        <Grid size={4}>
                             <Typography
                                 align="left"
                                 sx={{
@@ -146,7 +146,7 @@ export function MatchView({ match, tournamentSlug, secret }: MatchViewProps) {
                                 {match.matchCategory + " - " + (match.matchGroup !== "" ? (" Group " + match.matchGroup) : match.name)}
                             </Typography>
                         </Grid>
-                        <Grid item xs={4}>
+                        <Grid size={4}>
                             <Typography
                                 align="left"
                                 sx={{
@@ -161,7 +161,7 @@ export function MatchView({ match, tournamentSlug, secret }: MatchViewProps) {
                         </Grid>
 
 
-                        <Grid item xs={4}>
+                        <Grid size={4}>
                             <Typography
                                 align="left"
                                 sx={{
@@ -175,7 +175,7 @@ export function MatchView({ match, tournamentSlug, secret }: MatchViewProps) {
                                 {getInitials(match.homeTeam.player1)} / {getInitials(match.homeTeam.player2)}
                             </Typography>
                         </Grid>
-                        <Grid item xs={4}>
+                        <Grid size={4}>
                             <Typography
                                 align="left"
                                 sx={{
@@ -189,7 +189,7 @@ export function MatchView({ match, tournamentSlug, secret }: MatchViewProps) {
                                 {getInitials(match.awayTeam.player1)} / {getInitials(match.awayTeam.player2)}
                             </Typography>
                         </Grid>
-                        <Grid item xs={4}>
+                        <Grid size={4}>
                             {(match.hasWinner) && <Typography align='left' sx={{
                                 variant: 'button', lineHeight: 1, paddingTop: 1, paddingX: 1
                             }}>
@@ -223,7 +223,7 @@ export function MatchView({ match, tournamentSlug, secret }: MatchViewProps) {
 
                     </Grid>
                 </Grid>
-                <Grid item md={2} xs={2} sx={{ textAlign: "right" }}>
+                <Grid size={{ xs: 2, md: 2 }} sx={{ textAlign: "right" }}>
                     <Grid
                         container
                         spacing={1}
@@ -231,7 +231,7 @@ export function MatchView({ match, tournamentSlug, secret }: MatchViewProps) {
                         alignItems="center"
                         columns={12}
                     >
-                        <Grid item md={6} xs={12} sx={{ textAlign: "right" }}>
+                        <Grid size={{ xs: 12, md: 6 }} sx={{ textAlign: "right" }}>
                             <Box display="flex" justifyContent="center">
                                 <Button
                                     variant="outlined"
@@ -249,7 +249,7 @@ export function MatchView({ match, tournamentSlug, secret }: MatchViewProps) {
                                 </Button>
                             </Box>
                         </Grid>
-                        <Grid item md={6} xs={12} sx={{ textAlign: "right" }}>
+                        <Grid size={{ xs: 12, md: 6 }} sx={{ textAlign: "right" }}>
 
                             <Box display="flex" justifyContent="center">
                                 <Button

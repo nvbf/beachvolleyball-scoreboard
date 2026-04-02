@@ -133,7 +133,7 @@ const TournamentAdmin = () => {
         }).filter(e => {
           return selectedCourt === "all" ? true : e.arenaName === selectedCourt
         }).map((match, index) => (
-          <Grid item key={index} xs={12}>
+          <Grid size={12} key={index}>
             <MatchView match={match} tournamentSlug={tournamentSlug} secret={secret} />
           </Grid>
         ))}
@@ -155,13 +155,13 @@ const TournamentAdmin = () => {
         sx={{ alignSelf: 'center', textAlign: 'center' }}
         alignItems="center">
         <Alert severity="warning">
-          <Grid item key="warning" >
+          <Grid key="warning">
             No access to admin for this tournament...
             Ask owner of tournament to get a authorization link.
             <br></br>
           </Grid>
         </Alert >
-        <Grid item key="claim" >
+        <Grid key="claim">
           <Button onClick={handleClaimAccess}>claim access</Button>
         </Grid>
       </Grid>
@@ -192,7 +192,7 @@ const TournamentAdmin = () => {
     alignItems="center"
     marginTop={0.5}
   >
-    {matches.secret && <Grid item xs={12}>
+    {matches.secret && <Grid size={12}>
       <Grid container
         rowSpacing={1}
         columnSpacing={1}
@@ -200,14 +200,14 @@ const TournamentAdmin = () => {
         justifyContent="center"
         alignItems="center"
       >
-        <Grid item>
+        <Grid>
           <Link href={`/tournamentadmin/${tournamentSlug}`} style={{ color: selectedPlayerClass === null ? 'black' : 'gray' }}>
             all classes
           </Link>
         </Grid>
 
         {matches.classes.map((playerClass: string) => (
-          <Grid item key={playerClass}>
+          <Grid key={playerClass}>
             <Link href={`/tournamentadmin/${tournamentSlug}?class=${playerClass}`} style={{ color: playerClass === selectedPlayerClass ? 'black' : 'gray' }}>
               {playerClass}
             </Link>
@@ -216,7 +216,7 @@ const TournamentAdmin = () => {
         }
       </Grid>
     </Grid>}
-    {matches.secret && <Grid item xs={12}>
+    {matches.secret && <Grid size={12}>
       <Grid container
         rowSpacing={1}
         columnSpacing={0}
@@ -224,7 +224,7 @@ const TournamentAdmin = () => {
         justifyContent="space-evenly"
         alignItems="center"
       >
-        <Grid item >
+        <Grid>
           <Button variant={seeUpcoming ? "contained" : "outlined"}
             sx={{
               backgroundColor: seeUpcoming ? getStatusColor(MatchState.Upcoming) : "",
@@ -239,7 +239,7 @@ const TournamentAdmin = () => {
             upcoming
           </Button>
         </Grid>
-        <Grid item >
+        <Grid>
           <Button variant={seeOngoing ? "contained" : "outlined"}
             sx={{
               backgroundColor: seeOngoing ? getStatusColor(MatchState.Ongoing) : "",
@@ -254,7 +254,7 @@ const TournamentAdmin = () => {
             ongoing
           </Button>
         </Grid>
-        <Grid item>
+        <Grid>
           <Button variant={seeFinished ? "contained" : "outlined"}
             sx={{
               backgroundColor: seeFinished ? getStatusColor(MatchState.Finished) : "",
@@ -271,7 +271,7 @@ const TournamentAdmin = () => {
             finished
           </Button>
         </Grid>
-        <Grid item >
+        <Grid>
           <Button variant={seeReported ? "contained" : "outlined"}
             sx={{
               backgroundColor: seeReported ? getStatusColor(MatchState.Reported) : "",
@@ -286,7 +286,7 @@ const TournamentAdmin = () => {
             reported
           </Button>
         </Grid>
-        <Grid item >
+        <Grid>
           <Button variant={descending ? "contained" : "outlined"}
             sx={{
               backgroundColor: descending ? "#999999" : "",
@@ -303,7 +303,7 @@ const TournamentAdmin = () => {
         </Grid>
       </Grid>
     </Grid>}
-    {!(!matches.secret || (selectDay || selectCourt)) && <Grid item xs={12}>
+    {!(!matches.secret || (selectDay || selectCourt)) && <Grid size={12}>
       <Grid container
         rowSpacing={1}
         columnSpacing={2}
@@ -311,7 +311,7 @@ const TournamentAdmin = () => {
         justifyContent="center"
         alignItems="center"
       >
-        <Grid item>
+        <Grid>
           <Button variant={seeUpcoming ? "contained" : "outlined"}
             sx={{
               backgroundColor: "#cccccc",
@@ -324,7 +324,7 @@ const TournamentAdmin = () => {
             {matches.selectedDay === "all" ? "choose day" : dateStringToString(matches.selectedDay)}
           </Button>
         </Grid>
-        <Grid item>
+        <Grid>
           <Button variant={seeUpcoming ? "contained" : "outlined"}
             sx={{
               backgroundColor: "#cccccc",
@@ -339,7 +339,7 @@ const TournamentAdmin = () => {
         </Grid>
       </Grid>
     </Grid>}
-    {(matches.secret && selectDay) && <Grid item xs={12}>
+    {(matches.secret && selectDay) && <Grid size={12}>
       <Grid container
         rowSpacing={1}
         columnSpacing={1}
@@ -347,7 +347,7 @@ const TournamentAdmin = () => {
         justifyContent="center"
         alignItems="center"
       >
-        <Grid item>
+        <Grid>
           <Button variant={"all" === matches.selectedDay ? "contained" : "outlined"}
             sx={{
               backgroundColor: "all" === matches.selectedDay ? "#999999" : "",
@@ -363,7 +363,7 @@ const TournamentAdmin = () => {
           </Button>
         </Grid>
         {matches.dates.map((date: string) => (
-          <Grid item key={date}>
+          <Grid key={date}>
             <Button variant={date === matches.selectedDay ? "contained" : "outlined"}
               sx={{
                 backgroundColor: date === matches.selectedDay ? "#999999" : "",
@@ -382,7 +382,7 @@ const TournamentAdmin = () => {
         }
       </Grid>
     </Grid>}
-    {(matches.secret && selectCourt) && <Grid item xs={12}>
+    {(matches.secret && selectCourt) && <Grid size={12}>
       <Grid container
         rowSpacing={1}
         columnSpacing={1}
@@ -390,7 +390,7 @@ const TournamentAdmin = () => {
         justifyContent="center"
         alignItems="center"
       >
-        <Grid item>
+        <Grid>
           <Button variant={"all" === matches.selectedCourt ? "contained" : "outlined"}
             sx={{
               backgroundColor: "all" === matches.selectedCourt ? "#999999" : "",
@@ -406,7 +406,7 @@ const TournamentAdmin = () => {
           </Button>
         </Grid>
         {matches.fields.map((court: string) => (
-          <Grid item key={court}>
+          <Grid key={court}>
             <Button variant={court === matches.selectedCourt ? "contained" : "outlined"}
               sx={{
                 backgroundColor: court === matches.selectedCourt ? "#999999" : "",
@@ -425,7 +425,7 @@ const TournamentAdmin = () => {
         }
       </Grid>
     </Grid>}
-    <Grid item xs={12}>
+    <Grid size={12}>
       {matches.secret && renderMatches(matchesList, tournamentSlug, descending, matches.selectedDay, matches.selectedCourt, matches.secret)}
       {(!matches.secret && !matches.showLoader) && renderNoAccess()}
       {matches.showLoader && <Loader />}

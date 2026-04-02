@@ -28,14 +28,14 @@ export function SetFinished() {
             columns={12}
             sx={{ alignSelf: 'center', textAlign: 'center' }}
         >
-            <Grid item xs={12} sm={8} md={6}>
+            <Grid size={{ xs: 12, sm: 8, md: 6 }}>
                 <Grid container
                     spacing={2}
                     columns={12}
                     justifyContent="center"
                 // alignItems="flex-end"
                 >
-                    <Grid item >
+                    <Grid>
                         <Typography align='right' sx={{
                             border: 6, borderRadius: '12px', borderColor: match.teamColor[TeamType.Home],
                             fontSize: "3.5rem", variant: 'button', lineHeight: 1, paddingTop: 3,
@@ -45,7 +45,7 @@ export function SetFinished() {
                         </Typography>
 
                     </Grid>
-                    <Grid item>
+                    <Grid>
                         <Typography align='left' sx={{
                             border: 6, borderRadius: '12px', borderColor: match.teamColor[TeamType.Away],
                             fontSize: "3.5rem", variant: 'button', lineHeight: 1, paddingTop: 3,
@@ -56,13 +56,13 @@ export function SetFinished() {
                     </Grid>
                 </Grid>
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={12}>
                 <Typography sx={{ fontSize: 22 }}>The set is done! </Typography>
                 <Typography sx={{ fontSize: 22 }}>Click on 'finalize' to finish.</Typography>
                 <br></br>
                 <Typography sx={{ fontSize: 22 }}>(You will no longer be able to undo the events in this set)</Typography>
             </Grid>
-            <Grid item md={6} xs={12} sx={{ textAlign: 'left' }}>
+            <Grid size={{ xs: 12, md: 6 }} sx={{ textAlign: 'left' }}>
                 <Button variant="contained" onClick={handleDone.bind(null)}
                     sx={{
                         width: 1, height: 64

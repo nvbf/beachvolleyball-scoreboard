@@ -76,14 +76,14 @@ const YourReactComponent: React.FC = () => {
       ).filter((e) =>
         isOngoing(e.startDate, e.endDate)
       ).map((tournament, index) => (
-        <Grid item key={tournament.slug} xs={12}>
+        <Grid size={12} key={tournament.slug}>
           <Grid container
             spacing={0}
             rowSpacing={0}
             columns={12}
             justifyContent="space-evenly"
             alignItems="center">
-            <Grid item key={index} xs={12}>
+            <Grid size={12} key={index}>
               <TournamentView tournament={tournament} />
             </Grid>
           </Grid>
@@ -100,14 +100,14 @@ const YourReactComponent: React.FC = () => {
       ).filter((e) =>
         isIncoming(e.startDate) && e.numberOfMatches
       ).map((tournament, index) => (
-        <Grid item key={tournament.slug} xs={12}>
+        <Grid size={12} key={tournament.slug}>
           <Grid container
             spacing={0}
             rowSpacing={0}
             columns={12}
             justifyContent="space-evenly"
             alignItems="center">
-            <Grid item key={index} xs={12}>
+            <Grid size={12} key={index}>
               <TournamentView tournament={tournament} />
             </Grid>
           </Grid>
@@ -125,14 +125,14 @@ const YourReactComponent: React.FC = () => {
       ).filter((e) =>
         isPast(e.endDate)
       ).map((tournament, index) => (
-        <Grid item key={tournament.slug} xs={12}>
+        <Grid size={12} key={tournament.slug}>
           <Grid container
             spacing={0}
             rowSpacing={0}
             columns={12}
             justifyContent="space-evenly"
             alignItems="center">
-            <Grid item key={index} xs={12}>
+            <Grid size={12} key={index}>
               <TournamentView tournament={tournament} />
             </Grid>
           </Grid>

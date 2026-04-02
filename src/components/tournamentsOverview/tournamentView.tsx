@@ -68,7 +68,7 @@ export function TournamentView({ tournament }: TournamentViewProps) {
                     justifyContent="space-evenly"
                     alignItems="center"
                 >
-                    <Grid item md={2} xs={12}>
+                    <Grid size={{ xs: 12, md: 2 }}>
                         <Typography
                             align="left"
                             sx={{
@@ -80,7 +80,7 @@ export function TournamentView({ tournament }: TournamentViewProps) {
                         </Typography>
 
                     </Grid>
-                    <Grid item md={8} xs={12} sx={{ textAlign: "right" }}>
+                    <Grid size={{ xs: 12, md: 8 }} sx={{ textAlign: "right" }}>
 
                         <Typography
                             align="left"
@@ -94,7 +94,7 @@ export function TournamentView({ tournament }: TournamentViewProps) {
                             {tournament.name}
                         </Typography>
                     </Grid>
-                    <Grid item md={2} xs={12} sx={{ textAlign: "right" }}>
+                    <Grid size={{ xs: 12, md: 2 }} sx={{ textAlign: "right" }}>
 
                         <Typography
                             align="left"
