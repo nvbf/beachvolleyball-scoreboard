@@ -13,7 +13,7 @@ const EventList: React.FC = () => {
     setIsExpanded((expanded) => !expanded);
   };
 
-  const formattedEvent = (event: Event): JSX.Element => {
+  const formattedEvent = (event: Event): React.JSX.Element => {
     const eventTypeString = eventTypeToString(event.eventType);
     const teamString = teamToString(event.team);
     const playerName = event.playerId.toString(); // replace with actual player name

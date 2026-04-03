@@ -7,7 +7,7 @@ import {
 } from '@mui/icons-material';
 import { getInitials } from "../../util/names";
 import { AdminMatch, MatchState } from "../tournamentAdmin/types";
-import QRCode from "qrcode.react";
+
 import { getDelayString, getLateStart, timestampToString } from "../../util/time";
 import { TeamType } from "../types";
 import { getMatchState, getStatusColor } from "../tournamentAdmin/adminMatchFunctions";

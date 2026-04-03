@@ -305,7 +305,7 @@ const TournamentOverlay = () => {
   );
 };
 
-const formattedMatch = (match: AdminMatch): JSX.Element => {
+const formattedMatch = (match: AdminMatch): React.JSX.Element => {
   const formattedTime = timestampToStringHours(match.startTime)
   return (
     <Grid

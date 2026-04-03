@@ -10,7 +10,7 @@ import {
 } from '@mui/icons-material';
 import { getInitials } from "../../util/names";
 import { AdminMatch, MatchState } from "./types";
-import QRCode from "qrcode.react";
+import { QRCodeSVG as QRCode } from "qrcode.react";
 import { getDelayString, getLateStart, timestampToString } from "../../util/time";
 import { getMatchState, getStatusColor } from "./adminMatchFunctions";
 import { TeamType } from "../types";
