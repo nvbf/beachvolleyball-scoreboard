@@ -45,6 +45,13 @@ function StartPage() {
             columns={12}
           >
             <AppCards
+              title="Demo Match"
+              subHeader="Try the scoresheet without saving anything"
+              path="demo"
+              iconName="timer"
+              size={iconSize}
+            />
+            <AppCards
               title="New Match"
               subHeader="Electronic scoresheet, no need for a seperate scorer."
               path="match"

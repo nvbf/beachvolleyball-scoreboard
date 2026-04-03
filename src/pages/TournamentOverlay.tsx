@@ -108,9 +108,9 @@ const TournamentOverlay = () => {
         }}
       >
         <Grid height={60} padding={0} sx={{
- backgroundColor: "#ffffff", borderColor: "#000000",
- border: 2,
- }}>
+          backgroundColor: "#ffffff", borderColor: "#000000",
+          border: 2,
+        }}>
           <Grid
             container
             spacing={1}
@@ -122,14 +122,14 @@ const TournamentOverlay = () => {
             paddingLeft={2}
             textAlign={"right"}
           >
-            <Grid 
- padding={0}>
+            <Grid
+              padding={0}>
               <Typography textTransform={"uppercase"} padding={0} fontSize={nameSize} lineHeight={1.4}>
                 {currentMatch ? `${getInitials(currentMatch.homeTeam.player1)}` : ""}
               </Typography>
             </Grid>
-            <Grid 
- padding={0}>
+            <Grid
+              padding={0}>
               <Typography textTransform={"uppercase"} padding={0} fontSize={nameSize} lineHeight={1.0}>
                 {currentMatch ? `${getInitials(currentMatch.homeTeam.player2)}` : ""}
               </Typography>
@@ -137,10 +137,10 @@ const TournamentOverlay = () => {
           </Grid>
         </Grid>
         <Grid height={60} sx={{
- borderColor: "#000000",
- backgroundColor: "#000000",
- color: "#ffffff",
- }}>
+          borderColor: "#000000",
+          backgroundColor: "#000000",
+          color: "#ffffff",
+        }}>
           <Grid
             container
             // spacing={1}
@@ -162,10 +162,10 @@ const TournamentOverlay = () => {
           </Grid>
         </Grid>
         <Grid height={60} sx={{
- backgroundColor: "#ffffff",
- borderColor: "#000000",
- border: 2,
- }}>
+          backgroundColor: "#ffffff",
+          borderColor: "#000000",
+          border: 2,
+        }}>
           <Grid
             container
             height={1}
@@ -193,10 +193,10 @@ const TournamentOverlay = () => {
           </Grid>
         </Grid>
         <Grid height={60} sx={{
- borderColor: "#000000",
- backgroundColor: "#000000",
- color: "#ffffff",
- }}>
+          borderColor: "#000000",
+          backgroundColor: "#000000",
+          color: "#ffffff",
+        }}>
           <Grid
             container
             // spacing={1}
@@ -218,11 +218,11 @@ const TournamentOverlay = () => {
           </Grid>
         </Grid>
         <Grid height={60}
- sx={{
- backgroundColor: "#ffffff",
- borderColor: "#000000",
- border: 2,
- }}>
+          sx={{
+            backgroundColor: "#ffffff",
+            borderColor: "#000000",
+            border: 2,
+          }}>
           <Grid
             container
             spacing={1}
@@ -234,14 +234,14 @@ const TournamentOverlay = () => {
             paddingLeft={1}
             textAlign={"left"}
           >
-            <Grid 
- padding={0}>
+            <Grid
+              padding={0}>
               <Typography textTransform={"uppercase"} padding={0} fontSize={nameSize} lineHeight={1.4}>
                 {currentMatch ? `${getInitials(currentMatch.awayTeam.player1)}` : ""}
               </Typography>
             </Grid>
-            <Grid 
- padding={0}>
+            <Grid
+              padding={0}>
               <Typography textTransform={"uppercase"} padding={0} fontSize={nameSize} lineHeight={1.0}>
                 {currentMatch ? `${getInitials(currentMatch.awayTeam.player2)}` : ""}
               </Typography>
@@ -266,9 +266,9 @@ const TournamentOverlay = () => {
         }}
       >
         <Grid height={104} width={1} padding={0} sx={{
- backgroundColor: "#00A3DA", borderColor: "#000000",
- borderRadius: "15px", paddingX: "48px", paddingY: "20px"
- }}>
+          backgroundColor: "#00A3DA", borderColor: "#000000",
+          borderRadius: "15px", paddingX: "48px", paddingY: "20px"
+        }}>
           <Grid
             container
             direction="row"
@@ -279,8 +279,8 @@ const TournamentOverlay = () => {
             columns={12}
             height={1}
           ><Grid padding={0} marginTop={"10px"} sx={{
- // backgroundColor: "#ddA3DA",
- }}>
+            // backgroundColor: "#ddA3DA",
+          }}>
               <Typography color={"#FBF9F9"} fontWeight={"bold"} align="left" textTransform={"uppercase"} margin={0} padding={0} fontSize={"50px"} lineHeight={1.0}>
                 Next matches
               </Typography>
@@ -294,9 +294,9 @@ const TournamentOverlay = () => {
           return true
         }).map((match) => (
           <Grid key={match.matchId} width={1} height={88} padding={0} sx={{
- backgroundColor: "rgba(233, 237, 233, 0.9)", borderColor: "#000000",
- borderRadius: "15px", paddingX: "48px", paddingY: "20px"
- }}>
+            backgroundColor: "rgba(233, 237, 233, 0.9)", borderColor: "#000000",
+            borderRadius: "15px", paddingX: "48px", paddingY: "20px"
+          }}>
             {formattedMatch(match)}
           </Grid>
         ))}
@@ -319,17 +319,17 @@ const formattedMatch = (match: AdminMatch): React.JSX.Element => {
       height={1}
     >
       <Grid size={3} padding={0} marginTop={"10px"} sx={{
- // backgroundColor: "#ddA3DA",
- borderColor: "#000000", borderWidth: "2px",
- }}>
+        // backgroundColor: "#ddA3DA",
+        borderColor: "#000000", borderWidth: "2px",
+      }}>
         <Typography color={"#000000"} fontWeight={"bold"} align="left" textTransform={"uppercase"} margin={0} padding={0} fontSize={"24px"} lineHeight={1.0}>
           {match.matchCategory + " - " + (match.matchGroup !== "" ? (" Group " + match.matchGroup) : match.name)}
         </Typography>
       </Grid>
       <Grid size={4} padding={0} marginTop={"10px"} sx={{
- // backgroundColor: "#ddA3DA",
- borderColor: "#000000", borderWidth: "2px",
- }}>
+        // backgroundColor: "#ddA3DA",
+        borderColor: "#000000", borderWidth: "2px",
+      }}>
         <Grid
           direction="column"
         >
@@ -342,17 +342,17 @@ const formattedMatch = (match: AdminMatch): React.JSX.Element => {
         </Grid>
       </Grid>
       <Grid size={1} padding={0} marginTop={"10px"} sx={{
- // backgroundColor: "#ddA3DA",
- borderColor: "#000000", borderWidth: "2px",
- }}>
+        // backgroundColor: "#ddA3DA",
+        borderColor: "#000000", borderWidth: "2px",
+      }}>
         <Typography color={"#000000"} fontWeight={"bold"} align="left" textTransform={"uppercase"} margin={0} padding={0} fontSize={"24px"} lineHeight={1.0}>
           {formattedTime}
         </Typography>
       </Grid>
-      <Grid size={4} padding={0} marginTop={"10px"}sx={{
- // backgroundColor: "#ddA3DA",
- borderColor: "#000000", borderWidth: "2px",
- }}>
+      <Grid size={4} padding={0} marginTop={"10px"} sx={{
+        // backgroundColor: "#ddA3DA",
+        borderColor: "#000000", borderWidth: "2px",
+      }}>
         <Grid
           direction="column"
         >

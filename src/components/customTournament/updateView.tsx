@@ -14,22 +14,22 @@ import { getMatchState, getStatusColor } from "../tournamentAdmin/adminMatchFunc
 
 interface UpdateViewProps {
     existingMatch: AdminMatch | null;
-    newMatch: AdminMatch    
+    newMatch: AdminMatch
 }
 
 export function UpdateView({ newMatch, existingMatch }: UpdateViewProps) {
     return (
         <div>
             {!compareAdminMatches(newMatch, existingMatch) && <div>New values:</div>}
-            {!compareAdminMatches(newMatch, existingMatch) && showMatch(newMatch, newMatch.matchId+"-new")}
+            {!compareAdminMatches(newMatch, existingMatch) && showMatch(newMatch, newMatch.matchId + "-new")}
             {!compareAdminMatches(newMatch, existingMatch) && <div>Old values:</div>}
-            {!compareAdminMatches(newMatch, existingMatch) && existingMatch && showMatch(existingMatch, newMatch.matchId+"-old")}
+            {!compareAdminMatches(newMatch, existingMatch) && existingMatch && showMatch(existingMatch, newMatch.matchId + "-old")}
         </div>
     );
 }
 
 const compareAdminMatches = (match1: AdminMatch, match2: AdminMatch | null): boolean => {
-    if (!match2){
+    if (!match2) {
         return false
     }
     return (
@@ -51,131 +51,131 @@ const compareAdminMatches = (match1: AdminMatch, match2: AdminMatch | null): boo
 
 const showMatch = (match: AdminMatch, key: string) => {
     return (<Box
-    mb={3}
-    key={key}
-    sx={{
-        border: 2,
-        borderLeftWidth: 10,
-        borderBottomWidth: 3,
-        marginBottom: 1,
-        padding: 1,
-        borderImage: "linear-gradient(to right, " + getStatusColor(
-            MatchState.Upcoming
-        ) + ", black) 1",
-        // borderLeftWidth: 10,
-    }}
->
-    <Grid
-        container
-        spacing={0}
-        rowSpacing={0}
-        columns={12}
-        marginBottom={0}
-        justifyContent="space-evenly"
-        alignItems="center"
+        mb={3}
+        key={key}
+        sx={{
+            border: 2,
+            borderLeftWidth: 10,
+            borderBottomWidth: 3,
+            marginBottom: 1,
+            padding: 1,
+            borderImage: "linear-gradient(to right, " + getStatusColor(
+                MatchState.Upcoming
+            ) + ", black) 1",
+            // borderLeftWidth: 10,
+        }}
     >
-        <Grid size={{ xs: 12, md: 8 }} sx={{ textAlign: "left" }}>
-            <Grid
-                container
-                spacing={0}
-                justifyContent="flex-end"
-                alignItems="center"
-                columns={12}
-                padding={0}
-                marginBottom={0}
-            >
-                <Grid size={{ xs: 8, md: 6 }}>
-                    <Typography
-                        align="left"
-                        sx={{
-                            variant: "button",
-                            lineHeight: 1,
-                            paddingX: 1,
-                        }}
-                    >
-                        #{match.matchId} | {timestampToString(match.startTime)}
-                        {(getMatchState(match) === MatchState.Upcoming) && getDelayString(match.startTime)}
-                        {(getMatchState(match) === MatchState.Ongoing) && getLateStart(match.startTime, match.startTimestamp)}
+        <Grid
+            container
+            spacing={0}
+            rowSpacing={0}
+            columns={12}
+            marginBottom={0}
+            justifyContent="space-evenly"
+            alignItems="center"
+        >
+            <Grid size={{ xs: 12, md: 8 }} sx={{ textAlign: "left" }}>
+                <Grid
+                    container
+                    spacing={0}
+                    justifyContent="flex-end"
+                    alignItems="center"
+                    columns={12}
+                    padding={0}
+                    marginBottom={0}
+                >
+                    <Grid size={{ xs: 8, md: 6 }}>
+                        <Typography
+                            align="left"
+                            sx={{
+                                variant: "button",
+                                lineHeight: 1,
+                                paddingX: 1,
+                            }}
+                        >
+                            #{match.matchId} | {timestampToString(match.startTime)}
+                            {(getMatchState(match) === MatchState.Upcoming) && getDelayString(match.startTime)}
+                            {(getMatchState(match) === MatchState.Ongoing) && getLateStart(match.startTime, match.startTimestamp)}
 
-                    </Typography>
+                        </Typography>
 
+                    </Grid>
+                    <Grid size={{ xs: 4, md: 6 }}>
+                        <Typography
+                            align="left"
+                            sx={{
+                                variant: "button",
+                                lineHeight: 1,
+                                paddingTop: 1,
+                                paddingX: 1,
+                            }}
+                        >
+                            {match.matchCategory + " - " + (match.matchGroup !== "" ? (" Group " + match.matchGroup) : match.name)}
+                        </Typography>
+                    </Grid>
+                    <Grid size={{ xs: 6, md: 6 }}>
+                        <Typography
+                            align="left"
+                            sx={{
+                                variant: "button",
+                                lineHeight: 1,
+                                paddingTop: 1,
+                                paddingX: 1,
+                            }}
+                        >
+                            {getInitials(match.homeTeam.player1)} / {getInitials(match.homeTeam.player2)}
+                        </Typography>
+                    </Grid>
+                    <Grid size={{ xs: 6, md: 6 }}>
+                        <Typography
+                            align="left"
+                            sx={{
+                                variant: "button",
+                                lineHeight: 1,
+                                paddingTop: 1,
+                                paddingX: 1,
+                            }}
+                        >
+                            {getInitials(match.awayTeam.player1)} / {getInitials(match.awayTeam.player2)}
+                        </Typography>
+                    </Grid>
                 </Grid>
-                <Grid size={{ xs: 4, md: 6 }}>
-                    <Typography
-                        align="left"
-                        sx={{
-                            variant: "button",
-                            lineHeight: 1,
-                            paddingTop: 1,
-                            paddingX: 1,
-                        }}
-                    >
-                        {match.matchCategory + " - " + (match.matchGroup !== "" ? (" Group " + match.matchGroup) : match.name)}
-                    </Typography>
-                </Grid>
-                <Grid size={{ xs: 6, md: 6 }}>
-                    <Typography
-                        align="left"
-                        sx={{
-                            variant: "button",
-                            lineHeight: 1,
-                            paddingTop: 1,
-                            paddingX: 1,
-                        }}
-                    >
-                        {getInitials(match.homeTeam.player1)} / {getInitials(match.homeTeam.player2)}
-                    </Typography>
-                </Grid>
-                <Grid size={{ xs: 6, md: 6 }}>
-                    <Typography
-                        align="left"
-                        sx={{
-                            variant: "button",
-                            lineHeight: 1,
-                            paddingTop: 1,
-                            paddingX: 1,
-                        }}
-                    >
-                        {getInitials(match.awayTeam.player1)} / {getInitials(match.awayTeam.player2)}
-                    </Typography>
+            </Grid>
+            <Grid size={{ xs: 12, md: 4 }} sx={{ textAlign: "right" }}>
+                <Grid
+                    container
+                    spacing={0}
+                    justifyContent="flex-end"
+                    alignItems="center"
+                    columns={12}
+                    marginBottom={0}
+                    padding={0}
+                >
+                    <Grid size={{ xs: 4, md: 12 }}>
+                        <Typography
+                            align="left"
+                            sx={{
+                                variant: "button",
+                                lineHeight: 1,
+                                paddingTop: 1,
+                                paddingX: 1,
+                            }}
+                        >
+                            {match.arenaName}
+                        </Typography>
+                    </Grid>
+                    <Grid size={{ xs: 8, md: 12 }}>
+                        {<Typography align='left' sx={{
+                            variant: 'button', lineHeight: 1, paddingTop: 1, paddingX: 1
+                        }}>
+                            Ref: {match.referee}
+                        </Typography>}
+                    </Grid>
+
                 </Grid>
             </Grid>
         </Grid>
-        <Grid size={{ xs: 12, md: 4 }} sx={{ textAlign: "right" }}>
-            <Grid
-                container
-                spacing={0}
-                justifyContent="flex-end"
-                alignItems="center"
-                columns={12}
-                marginBottom={0}
-                padding={0}
-            >
-                <Grid size={{ xs: 4, md: 12 }}>
-                    <Typography
-                        align="left"
-                        sx={{
-                            variant: "button",
-                            lineHeight: 1,
-                            paddingTop: 1,
-                            paddingX: 1,
-                        }}
-                    >
-                        {match.arenaName}
-                    </Typography>
-                </Grid>
-                <Grid size={{ xs: 8, md: 12 }}>
-                    {<Typography align='left' sx={{
-                        variant: 'button', lineHeight: 1, paddingTop: 1, paddingX: 1
-                    }}>
-                        Ref: {match.referee}
-                    </Typography>}
-                </Grid>
-
-            </Grid>
-        </Grid>
-    </Grid>
-</Box>)
+    </Box>)
 
 }
 

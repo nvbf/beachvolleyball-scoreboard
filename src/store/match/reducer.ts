@@ -291,6 +291,7 @@ const matchSlice = createSlice({
     noMirrorSides: (state) => { }, // dummy reducer
     teamStartLeft: (state, action: PayloadAction<TeamType>) => { }, // dummy reducer
     initMatch: (state, action: PayloadAction<Match>) => { }, // dummy reducer
+    resetMatch: () => initMatchState,
   }
 });
 
@@ -324,6 +325,7 @@ export const {
   noMirrorSides,
   teamStartLeft,
   initMatch,
+  resetMatch,
 } = matchSlice.actions;
 
 export default matchSlice.reducer;
