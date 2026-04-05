@@ -1,0 +1,20 @@
+{
+    "projects": {
+        "default": "scoreboard-sandbox-fc7ac"
+    },
+    "targets": {
+        "scoreboard-sandbox-fc7ac": {
+            "hosting": {
+                "dev": [
+                    "YOUR_DEV_SITE_NAME"
+                ],
+                "beta": [
+                    "YOUR_BETA_SITE_NAME"
+                ],
+                "prod": [
+                    "scoreboard-sandbox-fc7ac"
+                ]
+            }
+        }
+    }
+}
