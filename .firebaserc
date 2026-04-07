@@ -1,18 +1,18 @@
 {
     "projects": {
-        "default": "scoreboard-sandbox-fc7ac"
+        "default": "osvb-scoreboard"
     },
     "targets": {
-        "scoreboard-sandbox-fc7ac": {
+        "osvb-scoreboard": {
             "hosting": {
                 "dev": [
-                    "YOUR_DEV_SITE_NAME"
+                    "osvb-scoreboard-dev"
                 ],
                 "beta": [
-                    "YOUR_BETA_SITE_NAME"
+                    "osvb-scoreboard-beta"
                 ],
                 "prod": [
-                    "scoreboard-sandbox-fc7ac"
+                    "osvb-scoreboard"
                 ]
             }
         }

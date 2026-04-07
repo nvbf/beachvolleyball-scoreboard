@@ -17,30 +17,37 @@
 set -euo pipefail
 
 # ── Configuration ────────────────────────────────────────────────────────────
-PROJECT_ID="scoreboard-sandbox-fc7ac"
-REPO_OWNER="YOUR_GITHUB_ORG_OR_USER"        # e.g. "oystein"
+PROJECT_ID="osvb-scoreboard"
+REPO_OWNER="nvbf"        # e.g. "oystein"
 REPO_NAME="beachvolleyball-scoreboard"
 
-SITE_DEV="YOUR_DEV_SITE_NAME"               # Firebase Hosting site for dev
-SITE_BETA="YOUR_BETA_SITE_NAME"             # Firebase Hosting site for beta
+SITE_DEV="osvb-scoreboard-dev"               # Firebase Hosting site for dev
+SITE_BETA="osvb-scoreboard-beta"             # Firebase Hosting site for beta
 SITE_PROD="$PROJECT_ID"                     # default site = project ID
 
-BACKEND_URL_DEV="https://YOUR_DEV_BACKEND_URL"
-BACKEND_URL_PROD="https://YOUR_PROD_BACKEND_URL"
+BACKEND_URL_DEV="https://tournament-sync-dev-104889733361.europe-west1.run.app"
+BACKEND_URL_PROD="https://tournament-sync-prod-104889733361.europe-west1.run.app"
 # ─────────────────────────────────────────────────────────────────────────────
 
 PROJECT_NUMBER=$(gcloud projects describe "$PROJECT_ID" --format='value(projectNumber)')
 CLOUD_BUILD_SA="${PROJECT_NUMBER}@cloudbuild.gserviceaccount.com"
+TRIGGER_SA="projects/${PROJECT_ID}/serviceAccounts/${PROJECT_NUMBER}-compute@developer.gserviceaccount.com"
 
 echo "→ Granting Firebase Hosting Admin to Cloud Build service account..."
 gcloud projects add-iam-policy-binding "$PROJECT_ID" \
   --member="serviceAccount:${CLOUD_BUILD_SA}" \
   --role="roles/firebasehosting.admin"
 
+echo "→ Granting Firebase Hosting Admin to trigger service account..."
+gcloud projects add-iam-policy-binding "$PROJECT_ID" \
+  --member="serviceAccount:${PROJECT_NUMBER}-compute@developer.gserviceaccount.com" \
+  --role="roles/firebasehosting.admin"
+
 echo "→ Creating dev trigger (every merge to main)..."
 gcloud builds triggers create github \
   --project="$PROJECT_ID" \
   --name="deploy-dev" \
+  --service-account="$TRIGGER_SA" \
   --repo-name="$REPO_NAME" \
   --repo-owner="$REPO_OWNER" \
   --branch-pattern="^main$" \
@@ -52,6 +59,7 @@ echo "→ Creating beta trigger (release tag r01, r02, ...)..."
 gcloud builds triggers create github \
   --project="$PROJECT_ID" \
   --name="deploy-beta" \
+  --service-account="$TRIGGER_SA" \
   --repo-name="$REPO_NAME" \
   --repo-owner="$REPO_OWNER" \
   --tag-pattern="^r[0-9]+$" \
@@ -63,6 +71,7 @@ echo "→ Creating prod trigger (same release tag, requires manual approval)..."
 gcloud builds triggers create github \
   --project="$PROJECT_ID" \
   --name="deploy-prod" \
+  --service-account="$TRIGGER_SA" \
   --repo-name="$REPO_NAME" \
   --repo-owner="$REPO_OWNER" \
   --tag-pattern="^r[0-9]+$" \
