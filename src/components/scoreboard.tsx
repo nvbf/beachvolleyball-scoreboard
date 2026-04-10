@@ -74,7 +74,7 @@ export function Scoreboard() {
           <Grid size={6} sx={{ textAlign: 'right' }}>
             <Typography sx={{
               fontSize: 18,
-              fontWeight: 700,
+              fontWeight: (getServer(match.events, leftTeam) === 1) ? "bold" : "normal",
               textDecorationThickness: '2px',
               textUnderlineOffset: '4px',
               textDecoration: (getServer(match.events, leftTeam) === 1) ? "underline" : "none"
@@ -87,6 +87,7 @@ export function Scoreboard() {
           <Grid size={6} sx={{ textAlign: 'left' }}>
             <Typography sx={{
               fontSize: 18,
+              fontWeight: (getServer(match.events, rightTeam) === 1) ? "bold" : "normal",
               textDecorationThickness: '2px',
               textUnderlineOffset: '4px',
               textDecoration: (getServer(match.events, rightTeam) === 1) ? "underline" : "none"
@@ -96,7 +97,9 @@ export function Scoreboard() {
           <Grid size={6} sx={{ textAlign: 'right' }}>
             <Typography sx={{
               fontSize: 18,
-              color: '#222226',
+              fontWeight: (getServer(match.events, leftTeam) === 2) ? "bold" : "normal",
+              textDecorationThickness: '2px',
+              textUnderlineOffset: '4px',
               textDecoration: (getServer(match.events, leftTeam) === 2) ? "underline" : "none"
             }}> {getInitials(getPlayer(match, 2, leftTeam))}</Typography>
 
@@ -108,7 +111,9 @@ export function Scoreboard() {
           <Grid size={6} sx={{ textAlign: 'left' }}>
             <Typography sx={{
               fontSize: 18,
-              color: '#222226',
+              fontWeight: (getServer(match.events, rightTeam) === 2) ? "bold" : "normal",
+              textDecorationThickness: '2px',
+              textUnderlineOffset: '4px',
               textDecoration: (getServer(match.events, rightTeam) === 2) ? "underline" : "none"
             }}> {getInitials(getPlayer(match, 2, rightTeam))}</Typography>
           </Grid>
