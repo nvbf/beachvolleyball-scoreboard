@@ -1,6 +1,5 @@
 import {
-  Undo,
-  Settings
+  Undo
 } from '@mui/icons-material';
 import {
   IconButton,
@@ -13,6 +12,7 @@ import Grid from "@mui/material/Grid"
 import { createUndoEvent, getLastValidEvent } from "../eventFunctions";
 import { EventType } from '../types';
 import TimeElapsed from '../timeElaped';
+import logo from '../../osvb_logo_hi_res.png';
 
 export function ScoreboardHeader() {
   const match = useAppSelector((state) => state.match);
@@ -21,10 +21,6 @@ export function ScoreboardHeader() {
 
   function undo() {
     dispatch(undoEvent({ matchId: match.matchId, id: match.id, event: createUndoEvent(match.events, match.authUserId) }));
-  }
-
-  function toggleSettings() {
-    // dispatch(callTimeout(Actor.AwayTeam));
   }
 
   function disableUndo(events: import("../types").Event[]): boolean {
@@ -78,9 +74,7 @@ export function ScoreboardHeader() {
             </Typography>
           </Grid>}
           <Grid size={3} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <IconButton onClick={toggleSettings} sx={{ width: 48, height: 48, border: '2px solid #1c1c1e', borderRadius: '12px', color: '#1c1c1e' }}>
-              <Settings sx={{ fontSize: 30 }} />
-            </IconButton>
+            <img src={logo} alt="OSVB logo" style={{ height: '48px', width: 'auto' }} />
           </Grid>
         </Grid>
       </Grid>
