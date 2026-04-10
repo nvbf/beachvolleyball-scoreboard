@@ -3,18 +3,16 @@ import {
   Settings
 } from '@mui/icons-material';
 import {
+  IconButton,
   Typography
 } from "@mui/material";
-import Button from "@mui/material/Button";
-import React, { useState } from 'react';
+import React from 'react';
 import { undoEvent } from '../../store/match/reducer';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import Grid from "@mui/material/Grid"
-import Clock from "../clock";
 import { createUndoEvent, getLastValidEvent } from "../eventFunctions";
 import { EventType } from '../types';
 import TimeElapsed from '../timeElaped';
-import logo from '../../osvb_logo_hi_res.png';
 
 export function ScoreboardHeader() {
   const match = useAppSelector((state) => state.match);
@@ -44,43 +42,45 @@ export function ScoreboardHeader() {
       justifyContent="center"
       alignItems="center"
       rowSpacing={0}
-      spacing={2}
+      spacing={0}
       columns={12}
     >
-      <Grid size={12}>
+      <Grid size={12} sx={{ position: 'sticky', top: 0, zIndex: 20, backgroundColor: '#e6dece', borderRadius: '12px', paddingTop: 0.5, paddingBottom: 1.5 }}>
         <Grid container
-          spacing={2}
+          spacing={0}
           columns={12}
-          sx={{ alignSelf: 'center', textAlign: 'center' }}
+          sx={{ alignSelf: 'center', textAlign: 'center', alignItems: 'center' }}
         >
-          <Grid size={3}>
-            <Button variant="outlined" disabled={disableUndo(match.events)} onClick={undo} sx={{ border: 2, borderRadius: '12px', color: 'black', borderColor: 'black' }}>
-              <Undo sx={{ fontSize: 42 }} />
-            </Button>
+          <Grid size={3} sx={{ display: 'flex', justifyContent: 'flex-start' }}>
+            <IconButton disabled={disableUndo(match.events)} onClick={undo} sx={{ width: 48, height: 48, border: '2px solid #1c1c1e', borderRadius: '12px', color: '#1c1c1e', '&.Mui-disabled': { borderColor: 'rgba(28,28,30,0.25)' } }}>
+              <Undo sx={{ fontSize: 30 }} />
+            </IconButton>
           </Grid>
           {!match.userMessage && <Grid size={6}>
-            <Typography align='center' sx={{ fontSize: "3rem", variant: 'button', lineHeight: 1, paddingTop: 1, paddingX: 1 }}>
+            <Typography align='center' sx={{ fontSize: '2.8rem', fontWeight: 700, lineHeight: 1, letterSpacing: '-0.02em' }}>
               <TimeElapsed startTime={match.startTime} />
             </Typography>
           </Grid>}
           {match.userMessage && !match.finished && <Grid size={6}>
-            <Typography align='center' sx={{ fontSize: "1.2rem", variant: 'button', lineHeight: 1, paddingTop: 1, paddingX: 1 }}>
+            <Typography align='center' sx={{ fontSize: '0.85rem', fontWeight: 700, lineHeight: 1.2, color: '#5a5a5f', letterSpacing: '0.06em' }}>
               NEXT POINT:
             </Typography>
-            <Typography align='center' sx={{ fontSize: "1.2rem", variant: 'button', lineHeight: 1, paddingTop: 1, paddingX: 1 }}>
+            <Typography align='center' sx={{ fontSize: '1.15rem', fontWeight: 700, lineHeight: 1.1, paddingTop: 0.75 }}>
               {match.userMessage.toUpperCase()}
             </Typography>
           </Grid>}
           {(getLastValidEvent(match.events)?.eventType === EventType.MatchFinalized || false) && <Grid size={6}>
-            <Typography align='center' sx={{ fontSize: "1.2rem", variant: 'button', lineHeight: 1, paddingTop: 1, paddingX: 1 }}>
+            <Typography align='center' sx={{ fontSize: '1rem', fontWeight: 700, lineHeight: 1.2 }}>
               {"match done!".toUpperCase()}
             </Typography>
-            <Typography align='center' sx={{ fontSize: "1.2rem", variant: 'button', lineHeight: 1, paddingTop: 1, paddingX: 1 }}>
+            <Typography align='center' sx={{ fontSize: '1rem', fontWeight: 700, lineHeight: 1.2, paddingTop: 0.25 }}>
               {"thank you!".toUpperCase()}
             </Typography>
           </Grid>}
-          <Grid size={3}>
-            <img src={logo} alt="logo" style={{ height: '3rem' }} />
+          <Grid size={3} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <IconButton onClick={toggleSettings} sx={{ width: 48, height: 48, border: '2px solid #1c1c1e', borderRadius: '12px', color: '#1c1c1e' }}>
+              <Settings sx={{ fontSize: 30 }} />
+            </IconButton>
           </Grid>
         </Grid>
       </Grid>

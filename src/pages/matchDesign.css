@@ -1,0 +1,35 @@
+.match-screen {
+  --match-sand: #e6dece;
+  --match-dark: #1c1c1e;
+  --match-muted: #8e8e93;
+  --match-card: rgba(255, 255, 255, 0.55);
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: clamp(10px, 2.4vw, 24px) clamp(10px, 3vw, 32px) clamp(16px, 3vw, 32px);
+  background: radial-gradient(circle at 50% -18%, #f4efe5 0%, var(--match-sand) 60%);
+  color: var(--match-dark);
+  font-family: "Inter", "Segoe UI", sans-serif;
+}
+
+.match-score-shell {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+}
+
+.match-event-log {
+  margin-top: 12px;
+  padding: 6px;
+  border-radius: 18px;
+  background: var(--match-card);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+@media (max-width: 720px) {
+  .match-screen {
+    padding: 10px 10px 20px;
+  }
+}

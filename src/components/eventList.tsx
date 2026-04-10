@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Event, EventType, TeamType } from "./types";
-import { Button, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
+import { Box, Button, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import { useAppSelector } from "../store/store";
 import moment from "moment";
 
@@ -118,39 +118,41 @@ const EventList: React.FC = () => {
   const displayedRows = isExpanded ? reversedRows : reversedRows.slice(0, 3);
 
   return (
-    <Grid size={12} sx={{ alignSelf: 'center', textAlign: 'center' }} marginTop={4}>
-      <TableContainer sx={{ width: "fit-content", maxWidth: "100%", marginLeft: "auto", marginRight: "auto" }}>
-        <Table size="small" sx={{ width: "auto" }}>
+    <Grid size={12} sx={{ alignSelf: 'center', textAlign: 'center' }} marginTop={2}>
+      <Box className="match-event-log">
+        <TableContainer sx={{ width: "100%", maxWidth: "100%", marginLeft: "auto", marginRight: "auto" }}>
+          <Table size="small" sx={{ width: "100%" }}>
           <TableHead>
             <TableRow>
-              <TableCell sx={{ fontWeight: 700, whiteSpace: "nowrap" }}>Local</TableCell>
-              <TableCell sx={{ fontWeight: 700, whiteSpace: "nowrap" }}>Since Start</TableCell>
-              <TableCell sx={{ fontWeight: 700, whiteSpace: "nowrap" }}>Event</TableCell>
-              <TableCell sx={{ fontWeight: 700, textAlign: "right", whiteSpace: "nowrap" }}>Standing</TableCell>
+              <TableCell sx={{ fontWeight: 700, whiteSpace: "nowrap", color: "rgba(28,28,30,0.65)", borderBottom: "1px solid rgba(0,0,0,0.1)" }}>Local</TableCell>
+              <TableCell sx={{ fontWeight: 700, whiteSpace: "nowrap", color: "rgba(28,28,30,0.65)", borderBottom: "1px solid rgba(0,0,0,0.1)" }}>Since Start</TableCell>
+              <TableCell sx={{ fontWeight: 700, whiteSpace: "nowrap", color: "rgba(28,28,30,0.65)", borderBottom: "1px solid rgba(0,0,0,0.1)" }}>Event</TableCell>
+              <TableCell sx={{ fontWeight: 700, textAlign: "right", whiteSpace: "nowrap", color: "rgba(28,28,30,0.65)", borderBottom: "1px solid rgba(0,0,0,0.1)" }}>Standing</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {displayedRows.map((row) => (
               <TableRow key={row.id}>
-                <TableCell>
-                  <Typography variant="body2" sx={{ whiteSpace: "nowrap" }}>{row.localTime}</Typography>
+                <TableCell sx={{ borderBottom: "none", paddingY: 1.1 }}>
+                  <Typography variant="body2" sx={{ whiteSpace: "nowrap", color: "rgba(28,28,30,0.75)" }}>{row.localTime}</Typography>
                 </TableCell>
-                <TableCell>
-                  <Typography variant="body2" sx={{ whiteSpace: "nowrap" }}>{row.elapsed}</Typography>
+                <TableCell sx={{ borderBottom: "none", paddingY: 1.1 }}>
+                  <Typography variant="body2" sx={{ whiteSpace: "nowrap", color: "rgba(28,28,30,0.75)" }}>{row.elapsed}</Typography>
                 </TableCell>
-                <TableCell>
-                  <Typography variant="body2" sx={{ whiteSpace: "nowrap" }}>{row.eventName}</Typography>
+                <TableCell sx={{ borderBottom: "none", paddingY: 1.1 }}>
+                  <Typography variant="body2" sx={{ whiteSpace: "nowrap", fontWeight: 500 }}>{row.eventName}</Typography>
                 </TableCell>
-                <TableCell sx={{ textAlign: "right" }}>
-                  <Typography variant="body2" sx={{ whiteSpace: "nowrap" }}>{row.standing}</Typography>
+                <TableCell sx={{ textAlign: "right", borderBottom: "none", paddingY: 1.1 }}>
+                  <Typography variant="body2" sx={{ whiteSpace: "nowrap", fontWeight: 700 }}>{row.standing}</Typography>
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
+      </Box>
       {timelineRows.length > 3 && (
-        <Button variant="contained" onClick={toggleExpansion}>
+        <Button variant="contained" onClick={toggleExpansion} sx={{ marginTop: 1.5, borderRadius: '10px', fontWeight: 700, minWidth: 132, backgroundColor: '#1a6bba', '&:hover': { backgroundColor: '#15599d' } }}>
           {isExpanded ? "Show less" : "Show more"}
         </Button>
       )}

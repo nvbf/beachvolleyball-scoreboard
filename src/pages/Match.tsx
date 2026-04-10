@@ -18,6 +18,7 @@ import MatchButtons from '../components/scoreboard/matchButtons';
 import MatchFinalized from '../components/scoreboard/matchFinalized';
 import EventList from '../components/eventList';
 import { getLastValidEvent } from '../components/eventFunctions';
+import './matchDesign.css';
 
 
 function Match() {
@@ -64,7 +65,7 @@ function Match() {
   }
 
   return (
-    <main>
+    <main className="match-screen">
       <ScoreboardHeader />
 
       {getActiveDisplay(match) === DisplayType.SelectServeorder && <ServeOrder />}

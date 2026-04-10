@@ -1,13 +1,9 @@
-import AddIcon from "@mui/icons-material/Add";
 import {
-  Add,
-  SportsVolleyball,
-  Undo,
-  Settings,
   ArrowForwardIos,
   ArrowBackIosNew
 } from '@mui/icons-material';
 import {
+  Box,
   Typography
 } from "@mui/material";
 import { useAppSelector } from '../store/store';
@@ -18,76 +14,54 @@ import { matchState } from "../store/types";
 
 export function Scoreboard() {
   const match = useAppSelector((state) => state.match);
+  const leftTeam = getLeftTeam(match);
+  const rightTeam = getRightTeam(match);
+  const leftColor = match.teamColor[leftTeam];
+  const rightColor = match.teamColor[rightTeam];
 
   return (
     <Grid container
       justifyContent="center"
       alignItems="center"
       rowSpacing={0}
-      spacing={2}
+      spacing={1.5}
       columns={12}
+      marginTop={0.5}
     >
-      <Grid size={{ xs: 12, sm: 8, md: 6 }}>
+      <Grid size={12}>
         <Grid container
-          spacing={2}
+          spacing={1}
           columns={12}
-          justifyContent="space-evenly"
-          alignItems="flex-end"
+          justifyContent="space-between"
+          alignItems="center"
         >
-          <Grid size={6} sx={{ textAlign: 'right' }}>
-            <Grid container
-              spacing={2}
-              justifyContent="flex-end"
-              alignItems="flex-end"
-              columns={12}
-            >
-              <Grid>
-                <Typography align='center' sx={{
-                  border: 4, borderRadius: '12px', borderColor: match.teamColor[getLeftTeam(match)],
-                  fontSize: "2rem", variant: 'button', lineHeight: 1, paddingTop: 1,
-                  paddingX: 1
-                }}>
-                  {match.currentSetScore[getLeftTeam(match)]}
-                </Typography>
-              </Grid>
-              <Grid>
-                <Typography align='right' sx={{
-                  border: 6, borderRadius: '12px', borderColor: match.teamColor[getLeftTeam(match)],
-                  fontSize: "3.5rem", variant: 'button', lineHeight: 1, paddingTop: 3,
-                  paddingX: 1, minWidth: 50
-                }}>
-                  {match.currentScore[getLeftTeam(match)]}
-                </Typography>
-              </Grid>
-            </Grid>
-          </Grid>
           <Grid size={6} sx={{ textAlign: 'left' }}>
-            <Grid container
-              spacing={2}
-              justifyContent="flex-start"
-              alignItems="flex-end"
-              columns={12}
-            >
-              <Grid>
-                <Typography align='left' sx={{
-                  border: 6, borderRadius: '12px', borderColor: match.teamColor[getRightTeam(match)],
-                  fontSize: "3.5rem", variant: 'button', lineHeight: 1, paddingTop: 3,
-                  paddingX: 1, minWidth: 50
-                }}>
-                  {match.currentScore[getRightTeam(match)]}
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: 1.25 }}>
+              <Box sx={{ width: 42, height: 52, border: `2px solid ${leftColor}`, borderRadius: '9px', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff' }}>
+                <Typography sx={{ color: leftColor, fontWeight: 700, fontSize: '1.6rem', lineHeight: 1 }}>
+                  {match.currentSetScore[leftTeam]}
                 </Typography>
-              </Grid>
-              <Grid>
-                <Typography align='center' sx={{
-                  border: 4, borderRadius: '12px', borderColor: match.teamColor[getRightTeam(match)],
-                  fontSize: "2rem", variant: 'button', lineHeight: 1, paddingTop: 1,
-                  paddingX: 1
-                }}>
-                  {match.currentSetScore[getRightTeam(match)]}
+              </Box>
+              <Box className="match-score-shell" sx={{ width: 88, height: 102, border: `4px solid ${leftColor}`, borderRadius: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Typography sx={{ color: '#1c1c1e', fontWeight: 800, fontSize: '3.25rem', lineHeight: 1 }}>
+                  {match.currentScore[leftTeam]}
                 </Typography>
-              </Grid>
-
-            </Grid>
+              </Box>
+            </Box>
+          </Grid>
+          <Grid size={6} sx={{ textAlign: 'right' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 1.25 }}>
+              <Box className="match-score-shell" sx={{ width: 88, height: 102, border: `4px solid ${rightColor}`, borderRadius: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Typography sx={{ color: '#1c1c1e', fontWeight: 800, fontSize: '3.25rem', lineHeight: 1 }}>
+                  {match.currentScore[rightTeam]}
+                </Typography>
+              </Box>
+              <Box sx={{ width: 42, height: 52, border: `2px solid ${rightColor}`, borderRadius: '9px', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff' }}>
+                <Typography sx={{ color: rightColor, fontWeight: 700, fontSize: '1.6rem', lineHeight: 1 }}>
+                  {match.currentSetScore[rightTeam]}
+                </Typography>
+              </Box>
+            </Box>
           </Grid>
         </Grid>
       </Grid>
@@ -95,41 +69,48 @@ export function Scoreboard() {
         <Grid container
           columnSpacing={0}
           columns={13}
-          sx={{ alignSelf: 'center', textAlign: 'center' }}
+          sx={{ alignSelf: 'center', textAlign: 'center', marginTop: 1.25 }}
         >
           <Grid size={6} sx={{ textAlign: 'right' }}>
             <Typography sx={{
               fontSize: 18,
-              textDecoration: (getServer(match.events, getLeftTeam(match)) === 1) ? "underline" : "none"
-            }}> {getInitials(getPlayer(match, 1, getLeftTeam(match)))} </Typography>
+              fontWeight: 700,
+              textDecorationThickness: '2px',
+              textUnderlineOffset: '4px',
+              textDecoration: (getServer(match.events, leftTeam) === 1) ? "underline" : "none"
+            }}> {getInitials(getPlayer(match, 1, leftTeam))} </Typography>
           </Grid>
-          <Grid size={1}>
-            {(getServer(match.events, getRightTeam(match)) === 1) && <ArrowForwardIos />}
-            {(getServer(match.events, getLeftTeam(match)) === 1) && <ArrowBackIosNew />}
+          <Grid size={1} sx={{ color: '#1c1c1e' }}>
+            {(getServer(match.events, rightTeam) === 1) && <ArrowForwardIos sx={{ fontSize: 16 }} />}
+            {(getServer(match.events, leftTeam) === 1) && <ArrowBackIosNew sx={{ fontSize: 16 }} />}
           </Grid>
           <Grid size={6} sx={{ textAlign: 'left' }}>
             <Typography sx={{
               fontSize: 18,
-              textDecoration: (getServer(match.events, getRightTeam(match)) === 1) ? "underline" : "none"
-            }}> {getInitials(getPlayer(match, 1, getRightTeam(match)))}</Typography>
+              textDecorationThickness: '2px',
+              textUnderlineOffset: '4px',
+              textDecoration: (getServer(match.events, rightTeam) === 1) ? "underline" : "none"
+            }}> {getInitials(getPlayer(match, 1, rightTeam))}</Typography>
           </Grid>
 
           <Grid size={6} sx={{ textAlign: 'right' }}>
             <Typography sx={{
               fontSize: 18,
-              textDecoration: (getServer(match.events, getLeftTeam(match)) === 2) ? "underline" : "none"
-            }}> {getInitials(getPlayer(match, 2, getLeftTeam(match)))}</Typography>
+              color: '#222226',
+              textDecoration: (getServer(match.events, leftTeam) === 2) ? "underline" : "none"
+            }}> {getInitials(getPlayer(match, 2, leftTeam))}</Typography>
 
           </Grid>
-          <Grid size={1}>
-            {(getServer(match.events, getLeftTeam(match)) === 2) && <ArrowBackIosNew />}
-            {(getServer(match.events, getRightTeam(match)) === 2) && <ArrowForwardIos />}
+          <Grid size={1} sx={{ color: '#1c1c1e' }}>
+            {(getServer(match.events, leftTeam) === 2) && <ArrowBackIosNew sx={{ fontSize: 16 }} />}
+            {(getServer(match.events, rightTeam) === 2) && <ArrowForwardIos sx={{ fontSize: 16 }} />}
           </Grid>
           <Grid size={6} sx={{ textAlign: 'left' }}>
             <Typography sx={{
               fontSize: 18,
-              textDecoration: (getServer(match.events, getRightTeam(match)) === 2) ? "underline" : "none"
-            }}> {getInitials(getPlayer(match, 2, getRightTeam(match)))}</Typography>
+              color: '#222226',
+              textDecoration: (getServer(match.events, rightTeam) === 2) ? "underline" : "none"
+            }}> {getInitials(getPlayer(match, 2, rightTeam))}</Typography>
           </Grid>
         </Grid>
       </Grid>
