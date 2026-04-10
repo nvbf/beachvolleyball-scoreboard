@@ -118,10 +118,10 @@ const EventList: React.FC = () => {
   const displayedRows = isExpanded ? reversedRows : reversedRows.slice(0, 3);
 
   return (
-    <Grid size={12} sx={{ alignSelf: 'center', textAlign: 'center' }} marginTop={2}>
-      <Box className="match-event-log">
-        <TableContainer sx={{ width: "100%", maxWidth: "100%", marginLeft: "auto", marginRight: "auto" }}>
-          <Table size="small" sx={{ width: "100%" }}>
+    <Grid sx={{ alignSelf: 'center', textAlign: 'center' }} marginTop={2}>
+      <Box className="match-event-log" sx={{ width: 'fit-content', maxWidth: '100%', marginLeft: 'auto', marginRight: 'auto' }}>
+        <TableContainer sx={{ width: 'fit-content', maxWidth: '100%', marginLeft: 'auto', marginRight: 'auto', overflowX: 'auto' }}>
+          <Table size="small" sx={{ width: 'auto' }}>
           <TableHead>
             <TableRow>
               <TableCell sx={{ fontWeight: 700, whiteSpace: "nowrap", color: "rgba(28,28,30,0.65)", borderBottom: "1px solid rgba(0,0,0,0.1)" }}>Local</TableCell>

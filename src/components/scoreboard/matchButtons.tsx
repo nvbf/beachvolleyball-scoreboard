@@ -84,10 +84,10 @@ export function MatchButtons() {
                 borderRadius: '12px',
                 letterSpacing: '0.07em',
                 boxShadow: 'none',
-                backgroundColor: 'rgba(28,28,30,0.78)',
-                '&:hover': { backgroundColor: 'rgba(28,28,30,0.88)' }
+                backgroundColor: match.teamColor[leftTeam],
+                '&:hover': { backgroundColor: match.teamColor[leftTeam]}
               }}>
-              <Typography sx={{ fontSize: 16, fontWeight: 700, color: '#fff' }}>TIMEOUT</Typography>
+              <Typography sx={{ fontSize: 16, fontWeight: 700, color: getTextColorFromBackground(match.teamColor[leftTeam]) }}>TIMEOUT</Typography>
             </Button>
           </Grid>
           <Grid size={1}>
