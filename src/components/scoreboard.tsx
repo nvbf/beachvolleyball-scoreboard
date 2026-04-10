@@ -11,6 +11,7 @@ import { TeamType, Event, EventType } from './types';
 import Grid from "@mui/material/Grid"
 import { getInitials } from "../util/names";
 import { matchState } from "../store/types";
+import { ScoreBox } from "./scoreboard/scoreBox";
 
 export function Scoreboard() {
   const match = useAppSelector((state) => state.match);
@@ -37,30 +38,14 @@ export function Scoreboard() {
         >
           <Grid size={6} sx={{ textAlign: 'left' }}>
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: 1.25 }}>
-              <Box sx={{ width: 42, height: 52, border: `2px solid ${leftColor}`, borderRadius: '9px', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff' }}>
-                <Typography sx={{ color: leftColor, fontWeight: 700, fontSize: '1.6rem', lineHeight: 1 }}>
-                  {match.currentSetScore[leftTeam]}
-                </Typography>
-              </Box>
-              <Box className="match-score-shell" sx={{ width: 88, height: 102, border: `4px solid ${leftColor}`, borderRadius: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Typography sx={{ color: '#1c1c1e', fontWeight: 800, fontSize: '3.25rem', lineHeight: 1 }}>
-                  {match.currentScore[leftTeam]}
-                </Typography>
-              </Box>
+              <ScoreBox score={match.currentSetScore[leftTeam]} color={leftColor} size="small" />
+              <ScoreBox score={match.currentScore[leftTeam]} color={leftColor} size="large" />
             </Box>
           </Grid>
           <Grid size={6} sx={{ textAlign: 'right' }}>
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 1.25 }}>
-              <Box className="match-score-shell" sx={{ width: 88, height: 102, border: `4px solid ${rightColor}`, borderRadius: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Typography sx={{ color: '#1c1c1e', fontWeight: 800, fontSize: '3.25rem', lineHeight: 1 }}>
-                  {match.currentScore[rightTeam]}
-                </Typography>
-              </Box>
-              <Box sx={{ width: 42, height: 52, border: `2px solid ${rightColor}`, borderRadius: '9px', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff' }}>
-                <Typography sx={{ color: rightColor, fontWeight: 700, fontSize: '1.6rem', lineHeight: 1 }}>
-                  {match.currentSetScore[rightTeam]}
-                </Typography>
-              </Box>
+              <ScoreBox score={match.currentScore[rightTeam]} color={rightColor} size="large" />
+              <ScoreBox score={match.currentSetScore[rightTeam]} color={rightColor} size="small" />
             </Box>
           </Grid>
         </Grid>

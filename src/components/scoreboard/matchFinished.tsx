@@ -5,6 +5,7 @@ import { Box, Button, Typography } from "@mui/material";
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import { addEvent, finalizeMatch } from "../../store/match/reducer";
 import { finalizeMatchEvent } from "../eventFunctions";
+import ScoreBox from "./scoreBox";
 
 
 interface TeamColorPickerProps {
@@ -38,25 +39,8 @@ export function MatchFinished() {
                     justifyContent="center"
                 // alignItems="flex-end"
                 >
-                    <Grid>
-                        <Typography align='right' sx={{
-                            border: 6, borderRadius: '12px', borderColor: match.teamColor[TeamType.Home],
-                            fontSize: "3.5rem", variant: 'button', lineHeight: 1, paddingTop: 3,
-                            paddingX: 1, minWidth: 50
-                        }}>
-                            {match.currentSetScore[TeamType.Home]}
-                        </Typography>
-
-                    </Grid>
-                    <Grid>
-                        <Typography align='left' sx={{
-                            border: 6, borderRadius: '12px', borderColor: match.teamColor[TeamType.Away],
-                            fontSize: "3.5rem", variant: 'button', lineHeight: 1, paddingTop: 3,
-                            paddingX: 1, minWidth: 50
-                        }}>
-                            {match.currentSetScore[TeamType.Away]}
-                        </Typography>
-                    </Grid>
+                    <ScoreBox score={match.currentSetScore[TeamType.Home]} color={match.teamColor[TeamType.Home]} size="large" />
+                    <ScoreBox score={match.currentSetScore[TeamType.Away]} color={match.teamColor[TeamType.Away]} size="large" />
                 </Grid>
             </Grid>
             {match.theCurrentSets.map((score, index) => (
@@ -67,24 +51,8 @@ export function MatchFinished() {
                         justifyContent="center"
                         alignItems="flex-end"
                     >
-                        <Grid>
-                            <Typography align='center' sx={{
-                                border: 4, borderRadius: '12px', borderColor: match.teamColor[TeamType.Home],
-                                fontSize: "2rem", variant: 'button', lineHeight: 1, paddingTop: 1,
-                                paddingX: 1
-                            }}>
-                                {score[TeamType.Home]}
-                            </Typography>
-                        </Grid>
-                        <Grid>
-                            <Typography align='center' sx={{
-                                border: 4, borderRadius: '12px', borderColor: match.teamColor[TeamType.Away],
-                                fontSize: "2rem", variant: 'button', lineHeight: 1, paddingTop: 1,
-                                paddingX: 1
-                            }}>
-                                {score[TeamType.Away]}
-                            </Typography>
-                        </Grid>
+                        <ScoreBox score={score[TeamType.Home]} color={match.teamColor[TeamType.Home]} size="small" />
+                        <ScoreBox score={score[TeamType.Away]} color={match.teamColor[TeamType.Away]} size="small" />
 
                     </Grid>
                 </Grid>

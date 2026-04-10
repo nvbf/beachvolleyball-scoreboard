@@ -49,7 +49,7 @@ export function MatchButtons() {
             <Button disabled={match.finished} variant="contained" onClick={addPoint.bind(null, leftTeam)}
               sx={{
                 width: 1,
-                height: 130,
+                height: 110,
                 borderRadius: '18px',
                 boxShadow: '0 8px 15px rgba(0,0,0,0.14)',
                 backgroundColor: match.teamColor[leftTeam],
@@ -65,7 +65,7 @@ export function MatchButtons() {
             <Button disabled={match.finished} variant="contained" onClick={addPoint.bind(null, rightTeam)}
               sx={{
                 width: 1,
-                height: 130,
+                height: 110,
                 borderRadius: '18px',
                 boxShadow: '0 8px 15px rgba(0,0,0,0.14)',
                 backgroundColor: match.teamColor[rightTeam],

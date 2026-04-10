@@ -5,6 +5,7 @@ import { Box, Button, Typography } from "@mui/material";
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import { addEvent, finalizeSet } from "../../store/match/reducer";
 import { finalizeSetEvent } from "../eventFunctions";
+import ScoreBox from "./scoreBox";
 
 
 interface TeamColorPickerProps {
@@ -35,25 +36,8 @@ export function SetFinished() {
                     justifyContent="center"
                 // alignItems="flex-end"
                 >
-                    <Grid>
-                        <Typography align='right' sx={{
-                            border: 6, borderRadius: '12px', borderColor: match.teamColor[TeamType.Home],
-                            fontSize: "3.5rem", variant: 'button', lineHeight: 1, paddingTop: 3,
-                            paddingX: 1, minWidth: 50
-                        }}>
-                            {match.theCurrentSets[match.currentSet - 2][TeamType.Home]}
-                        </Typography>
-
-                    </Grid>
-                    <Grid>
-                        <Typography align='left' sx={{
-                            border: 6, borderRadius: '12px', borderColor: match.teamColor[TeamType.Away],
-                            fontSize: "3.5rem", variant: 'button', lineHeight: 1, paddingTop: 3,
-                            paddingX: 1, minWidth: 50
-                        }}>
-                            {match.theCurrentSets[match.currentSet - 2][TeamType.Away]}
-                        </Typography>
-                    </Grid>
+                    <ScoreBox score={match.theCurrentSets[match.currentSet - 2][TeamType.Home]} color={match.teamColor[TeamType.Home]} size="large" />
+                    <ScoreBox score={match.theCurrentSets[match.currentSet - 2][TeamType.Away]} color={match.teamColor[TeamType.Away]} size="large" />
                 </Grid>
             </Grid>
             <Grid size={12}>
