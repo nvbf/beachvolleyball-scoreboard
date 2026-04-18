@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "./../store/store"; // update the path to your store file
-import MatchView from "../components/tournamentView/matchView";
-import { Box, Button, Grid } from "@mui/material";
-import { Sort } from '@mui/icons-material';
-import { useParams } from "react-router-dom";
-import { QueryFieldFilterConstraint, collection, doc, getFirestore, onSnapshot, query, where } from "firebase/firestore";
+import MatchCard from "../components/tournamentView/MatchCard";
+import { Box, Button, Grid, Container, Typography, AppBar, Toolbar } from "@mui/material";
+import { Sort, ArrowBack, CalendarMonth, Place } from '@mui/icons-material';
+import { useParams, useNavigate } from "react-router-dom";
+import "./TournamentView.css";
+import { QueryFieldFilterConstraint, collection, doc, getDocs, getFirestore, onSnapshot, query, where } from "firebase/firestore";
 import { getMatchState, getStatusColor, parseAdminMatch } from "../components/tournamentAdmin/adminMatchFunctions";
 import { AdminMatch, MatchState } from "../components/tournamentAdmin/types";
 import { dateStringToString } from "../util/time";
@@ -13,6 +14,7 @@ import { chooseCourt, chooseDay, fetchMatchesRequest, updateMatch } from "../sto
 
 const TournamentView = () => {
   const params = useParams();
+  const navigate = useNavigate();
   const searchParams = new URLSearchParams(location.search);
   let tournamentSlug: string;
   switch (params.tournamentSlug) {
@@ -28,6 +30,7 @@ const TournamentView = () => {
   }
   const [fetchedMatches, setFetchedMatches] = useState(false);
   const [createdCallbacks, setCreatedCallbacks] = useState(false);
+  const [tournamentName, setTournamentName] = useState<string>("");
 
   const [seeUpcoming, setSeeUpcoming] = useState(true);
   const [seeOngoing, setSeeOngoing] = useState(true);
@@ -79,6 +82,16 @@ const TournamentView = () => {
   const dispatch = useDispatch();
   let db = getFirestore(import.meta.env.VITE_FIREBASE_DATABASE)
 
+  useEffect(() => {
+    if (!tournamentSlug) return;
+    const fetchName = async () => {
+      const snap = await getDocs(collection(db, "Tournaments"));
+      const match = snap.docs.find(d => d.data().Slug === tournamentSlug);
+      if (match) setTournamentName(match.data().Name);
+    };
+    fetchName();
+  }, [tournamentSlug]);
+
   // Retrieve the matches from the Redux store
   const matches = useSelector((state: RootState) => state.matches);
   const matchesList: AdminMatch[] = Object.values(matches.matches);
@@ -117,28 +130,26 @@ const TournamentView = () => {
   }
 
   const renderMatches = (matches: AdminMatch[], tournamentSlug: string, selectedDay: string, selectedCourt: string) => {
-    return (
-      <Grid container
-        spacing={0}
-        rowSpacing={0}
-        columns={12}
-        justifyContent="space-evenly"
-        alignItems="center">
+    const filteredMatches = matches
+      .sort((a, b) => (a.startTime - b.startTime))
+      .filter(e => {
+        return seeUpcoming && isUpcoming(e) ||
+          seeOngoing && isOngoing(e) ||
+          seeFinished && (isFinished(e) || isReported(e))
+      })
+      .filter(e => {
+        return selectedDay === "all" ? true : (new Date(e.startTime).toISOString().split('T')[0] === selectedDay)
+      })
+      .filter(e => {
+        return selectedCourt === "all" ? true : e.arenaName === selectedCourt
+      });
 
-        {matches.sort((a, b) => (a.startTime - b.startTime)).filter(e => {
-          return seeUpcoming && isUpcoming(e) ||
-            seeOngoing && isOngoing(e) ||
-            seeFinished && (isFinished(e) || isReported(e))
-        }).filter(e => {
-          return selectedDay === "all" ? true : (new Date(e.startTime).toISOString().split('T')[0] === selectedDay)
-        }).filter(e => {
-          return selectedCourt === "all" ? true : e.arenaName === selectedCourt
-        }).map((match, index) => (
-          <Grid size={12} key={index} margin={0}>
-            <MatchView match={match} tournamentSlug={tournamentSlug} />
-          </Grid>
+    return (
+      <Box sx={{ display: "flex", flexDirection: "column", gap: 2, margin: "0 auto" }}>
+        {filteredMatches.map((match, index) => (
+          <MatchCard key={`${match.matchId}-${index}`} match={match} tournamentSlug={tournamentSlug} />
         ))}
-      </Grid>
+      </Box>
     );
   };
 
@@ -159,197 +170,371 @@ const TournamentView = () => {
   }
 
   return (
-    <Grid container
-      rowSpacing={1}
-      columnSpacing={0}
-      columns={12}
-      justifyContent="space-evenly"
-      alignItems="center"
-      marginTop={1}
-    >
-      <Grid size={12}>
-        <Grid container
-          rowSpacing={1}
-          columnSpacing={0}
-          columns={12}
-          justifyContent="space-evenly"
-          alignItems="center"
+    <Box sx={{ display: "flex", flexDirection: "column", minHeight: "100vh", backgroundColor: "#F3EFE6" }}>
+      {/* Header */}
+      <AppBar
+        position="sticky"
+        sx={{
+          backgroundColor: "#F3EFE6",
+          color: "#2D3748",
+          boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
+          borderBottom: "1px solid #E2E8F0",
+          backdropFilter: "blur(10px)",
+        }}
+      >
+        <Toolbar sx={{ justifyContent: "space-between", minHeight: "70px" }}>
+          <Box sx={{ flex: 1 }}>
+            <Button
+              onClick={() => navigate("/tournaments")}
+              sx={{
+                padding: "8px",
+                borderRadius: "50%",
+                color: "#2D3748",
+                "&:hover": { backgroundColor: "rgba(0, 0, 0, 0.05)" },
+              }}
+            >
+              <ArrowBack />
+            </Button>
+          </Box>
+          <Typography
+            variant="h5"
+            sx={{
+              flex: 1,
+              textAlign: "center",
+              fontWeight: 800,
+              letterSpacing: "0.05em",
+              fontSize: { xs: "20px", md: "28px" },
+              color: "#2D3748",
+            }}
+          >
+            {tournamentName ||
+              tournamentSlug
+                .replace(/_/g, " ")
+                .replace(/-/g, " ")
+                .replace(/\b\w/g, (c) => c.toUpperCase())}
+          </Typography>
+          <Box sx={{ flex: 1, display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
+            <Box
+              component="img"
+              src="/src/osvb_logo_hi_res.png"
+              alt="OSVB"
+              sx={{ height: { xs: "36px", sm: "44px" }, width: "auto", objectFit: "contain" }}
+            />
+          </Box>
+        </Toolbar>
+      </AppBar>
+
+      {/* Main Content */}
+      <Container maxWidth="lg" sx={{ flex: 1, py: 4 }}>
+        {/* Controls Section */}
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: 3,
+            mb: 6,
+          }}
         >
-          <Grid>
-            <Button variant={seeUpcoming ? "contained" : "outlined"}
+          {/* Segmented Control */}
+          <Box
+            sx={{
+              display: "flex",
+              width: "100%",
+              maxWidth: "720px",
+              padding: "4px",
+              borderRadius: "12px",
+              gap: 1,
+            }}
+          >
+            <Button
+              onClick={() => setSeeUpcoming(!seeUpcoming)}
               sx={{
-                backgroundColor: seeUpcoming ? getStatusColor(MatchState.Upcoming) : "",
-                borderColor: !seeUpcoming ? getStatusColor(MatchState.Upcoming) : "",
-                color: "#333333",
-                '&:hover': {
-                  backgroundColor: seeUpcoming ? getStatusColor(MatchState.Upcoming) : "",
-                  borderColor: !seeUpcoming ? getStatusColor(MatchState.Upcoming) : "",
-                }
+                flex: 1,
+                px: 3,
+                py: 1.2,
+                borderRadius: "8px",
+                fontSize: { xs: "12px", sm: "13px" },
+                fontWeight: 600,
+                textTransform: "uppercase",
+                whiteSpace: "nowrap",
+                transition: "all 0.2s",
+                border: `3px solid ${seeUpcoming ? getStatusColor(MatchState.Upcoming) : "transparent"}`,
+                backgroundColor: seeUpcoming ? "rgba(255, 255, 255, 0.55)" : "transparent",
+                color: seeUpcoming ? "#333" : "#718096",
+                boxShadow: seeUpcoming ? "0 1px 3px rgba(0, 0, 0, 0.1)" : "none",
+                "&:hover": {
+                  backgroundColor: seeUpcoming ? getStatusColor(MatchState.Upcoming) : "rgba(0, 0, 0, 0.03)",
+                  color: "#2D3748",
+                },
               }}
-              onClick={() => setSeeUpcoming(!seeUpcoming)}>
-              upcoming
+            >
+              Upcoming
             </Button>
-          </Grid>
-          <Grid>
-            <Button variant={seeOngoing ? "contained" : "outlined"}
+            <Button
+              onClick={() => setSeeOngoing(!seeOngoing)}
               sx={{
-                backgroundColor: seeOngoing ? getStatusColor(MatchState.Ongoing) : "",
-                borderColor: !seeOngoing ? getStatusColor(MatchState.Ongoing) : "",
-                color: "#333333",
-                '&:hover': {
-                  backgroundColor: seeOngoing ? getStatusColor(MatchState.Ongoing) : "",
-                  borderColor: !seeOngoing ? getStatusColor(MatchState.Ongoing) : "",
-                }
+                flex: 1,
+                px: 3,
+                py: 1.2,
+                borderRadius: "8px",
+                fontSize: { xs: "12px", sm: "13px" },
+                fontWeight: 500,
+                textTransform: "uppercase",
+                whiteSpace: "nowrap",
+                border: `3px solid ${seeOngoing ? getStatusColor(MatchState.Ongoing) : "transparent"}`,
+                backgroundColor: seeOngoing ? "rgba(255, 255, 255, 0.55)" : "transparent",
+                color: seeOngoing ? "#333" : "#718096",
+                transition: "all 0.2s",
+                "&:hover": {
+                  backgroundColor: seeOngoing ? getStatusColor(MatchState.Ongoing) : "rgba(0, 0, 0, 0.03)",
+                  color: "#2D3748",
+                },
               }}
-              onClick={() => setSeeOngoing(!seeOngoing)}>
-              ongoing
+            >
+              Ongoing
             </Button>
-          </Grid>
-          <Grid>
-            <Button variant={seeFinished ? "contained" : "outlined"}
+            <Button
+              onClick={() => setSeeFinished(!seeFinished)}
               sx={{
-                backgroundColor: seeFinished ? getStatusColor(MatchState.Finished) : "",
-                borderColor: !seeFinished ? getStatusColor(MatchState.Finished) : "",
-                color: "#333333",
-                borderWidth: 3,
-                '&:hover': {
-                  backgroundColor: seeFinished ? getStatusColor(MatchState.Finished) : "",
-                  borderColor: !seeFinished ? getStatusColor(MatchState.Finished) : "",
-                  borderWidth: 3,
-                }
+                flex: 1,
+                px: 3,
+                py: 1.2,
+                borderRadius: "8px",
+                fontSize: { xs: "12px", sm: "13px" },
+                fontWeight: 500,
+                textTransform: "uppercase",
+                whiteSpace: "nowrap",
+                border: `3px solid ${seeFinished ? getStatusColor(MatchState.Finished) : "transparent"}`,
+                backgroundColor: seeFinished ? "rgba(255, 255, 255, 0.55)" : "transparent",
+                color: seeFinished ? "#333" : "#718096",
+                transition: "all 0.2s",
+                "&:hover": {
+                  backgroundColor: seeFinished ? getStatusColor(MatchState.Finished) : "rgba(0, 0, 0, 0.03)",
+                  color: "#2D3748",
+                },
               }}
-              onClick={() => setSeeFinished(!seeFinished)}>
-              finished
+            >
+              Finished
             </Button>
-          </Grid>
-        </Grid>
-      </Grid>
-      {!(selectDay || selectCourt) && <Grid size={12}>
-        <Grid container
-          rowSpacing={1}
-          columnSpacing={2}
-          columns={12}
-          justifyContent="center"
-          alignItems="center"
-        >
-          <Grid>
-            <Button variant={seeUpcoming ? "contained" : "outlined"}
+          </Box>
+
+          {/* Filters - Only show when not in selection mode */}
+          {!(selectDay || selectCourt) && (
+            <Box
               sx={{
-                backgroundColor: "#cccccc",
-                color: "#333333",
-                '&:hover': {
-                  backgroundColor: "#cccccc",
-                }
+                display: "flex",
+                flexWrap: "wrap",
+                justifyContent: "center",
+                gap: 2,
               }}
-              onClick={() => setSelectDay(true)}>
-              {matches.selectedDay === "all" ? "choose day" : dateStringToString(matches.selectedDay)}
-            </Button>
-          </Grid>
-          <Grid>
-            <Button variant={seeUpcoming ? "contained" : "outlined"}
-              sx={{
-                backgroundColor: "#cccccc",
-                color: "#333333",
-                '&:hover': {
-                  backgroundColor: "#cccccc",
-                }
-              }}
-              onClick={() => setSelectCourt(true)}>
-              {matches.selectedCourt === "all" ? "choose court" : matches.selectedCourt}
-            </Button>
-          </Grid>
-        </Grid>
-      </Grid>}
-      {selectDay && <Grid size={12}>
-        <Grid container
-          rowSpacing={1}
-          columnSpacing={1}
-          columns={12}
-          justifyContent="center"
-          alignItems="center"
-        >
-          <Grid>
-            <Button variant={"all" === matches.selectedDay ? "contained" : "outlined"}
-              sx={{
-                backgroundColor: "all" === matches.selectedDay ? "#999999" : "",
-                borderColor: !("all" === matches.selectedDay) ? "#999999" : "",
-                color: "#333333",
-                '&:hover': {
-                  backgroundColor: "all" === matches.selectedDay ? "#999999" : "",
-                  borderColor: !("all" === matches.selectedDay) ? "#999999" : "",
-                }
-              }}
-              onClick={() => handleSelectDay("all")}>
-              all days
-            </Button>
-          </Grid>
-          {matches.dates.map((date) => (
-            <Grid key={date}>
-              <Button variant={date === matches.selectedDay ? "contained" : "outlined"}
+            >
+              <Button
+                onClick={() => setSelectDay(true)}
                 sx={{
-                  backgroundColor: date === matches.selectedDay ? "#999999" : "",
-                  borderColor: !(date === matches.selectedDay) ? "#999999" : "",
-                  color: "#333333",
-                  '&:hover': {
-                    backgroundColor: date === matches.selectedDay ? "#999999" : "",
-                    borderColor: !(date === matches.selectedDay) ? "#999999" : "",
-                  }
+                  px: 3,
+                  py: 1,
+                  backgroundColor: "white",
+                  border: "1px solid #E2E8F0",
+                  borderRadius: "8px",
+                  fontSize: "13px",
+                  fontWeight: 500,
+                  color: "#2D3748",
+                  boxShadow: "0 1px 2px rgba(0, 0, 0, 0.05)",
+                  textTransform: "none",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 1,
+                  transition: "all 0.2s",
+                  "&:hover": {
+                    backgroundColor: "#F7FAFC",
+                  },
                 }}
-                onClick={() => handleSelectDay(date)}>
-                {dateStringToString(date)}
+              >
+                <CalendarMonth sx={{ fontSize: "18px" }} />
+                {matches.selectedDay === "all" ? "Choose Day" : dateStringToString(matches.selectedDay)}
               </Button>
-            </Grid>
-          ))
-          }
-        </Grid>
-      </Grid>}
-      {selectCourt && <Grid size={12}>
-        <Grid container
-          rowSpacing={1}
-          columnSpacing={1}
-          columns={12}
-          justifyContent="center"
-          alignItems="center"
-        >
-          <Grid>
-            <Button variant={"all" === matches.selectedCourt ? "contained" : "outlined"}
-              sx={{
-                backgroundColor: "all" === matches.selectedCourt ? "#999999" : "",
-                borderColor: !("all" === matches.selectedCourt) ? "#999999" : "",
-                color: "#333333",
-                '&:hover': {
-                  backgroundColor: "all" === matches.selectedCourt ? "#999999" : "",
-                  borderColor: !("all" === matches.selectedCourt) ? "#999999" : "",
-                }
-              }}
-              onClick={() => handleSelectCourt("all")}>
-              all courts
-            </Button>
-          </Grid>
-          {matches.fields.map((court) => (
-            <Grid key={court}>
-              <Button variant={court === matches.selectedCourt ? "contained" : "outlined"}
+              <Button
+                onClick={() => setSelectCourt(true)}
                 sx={{
-                  backgroundColor: court === matches.selectedCourt ? "#999999" : "",
-                  borderColor: !(court === matches.selectedCourt) ? "#999999" : "",
-                  color: "#333333",
-                  '&:hover': {
-                    backgroundColor: court === matches.selectedCourt ? "#999999" : "",
-                    borderColor: !(court === matches.selectedCourt) ? "#999999" : "",
-                  }
+                  px: 3,
+                  py: 1,
+                  backgroundColor: "white",
+                  border: "1px solid #E2E8F0",
+                  borderRadius: "8px",
+                  fontSize: "13px",
+                  fontWeight: 500,
+                  color: "#2D3748",
+                  boxShadow: "0 1px 2px rgba(0, 0, 0, 0.05)",
+                  textTransform: "none",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 1,
+                  transition: "all 0.2s",
+                  "&:hover": {
+                    backgroundColor: "#F7FAFC",
+                  },
                 }}
-                onClick={() => handleSelectCourt(court)}>
-                {court}
+              >
+                <Place sx={{ fontSize: "18px" }} />
+                {matches.selectedCourt === "all" ? "Choose Court" : matches.selectedCourt}
               </Button>
-            </Grid>
-          ))
-          }
-        </Grid>
-      </Grid>}
-      <Grid size={12}>
-        {renderMatches(matchesList, tournamentSlug, matches.selectedDay, matches.selectedCourt)}
-      </Grid>
-    </Grid>
+            </Box>
+          )}
+
+          {/* Day Selection */}
+          {selectDay && (
+            <Box
+              sx={{
+                display: "flex",
+                flexWrap: "wrap",
+                justifyContent: "center",
+                gap: 2,
+              }}
+            >
+              <Button
+                onClick={() => handleSelectDay("all")}
+                sx={{
+                  px: 3,
+                  py: 1,
+                  backgroundColor: "all" === matches.selectedDay ? "#999999" : "transparent",
+                  border: "1px solid #999999",
+                  borderRadius: "8px",
+                  fontSize: "13px",
+                  fontWeight: 500,
+                  color: "#2D3748",
+                  textTransform: "none",
+                  "&:hover": {
+                    backgroundColor: "all" === matches.selectedDay ? "#999999" : "rgba(153, 153, 153, 0.1)",
+                  },
+                }}
+              >
+                All Days
+              </Button>
+              {matches.dates.map((date) => (
+                <Button
+                  key={date}
+                  onClick={() => handleSelectDay(date)}
+                  sx={{
+                    px: 3,
+                    py: 1,
+                    backgroundColor: date === matches.selectedDay ? "#999999" : "transparent",
+                    border: "1px solid #999999",
+                    borderRadius: "8px",
+                    fontSize: "13px",
+                    fontWeight: 500,
+                    color: "#2D3748",
+                    textTransform: "none",
+                    "&:hover": {
+                      backgroundColor: date === matches.selectedDay ? "#999999" : "rgba(153, 153, 153, 0.1)",
+                    },
+                  }}
+                >
+                  {dateStringToString(date)}
+                </Button>
+              ))}
+              <Button
+                onClick={() => setSelectDay(false)}
+                sx={{
+                  px: 3,
+                  py: 1,
+                  backgroundColor: "#E5E7EB",
+                  border: "1px solid #D1D5DB",
+                  borderRadius: "8px",
+                  fontSize: "13px",
+                  fontWeight: 500,
+                  color: "#2D3748",
+                  textTransform: "none",
+                  "&:hover": {
+                    backgroundColor: "#D1D5DB",
+                  },
+                }}
+              >
+                Close
+              </Button>
+            </Box>
+          )}
+
+          {/* Court Selection */}
+          {selectCourt && (
+            <Box
+              sx={{
+                display: "flex",
+                flexWrap: "wrap",
+                justifyContent: "center",
+                gap: 2,
+              }}
+            >
+              <Button
+                onClick={() => handleSelectCourt("all")}
+                sx={{
+                  px: 3,
+                  py: 1,
+                  backgroundColor: "all" === matches.selectedCourt ? "#999999" : "transparent",
+                  border: "1px solid #999999",
+                  borderRadius: "8px",
+                  fontSize: "13px",
+                  fontWeight: 500,
+                  color: "#2D3748",
+                  textTransform: "none",
+                  "&:hover": {
+                    backgroundColor: "all" === matches.selectedCourt ? "#999999" : "rgba(153, 153, 153, 0.1)",
+                  },
+                }}
+              >
+                All Courts
+              </Button>
+              {matches.fields.map((court) => (
+                <Button
+                  key={court}
+                  onClick={() => handleSelectCourt(court)}
+                  sx={{
+                    px: 3,
+                    py: 1,
+                    backgroundColor: court === matches.selectedCourt ? "#999999" : "transparent",
+                    border: "1px solid #999999",
+                    borderRadius: "8px",
+                    fontSize: "13px",
+                    fontWeight: 500,
+                    color: "#2D3748",
+                    textTransform: "none",
+                    "&:hover": {
+                      backgroundColor: court === matches.selectedCourt ? "#999999" : "rgba(153, 153, 153, 0.1)",
+                    },
+                  }}
+                >
+                  {court}
+                </Button>
+              ))}
+              <Button
+                onClick={() => setSelectCourt(false)}
+                sx={{
+                  px: 3,
+                  py: 1,
+                  backgroundColor: "#E5E7EB",
+                  border: "1px solid #D1D5DB",
+                  borderRadius: "8px",
+                  fontSize: "13px",
+                  fontWeight: 500,
+                  color: "#2D3748",
+                  textTransform: "none",
+                  "&:hover": {
+                    backgroundColor: "#D1D5DB",
+                  },
+                }}
+              >
+                Close
+              </Button>
+            </Box>
+          )}
+        </Box>
+
+        {/* Match List */}
+        <Box sx={{ pb: 6 }}>
+          {renderMatches(matchesList, tournamentSlug, matches.selectedDay, matches.selectedCourt)}
+        </Box>
+      </Container>
+    </Box>
   );
 };
 

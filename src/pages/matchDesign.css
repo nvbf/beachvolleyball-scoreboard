@@ -9,7 +9,6 @@
   min-height: 100vh;
   box-sizing: border-box;
   padding: clamp(10px, 2.4vw, 24px) clamp(10px, 3vw, 32px) clamp(16px, 3vw, 32px);
-  background: radial-gradient(circle at 50% -18%, #f4efe5 0%, var(--match-sand) 60%);
   color: var(--match-dark);
   font-family: "Inter", "Segoe UI", sans-serif;
 }
