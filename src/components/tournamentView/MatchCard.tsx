@@ -5,372 +5,421 @@ import { AdminMatch, MatchState } from "../tournamentAdmin/types";
 import { TeamType } from "../types";
 import { getInitials } from "../../util/names";
 import { getMatchState } from "../tournamentAdmin/adminMatchFunctions";
-import { dateStringToString, timestampToString } from "../../util/time";
-import "./MatchCard.css";
+import { timestampToString } from "../../util/time";
+import { colors, statusColors, MatchStatus } from "../../theme";
 
 interface MatchCardProps {
     match: AdminMatch;
     tournamentSlug: string;
 }
 
-export const MatchCard: React.FC<MatchCardProps> = ({ match, tournamentSlug }) => {
+// ─── Helpers ─────────────────────────────────────────────────────────────────
+
+const getProfixioSets = (
+    sets: { [key: string]: number }[],
+    team: TeamType
+): number =>
+    sets.reduce((acc, s) => {
+        const homeWon = s["PointsHomeTeam"] > s["PointsAwayTeam"];
+        return acc + (team === TeamType.Home ? (homeWon ? 1 : 0) : homeWon ? 0 : 1);
+    }, 0);
+
+// ─── Status pill ─────────────────────────────────────────────────────────────
+
+const StatusPill: React.FC<{ status: MatchStatus }> = ({ status }) => {
+    const s = statusColors[status];
+    return (
+        <Box
+            sx={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "3px",
+                fontSize: "9px",
+                fontWeight: 600,
+                px: "5px",
+                py: "1px",
+                borderRadius: "3px",
+                backgroundColor: s.statusBg,
+                color: s.statusText,
+                whiteSpace: "nowrap",
+                flexShrink: 0,
+            }}
+        >
+            <Box
+                sx={{
+                    width: 4,
+                    height: 4,
+                    borderRadius: "50%",
+                    backgroundColor: s.dot,
+                    flexShrink: 0,
+                }}
+            />
+            {s.label}
+        </Box>
+    );
+};
+
+// ─── Per-set score columns ────────────────────────────────────────────────────
+// Renders N columns, each showing home score on top and away score on bottom,
+// aligned so scores across both team rows line up vertically.
+
+interface SetColumnsProps {
+    sets: { home: number; away: number }[];
+}
+
+const SetColumns: React.FC<SetColumnsProps> = ({ sets }) => (
+    <Box sx={{ display: "flex", gap: "4px", flexShrink: 0 }}>
+        {sets.map((set, i) => (
+            <Box
+                key={i}
+                sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    gap: "2px",
+                    backgroundColor: colors.setBg,
+                    borderRadius: "3px",
+                    px: "4px",
+                    py: "2px",
+                    minWidth: "0",
+                    width: "22px",
+                }}
+            >
+                <Typography
+                    sx={{
+                        fontSize: "10px",
+                        fontFamily: "'DM Mono', monospace",
+                        fontWeight: 500,
+                        color: set.home > set.away ? colors.textPrimary : colors.textFaint,
+                        lineHeight: 1,
+                    }}
+                >
+                    {set.home}
+                </Typography>
+                <Box sx={{ height: "1px", width: "100%", backgroundColor: colors.borderMeta }} />
+                <Typography
+                    sx={{
+                        fontSize: "10px",
+                        fontFamily: "'DM Mono', monospace",
+                        fontWeight: 500,
+                        color: set.away > set.home ? colors.textPrimary : colors.textFaint,
+                        lineHeight: 1,
+                    }}
+                >
+                    {set.away}
+                </Typography>
+            </Box>
+        ))}
+    </Box>
+);
+
+// ─── Main component ───────────────────────────────────────────────────────────
+
+export const MatchCard: React.FC<MatchCardProps> = ({ match }) => {
     const matchState = getMatchState(match);
-    const isFinished = matchState === MatchState.Finished || matchState === MatchState.Reported;
+    const isFinished =
+        matchState === MatchState.Finished || matchState === MatchState.Reported;
     const isOngoing = matchState === MatchState.Ongoing;
+    const isUpcoming = !isFinished && !isOngoing;
 
-    // Determine border color based on match state
-    const getBorderColor = (): string => {
-        if (isFinished) return "#A8E6CF"; // Green/Teal
-        if (isOngoing) return "#FFD3B6"; // Orange
-        return "#CBD5E0"; // Gray for upcoming
-    };
+    const status: MatchStatus = isFinished
+        ? "finished"
+        : isOngoing
+            ? "ongoing"
+            : "upcoming";
 
-    const getProfixioSets = (sets: { [key: string]: number }[], team: TeamType): number => {
-        let score = 0;
-        sets.forEach((e) => {
-            if (team === TeamType.Home) {
-                if (e["PointsHomeTeam"] > e["PointsAwayTeam"]) {
-                    score++;
-                }
-            } else {
-                if (e["PointsHomeTeam"] < e["PointsAwayTeam"]) {
-                    score++;
-                }
-            }
-        });
-        return score;
-    };
+    const s = statusColors[status];
 
-    const getTeamColor = (team: TeamType): string => {
-        if (!match.hasWinner && !match.currentScore) return "#CBD5E0";
+    const homeSetScore = match.hasWinner
+        ? getProfixioSets(match.sets, TeamType.Home)
+        : match.currentSetScore?.[TeamType.Home] ?? 0;
 
-        if (match.hasWinner) {
-            const homeWins = getProfixioSets(match.sets, TeamType.Home);
-            const awayWins = getProfixioSets(match.sets, TeamType.Away);
-            return team === TeamType.Home && homeWins > awayWins
-                ? "#A8E6CF"
-                : team === TeamType.Away && awayWins > homeWins
-                    ? "#A8E6CF"
-                    : "#CBD5E0";
-        }
+    const awaySetScore = match.hasWinner
+        ? getProfixioSets(match.sets, TeamType.Away)
+        : match.currentSetScore?.[TeamType.Away] ?? 0;
 
-        if (match.currentScore) {
-            const homeSetScore = match.currentSetScore[TeamType.Home] || 0;
-            const awaySetScore = match.currentSetScore[TeamType.Away] || 0;
-            return team === TeamType.Home && homeSetScore > awaySetScore
-                ? "#A8E6CF"
-                : team === TeamType.Away && awaySetScore > homeSetScore
-                    ? "#A8E6CF"
-                    : "#CBD5E0";
-        }
+    const homeWinning = homeSetScore > awaySetScore;
+    const awayWinning = awaySetScore > homeSetScore;
+    const hasScore = match.hasWinner || !!match.currentScore;
 
-        return "#CBD5E0";
-    };
+    // Build unified set data for SetColumns
+    const currentScoreArray = Array.isArray(match.currentScore)
+        ? match.currentScore
+        : [];
 
-    const homeTeamColor = getTeamColor(TeamType.Home);
-    const awayTeamColor = getTeamColor(TeamType.Away);
+    const setSets: { home: number; away: number }[] = match.hasWinner
+        ? match.sets.map((set) => ({
+            home: set["PointsHomeTeam"],
+            away: set["PointsAwayTeam"],
+        }))
+        : currentScoreArray.map((set) => ({
+            home: set["HOME"],
+            away: set["AWAY"],
+        }));
 
+    const homeTextColor = !hasScore
+        ? colors.textMuted
+        : homeWinning
+            ? colors.textPrimary
+            : colors.textFaint;
 
+    const awayTextColor = !hasScore
+        ? colors.textMuted
+        : awayWinning
+            ? colors.textPrimary
+            : colors.textFaint;
 
-    const matchDate = new Date(match.startTime).toISOString().split("T")[0];
+    const homeScoreColor = !hasScore
+        ? colors.textMuted
+        : homeWinning
+            ? colors.textPrimary
+            : colors.finishedBorder;
+
+    const awayScoreColor = !hasScore
+        ? colors.textMuted
+        : awayWinning
+            ? colors.textPrimary
+            : colors.finishedBorder;
 
     return (
         <Box
-            className={`match-card ${isFinished ? "opacity-85" : ""}`}
             sx={{
-                backgroundColor: "#FAFAF8",
-                borderRadius: "12px",
-                border: "1px solid #E2E8F0",
-                borderLeft: `4px solid ${getBorderColor()}`,
-                boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
+                backgroundColor: s.cardBg,
+                borderRadius: "8px",
+                border: `1px solid ${colors.borderLight}`,
+                borderLeft: `3.5px solid ${s.borderLeft}`,
                 overflow: "hidden",
-                transition: "all 0.2s ease",
                 display: "flex",
-                flexDirection: { xs: "column", md: "row" },
-                "&:hover": {
-                    transform: "translateY(-2px)",
-                    boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1)",
-                },
+                mb: "6px",
+                opacity: isFinished ? 0.88 : 1,
             }}
         >
-            {/* Info Column */}
+            {/* ── Meta panel — narrower to give body more room ── */}
             <Box
                 sx={{
-                    backgroundColor: "rgba(0, 0, 0, 0.02)",
-                    borderBottom: { xs: "1px solid #E2E8F0", md: "none" },
-                    borderRight: { xs: "none", md: "1px solid #E2E8F0" },
-                    padding: { xs: "12px 16px", md: "20px" },
-                    display: "flex",
-                    flexDirection: { xs: "column", md: "column" },
-                    justifyContent: "center",
-                    alignItems: { xs: "flex-start", md: "flex-start" },
-                    gap: { xs: 1, md: 2 },
-                    minWidth: { md: "20%" },
-                }}
-            >
-                {/* Row 1 (mobile): Match number + time */}
-                <Box
-                    sx={{
-                        display: "flex",
-                        flexDirection: { xs: "row", md: "column" },
-                        alignItems: { xs: "center", md: "flex-start" },
-                        gap: { xs: 2, md: 1 },
-                    }}
-                >
-                    <Typography
-                        sx={{
-                            fontSize: "13px",
-                            fontWeight: 1000,
-                            backgroundColor: "white",
-                            padding: "4px 8px",
-                            borderRadius: "4px",
-                            boxShadow: "0 1px 2px rgba(0, 0, 0, 0.05)",
-                            color: "#718096",
-                        }}
-                    >
-                        #{match.matchId}
-                    </Typography>
-                    <Box
-                        sx={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 0.5,
-                            fontSize: "14px",
-                            fontWeight: 500,
-                            color: "#718096",
-                        }}
-                    >
-                        <AccessTime sx={{ fontSize: "18px" }} />
-                        <span>{timestampToString(match.startTime)}</span>
-                    </Box>
-                </Box>
-
-                {/* Row 2 (mobile): Category + court | desktop: stacked separately */}
-                <Box
-                    sx={{
-                        display: "flex",
-                        flexWrap: "wrap",
-                        flexDirection: { xs: "row", md: "column" },
-                        alignItems: { xs: "center", md: "flex-start" },
-                        gap: 1,
-                    }}
-                >
-                    <Typography
-                        sx={{
-                            fontSize: "13px",
-                            fontWeight: 600,
-                            backgroundColor: "#E5E7EB",
-                            color: "#374151",
-                            padding: "4px 8px",
-                            borderRadius: "4px",
-                        }}
-                    >
-                        {match.matchCategory}
-                        {match.matchGroup ? ` - Group ${match.matchGroup}` : ""}
-                    </Typography>
-                    <Box
-                        sx={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 0.5,
-                            fontSize: "14px",
-                            fontWeight: 500,
-                            color: "#718096",
-                        }}
-                    >
-                        <Place sx={{ fontSize: "18px" }} />
-                        <span>{match.arenaName}</span>
-                    </Box>
-                </Box>
-            </Box>
-
-            {/* Teams Column */}
-            <Box
-                sx={{
-                    padding: { xs: "12px", md: "16px" },
+                    width: { xs: "88px", sm: "96px" },
+                    minWidth: { xs: "88px", sm: "96px" },
+                    px: "8px",
+                    py: "5px",
+                    borderRight: `1px solid ${colors.borderMeta}`,
+                    backgroundColor: s.metaBg,
                     display: "flex",
                     flexDirection: "column",
                     justifyContent: "center",
-                    gap: 3,
-                    position: "relative",
-                    flex: 1,
-                    minWidth: { md: "55%" },
+                    gap: "3px",
+                    flexShrink: 0,
                 }}
             >
-                {/* Home Team */}
-                <Box
-                    sx={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                    }}
-                >
-                    <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                        <Box
-                            sx={{
-                                width: "2px",
-                                height: "32px",
-                                backgroundColor: homeTeamColor,
-                                borderRadius: "1px",
-                            }}
-                        />
-                        <Typography
-                            sx={{
-                                fontSize: { xs: "16px", md: "18px" },
-                                fontWeight: 600,
-                                color: homeTeamColor === "#CBD5E0" ? "#718096" : "#1A202C",
-                            }}
-                        >
-                            {getInitials(match.homeTeam.player1)} / {getInitials(match.homeTeam.player2)}
-                        </Typography>
-                    </Box>
+                {/* Match number + status pill */}
+                <Box sx={{ display: "flex", alignItems: "center", gap: "4px" }}>
                     <Typography
-                        sx={{
-                            fontSize: { xs: "24px", md: "32px" },
-                            fontWeight: 900,
-                            color: homeTeamColor === "#CBD5E0" ? "#718096" : "#1A202C",
-                        }}
+                        sx={{ fontSize: "10px", fontWeight: 600, color: colors.textFaint, flexShrink: 0 }}
                     >
-                        {match.hasWinner ? getProfixioSets(match.sets, TeamType.Home) : match.currentSetScore?.[TeamType.Home] || 0}
+                        #{match.matchId}
+                    </Typography>
+                    <StatusPill status={status} />
+                </Box>
+
+                {/* Time */}
+                <Box sx={{ display: "flex", alignItems: "center", gap: "2px", color: colors.textMuted }}>
+                    <AccessTime sx={{ fontSize: "10px", opacity: 0.5, flexShrink: 0 }} />
+                    <Typography sx={{ fontSize: "10px", lineHeight: 1.3 }}>
+                        {timestampToString(match.startTime)}
                     </Typography>
                 </Box>
 
-                {/* VS Divider */}
+                {/* Category badge */}
                 <Box
                     sx={{
-                        height: "1px",
-                        width: "100%",
-                        backgroundColor: "#E2E8F0",
-                        position: "relative",
+                        display: "inline-block",
+                        fontSize: "10px",
+                        fontWeight: 600,
+                        letterSpacing: "0.02em",
+                        px: "5px",
+                        py: "1px",
+                        borderRadius: "3px",
+                        backgroundColor: colors.badgeBg,
+                        color: colors.badgeText,
+                        border: `1px solid ${colors.badgeBorder}`,
+                        width: "fit-content",
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        maxWidth: "100%",
                     }}
                 >
-                    <Typography
-                        sx={{
-                            position: "absolute",
-                            left: "50%",
-                            top: "50%",
-                            transform: "translate(-50%, -50%)",
-                            backgroundColor: "#FAFAF8",
-                            paddingX: 1,
-                            fontSize: "12px",
-                            color: "#718096",
-                            fontWeight: 500,
-                        }}
-                    >
-                        VS
-                    </Typography>
+                    {match.matchCategory}
+                    {match.matchGroup ? ` – Group ${match.matchGroup}` : ""}
                 </Box>
 
-                {/* Away Team */}
-                <Box
-                    sx={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                    }}
-                >
-                    <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                        <Box
-                            sx={{
-                                width: "2px",
-                                height: "32px",
-                                backgroundColor: awayTeamColor,
-                                borderRadius: "1px",
-                            }}
-                        />
-                        <Typography
-                            sx={{
-                                fontSize: { xs: "16px", md: "18px" },
-                                fontWeight: awayTeamColor === "#CBD5E0" ? 500 : 600,
-                                color: awayTeamColor === "#CBD5E0" ? "#718096" : "#1A202C",
-                            }}
-                        >
-                            {getInitials(match.awayTeam.player1)} / {getInitials(match.awayTeam.player2)}
-                        </Typography>
-                    </Box>
+                {/* Court */}
+                <Box sx={{ display: "flex", alignItems: "center", gap: "2px", color: colors.textMuted }}>
+                    <Place sx={{ fontSize: "10px", opacity: 0.5, flexShrink: 0 }} />
                     <Typography
                         sx={{
-                            fontSize: { xs: "24px", md: "32px" },
-                            fontWeight: awayTeamColor === "#CBD5E0" ? 700 : 900,
-                            color: awayTeamColor === "#CBD5E0" ? "#718096" : "#1A202C",
+                            fontSize: "10px",
+                            lineHeight: 1.3,
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                            whiteSpace: "nowrap",
                         }}
                     >
-                        {match.hasWinner ? getProfixioSets(match.sets, TeamType.Away) : match.currentSetScore?.[TeamType.Away] || 0}
+                        {match.arenaName}
                     </Typography>
                 </Box>
             </Box>
 
-            {/* Score/Court Column */}
+            {/* ── Match body ── */}
             <Box
                 sx={{
-                    backgroundColor: "rgba(0, 0, 0, 0.02)",
-                    borderTop: { xs: "1px solid #E2E8F0", md: "none" },
-                    borderLeft: { xs: "none", md: "1px solid #E2E8F0" },
-                    padding: { xs: "16px", md: "20px" },
+                    flex: 1,
+                    minWidth: 0,
+                    px: "10px",
+                    py: "5px",
                     display: "flex",
-                    flexDirection: { xs: "row", md: "column" },
-                    justifyContent: { xs: "space-between", md: "flex-end" },
-                    alignItems: { xs: "center", md: "flex-end" },
-                    gap: 2,
-                    minWidth: { md: "15%" },
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    gap: "4px",
                 }}
             >
-                <Box
-                    sx={{
-                        textAlign: "right",
-                        marginTop: { md: "auto" },
-                        paddingRight: { xs: "16px", md: "20px" },
-                    }}
-                >
+                {/* Home row: name + set home scores + total */}
+                <Box sx={{ display: "flex", alignItems: "center", gap: "6px", minWidth: 0 }}>
                     <Typography
                         sx={{
-                            fontSize: "12px",
-                            fontWeight: 500,
-                            color: "#718096",
-                            marginBottom: 0.5,
-                            display: { xs: "none", md: "block" },
+                            fontSize: "14px",
+                            fontWeight: homeWinning ? 600 : 400,
+                            color: homeTextColor,
+                            flex: "1 1 0",
+                            minWidth: 0,
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                            whiteSpace: "nowrap",
                         }}
                     >
-                        Set Scores
+                        {getInitials(match.homeTeam.player1)} / {getInitials(match.homeTeam.player2)}
                     </Typography>
-                    <Box sx={{ display: "flex", flexDirection: { xs: "row", md: "column" }, flexWrap: "wrap", gap: 0.5, alignItems: { xs: "flex-end", md: "flex-end" } }}>
-                        {match.hasWinner
-                            ? match.sets.map((s, i) => (
-                                <Typography
+                    {/* Per-set home scores */}
+                    {setSets.length > 0 && (
+                        <Box sx={{ display: "flex", gap: "4px", flexShrink: 0 }}>
+                            {setSets.map((set, i) => (
+                                <Box
                                     key={i}
                                     sx={{
-                                        fontSize: "13px",
-                                        fontWeight: 500,
-                                        fontFamily: "monospace",
-                                        backgroundColor: "white",
-                                        padding: "4px 8px",
-                                        borderRadius: "4px",
-                                        boxShadow: "0 1px 2px rgba(0, 0, 0, 0.05)",
-                                        color: "#2D3748",
+                                        width: "12px",
+                                        backgroundColor: colors.setBg,
+                                        borderRadius: "3px 3px 0 0",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        py: "2px",
                                     }}
                                 >
-                                    ({s.PointsHomeTeam}-{s.PointsAwayTeam})
-                                </Typography>
-                            ))
-                            : (match.currentScore || []).map((s, i) => (
-                                <Typography
+                                    <Typography
+                                        sx={{
+                                            fontSize: "11px",
+                                            fontFamily: "'DM Mono', monospace",
+                                            fontWeight: 500,
+                                            color: set.home > set.away ? colors.textPrimary : colors.textFaint,
+                                            lineHeight: 1,
+                                        }}
+                                    >
+                                        {set.home}
+                                    </Typography>
+                                </Box>
+                            ))}
+                        </Box>
+                    )}
+                    {/* Total set score */}
+                    {!isUpcoming && (
+                        <Typography
+                            sx={{
+                                fontSize: "18px",
+                                fontWeight: homeWinning ? 600 : 400,
+                                fontFamily: "'DM Mono', monospace",
+                                color: homeScoreColor,
+                                lineHeight: 1,
+                                flexShrink: 0,
+                                width: "18px",
+                                textAlign: "right",
+                            }}
+                        >
+                            {homeSetScore}
+                        </Typography>
+                    )}
+                </Box>
+
+                {/* Divider — full width, no gaps */}
+                <Box sx={{ height: "1px", backgroundColor: colors.borderMeta, mx: 0 }} />
+
+                {/* Away row: name + set away scores + total */}
+                <Box sx={{ display: "flex", alignItems: "center", gap: "6px", minWidth: 0 }}>
+                    <Typography
+                        sx={{
+                            fontSize: "14px",
+                            fontWeight: awayWinning ? 600 : 400,
+                            color: awayTextColor,
+                            flex: "1 1 0",
+                            minWidth: 0,
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                            whiteSpace: "nowrap",
+                        }}
+                    >
+                        {getInitials(match.awayTeam.player1)} / {getInitials(match.awayTeam.player2)}
+                    </Typography>
+                    {/* Per-set away scores */}
+                    {setSets.length > 0 && (
+                        <Box sx={{ display: "flex", gap: "4px", flexShrink: 0 }}>
+                            {setSets.map((set, i) => (
+                                <Box
                                     key={i}
                                     sx={{
-                                        fontSize: "13px",
-                                        fontWeight: 500,
-                                        fontFamily: "monospace",
-                                        backgroundColor: "white",
-                                        padding: "4px 8px",
-                                        borderRadius: "4px",
-                                        boxShadow: "0 1px 2px rgba(0, 0, 0, 0.05)",
-                                        color: "#2D3748",
+                                        width: "12px",
+                                        backgroundColor: colors.setBg,
+                                        borderRadius: "0 0 3px 3px",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        py: "2px",
                                     }}
                                 >
-                                    ({s.HOME}-{s.AWAY})
-                                </Typography>
-                            ))
-                        }
-                    </Box>
+                                    <Typography
+                                        sx={{
+                                            fontSize: "11px",
+                                            fontFamily: "'DM Mono', monospace",
+                                            fontWeight: 500,
+                                            color: set.away > set.home ? colors.textPrimary : colors.textFaint,
+                                            lineHeight: 1,
+                                        }}
+                                    >
+                                        {set.away}
+                                    </Typography>
+                                </Box>
+                            ))}
+                        </Box>
+                    )}
+                    {/* Total set score */}
+                    {!isUpcoming && (
+                        <Typography
+                            sx={{
+                                fontSize: "18px",
+                                fontWeight: awayWinning ? 600 : 400,
+                                fontFamily: "'DM Mono', monospace",
+                                color: awayScoreColor,
+                                lineHeight: 1,
+                                flexShrink: 0,
+                                width: "18px",
+                                textAlign: "right",
+                            }}
+                        >
+                            {awaySetScore}
+                        </Typography>
+                    )}
+                    {isUpcoming && (
+                        <Typography sx={{ fontSize: "14px", color: colors.textFaint, fontFamily: "'DM Mono', monospace", flexShrink: 0 }}>
+                            –
+                        </Typography>
+                    )}
                 </Box>
             </Box>
         </Box>
