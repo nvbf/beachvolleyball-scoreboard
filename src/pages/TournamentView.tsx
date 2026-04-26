@@ -221,9 +221,13 @@ const TournamentView = () => {
   const isFinished = (m: AdminMatch) => getMatchState(m) === MatchState.Finished;
   const isReported = (m: AdminMatch) => getMatchState(m) === MatchState.Reported;
 
-  const upcomingCount = matchesList.filter(isUpcoming).length;
-  const ongoingCount = matchesList.filter(isOngoing).length;
-  const finishedCount = matchesList.filter(m => isFinished(m) || isReported(m)).length;
+  const filteredByDayCourt = matchesList
+    .filter(e => matches.selectedDay === "all" || new Date(e.startTime).toISOString().split('T')[0] === matches.selectedDay)
+    .filter(e => matches.selectedCourt === "all" || e.arenaName === matches.selectedCourt);
+
+  const upcomingCount = filteredByDayCourt.filter(isUpcoming).length;
+  const ongoingCount = filteredByDayCourt.filter(isOngoing).length;
+  const finishedCount = filteredByDayCourt.filter(m => isFinished(m) || isReported(m)).length;
 
   const renderMatches = (
     matches: AdminMatch[],
