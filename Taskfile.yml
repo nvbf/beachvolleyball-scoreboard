@@ -19,18 +19,18 @@ tasks:
     env:
       NODE_ENV: development
       DEBUG: "*,-babel"
-      VITE_BACKEND_URL: https://tournament-sync-dev-48024539e01a.herokuapp.com
+      VITE_BACKEND_URL: https://tournament-sync-dev-104889733361.europe-west1.run.app
       VITE_FIREBASE_DATABASE: development
       PORT: 4000
 
-  run-prod:
-    desc: Run the ap as prod locally
+  run-beta:
+    desc: Run the app as beta locally
     cmds:
       - npm run dev
     env:
       NODE_ENV: development
       DEBUG: "*,-babel"
-      VITE_BACKEND_URL: https://tournament-sync.herokuapp.com
+      VITE_BACKEND_URL: https://tournament-sync-beta-104889733361.europe-west1.run.app
       VITE_FIREBASE_DATABASE: (default)
       PORT: 4000
 
@@ -46,6 +46,13 @@ tasks:
     dir: .
     cmds:
       - npm test
+
+  populate-demo:
+    desc: Populate Firestore with demo tournament data (4 matches spread throughout the day)
+    cmds:
+      - node scripts/populate-demo-tournament.js {{.SERVICE_ACCOUNT_KEY}}
+    requires:
+      vars: [SERVICE_ACCOUNT_KEY]
 
   help:
     desc: Display this help

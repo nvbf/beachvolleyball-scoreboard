@@ -10,7 +10,7 @@ substitutions:
   _FIREBASE_DATABASE: 'development'
   _BACKEND_URL: ''
   _HOSTING_TARGET: 'dev'
-  _FIREBASE_PROJECT: 'scoreboard-sandbox-fc7ac'
+  _FIREBASE_PROJECT: 'osvb-scoreboard'
 
 steps:
   - name: 'node:22'

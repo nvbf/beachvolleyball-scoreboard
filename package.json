@@ -49,6 +49,7 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "start": "vite --port 3000",
-    "test": "vitest --config ./vitest.config.ts --dir tests --run"
+    "test": "vitest --config ./vitest.config.ts --dir tests --run",
+    "populate-demo": "node scripts/populate-demo-tournament.js"
   }
 }

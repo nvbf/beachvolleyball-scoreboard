@@ -12,7 +12,8 @@ import { chooseCourt, chooseDay, fetchMatchSecrets, fetchMatchesRequest, updateM
 import { useNavigate } from 'react-router-dom';
 import Loader from "../components/loader";
 import { colors, statusColors } from "../theme";
-import { SwapVert } from "@mui/icons-material";
+import { SwapVert, Visibility } from "@mui/icons-material";
+import { CourtStatusOverlay } from "../components/tournamentAdmin/statusOverview";
 
 // ─── Pill toggle ─────────────────────────────────────────────────────────────
 
@@ -145,6 +146,7 @@ const TournamentAdmin = () => {
   const [descending, setDescending] = useState(true);
   const [selectDay, setSelectDay] = useState(false);
   const [selectCourt, setSelectCourt] = useState(false);
+  const [showCourtStatus, setShowCourtStatus] = useState(false);
 
   const navigate = useNavigate();
   const tournamentSlug: string = params.tournamentSlug ?? "";
@@ -308,6 +310,30 @@ const TournamentAdmin = () => {
             >
               <SwapVert sx={{ fontSize: "16px" }} />
             </Box>
+
+            {/* Court status button */}
+            <Box
+              onClick={() => setShowCourtStatus(true)}
+              title="Court status overview"
+              sx={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "5px",
+                fontSize: "11px",
+                fontWeight: 600,
+                px: "11px",
+                py: "5px",
+                borderRadius: "20px",
+                cursor: "pointer",
+                border: `1.5px solid ${colors.inactivePillBorder}`,
+                backgroundColor: colors.inactivePillBg,
+                color: colors.inactivePillText,
+                whiteSpace: "nowrap",
+              }}
+            >
+              <Visibility sx={{ fontSize: "14px" }} />
+              Status
+            </Box>
           </Box>
 
           {/* ── Day / court filter row ── */}
@@ -357,6 +383,13 @@ const TournamentAdmin = () => {
       {matches.secret && renderMatches(matchesList, tournamentSlug, descending, matches.selectedDay, matches.selectedCourt, matches.secret)}
       {!matches.secret && !matches.showLoader && renderNoAccess()}
       {matches.showLoader && <Loader />}
+
+      {showCourtStatus && (
+        <CourtStatusOverlay
+          matches={matchesList}
+          onClose={() => setShowCourtStatus(false)}
+        />
+      )}
     </Box>
   );
 };
