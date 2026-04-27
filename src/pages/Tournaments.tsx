@@ -42,12 +42,12 @@ const fetchTournaments = async (): Promise<Tournament[]> => {
 const SectionLabel: React.FC<{ label: string }> = ({ label }) => (
   <Typography
     sx={{
-      fontSize: "15px",
+      fontSize: { xs: "11px", sm: "15px" },
       fontWeight: 600,
       letterSpacing: "0.08em",
       textTransform: "uppercase",
       color: colors.textFaint,
-      mb: "12px",
+      mb: { xs: "8px", sm: "12px" },
       ml: "2px",
     }}
   >
@@ -116,11 +116,11 @@ const TournamentCard: React.FC<TournamentCardProps> = ({ tournament, variant, is
     {/* Date */}
     <Box
       sx={{
-        width: { xs: "120px", sm: "150px" },
-        minWidth: { xs: "120px", sm: "150px" },
-        px: "16px",
-        py: "18px",
-        fontSize: "15px",
+        width: { xs: "80px", sm: "120px", md: "150px" },
+        minWidth: { xs: "80px", sm: "120px", md: "150px" },
+        px: { xs: "10px", sm: "14px", md: "16px" },
+        py: { xs: "10px", sm: "14px", md: "18px" },
+        fontSize: { xs: "11px", sm: "13px", md: "15px" },
         color: colors.textMuted,
         borderRight: `1px solid ${colors.borderMeta}`,
         backgroundColor: metaBgColors[variant],
@@ -135,9 +135,9 @@ const TournamentCard: React.FC<TournamentCardProps> = ({ tournament, variant, is
     <Box
       sx={{
         flex: 1,
-        px: "20px",
-        py: "18px",
-        fontSize: "18px",
+        px: { xs: "10px", sm: "14px", md: "20px" },
+        py: { xs: "10px", sm: "14px", md: "18px" },
+        fontSize: { xs: "13px", sm: "15px", md: "18px" },
         fontWeight: 500,
         color: colors.textPrimary,
         overflow: "hidden",
@@ -148,12 +148,13 @@ const TournamentCard: React.FC<TournamentCardProps> = ({ tournament, variant, is
       {tournament.name}
     </Box>
 
-    {/* Match count */}
+    {/* Match count — hidden on smallest screens */}
     <Box
       sx={{
-        px: "20px",
-        py: "18px",
-        fontSize: "15px",
+        display: { xs: "none", sm: "block" },
+        px: { xs: "10px", sm: "14px", md: "20px" },
+        py: { xs: "10px", sm: "14px", md: "18px" },
+        fontSize: { xs: "11px", sm: "13px", md: "15px" },
         color: colors.textFaint,
         whiteSpace: "nowrap",
         flexShrink: 0,
@@ -185,8 +186,8 @@ const YearAccordion: React.FC<YearAccordionProps> = ({ year, tournaments, defaul
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          px: "18px",
-          py: "14px",
+          px: { xs: "12px", sm: "18px" },
+          py: { xs: "10px", sm: "14px" },
           backgroundColor: colors.pageBg,
           border: `1px solid ${colors.borderLight}`,
           borderRadius: open ? "10px 10px 0 0" : "10px",
@@ -196,10 +197,10 @@ const YearAccordion: React.FC<YearAccordionProps> = ({ year, tournaments, defaul
         }}
       >
         <Box sx={{ display: "flex", alignItems: "baseline", gap: "8px" }}>
-          <Typography sx={{ fontSize: "18px", fontWeight: 600, color: colors.textPrimary }}>
+          <Typography sx={{ fontSize: { xs: "14px", sm: "18px" }, fontWeight: 600, color: colors.textPrimary }}>
             {year}
           </Typography>
-          <Typography sx={{ fontSize: "15px", color: colors.textFaint }}>
+          <Typography sx={{ fontSize: { xs: "11px", sm: "15px" }, color: colors.textFaint }}>
             — {tournaments.length} tournament{tournaments.length !== 1 ? "s" : ""} · {totalMatches} matches
           </Typography>
         </Box>
@@ -267,11 +268,11 @@ const Tournaments: React.FC = () => {
   const years = Object.keys(byYear).sort((a, b) => Number(b) - Number(a));
 
   return (
-    <Box sx={{ backgroundColor: colors.pageBg, minHeight: "100vh", px: { xs: 2, sm: 6 }, pt: "28px", pb: 8 }}>
+    <Box sx={{ backgroundColor: colors.pageBg, minHeight: "100vh", px: { xs: 1, sm: 3, md: 6 }, pt: { xs: "12px", sm: "20px", md: "28px" }, pb: 8 }}>
 
       {/* Active */}
       {active.length > 0 && (
-        <Box sx={{ mb: "32px" }}>
+        <Box sx={{ mb: { xs: "16px", sm: "32px" } }}>
           <SectionLabel label="Active" />
           {active.map(t => (
             <TournamentCard key={t.slug} tournament={t} variant="active" />
@@ -281,7 +282,7 @@ const Tournaments: React.FC = () => {
 
       {/* Upcoming */}
       {upcoming.length > 0 && (
-        <Box sx={{ mb: "32px" }}>
+        <Box sx={{ mb: { xs: "16px", sm: "32px" } }}>
           <SectionLabel label="Upcoming" />
           {upcoming.map(t => (
             <TournamentCard key={t.slug} tournament={t} variant="upcoming" />
