@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Typography, IconButton, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button, Tooltip } from "@mui/material";
 import {
     Place,
@@ -87,6 +87,18 @@ export function MatchView({ match, tournamentSlug, secret }: MatchViewProps) {
 
     const handleClose = () => setOpen(false);
 
+    // Auto-clear the retry block when the server's retry time has passed
+    useEffect(() => {
+        if (!finalizeRetryAt) return;
+        const msLeft = finalizeRetryAt.getTime() - Date.now();
+        if (msLeft <= 0) {
+            setFinalizeRetryAt(null);
+            return;
+        }
+        const timer = setTimeout(() => setFinalizeRetryAt(null), msLeft);
+        return () => clearTimeout(timer);
+    }, [finalizeRetryAt]);
+
     const handleFinalize = async () => {
         if (finalizeRetryAt && new Date() < finalizeRetryAt) {
             const secsLeft = Math.ceil((finalizeRetryAt.getTime() - Date.now()) / 1000);
@@ -119,8 +131,10 @@ export function MatchView({ match, tournamentSlug, secret }: MatchViewProps) {
                 dispatch(fetchMatchesRequest({ tournamentSlug, class: null }));
                 setFinalizeRetryAt(null);
             } else if (response.status === 400) {
-                const retryAtHeader = response.headers.get("X-Retry-At");
-                const retryAfterHeader = response.headers.get("Retry-After");
+                const retryAtHeader = response.headers.get("x-retry-at");
+                const retryAfterHeader = response.headers.get("retry-after");
+                console.log("400 response headers:", { retryAtHeader, retryAfterHeader });
+                console.log("All headers:", [...response.headers.entries()]);
                 if (retryAtHeader) {
                     const retryDate = new Date(retryAtHeader);
                     setFinalizeRetryAt(retryDate);
@@ -762,16 +776,12 @@ export function MatchView({ match, tournamentSlug, secret }: MatchViewProps) {
                         )}
                     </IconButton>
 
-                    {/* Force finalize button — only when a team has 2 sets, match has a scoreboardID, and is not yet reported */}
-                    {match.scoreboardID && (match.currentSetScore?.["HOME"] >= 2 || match.currentSetScore?.["AWAY"] >= 2) && !isReported && (
+                    {/* Force finalize button — only when a team has 2 sets, match has a scoreboardID, is not yet reported, and not in retry cooldown */}
+                    {match.scoreboardID && (match.currentSetScore?.["HOME"] >= 2 || match.currentSetScore?.["AWAY"] >= 2) && !isReported && !finalizeRetryAt && (
                         <>
                             <Box sx={{ width: "1px", backgroundColor: colors.borderMeta, flexShrink: 0 }} />
                             <Tooltip
-                                title={
-                                    finalizeRetryAt && new Date() < finalizeRetryAt
-                                        ? `Retry at ${finalizeRetryAt.toLocaleTimeString()}`
-                                        : "Force finalize match"
-                                }
+                                title="Force finalize match"
                             >
                                 <span>
                                     <IconButton
@@ -779,9 +789,7 @@ export function MatchView({ match, tournamentSlug, secret }: MatchViewProps) {
                                         size="small"
                                         disabled={isFinalizing}
                                         sx={{
-                                            color: finalizeRetryAt && new Date() < finalizeRetryAt
-                                                ? colors.upcomingBorder
-                                                : colors.reportedDot,
+                                            color: colors.reportedDot,
                                             borderRadius: 0,
                                             px: "10px",
                                             py: 0,
