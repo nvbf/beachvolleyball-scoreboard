@@ -1,81 +1,91 @@
-import React, { useState } from "react";
+import React from "react";
 import { TeamType } from "../types";
-import Grid from "@mui/material/Grid";
 import { Box, Button, Typography } from "@mui/material";
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import { addEvent, finalizeMatch } from "../../store/match/reducer";
 import { finalizeMatchEvent } from "../eventFunctions";
 import ScoreBox from "./scoreBox";
-
-
-interface TeamColorPickerProps {
-    team: TeamType;
-}
+import { colors } from "../../theme";
 
 export function MatchFinished() {
-
     const match = useAppSelector((state) => state.match);
     const dispatch = useAppDispatch();
 
     function handleDone() {
-        dispatch(addEvent({ matchId: match.matchId, id: match.id, event: finalizeMatchEvent(match.authUserId) }))
-        dispatch(finalizeMatch())
+        dispatch(addEvent({ matchId: match.matchId, id: match.id, event: finalizeMatchEvent(match.authUserId) }));
+        dispatch(finalizeMatch());
     }
 
     return (
-        <Grid
-            container
-            rowSpacing={2}
-            columnSpacing={1}
-            justifyContent="center"
-            columns={12}
-            marginTop={1}
-            sx={{ alignSelf: 'center', textAlign: 'center' }}
-        >
-            <Grid size={12}>
-                <Grid container
-                    spacing={2}
-                    columns={12}
-                    justifyContent="center"
-                // alignItems="flex-end"
-                >
-                    <ScoreBox score={match.currentSetScore[TeamType.Home]} color={match.teamColor[TeamType.Home]} size="large" />
-                    <ScoreBox score={match.currentSetScore[TeamType.Away]} color={match.teamColor[TeamType.Away]} size="large" />
-                </Grid>
-            </Grid>
-            {match.theCurrentSets.map((score, index) => (
-                <Grid size={12} key={index}>
-                    <Grid container
-                        spacing={2}
-                        columns={12}
-                        justifyContent="center"
-                        alignItems="flex-end"
-                    >
-                        <ScoreBox score={score[TeamType.Home]} color={match.teamColor[TeamType.Home]} size="small" />
-                        <ScoreBox score={score[TeamType.Away]} color={match.teamColor[TeamType.Away]} size="small" />
+        <Box sx={{ backgroundColor: colors.pageBg, minHeight: "100vh", px: { xs: 2, sm: 4 }, py: 4 }}>
 
-                    </Grid>
-                </Grid>
+            {/* Final set score — large */}
+            <Box sx={{ display: "flex", justifyContent: "center", gap: 2, mb: 2 }}>
+                <ScoreBox score={match.currentSetScore[TeamType.Home]} color={match.teamColor[TeamType.Home]} size="large" />
+                <ScoreBox score={match.currentSetScore[TeamType.Away]} color={match.teamColor[TeamType.Away]} size="large" />
+            </Box>
+
+            {/* Per-set scores — small */}
+            {match.theCurrentSets.map((score, index) => (
+                <Box key={index} sx={{ display: "flex", justifyContent: "center", gap: 2, mb: 1 }}>
+                    <ScoreBox score={score[TeamType.Home]} color={match.teamColor[TeamType.Home]} size="small" />
+                    <ScoreBox score={score[TeamType.Away]} color={match.teamColor[TeamType.Away]} size="small" />
+                </Box>
             ))}
-            <Grid size={12}>
-                <Typography sx={{ fontSize: 22 }}>The match is done! </Typography>
-                <Typography sx={{ fontSize: 22 }}>Click on 'finalize' to finish.</Typography>
-                <br></br>
-                <Typography sx={{ fontSize: 22 }}>(Undo will be disabled when the match is finalized)</Typography>
-            </Grid>
-            <Grid size={{ xs: 12, md: 6 }} sx={{ textAlign: 'left' }}>
-                <Button variant="contained" onClick={handleDone.bind(null)}
+
+            {/* Message */}
+            <Box sx={{ textAlign: "center", mt: 3, mb: 4 }}>
+                <Typography
                     sx={{
-                        width: 1, height: 64
-                    }}>
-                    <Typography sx={{ fontSize: 28 }}>
+                        fontSize: { xs: "20px", sm: "24px" },
+                        fontWeight: 500,
+                        color: colors.textMuted,
+                        mb: 1,
+                    }}
+                >
+                    The match is done!
+                </Typography>
+                <Typography
+                    sx={{
+                        fontSize: { xs: "20px", sm: "24px" },
+                        fontWeight: 500,
+                        color: colors.textMuted,
+                        mb: 2,
+                    }}
+                >
+                    Click on 'finalize' to finish.
+                </Typography>
+                <Typography
+                    sx={{
+                        fontSize: { xs: "16px", sm: "18px" },
+                        color: colors.textFaint,
+                        lineHeight: 1.5,
+                    }}
+                >
+                    (Undo will be disabled when the match is finalized)
+                </Typography>
+            </Box>
+
+            {/* Finalize button */}
+            <Box sx={{ display: "flex", justifyContent: "center" }}>
+                <Button
+                    variant="contained"
+                    onClick={handleDone}
+                    sx={{
+                        width: { xs: "100%", sm: "60%" },
+                        height: { xs: "56px", sm: "64px" },
+                        borderRadius: "10px",
+                    }}
+                >
+                    <Typography sx={{ fontSize: { xs: "16px", sm: "20px" }, fontWeight: 600 }}>
                         Finalize!
                     </Typography>
                 </Button>
-            </Grid>
-        </Grid>
+            </Box>
+
+        </Box>
     );
-};
+}
 
 function getDefaultColorByTeam(team: TeamType) {
     return team === TeamType.Home ? "#0000ff" : "#ff0000";

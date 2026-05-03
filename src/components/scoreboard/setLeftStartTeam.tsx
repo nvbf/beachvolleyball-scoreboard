@@ -1,36 +1,18 @@
-import AddIcon from "@mui/icons-material/Add";
-import {
-    SwapHoriz,
-    SportsVolleyball,
-    Undo,
-    Settings
-} from '@mui/icons-material';
-import {
-    Box,
-    CardActions,
-    ThemeProvider,
-    Typography,
-    createTheme,
-    responsiveFontSizes
-} from "@mui/material";
-import Button from "@mui/material/Button";
+import { SwapHoriz } from '@mui/icons-material';
+import { Box, Button, Typography } from "@mui/material";
 import React, { useState } from 'react';
 import { addEvent } from '../../store/match/reducer';
 import { useAppDispatch, useAppSelector } from '../../store/store';
-import { TeamType, Event, EventType } from '../types';
-import Grid from "@mui/material/Grid"
-import EventList from "../eventList";
+import { TeamType } from '../types';
 import { getInitials } from "../../util/names";
-import { selectFirstServerEvent, selectFirstServingTeamEvent } from "../eventFunctions";
+import { setLeftStartTeamEvent, setNoSideSwitchEvent } from "../eventFunctions";
 import { matchState } from "../../store/types";
-import { setLeftStartTeamEvent } from "../eventFunctions";
-import { setNoSideSwitchEvent } from "../eventFunctions";
 import { getTextColorFromBackground } from "../../util/color";
+import { colors } from "../../theme";
 
 export function SetLeftStartTeam() {
     const match = useAppSelector((state) => state.match);
     const [leftSideTeam, setLeftSideTeam] = useState(TeamType.Home);
-
     const dispatch = useAppDispatch();
 
     function setLeftTeam() {
@@ -42,171 +24,139 @@ export function SetLeftStartTeam() {
     }
 
     function handleSwitch() {
-        if (leftSideTeam === TeamType.Home) {
-            setLeftSideTeam(TeamType.Away)
-        } else {
-            setLeftSideTeam(TeamType.Home)
-        }
+        setLeftSideTeam(leftSideTeam === TeamType.Home ? TeamType.Away : TeamType.Home);
     }
 
-    const getRightTeam = (): TeamType => {
-        if (leftSideTeam === TeamType.Home) {
-            return TeamType.Away
-        } else {
-            return TeamType.Home
-        }
-    }
-
-    const getLeftTeam = (): TeamType => {
-        return leftSideTeam
-    }
+    const getLeftTeam = (): TeamType => leftSideTeam;
+    const getRightTeam = (): TeamType => leftSideTeam === TeamType.Home ? TeamType.Away : TeamType.Home;
 
     const getPlayer = (match: matchState, playerId: number, teamType: TeamType): string => {
         if (teamType === TeamType.Home) {
-            if (playerId === 1) {
-                return match.homeTeam.player1Name
-            } else {
-                return match.homeTeam.player2Name
-            }
+            return playerId === 1 ? match.homeTeam.player1Name : match.homeTeam.player2Name;
         } else {
-            if (playerId === 1) {
-                return match.awayTeam.player1Name
-            } else {
-                return match.awayTeam.player2Name
-            }
+            return playerId === 1 ? match.awayTeam.player1Name : match.awayTeam.player2Name;
         }
-    }
-
-    let theme = createTheme();
-    theme = responsiveFontSizes(theme);
-    theme.typography.h6 = {
-        fontWeight: 'normal',
-        fontSize: '1.0rem',
-        '@media (min-width:600px)': {
-            fontSize: '1.4rem',
-        },
-        [theme.breakpoints.up('md')]: {
-            fontSize: '1.6rem',
-        },
     };
 
     return (
-        <ThemeProvider theme={theme}>
-            <Grid container
-                justifyContent="center"
-                alignItems="center"
-                rowSpacing={0}
-                spacing={2}
-                columns={12}
-            >
-                <Grid size={12}>
+        <Box sx={{ backgroundColor: colors.pageBg, minHeight: "100vh", px: { xs: 2, sm: 4 }, py: 4 }}>
 
-                    <Grid container
-                        columnSpacing={2}
-                        rowSpacing={2}
-                        justifyContent="center"
-                        columns={12}
-                        sx={{ alignSelf: 'center', textAlign: 'center' }}
-                    >
-                        <Grid size={12} sx={{ textAlign: 'center' }}>
-                            <Typography variant="h4"> Choose team sides</Typography>
-                        </Grid>
-                        <Grid size={12}>
-                            <Grid container
-                                columnSpacing={2}
-                                rowSpacing={2}
-                                columns={12}
-                                justifyContent="center"
-                                sx={{ alignSelf: 'center', textAlign: 'center' }}
-                            >
-                                <Grid size={6} sx={{ textAlign: 'left' }}>
-                                    <Button variant="contained" sx={{
-                                        width: 1
-                                    }}
-                                        onClick={handleSwitch.bind(null)}>
-                                        <SwapHoriz sx={{ fontSize: 54 }} />
-                                    </Button>
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                        <Grid size={6} sx={{ textAlign: 'right' }}>
-                            <Button variant="contained"
-                                sx={{
-                                    width: 1, height: 96, backgroundColor: match.teamColor[getLeftTeam()],
-                                    '&:hover': { backgroundColor: match.teamColor[getLeftTeam()] }
-                                }}>
-                                <Typography variant="h6" sx={{ color: getTextColorFromBackground(match.teamColor[getLeftTeam()]) }}>
-                                    <Box>{getInitials(getPlayer(match, 1, getLeftTeam()))}</Box>
-                                    <Box>{getInitials(getPlayer(match, 2, getLeftTeam()))}</Box>
-                                </Typography>
-                            </Button>
-                        </Grid>
-                        <Grid size={6} sx={{ textAlign: 'left' }}>
-                            <Button variant="contained"
-                                sx={{
-                                    width: 1, height: 96, backgroundColor: match.teamColor[getRightTeam()],
-                                    '&:hover': { backgroundColor: match.teamColor[getRightTeam()] }
-                                }}>
-                                <Typography variant="h6" sx={{ color: getTextColorFromBackground(match.teamColor[getRightTeam()]) }}>
-                                    <Box>{getInitials(getPlayer(match, 1, getRightTeam()))}</Box>
-                                    <Box>{getInitials(getPlayer(match, 2, getRightTeam()))}</Box>
-                                </Typography>
-                            </Button>
-                        </Grid>
-                    </Grid>
-                </Grid>
+            {/* ── Choose team sides ── */}
+            <SectionLabel label="Choose team sides" />
 
-                <Grid size={12}>
-                    <Grid container
-                        columnSpacing={2}
-                        rowSpacing={2}
-                        columns={12}
-                        justifyContent="center"
-                        sx={{ alignSelf: 'center', textAlign: 'center' }}
-                    >
-                        <Grid size={6} sx={{ textAlign: 'left' }}>
-                            <Button variant="contained" onClick={setLeftTeam.bind(null)}
-                                sx={{
-                                    width: 1, height: 64
-                                }}>
-                                <Typography variant="h6">
-                                    Sides set!
-                                </Typography>
-                            </Button>
-                        </Grid>
-                    </Grid>
-                </Grid>
+            {/* Swap button */}
+            <Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
+                <Button
+                    variant="contained"
+                    onClick={handleSwitch}
+                    sx={{ width: { xs: "100%", sm: "60%" }, height: { xs: "56px", sm: "64px" }, borderRadius: "10px" }}
+                >
+                    <SwapHoriz sx={{ fontSize: 36 }} />
+                </Button>
+            </Box>
 
-                <Grid size={12}>
-                    <Grid container
-                        columnSpacing={2}
-                        rowSpacing={2}
-                        columns={12}
-                        justifyContent="center"
-                        sx={{ alignSelf: 'center', textAlign: 'center' }}
-                    >
-                        <Grid size={12} sx={{ textAlign: 'center' }}>
-                            <Typography variant="h4"> If you don't want auto-swap enabled: </Typography>
-                        </Grid>
-                        <Grid size={6} sx={{ textAlign: 'left' }}>
-                            <Button variant="contained" onClick={setNoSideSwitch.bind(null)}
-                                sx={{
-                                    width: 1, height: 64
-                                }}>
-                                <Typography variant="h6">
-                                    Don't swap!
-                                </Typography>
-                            </Button>
-                        </Grid>
-                    </Grid>
-                </Grid>
-            </Grid>
-        </ThemeProvider>
+            {/* Team side buttons */}
+            <Box sx={{ display: "flex", gap: 2, mb: 4 }}>
+                <TeamButton
+                    label={[
+                        getInitials(getPlayer(match, 1, getLeftTeam())),
+                        getInitials(getPlayer(match, 2, getLeftTeam())),
+                    ]}
+                    color={match.teamColor[getLeftTeam()]}
+                />
+                <TeamButton
+                    label={[
+                        getInitials(getPlayer(match, 1, getRightTeam())),
+                        getInitials(getPlayer(match, 2, getRightTeam())),
+                    ]}
+                    color={match.teamColor[getRightTeam()]}
+                />
+            </Box>
+
+            {/* Sides set */}
+            <Box sx={{ display: "flex", justifyContent: "center", mb: 4 }}>
+                <Button
+                    variant="contained"
+                    onClick={setLeftTeam}
+                    sx={{ width: { xs: "100%", sm: "60%" }, height: { xs: "56px", sm: "64px" }, borderRadius: "10px" }}
+                >
+                    <Typography sx={{ fontSize: { xs: "16px", sm: "20px" }, fontWeight: 600 }}>
+                        Sides set!
+                    </Typography>
+                </Button>
+            </Box>
+
+            {/* No auto-swap */}
+            <SectionLabel label="If you don't want auto-swap enabled:" />
+            <Box sx={{ display: "flex", justifyContent: "center" }}>
+                <Button
+                    variant="contained"
+                    onClick={setNoSideSwitch}
+                    sx={{ width: { xs: "100%", sm: "60%" }, height: { xs: "56px", sm: "64px" }, borderRadius: "10px" }}
+                >
+                    <Typography sx={{ fontSize: { xs: "16px", sm: "20px" }, fontWeight: 600 }}>
+                        Don't swap!
+                    </Typography>
+                </Button>
+            </Box>
+
+        </Box>
     );
-
 }
 
+// ─── Section label ────────────────────────────────────────────────────────────
+
+const SectionLabel: React.FC<{ label: string }> = ({ label }) => (
+    <Typography
+        sx={{
+            fontSize: { xs: "18px", sm: "22px" },
+            fontWeight: 500,
+            color: colors.textMuted,
+            textAlign: "center",
+            mb: 2,
+            letterSpacing: "0.01em",
+        }}
+    >
+        {label}
+    </Typography>
+);
+
+// ─── Team button (color from user) ───────────────────────────────────────────
+
+const TeamButton: React.FC<{ label: string[]; color: string }> = ({ label, color }) => {
+    const textColor = getTextColorFromBackground(color);
+    return (
+        <Box
+            sx={{
+                flex: 1,
+                minHeight: { xs: "76px", sm: "92px" },
+                backgroundColor: color,
+                borderRadius: "10px",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "4px",
+                boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
+                px: 2,
+            }}
+        >
+            {label.map((line, i) => (
+                <Typography
+                    key={i}
+                    sx={{
+                        fontSize: { xs: "16px", sm: "20px" },
+                        fontWeight: 700,
+                        color: textColor,
+                        letterSpacing: "0.04em",
+                        lineHeight: 1.2,
+                    }}
+                >
+                    {line}
+                </Typography>
+            ))}
+        </Box>
+    );
+};
+
 export default SetLeftStartTeam;
-
-
-

@@ -1,52 +1,54 @@
-import React, { useState } from "react";
+import React from "react";
 import { TeamType } from "../types";
-import Grid from "@mui/material/Grid";
 import { Box, Button, Typography } from "@mui/material";
 import { useAppDispatch, useAppSelector } from '../../store/store';
-import { getTextColorFromBackground } from "../../util/color";
 import { addEvent } from "../../store/match/reducer";
 import { setClearMessageEvent } from "../eventFunctions";
-
-
-interface TeamColorPickerProps {
-    team: TeamType;
-}
+import { colors } from "../../theme";
 
 export function SwitchSides() {
-
     const dispatch = useAppDispatch();
     const match = useAppSelector((state) => state.match);
 
     function handleDone() {
-        dispatch(addEvent({ matchId: match.matchId, id: match.id, event: setClearMessageEvent(match.authUserId) }))
+        dispatch(addEvent({ matchId: match.matchId, id: match.id, event: setClearMessageEvent(match.authUserId) }));
     }
 
     return (
-        <Grid
-            container
-            rowSpacing={2}
-            columnSpacing={1}
-            justifyContent="center"
-            columns={12}
-            sx={{ alignSelf: 'center', textAlign: 'center' }}
-            marginTop={4}
-        >
-            <Grid size={12}>
-                <Typography sx={{ fontSize: 28 }}>Switch sides!!</Typography>
-            </Grid>
-            <Grid size={{ xs: 12, md: 6 }} sx={{ textAlign: 'left' }}>
-                <Button variant="contained" onClick={handleDone.bind(null)}
+        <Box sx={{ backgroundColor: colors.pageBg, minHeight: "100vh", px: { xs: 2, sm: 4 }, py: 4 }}>
+
+            <Typography
+                sx={{
+                    fontSize: { xs: "18px", sm: "22px" },
+                    fontWeight: 500,
+                    color: colors.textMuted,
+                    textAlign: "center",
+                    mb: 4,
+                    letterSpacing: "0.01em",
+                }}
+            >
+                Switch sides!
+            </Typography>
+
+            <Box sx={{ display: "flex", justifyContent: "center" }}>
+                <Button
+                    variant="contained"
+                    onClick={handleDone}
                     sx={{
-                        width: 1, height: 64
-                    }}>
-                    <Typography>
+                        width: { xs: "100%", sm: "60%" },
+                        height: { xs: "56px", sm: "64px" },
+                        borderRadius: "10px",
+                    }}
+                >
+                    <Typography sx={{ fontSize: { xs: "16px", sm: "20px" }, fontWeight: 600 }}>
                         Done!
                     </Typography>
                 </Button>
-            </Grid>
-        </Grid>
+            </Box>
+
+        </Box>
     );
-};
+}
 
 function getDefaultColorByTeam(team: TeamType) {
     return team === TeamType.Home ? "#0000ff" : "#ff0000";

@@ -1,56 +1,74 @@
-import React, { useState } from "react";
-import { TeamType } from "../types";
-import Grid from "@mui/material/Grid";
+import React from "react";
 import { Box, Button, Typography } from "@mui/material";
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import { addEvent } from "../../store/match/reducer";
-import { pickTeamColorEvent, setClearMessageEvent } from "../eventFunctions";
+import { setClearMessageEvent } from "../eventFunctions";
 import TimeElapsed from "../timeElaped";
-
+import { colors } from "../../theme";
 
 interface TechnicalTimeoutProps {
     startTime: number;
 }
 
 export function TechnicalTimeout({ startTime }: TechnicalTimeoutProps) {
-
     const dispatch = useAppDispatch();
     const match = useAppSelector((state) => state.match);
 
     function handleDone() {
-        dispatch(addEvent({ matchId: match.matchId, id: match.id, event: setClearMessageEvent(match.authUserId) }))
+        dispatch(addEvent({ matchId: match.matchId, id: match.id, event: setClearMessageEvent(match.authUserId) }));
     }
 
     return (
-        <Grid
-            container
-            rowSpacing={2}
-            columnSpacing={1}
-            justifyContent="center"
-            columns={12}
-            marginTop={4}
-            sx={{ alignSelf: 'center', textAlign: 'center' }}
-        >
-            <Grid size={12}>
-                <Typography sx={{ fontSize: 28 }}>Technical timeout</Typography>
-            </Grid>
-            <Grid size={12} sx={{ textAlign: 'left' }}>
-                <Typography align='center' sx={{ fontSize: "2rem", variant: 'button', lineHeight: 1, paddingTop: 1, paddingX: 1 }}>
-                    <TimeElapsed startTime={startTime} />
-                </Typography>
-            </Grid>
-            <Grid size={{ xs: 12, md: 6 }} sx={{ textAlign: 'left' }}>
-                <Button variant="contained" onClick={handleDone.bind(null)}
+        <Box sx={{ backgroundColor: colors.pageBg, minHeight: "100vh", px: { xs: 2, sm: 4 }, py: 4 }}>
+
+            {/* Label */}
+            <Typography
+                sx={{
+                    fontSize: { xs: "18px", sm: "22px" },
+                    fontWeight: 500,
+                    color: colors.textMuted,
+                    textAlign: "center",
+                    mb: 3,
+                    letterSpacing: "0.01em",
+                }}
+            >
+                Technical timeout
+            </Typography>
+
+            {/* Timer */}
+            <Typography
+                sx={{
+                    fontSize: { xs: "48px", sm: "64px" },
+                    fontWeight: 600,
+                    color: colors.textPrimary,
+                    textAlign: "center",
+                    fontFamily: "'DM Mono', monospace",
+                    lineHeight: 1,
+                    mb: 4,
+                }}
+            >
+                <TimeElapsed startTime={startTime} />
+            </Typography>
+
+            {/* Done button */}
+            <Box sx={{ display: "flex", justifyContent: "center" }}>
+                <Button
+                    variant="contained"
+                    onClick={handleDone}
                     sx={{
-                        width: 1, height: 64
-                    }}>
-                    <Typography>
+                        width: { xs: "100%", sm: "60%" },
+                        height: { xs: "56px", sm: "64px" },
+                        borderRadius: "10px",
+                    }}
+                >
+                    <Typography sx={{ fontSize: { xs: "16px", sm: "20px" }, fontWeight: 600 }}>
                         Done!
                     </Typography>
                 </Button>
-            </Grid>
-        </Grid>
+            </Box>
+
+        </Box>
     );
-};
+}
 
 export default TechnicalTimeout;

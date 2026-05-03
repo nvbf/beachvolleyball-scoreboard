@@ -1,47 +1,21 @@
 import { v4 } from "uuid";
-import {
-  Box,
-  CircularProgress,
-  ThemeProvider,
-  Typography,
-  createTheme,
-  responsiveFontSizes
-} from "@mui/material";
-import Button from "@mui/material/Button";
+import { Box, Button, CircularProgress, Typography } from "@mui/material";
 import React, { useState } from 'react';
 import { initMatch, resetTeamColor } from '../../store/match/reducer';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import { TeamType } from './../types';
-import Grid from "@mui/material/Grid"
 import { getTextColorFromBackground } from "../../util/color";
 import { getInitials } from "../../util/names";
+import { colors } from "../../theme";
 
 export function InitMatch() {
   const match = useAppSelector((state) => state.match);
   const [loading, setLoading] = useState(false);
-
-
   const dispatch = useAppDispatch();
-
-  // function setMatchId() {
-  //   dispatch(resetMatchId());
-  // }
-
-  // function setTournamentId() {
-  //   dispatch(resetTournamentId());
-  // }
 
   function setTeamColors(team: TeamType) {
     dispatch(resetTeamColor(team));
   }
-
-  // function setHomePlayerName(player: number) {
-  //   dispatch(resetHomePlayerName(player));
-  // }
-
-  // function setAwayPlayerName(player: number) {
-  //   dispatch(resetAwayPlayerName(player));
-  // }
 
   function handleDone() {
     dispatch(initMatch({
@@ -52,186 +26,126 @@ export function InitMatch() {
       homeTeam: { player1Name: match.homeTeam.player1Name, player2Name: match.homeTeam.player2Name },
       matchId: match.matchId,
       tournamentId: match.tournamentId,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     }));
-    setLoading(true)
+    setLoading(true);
   }
 
-
-  let theme = createTheme();
-  theme = responsiveFontSizes(theme);
-  theme.typography.h6 = {
-    fontWeight: 'normal',
-    fontSize: '1.0rem',
-    '@media (min-width:600px)': {
-      fontSize: '1.4rem',
-    },
-    [theme.breakpoints.up('md')]: {
-      fontSize: '1.6rem',
-    },
-  };
-
   return (
-    <ThemeProvider theme={theme}>
-      <Grid container
-        justifyContent="center"
-        alignItems="center"
-        rowSpacing={0}
-        spacing={2}
-        columns={12}
-        marginTop={15}
+    <Box sx={{ backgroundColor: colors.pageBg, minHeight: "100vh", px: { xs: 2, sm: 4 }, py: 4 }}>
+
+      {/* Change team colors */}
+      <Typography
+        sx={{
+          fontSize: { xs: "18px", sm: "22px" },
+          fontWeight: 500,
+          color: colors.textMuted,
+          textAlign: "center",
+          mb: 2,
+          letterSpacing: "0.01em",
+        }}
       >
-        {/* <Grid size={12}>
-          <Grid container
-            columnSpacing={2}
-            rowSpacing={2}
-            justifyContent="center"
-            columns={12}
-            sx={{ alignSelf: 'center', textAlign: 'center' }}
-          >
-            <Grid size={12} sx={{ textAlign: 'center' }}>
-              <Typography variant="h4">Change player names:</Typography>
-            </Grid>
-            <Grid size={6} sx={{ textAlign: 'right' }}>
-              <Button variant="contained" onClick={setHomePlayerName.bind(null, 1)}
-                sx={{
-                  width: 1, height: 54, backgroundColor: match.teamColor[TeamType.Home],
-                  '&:hover': { backgroundColor: match.teamColor[TeamType.Home] }
-                }}>
-                <Typography variant="h6" sx={{ color: getTextColorFromBackground(match.teamColor[TeamType.Home]) }}>
-                  <Box>{getInitials(match.homeTeam.player1Name)}</Box>
-                </Typography>
-              </Button>
-            </Grid>
-            <Grid size={6} sx={{ textAlign: 'left' }}>
-              <Button variant="contained" onClick={setAwayPlayerName.bind(null, 1)}
-                sx={{
-                  width: 1, height: 54, backgroundColor: match.teamColor[TeamType.Away],
-                  '&:hover': { backgroundColor: match.teamColor[TeamType.Away] }
-                }}>
-                <Typography variant="h6" sx={{ color: getTextColorFromBackground(match.teamColor[TeamType.Away]) }}>
-                  <Box>{getInitials(match.awayTeam.player1Name)}</Box>
-                </Typography>
-              </Button>
-            </Grid>
-            <Grid size={6} sx={{ textAlign: 'right' }}>
-              <Button variant="contained" onClick={setHomePlayerName.bind(null, 2)}
-                sx={{
-                  width: 1, height: 54, backgroundColor: match.teamColor[TeamType.Home],
-                  '&:hover': { backgroundColor: match.teamColor[TeamType.Home] }
-                }}>
-                <Typography variant="h6" sx={{ color: getTextColorFromBackground(match.teamColor[TeamType.Home]) }}>
-                  <Box>{getInitials(match.homeTeam.player2Name)}</Box>
-                </Typography>
-              </Button>
-            </Grid>
-            <Grid size={6} sx={{ textAlign: 'left' }}>
-              <Button variant="contained" onClick={setAwayPlayerName.bind(null, 2)}
-                sx={{
-                  width: 1, height: 54, backgroundColor: match.teamColor[TeamType.Away],
-                  '&:hover': { backgroundColor: match.teamColor[TeamType.Away] }
-                }}>
-                <Typography variant="h6" sx={{ color: getTextColorFromBackground(match.teamColor[TeamType.Away]) }}>
-                  <Box>{getInitials(match.awayTeam.player2Name)}</Box>
-                </Typography>
-              </Button>
-            </Grid>
-          </Grid>
-        </Grid> */}
-        <Grid size={12}>
-          <Grid container
-            columnSpacing={2}
-            rowSpacing={2}
-            columns={12}
-            justifyContent="center"
-            sx={{ alignSelf: 'center', textAlign: 'center' }}
-          >
-            <Grid size={12} sx={{ textAlign: 'center' }}>
-              <Typography variant="h4">Change team colors:</Typography>
-            </Grid>
-            <Grid size={6} sx={{ textAlign: 'right' }}>
-              <Button variant="contained" onClick={setTeamColors.bind(null, TeamType.Home)}
-                sx={{
-                  width: 1, height: 82, backgroundColor: match.teamColor[TeamType.Home],
-                  '&:hover': { backgroundColor: match.teamColor[TeamType.Home] }
-                }}>
-                <Typography sx={{ fontSize: 18, color: getTextColorFromBackground(match.teamColor[TeamType.Home]) }}>
-                  <Box>{getInitials(match.homeTeam.player1Name)}</Box>
-                  <Box>{getInitials(match.homeTeam.player2Name)}</Box>
-                </Typography>
-              </Button>
-            </Grid>
-            <Grid size={6} sx={{ textAlign: 'left' }}>
-              <Button variant="contained" onClick={setTeamColors.bind(null, TeamType.Away)}
-                sx={{
-                  width: 1, height: 76, backgroundColor: match.teamColor[TeamType.Away],
-                  '&:hover': { backgroundColor: match.teamColor[TeamType.Away] }
-                }}>
-                <Typography sx={{ fontSize: 18, color: getTextColorFromBackground(match.teamColor[TeamType.Away]) }}>
-                  <Box>{getInitials(match.awayTeam.player1Name)}</Box>
-                  <Box>{getInitials(match.awayTeam.player2Name)}</Box>
-                </Typography>
-              </Button>
-            </Grid>
-          </Grid>
-        </Grid>
-        {/* <Grid size={12}>
-          <Grid container
-            columnSpacing={2}
-            rowSpacing={2}
-            columns={12}
-            justifyContent="center"
-            sx={{ alignSelf: 'center', textAlign: 'center' }}
-          >
-            <Grid size={12} sx={{ textAlign: 'center' }}>
-              <Typography variant="h4"> Change values for:</Typography>
-            </Grid>
-            <Grid size={6} sx={{ textAlign: 'right' }}>
-              <Button
-                variant="contained" onClick={setMatchId.bind(null)}
-                sx={{
-                  width: 1, height: 96
-                }}>
-                <Typography variant="h6">
-                  <Box>Match Id </Box>
-                  <Box>{match.matchId}</Box>
-                </Typography>
-              </Button>
-            </Grid>
-            <Grid size={6} sx={{ textAlign: 'left' }}>
-              <Button variant="contained" onClick={setTournamentId.bind(null)}
-                sx={{
-                  width: 1, height: 96
-                }
-                }>
-                <Typography variant="h6">
-                  <Box>Tournament id</Box>
-                  <Box>{match.tournamentId}</Box>
-                </Typography>
-              </Button>
-            </Grid>
-          </Grid>
-        </Grid> */}
-        <Grid size={{ xs: 12, md: 6 }} sx={{ textAlign: 'left' }} marginTop={5}>
-          <Grid size={12} sx={{ textAlign: 'center' }}>
-            <Typography variant="h4"> When you are ready:</Typography>
-          </Grid>
-          <Grid size={12} sx={{ textAlign: 'center' }} marginTop={2}>
-            <Button variant="contained" disabled={loading} onClick={handleDone.bind(null)}
-              sx={{
-                width: 1, height: 96
-              }}>
-              {!loading && <Typography variant="h3">
-                Start match!
-              </Typography>}
-              {loading && <CircularProgress color="inherit" />}
-            </Button>
-          </Grid>
-        </Grid>
-      </Grid>
-    </ThemeProvider>
+        Change team colors:
+      </Typography>
+
+      <Box sx={{ display: "flex", gap: 2, mb: 5 }}>
+        <TeamButton
+          label={[
+            getInitials(match.homeTeam.player1Name),
+            getInitials(match.homeTeam.player2Name),
+          ]}
+          color={match.teamColor[TeamType.Home]}
+          onClick={() => setTeamColors(TeamType.Home)}
+        />
+        <TeamButton
+          label={[
+            getInitials(match.awayTeam.player1Name),
+            getInitials(match.awayTeam.player2Name),
+          ]}
+          color={match.teamColor[TeamType.Away]}
+          onClick={() => setTeamColors(TeamType.Away)}
+        />
+      </Box>
+
+      {/* When you are ready */}
+      <Typography
+        sx={{
+          fontSize: { xs: "18px", sm: "22px" },
+          fontWeight: 500,
+          color: colors.textMuted,
+          textAlign: "center",
+          mb: 2,
+          letterSpacing: "0.01em",
+        }}
+      >
+        When you are ready:
+      </Typography>
+
+      <Box sx={{ display: "flex", justifyContent: "center" }}>
+        <Button
+          variant="contained"
+          disabled={loading}
+          onClick={handleDone}
+          sx={{
+            width: { xs: "100%", sm: "60%" },
+            height: { xs: "72px", sm: "88px" },
+            borderRadius: "10px",
+          }}
+        >
+          {!loading ? (
+            <Typography sx={{ fontSize: { xs: "22px", sm: "28px" }, fontWeight: 700 }}>
+              Start match!
+            </Typography>
+          ) : (
+            <CircularProgress color="inherit" />
+          )}
+        </Button>
+      </Box>
+
+    </Box>
   );
 }
 
-export default InitMatch;
+// ─── Team button ──────────────────────────────────────────────────────────────
 
+const TeamButton: React.FC<{ label: string[]; color: string; onClick: () => void }> = ({ label, color, onClick }) => {
+  const textColor = getTextColorFromBackground(color);
+  return (
+    <Box
+      onClick={onClick}
+      sx={{
+        flex: 1,
+        minHeight: { xs: "76px", sm: "92px" },
+        backgroundColor: color,
+        borderRadius: "10px",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: "4px",
+        cursor: "pointer",
+        boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
+        transition: "filter 0.12s",
+        "&:hover": { filter: "brightness(1.08)" },
+        px: 2,
+      }}
+    >
+      {label.map((line, i) => (
+        <Typography
+          key={i}
+          sx={{
+            fontSize: { xs: "16px", sm: "20px" },
+            fontWeight: 700,
+            color: textColor,
+            letterSpacing: "0.04em",
+            lineHeight: 1.2,
+          }}
+        >
+          {line}
+        </Typography>
+      ))}
+    </Box>
+  );
+};
+
+export default InitMatch;
