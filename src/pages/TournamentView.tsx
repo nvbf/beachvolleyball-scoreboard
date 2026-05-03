@@ -11,6 +11,7 @@ import { AdminMatch, MatchState } from "../components/tournamentAdmin/types";
 import { dateStringToString } from "../util/time";
 import { chooseCourt, chooseDay, fetchMatchesRequest, updateMatch } from "../store/tournamentAdmin/reducer";
 import { colors, statusColors } from "../theme";
+import logo from "../osvb_logo_hi_res.png";
 
 // ─── Pill toggle ─────────────────────────────────────────────────────────────
 
@@ -144,6 +145,7 @@ const TournamentView = () => {
   const [seeFinished, setSeeFinished] = useState(true);
   const [selectDay, setSelectDay] = useState(false);
   const [selectCourt, setSelectCourt] = useState(false);
+  const [finishedInitialized, setFinishedInitialized] = useState(false);
 
   const playerClass = searchParams.get('class');
   const noDate = searchParams.get('noDate');
@@ -220,6 +222,18 @@ const TournamentView = () => {
   const isOngoing = (m: AdminMatch) => getMatchState(m) === MatchState.Ongoing;
   const isFinished = (m: AdminMatch) => getMatchState(m) === MatchState.Finished;
   const isReported = (m: AdminMatch) => getMatchState(m) === MatchState.Reported;
+
+  // Auto-hide finished matches on first load if there are still active/upcoming matches today
+  useEffect(() => {
+    if (finishedInitialized || matchesList.length === 0) return;
+    const todayStr = new Date().toISOString().split("T")[0];
+    const todayMatches = matchesList.filter(
+      m => new Date(m.startTime).toISOString().split("T")[0] === todayStr
+    );
+    const hasActiveToday = todayMatches.some(m => isUpcoming(m) || isOngoing(m));
+    if (hasActiveToday) setSeeFinished(false);
+    setFinishedInitialized(true);
+  }, [matchesList.length]);
 
   const filteredByDayCourt = matchesList
     .filter(e => matches.selectedDay === "all" || new Date(e.startTime).toISOString().split('T')[0] === matches.selectedDay)
@@ -305,7 +319,7 @@ const TournamentView = () => {
 
         <Box
           component="img"
-          src="/src/osvb_logo_hi_res.png"
+          src={logo}
           alt="OSVB"
           sx={{ height: "36px", width: "auto", objectFit: "contain", opacity: 0.7 }}
         />
