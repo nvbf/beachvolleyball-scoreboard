@@ -14,7 +14,7 @@ import { AdminMatch, MatchState } from "./types";
 import { TeamType } from "../types";
 import { getInitials } from "../../util/names";
 import { getMatchState } from "./adminMatchFunctions";
-import { timestampToString, getDelayString, getLateStart } from "../../util/time";
+import { timestampToString } from "../../util/time";
 import { colors, statusColors, MatchStatus } from "../../theme";
 import { fetchMatchesRequest } from "../../store/tournamentAdmin/reducer";
 import { useDispatch } from "react-redux";
@@ -38,7 +38,7 @@ const getProfixioSets = (
 
 // ─── Status pill ─────────────────────────────────────────────────────────────
 
-const StatusPill: React.FC<{ status: MatchStatus }> = ({ status }) => {
+const StatusPill: React.FC<{ status: MatchStatus; label?: string }> = ({ status, label }) => {
     const s = statusColors[status];
     return (
         <Box
@@ -66,7 +66,7 @@ const StatusPill: React.FC<{ status: MatchStatus }> = ({ status }) => {
                     flexShrink: 0,
                 }}
             />
-            {s.label}
+            {label ?? s.label}
         </Box>
     );
 };
@@ -172,12 +172,12 @@ export function MatchView({ match, tournamentSlug, secret }: MatchViewProps) {
             ? colors.textPrimary
             : colors.finishedBorder;
 
-    // Delay/late info for upcoming/ongoing
-    const timeAnnotation = isUpcoming
-        ? getDelayString(match.startTime)
-        : isOngoing
-            ? getLateStart(match.startTime, match.startTimestamp)
-            : null;
+    // Upcoming matches more than 10 min past scheduled start are "late"
+    const upcomingDelayMin = Math.round((Date.now() - match.startTime) / 60000);
+    const isLate = isUpcoming && upcomingDelayMin > 10;
+    const lateLabel = isLate
+        ? `Late (+${Math.floor(upcomingDelayMin / 60)}:${String(upcomingDelayMin % 60).padStart(2, "0")})`
+        : undefined;
 
     return (
         <>
@@ -218,7 +218,7 @@ export function MatchView({ match, tournamentSlug, secret }: MatchViewProps) {
                         >
                             #{match.matchId}
                         </Typography>
-                        <StatusPill status={status} />
+                        <StatusPill status={status} label={lateLabel} />
                     </Box>
 
                     {/* Line 2 mobile: time */}
@@ -226,11 +226,6 @@ export function MatchView({ match, tournamentSlug, secret }: MatchViewProps) {
                         <AccessTime sx={{ fontSize: "10px", opacity: 0.5, flexShrink: 0 }} />
                         <Typography sx={{ fontSize: "10px", lineHeight: 1.3, whiteSpace: "nowrap" }}>
                             {timestampToString(match.startTime)}
-                            {timeAnnotation && (
-                                <Box component="span" sx={{ color: colors.upcomingStatusText, ml: "2px" }}>
-                                    {timeAnnotation}
-                                </Box>
-                            )}
                         </Typography>
                     </Box>
 
@@ -295,11 +290,6 @@ export function MatchView({ match, tournamentSlug, secret }: MatchViewProps) {
                                 }}
                             >
                                 {timestampToString(match.startTime)}
-                                {timeAnnotation && (
-                                    <Box component="span" sx={{ color: colors.upcomingStatusText, ml: "2px" }}>
-                                        {timeAnnotation}
-                                    </Box>
-                                )}
                             </Typography>
                         </Box>
                     </Box>
@@ -345,7 +335,7 @@ export function MatchView({ match, tournamentSlug, secret }: MatchViewProps) {
                 {/* ── Match body — wide layout (>900px): single line ── */}
                 <Box
                     sx={{
-                        display: { xs: "none", md: "flex" },
+                        display: { xs: "none", lg: "flex" },
                         flex: 1,
                         minWidth: 0,
                         px: "12px",
@@ -396,6 +386,20 @@ export function MatchView({ match, tournamentSlug, secret }: MatchViewProps) {
 
                     {/* Spacer */}
                     <Box sx={{ flex: 1 }} />
+
+                    {/* Referee — upcoming only, floats right */}
+                    {isUpcoming && match.referee && (
+                        <Box sx={{ display: "flex", alignItems: "center", gap: "4px", flexShrink: 0 }}>
+                            <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="#9a8e7e" strokeWidth="1.4">
+                                <circle cx="5" cy="10" r="3" />
+                                <path d="M8 10h5l1-4H8" />
+                                <path d="M10 6V4" />
+                            </svg>
+                            <Typography sx={{ fontSize: "13px", color: colors.textFaint, whiteSpace: "nowrap" }}>
+                                {match.referee}
+                            </Typography>
+                        </Box>
+                    )}
 
                     {/* Per-set scores: (21 – 13) (21 – 19) · total */}
                     {!isUpcoming && (
@@ -468,7 +472,7 @@ export function MatchView({ match, tournamentSlug, secret }: MatchViewProps) {
                 {/* ── Match body — narrow layout (<900px): stacked rows ── */}
                 <Box
                     sx={{
-                        display: { xs: "flex", md: "none" },
+                        display: { xs: "flex", lg: "none" },
                         flex: 1,
                         minWidth: 0,
                         px: "10px",
@@ -607,19 +611,40 @@ export function MatchView({ match, tournamentSlug, secret }: MatchViewProps) {
                                 {awaySetScore}
                             </Typography>
                         )}
-                        {isUpcoming && (
-                            <Typography
-                                sx={{
-                                    fontSize: "14px",
-                                    color: colors.textFaint,
-                                    fontFamily: "'DM Mono', monospace",
-                                    flexShrink: 0,
-                                }}
-                            >
-                                –
-                            </Typography>
-                        )}
                     </Box>
+
+                    {/* Referee row — upcoming only, below second divider */}
+                    {isUpcoming && match.referee && (
+                        <>
+                            <Box sx={{ height: "1px", backgroundColor: colors.borderMeta }} />
+                            <Box sx={{ display: "flex", alignItems: "center", gap: "4px", minWidth: 0 }}>
+                                <Box
+                                    component="span"
+                                    sx={{ fontSize: "10px", display: "flex", alignItems: "center", flexShrink: 0 }}
+                                >
+                                    {/* Whistle icon */}
+                                    <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="#9a8e7e" strokeWidth="1.4">
+                                        <circle cx="5" cy="10" r="3" />
+                                        <path d="M8 10h5l1-4H8" />
+                                        <path d="M10 6V4" />
+                                    </svg>
+                                </Box>
+                                <Typography
+                                    sx={{
+                                        fontSize: "12px",
+                                        color: colors.textFaint,
+                                        overflow: "hidden",
+                                        textOverflow: "ellipsis",
+                                        whiteSpace: "nowrap",
+                                        flex: "1 1 0",
+                                        minWidth: 0,
+                                    }}
+                                >
+                                    {match.referee}
+                                </Typography>
+                            </Box>
+                        </>
+                    )}
                 </Box>
 
                 {/* ── Action buttons ── */}

@@ -348,8 +348,31 @@ export const MatchCard: React.FC<MatchCardProps> = ({ match }) => {
                     )}
                 </Box>
 
-                {/* Divider — full width, no gaps */}
-                <Box sx={{ height: "1px", backgroundColor: colors.borderMeta, mx: 0 }} />
+                {/* Divider — with referee on the right for upcoming, plain line otherwise */}
+                <Box sx={{ display: "flex", alignItems: "center", gap: "6px", minWidth: 0, height: "1px", position: "relative" }}>
+                    <Box sx={{ flex: 1, height: "1px", backgroundColor: colors.borderMeta, minWidth: "8px" }} />
+                    {isUpcoming && match.referee && (
+                        <Box sx={{ display: "flex", alignItems: "center", gap: "3px", flexShrink: 0, position: "absolute", right: 0, top: "50%", transform: "translateY(-50%)", backgroundColor: s.cardBg, pl: "6px" }}>
+                            <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="#9a8e7e" strokeWidth="1.4" style={{ flexShrink: 0 }}>
+                                <circle cx="5" cy="10" r="3" />
+                                <path d="M8 10h5l1-4H8" />
+                                <path d="M10 6V4" />
+                            </svg>
+                            <Typography
+                                sx={{
+                                    fontSize: "12px",
+                                    color: colors.textFaint,
+                                    whiteSpace: "nowrap",
+                                    overflow: "hidden",
+                                    textOverflow: "ellipsis",
+                                    maxWidth: { xs: "120px", sm: "200px" },
+                                }}
+                            >
+                                {match.referee}
+                            </Typography>
+                        </Box>
+                    )}
+                </Box>
 
                 {/* Away row: name + set away scores + total */}
                 <Box sx={{ display: "flex", alignItems: "center", gap: "6px", minWidth: 0 }}>
@@ -413,11 +436,6 @@ export const MatchCard: React.FC<MatchCardProps> = ({ match }) => {
                             }}
                         >
                             {awaySetScore}
-                        </Typography>
-                    )}
-                    {isUpcoming && (
-                        <Typography sx={{ fontSize: "14px", color: colors.textFaint, fontFamily: "'DM Mono', monospace", flexShrink: 0 }}>
-                            –
                         </Typography>
                     )}
                 </Box>
