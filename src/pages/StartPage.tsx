@@ -11,6 +11,7 @@ import {
   ChevronRight,
 } from "@mui/icons-material";
 import { colors } from "../theme";
+import logo from "../osvb_logo_hi_res.png";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -163,7 +164,7 @@ function StartPage() {
       >
         <Box
           component="img"
-          src="/src/osvb_logo_hi_res.png"
+          src={logo}
           alt="OSVB"
           sx={{ height: { xs: "80px", sm: "100px" }, width: "auto", objectFit: "contain" }}
         />
