@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, Typography, IconButton, Dialog } from "@mui/material";
+import { Box, Typography, IconButton, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button, Tooltip } from "@mui/material";
 import {
     Place,
     AccessTime,
@@ -8,6 +8,7 @@ import {
     SyncProblem,
     QrCodeScanner,
     QrCode,
+    GavelRounded,
 } from "@mui/icons-material";
 import { QRCodeSVG as QRCode } from "qrcode.react";
 import { AdminMatch, MatchState } from "./types";
@@ -18,6 +19,7 @@ import { timestampToString } from "../../util/time";
 import { colors, statusColors, MatchStatus } from "../../theme";
 import { fetchMatchesRequest } from "../../store/tournamentAdmin/reducer";
 import { useDispatch } from "react-redux";
+import { getAuth } from "firebase/auth";
 
 interface MatchViewProps {
     match: AdminMatch;
@@ -78,9 +80,64 @@ export function MatchView({ match, tournamentSlug, secret }: MatchViewProps) {
     const [activeQrCode, setActiveQrCode] = useState("");
     const [isUpdating, setIsUpdating] = useState(false);
     const [updateFailed, setUpdateFailed] = useState(false);
+    const [isFinalizing, setIsFinalizing] = useState(false);
+    const [finalizeRetryAt, setFinalizeRetryAt] = useState<Date | null>(null);
+    const [popupMessage, setPopupMessage] = useState<string | null>(null);
     const dispatch = useDispatch();
 
     const handleClose = () => setOpen(false);
+
+    const handleFinalize = async () => {
+        if (finalizeRetryAt && new Date() < finalizeRetryAt) {
+            const secsLeft = Math.ceil((finalizeRetryAt.getTime() - Date.now()) / 1000);
+            setPopupMessage(`Please wait ${secsLeft}s before retrying.`);
+            return;
+        }
+
+        setIsFinalizing(true);
+        try {
+            const auth = getAuth();
+            const user = auth.currentUser;
+
+            if (!user) {
+                setPopupMessage("You must be authenticated to finalize a match.");
+                return;
+            }
+
+            const idToken = await user.getIdToken();
+            const response = await fetch(
+                `${import.meta.env.VITE_BACKEND_URL}/match/v1/result/finalize/${match.scoreboardID}`,
+                {
+                    method: "PUT",
+                    headers: {
+                        "Authorization": `Bearer ${idToken}`,
+                        "Content-Type": "application/json",
+                    },
+                }
+            );
+            if (response.ok) {
+                dispatch(fetchMatchesRequest({ tournamentSlug, class: null }));
+                setFinalizeRetryAt(null);
+            } else if (response.status === 400) {
+                const retryAtHeader = response.headers.get("X-Retry-At");
+                const retryAfterHeader = response.headers.get("Retry-After");
+                if (retryAtHeader) {
+                    const retryDate = new Date(retryAtHeader);
+                    setFinalizeRetryAt(retryDate);
+                    const secsLeft = retryAfterHeader
+                        ? parseInt(retryAfterHeader, 10)
+                        : Math.ceil((retryDate.getTime() - Date.now()) / 1000);
+                    setPopupMessage(`Cannot finalize yet. Retry in ${secsLeft}s (at ${retryDate.toLocaleTimeString()}).`);
+                } else {
+                    const body = await response.json().catch(() => null);
+                    setPopupMessage(body?.error ?? "Cannot finalize yet.");
+                }
+            }
+        } catch (e) {
+            setPopupMessage("Failed to reach the server. Please try again.");
+        }
+        setIsFinalizing(false);
+    };
 
     const handleSync = async () => {
         setIsUpdating(true);
@@ -704,6 +761,41 @@ export function MatchView({ match, tournamentSlug, secret }: MatchViewProps) {
                             <QrCodeScanner sx={{ fontSize: "18px" }} />
                         )}
                     </IconButton>
+
+                    {/* Force finalize button — only when a team has 2 sets, match has a scoreboardID, and is not yet reported */}
+                    {match.scoreboardID && (match.currentSetScore?.["HOME"] >= 2 || match.currentSetScore?.["AWAY"] >= 2) && !isReported && (
+                        <>
+                            <Box sx={{ width: "1px", backgroundColor: colors.borderMeta, flexShrink: 0 }} />
+                            <Tooltip
+                                title={
+                                    finalizeRetryAt && new Date() < finalizeRetryAt
+                                        ? `Retry at ${finalizeRetryAt.toLocaleTimeString()}`
+                                        : "Force finalize match"
+                                }
+                            >
+                                <span>
+                                    <IconButton
+                                        onClick={handleFinalize}
+                                        size="small"
+                                        disabled={isFinalizing}
+                                        sx={{
+                                            color: finalizeRetryAt && new Date() < finalizeRetryAt
+                                                ? colors.upcomingBorder
+                                                : colors.reportedDot,
+                                            borderRadius: 0,
+                                            px: "10px",
+                                            py: 0,
+                                            height: "100%",
+                                            "&:hover": { backgroundColor: colors.borderLight },
+                                            "&.Mui-disabled": { opacity: 0.4 },
+                                        }}
+                                    >
+                                        <GavelRounded sx={{ fontSize: "18px" }} />
+                                    </IconButton>
+                                </span>
+                            </Tooltip>
+                        </>
+                    )}
                 </Box>
             </Box>
 
@@ -711,6 +803,34 @@ export function MatchView({ match, tournamentSlug, secret }: MatchViewProps) {
                 <Box p={3}>
                     <QRCode value={activeQrCode} size={Math.min(512, window.outerWidth - 100)} />
                 </Box>
+            </Dialog>
+
+            {/* Finalize error popup */}
+            <Dialog
+                open={popupMessage !== null}
+                onClose={() => setPopupMessage(null)}
+                PaperProps={{
+                    sx: {
+                        backgroundColor: colors.cardBg,
+                        border: `1px solid ${colors.borderLight}`,
+                        borderRadius: "10px",
+                        px: 1,
+                    }
+                }}
+            >
+                <DialogTitle sx={{ fontSize: "15px", fontWeight: 600, color: colors.textPrimary, pb: 1 }}>
+                    Cannot finalize
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText sx={{ fontSize: "13px", color: colors.textMuted }}>
+                        {popupMessage}
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setPopupMessage(null)} variant="contained" size="small" sx={{ borderRadius: "8px" }}>
+                        OK
+                    </Button>
+                </DialogActions>
             </Dialog>
         </>
     );
