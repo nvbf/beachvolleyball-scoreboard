@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { trackPageView } from '../firebase/analytics';
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "./../store/store";
 import MatchView from "../components/tournamentAdmin/matchView";
@@ -161,6 +162,8 @@ const TournamentAdmin = () => {
     dispatch(chooseCourt(court));
     setSelectCourt(false);
   }
+
+  useEffect(() => { trackPageView('tournament_admin', { slug: tournamentSlug ?? '' }); }, [tournamentSlug]);
 
   useEffect(() => {
     const fetchData = async (slug: string) => {

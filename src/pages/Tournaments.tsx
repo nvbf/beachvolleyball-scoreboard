@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { trackPageView } from '../firebase/analytics';
 import { collection } from "@firebase/firestore";
 import { db } from './../firebase/firebase-config';
 import { Box, Typography } from '@mui/material';
@@ -239,6 +240,8 @@ const YearAccordion: React.FC<YearAccordionProps> = ({ year, tournaments, defaul
 
 const Tournaments: React.FC = () => {
   const [data, setData] = useState<Tournament[] | null>(null);
+
+  useEffect(() => { trackPageView('tournaments'); }, []);
 
   useEffect(() => {
     fetchTournaments().then(setData);

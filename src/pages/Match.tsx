@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { trackPageView } from '../firebase/analytics';
 import Scoreboard from '../components/scoreboard';
 import { useAppDispatch, useAppSelector } from '../store/store';
 import ScoreboardHeader from '../components/scoreboard/header';
@@ -28,6 +29,8 @@ function Match() {
   const [checkedDb, setCheckedDb] = useState(false);
 
   const params = useParams();
+
+  useEffect(() => { trackPageView('scoreboard'); }, []);
 
   useEffect(() => {
     // Define your async function
