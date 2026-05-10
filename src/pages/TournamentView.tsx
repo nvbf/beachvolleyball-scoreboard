@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { trackPageView } from '../firebase/analytics';
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "./../store/store";
 import MatchCard from "../components/tournamentView/MatchCard";
@@ -12,6 +11,7 @@ import { AdminMatch, MatchState } from "../components/tournamentAdmin/types";
 import { dateStringToString } from "../util/time";
 import { chooseCourt, chooseDay, fetchMatchesRequest, updateMatch } from "../store/tournamentAdmin/reducer";
 import { colors, statusColors } from "../theme";
+import { trackAreaVisit } from '../analytics/umami';
 import logo from "../osvb_logo_hi_res.png";
 
 // ─── Pill toggle ─────────────────────────────────────────────────────────────
@@ -161,7 +161,9 @@ const TournamentView = () => {
     setSelectCourt(false);
   }
 
-  useEffect(() => { trackPageView('tournament_view', { slug: tournamentSlug ?? '' }); }, [tournamentSlug]);
+  useEffect(() => {
+    trackAreaVisit('tournament_view', { slug: tournamentSlug });
+  }, [tournamentSlug]);
 
   useEffect(() => {
     const fetchData = async (slug: string) => {

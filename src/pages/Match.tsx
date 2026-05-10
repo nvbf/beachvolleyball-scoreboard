@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { trackPageView } from '../firebase/analytics';
 import Scoreboard from '../components/scoreboard';
 import { useAppDispatch, useAppSelector } from '../store/store';
 import ScoreboardHeader from '../components/scoreboard/header';
@@ -19,6 +18,7 @@ import MatchButtons from '../components/scoreboard/matchButtons';
 import MatchFinalized from '../components/scoreboard/matchFinalized';
 import EventList from '../components/eventList';
 import { getLastValidEvent } from '../components/eventFunctions';
+import { trackAreaVisit } from '../analytics/umami';
 import './matchDesign.css';
 
 
@@ -30,7 +30,9 @@ function Match() {
 
   const params = useParams();
 
-  useEffect(() => { trackPageView('scoreboard'); }, []);
+  useEffect(() => {
+    trackAreaVisit('scoreboard', params.matchId ? { matchId: params.matchId } : undefined);
+  }, [params.matchId]);
 
   useEffect(() => {
     // Define your async function

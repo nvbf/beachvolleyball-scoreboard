@@ -5,12 +5,14 @@
 #   _BACKEND_URL        — Backend service URL for this environment
 #   _HOSTING_TARGET     — Firebase Hosting site target: 'dev', 'beta', or 'prod'
 #   _FIREBASE_PROJECT   — GCP / Firebase project ID
+#   _UMAMI_WEBSITE_ID   — Umami website ID for this environment
 
 substitutions:
   _FIREBASE_DATABASE: 'development'
   _BACKEND_URL: ''
   _HOSTING_TARGET: 'dev'
   _FIREBASE_PROJECT: 'osvb-scoreboard'
+  _UMAMI_WEBSITE_ID: ''
 
 steps:
   - name: 'node:22'
@@ -25,6 +27,7 @@ steps:
     env:
       - 'VITE_FIREBASE_DATABASE=$_FIREBASE_DATABASE'
       - 'VITE_BACKEND_URL=$_BACKEND_URL'
+      - 'VITE_UMAMI_WEBSITE_ID=$_UMAMI_WEBSITE_ID'
     waitFor: ['install']
 
   - name: 'node:22'

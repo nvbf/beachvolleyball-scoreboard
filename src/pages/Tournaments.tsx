@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { trackPageView } from '../firebase/analytics';
 import { collection } from "@firebase/firestore";
 import { db } from './../firebase/firebase-config';
 import { Box, Typography } from '@mui/material';
 import TournamentView from '../components/tournamentsOverview/tournamentView';
 import { getDocs } from 'firebase/firestore';
+import { trackAreaVisit } from '../analytics/umami';
 import { isIncoming, isOngoing, isPast } from '../util/time';
 import { colors } from '../theme';
 import { ExpandMore, ExpandLess } from '@mui/icons-material';
@@ -241,7 +241,9 @@ const YearAccordion: React.FC<YearAccordionProps> = ({ year, tournaments, defaul
 const Tournaments: React.FC = () => {
   const [data, setData] = useState<Tournament[] | null>(null);
 
-  useEffect(() => { trackPageView('tournaments'); }, []);
+  useEffect(() => {
+    trackAreaVisit('tournaments');
+  }, []);
 
   useEffect(() => {
     fetchTournaments().then(setData);

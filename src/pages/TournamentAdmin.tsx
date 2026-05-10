@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { trackPageView } from '../firebase/analytics';
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "./../store/store";
 import MatchView from "../components/tournamentAdmin/matchView";
@@ -12,6 +11,7 @@ import { dateStringToString } from "../util/time";
 import { chooseCourt, chooseDay, fetchMatchSecrets, fetchMatchesRequest, updateMatch } from "../store/tournamentAdmin/reducer";
 import { useNavigate } from 'react-router-dom';
 import Loader from "../components/loader";
+import { trackAreaVisit } from '../analytics/umami';
 import { colors, statusColors } from "../theme";
 import { SwapVert, Visibility } from "@mui/icons-material";
 import { CourtStatusOverlay } from "../components/tournamentAdmin/statusOverview";
@@ -163,7 +163,9 @@ const TournamentAdmin = () => {
     setSelectCourt(false);
   }
 
-  useEffect(() => { trackPageView('tournament_admin', { slug: tournamentSlug ?? '' }); }, [tournamentSlug]);
+  useEffect(() => {
+    trackAreaVisit('tournament_admin', { slug: tournamentSlug });
+  }, [tournamentSlug]);
 
   useEffect(() => {
     const fetchData = async (slug: string) => {
