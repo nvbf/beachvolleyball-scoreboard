@@ -9,15 +9,155 @@ import { AdminMatch } from "../components/tournamentAdmin/types";
 import { TeamType } from "../components/types";
 import { getInitials } from "../util/names";
 import { fetchMatchesRequest, updateMatch } from "../store/tournamentAdmin/reducer";
-import { timestampToString, timestampToStringHours } from "../util/time";
+import { timestampToStringHours } from "../util/time";
+
+const demoCurrentMatch: AdminMatch = {
+  matchId: 9001,
+  awayTeam: {
+    isWinner: false,
+    name: "Team North",
+    player1: "Ava Nord",
+    player2: "Mia Berg",
+  },
+  currentScore: [
+    {
+      [TeamType.Home]: 18,
+      [TeamType.Away]: 16,
+    },
+  ],
+  currentSetScore: {
+    [TeamType.Home]: 1,
+    [TeamType.Away]: 0,
+  },
+  sets: [
+    {
+      [TeamType.Home]: 21,
+      [TeamType.Away]: 18,
+    },
+  ],
+  startTime: Date.now() + 3 * 60 * 1000,
+  startTimestamp: Date.now() - 20 * 60 * 1000,
+  arenaName: "Center Court",
+  hasWinner: false,
+  isFinalized: false,
+  isStarted: true,
+  referee: "Demo Ref",
+  homeTeam: {
+    isWinner: false,
+    name: "Team South",
+    player1: "Noah Strand",
+    player2: "Elias Vik",
+  },
+  matchCategory: "Men",
+  matchGroup: "A",
+  name: "Semi Final",
+  scoreboardID: "demo-scoreboard",
+};
+
+const demoUpcomingMatches: AdminMatch[] = [
+  {
+    ...demoCurrentMatch,
+    matchId: 9002,
+    isStarted: false,
+    currentScore: [{ [TeamType.Home]: 0, [TeamType.Away]: 0 }],
+    currentSetScore: { [TeamType.Home]: 0, [TeamType.Away]: 0 },
+    startTime: Date.now() + 10 * 60 * 1000,
+    homeTeam: {
+      isWinner: false,
+      name: "Team West",
+      player1: "Luna Sol",
+      player2: "Kari Moe",
+    },
+    awayTeam: {
+      isWinner: false,
+      name: "Team East",
+      player1: "Iben Rye",
+      player2: "Sara Lien",
+    },
+    matchCategory: "Women",
+    matchGroup: "B",
+    name: "Quarter Final",
+  },
+  {
+    ...demoCurrentMatch,
+    matchId: 9003,
+    isStarted: false,
+    currentScore: [{ [TeamType.Home]: 0, [TeamType.Away]: 0 }],
+    currentSetScore: { [TeamType.Home]: 0, [TeamType.Away]: 0 },
+    startTime: Date.now() + 25 * 60 * 1000,
+    homeTeam: {
+      isWinner: false,
+      name: "Team Sand",
+      player1: "Per Holm",
+      player2: "Mads Ny",
+    },
+    awayTeam: {
+      isWinner: false,
+      name: "Team Wave",
+      player1: "Theo Lin",
+      player2: "Ola Nybo",
+    },
+    matchCategory: "Mixed",
+    matchGroup: "C",
+    name: "Round 3",
+  },
+  {
+    ...demoCurrentMatch,
+    matchId: 9006,
+    isStarted: false,
+    currentScore: [{ [TeamType.Home]: 0, [TeamType.Away]: 0 }],
+    currentSetScore: { [TeamType.Home]: 0, [TeamType.Away]: 0 },
+    startTime: Date.now() + 70 * 60 * 1000,
+    homeTeam: {
+      isWinner: false,
+      name: "Team Foam",
+      player1: "Mila Tor",
+      player2: "Runa Sve",
+    },
+    awayTeam: {
+      isWinner: false,
+      name: "Team Shore",
+      player1: "Nora Vin",
+      player2: "Tina Ask",
+    },
+    matchCategory: "Mixed",
+    matchGroup: "F",
+    name: "Round 6",
+  },
+  {
+    ...demoCurrentMatch,
+    matchId: 9007,
+    isStarted: false,
+    currentScore: [{ [TeamType.Home]: 0, [TeamType.Away]: 0 }],
+    currentSetScore: { [TeamType.Home]: 0, [TeamType.Away]: 0 },
+    startTime: Date.now() + 85 * 60 * 1000,
+    homeTeam: {
+      isWinner: false,
+      name: "Team Bay",
+      player1: "Odin Rey",
+      player2: "Knut Sol",
+    },
+    awayTeam: {
+      isWinner: false,
+      name: "Team Reef",
+      player1: "Vera Lim",
+      player2: "Ylva Vang",
+    },
+    matchCategory: "Men",
+    matchGroup: "G",
+    name: "Round 7",
+  },
+];
 
 const TournamentOverlay = () => {
   const location = useLocation();
   const [fetchedMatches, setFetchedMatches] = useState(false);
   const [createdCallbacks, setCreatedCallbacks] = useState(false);
+  const [showDemoCurrentMatch, setShowDemoCurrentMatch] = useState(true);
   // Extract the URL parameters
   const queryParams = new URLSearchParams(location.search);
   const tournamentSlug = queryParams.get("tournamentId") || "default";
+  const isDemoMode = tournamentSlug === "demo";
   const courtID = queryParams.get("courtId");
   const noDate = queryParams.get('noDate');
   const numberSize = 32
@@ -31,7 +171,7 @@ const TournamentOverlay = () => {
   const matchesList = Object.values(matches);
 
   // Fetch the matches when the component mounts
-  if (!fetchedMatches && tournamentSlug) {
+  if (!isDemoMode && !fetchedMatches && tournamentSlug) {
     dispatch(fetchMatchesRequest({ tournamentSlug: tournamentSlug, class: null })); // replace with actual tournamentSlug
     setFetchedMatches(true)
   }
@@ -49,7 +189,21 @@ const TournamentOverlay = () => {
     };
   }, []);
 
-  if (!createdCallbacks && tournamentSlug) {
+  useEffect(() => {
+    if (!isDemoMode) {
+      return;
+    }
+
+    const interval = window.setInterval(() => {
+      setShowDemoCurrentMatch((previous) => !previous);
+    }, 10_000);
+
+    return () => {
+      window.clearInterval(interval);
+    };
+  }, [isDemoMode]);
+
+  if (!isDemoMode && !createdCallbacks && tournamentSlug) {
     const currentDate: string = new Date().toISOString().split('T')[0];
     let collectionQuery: QueryFieldFilterConstraint[] = []
     if (noDate === null) {
@@ -76,8 +230,12 @@ const TournamentOverlay = () => {
     setCreatedCallbacks(true)
   }
 
-  const currentMatch = getCurrentMatch(matchesList, courtID || "")
-  const commingMatches = getCommingMatches(matchesList, courtID || "")
+  const currentMatch = isDemoMode
+    ? (showDemoCurrentMatch ? demoCurrentMatch : undefined)
+    : getCurrentMatch(matchesList, courtID || "")
+  const commingMatches = isDemoMode
+    ? demoUpcomingMatches
+    : getCommingMatches(matchesList, courtID || "")
 
   return (
     <div
@@ -88,7 +246,7 @@ const TournamentOverlay = () => {
         right: "0",
         backgroundColor: 'rgba(0, 0, 0, 0)',        // backgroundColor: "rgba(0,0,0,0.7)",
         textAlign: "center",
-        width: '1920px', height: '1080px'
+        width: '1280px', height: '720px',
       }}
     >
       {currentMatch && <Grid
@@ -258,10 +416,10 @@ const TournamentOverlay = () => {
         columns={12}
         sx={{
           position: "absolute",
-          width: "887px",
+          width: "567px",
           bottom: "0",
           left: "25%",
-          top: "167px",
+          top: "100px",
           right: "0",
         }}
       >
@@ -367,7 +525,7 @@ const formattedMatch = (match: AdminMatch): React.JSX.Element => {
     </Grid>
   );
 };
-export const getCurrentMatch = (matches: AdminMatch[], courtID: string): AdminMatch => {
+export const getCurrentMatch = (matches: AdminMatch[], courtID: string): AdminMatch | undefined => {
   return matches.filter(e => !e.hasWinner && !e.isFinalized && e.isStarted && e.arenaName === courtID)[0]
 }
 
