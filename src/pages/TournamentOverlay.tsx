@@ -246,7 +246,7 @@ const TournamentOverlay = () => {
         right: "0",
         backgroundColor: 'rgba(0, 0, 0, 0)',        // backgroundColor: "rgba(0,0,0,0.7)",
         textAlign: "center",
-        width: '1280px', height: '720px',
+        width: '1920px', height: '1080px'
       }}
     >
       {currentMatch && <Grid
@@ -416,10 +416,10 @@ const TournamentOverlay = () => {
         columns={12}
         sx={{
           position: "absolute",
-          width: "567px",
+          width: "887px",
           bottom: "0",
           left: "25%",
-          top: "100px",
+          top: "167px",
           right: "0",
         }}
       >
