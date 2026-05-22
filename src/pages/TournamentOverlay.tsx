@@ -246,7 +246,7 @@ const TournamentOverlay = () => {
         right: "0",
         backgroundColor: 'rgba(0, 0, 0, 0)',        // backgroundColor: "rgba(0,0,0,0.7)",
         textAlign: "center",
-        width: '1920px', height: '880px'
+        width: '1920px', height: '850px'
       }}
     >
       {currentMatch && <Grid
