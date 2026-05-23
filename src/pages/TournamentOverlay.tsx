@@ -236,6 +236,11 @@ const TournamentOverlay = () => {
   const commingMatches = isDemoMode
     ? demoUpcomingMatches
     : getCommingMatches(matchesList, courtID || "")
+  const latestScore = currentMatch?.currentScore?.[currentMatch.currentScore.length - 1]
+  const homeSetScore = currentMatch?.currentSetScore?.[TeamType.Home] ?? 0
+  const awaySetScore = currentMatch?.currentSetScore?.[TeamType.Away] ?? 0
+  const homeScore = latestScore?.[TeamType.Home] ?? 0
+  const awayScore = latestScore?.[TeamType.Away] ?? 0
 
   return (
     <div
@@ -314,7 +319,7 @@ const TournamentOverlay = () => {
             </Grid>
             <Grid padding={0} margin={0}>
               <Typography fontSize={numberSize} lineHeight={1.2} noWrap>
-                {currentMatch ? currentMatch.currentSetScore[TeamType.Home] : ""}
+                {currentMatch ? homeSetScore : ""}
               </Typography>
             </Grid>
           </Grid>
@@ -334,7 +339,7 @@ const TournamentOverlay = () => {
           >
             <Grid height={1}>
               <Typography fontSize={numberSize}>
-                {currentMatch ? currentMatch.currentScore[currentMatch.currentScore.length - 1][TeamType.Home] : ""}
+                {currentMatch ? homeScore : ""}
 
               </Typography>
             </Grid>
@@ -345,7 +350,7 @@ const TournamentOverlay = () => {
             </Grid>
             <Grid>
               <Typography fontSize={numberSize}>
-                {currentMatch ? currentMatch.currentScore[currentMatch.currentScore.length - 1][TeamType.Away] : ""}
+                {currentMatch ? awayScore : ""}
               </Typography>
             </Grid>
           </Grid>
@@ -370,7 +375,7 @@ const TournamentOverlay = () => {
             </Grid>
             <Grid padding={0} margin={0}>
               <Typography fontSize={numberSize} lineHeight={1.2} noWrap>
-                {currentMatch ? currentMatch.currentSetScore[TeamType.Away] : ""}
+                {currentMatch ? awaySetScore : ""}
               </Typography>
             </Grid>
           </Grid>
