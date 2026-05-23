@@ -154,36 +154,26 @@ const TournamentOverlay = () => {
   const [fetchedMatches, setFetchedMatches] = useState(false);
   const [createdCallbacks, setCreatedCallbacks] = useState(false);
   const [showDemoCurrentMatch, setShowDemoCurrentMatch] = useState(true);
-  // Extract the URL parameters
   const queryParams = new URLSearchParams(location.search);
   const tournamentSlug = queryParams.get("tournamentId") || "default";
   const isDemoMode = tournamentSlug === "demo";
   const courtID = queryParams.get("courtId");
   const noDate = queryParams.get('noDate');
-  const numberSize = 32
-  const nameSize = 12
 
   const dispatch = useDispatch();
   let db = getFirestore(import.meta.env.VITE_FIREBASE_DATABASE)
 
-  // Retrieve the matches from the Redux store
   const matches = useSelector((state: RootState) => state.matches.matches);
   const matchesList = Object.values(matches);
 
-  // Fetch the matches when the component mounts
   if (!isDemoMode && !fetchedMatches && tournamentSlug) {
-    dispatch(fetchMatchesRequest({ tournamentSlug: tournamentSlug, class: null })); // replace with actual tournamentSlug
+    dispatch(fetchMatchesRequest({ tournamentSlug: tournamentSlug, class: null }));
     setFetchedMatches(true)
   }
 
   useEffect(() => {
-    // Save original body background color
     const originalBodyBackgroundColor = document.body.style.backgroundColor;
-
-    // Change body background color to transparent
     document.body.style.backgroundColor = 'transparent';
-
-    // Reset body background color after component unmount
     return () => {
       document.body.style.backgroundColor = originalBodyBackgroundColor;
     };
@@ -193,11 +183,9 @@ const TournamentOverlay = () => {
     if (!isDemoMode) {
       return;
     }
-
     const interval = window.setInterval(() => {
       setShowDemoCurrentMatch((previous) => !previous);
     }, 10_000);
-
     return () => {
       window.clearInterval(interval);
     };
@@ -213,9 +201,7 @@ const TournamentOverlay = () => {
       collectionQuery.push(where("Field.Name", "==", courtID))
     }
     collectionQuery.push(where("HasWinner", "==", false))
-
     const q = query(collection(db, "Tournaments", tournamentSlug, "Matches"), ...collectionQuery);
-
     setCreatedCallbacks(true)
     onSnapshot(q, (querySnapshot) => {
       querySnapshot.docChanges().forEach((change) => {
@@ -249,169 +235,113 @@ const TournamentOverlay = () => {
         top: "0",
         left: "0",
         right: "0",
-        backgroundColor: 'rgba(0, 0, 0, 0)',        // backgroundColor: "rgba(0,0,0,0.7)",
+        backgroundColor: 'rgba(0, 0, 0, 0)',
         textAlign: "center",
         width: '1920px', height: '1080px'
       }}
     >
-      {currentMatch && <Grid
-        container
-        direction="row"
-        justifyContent="center"
-        alignItems="center"
-        padding={0}
-        spacing={0}
-        columns={12}
-        sx={{
+      {/* ── Live scoreboard ── */}
+      {currentMatch && (
+        <div style={{
           position: "absolute",
-          width: 1,
+          width: "100%",
           bottom: "60px",
           left: "0",
           right: "0",
-        }}
-      >
-        <Grid height={60} padding={0} sx={{
-          backgroundColor: "#ffffff", borderColor: "#000000",
-          border: 2,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
         }}>
-          <Grid
-            container
-            spacing={1}
-            height={60}
-            direction="column"
-            justifyContent={"center"}
-            padding={0.5}
-            paddingRight={1}
-            paddingLeft={2}
-            textAlign={"right"}
-          >
-            <Grid
-              padding={0}>
-              <Typography textTransform={"uppercase"} padding={0} fontSize={nameSize} lineHeight={1.4}>
-                {currentMatch ? `${getInitials(currentMatch.homeTeam.player1)}` : ""}
-              </Typography>
-            </Grid>
-            <Grid
-              padding={0}>
-              <Typography textTransform={"uppercase"} padding={0} fontSize={nameSize} lineHeight={1.0}>
-                {currentMatch ? `${getInitials(currentMatch.homeTeam.player2)}` : ""}
-              </Typography>
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid height={60} sx={{
-          borderColor: "#000000",
-          backgroundColor: "#000000",
-          color: "#ffffff",
-        }}>
-          <Grid
-            container
-            // spacing={1}
-            paddingY={0.5}
-            paddingX={2}
-            columns={12}
-            direction={"column"}
-          >
-            <Grid padding={0} margin={0}>
-              <Typography textTransform={"uppercase"} fontSize={8} padding={0} margin={0} noWrap>
-                sets
-              </Typography>
-            </Grid>
-            <Grid padding={0} margin={0}>
-              <Typography fontSize={numberSize} lineHeight={1.2} noWrap>
-                {currentMatch ? homeSetScore : ""}
-              </Typography>
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid height={60} sx={{
-          backgroundColor: "#ffffff",
-          borderColor: "#000000",
-          border: 2,
-        }}>
-          <Grid
-            container
-            height={1}
-            spacing={1}
-            padding={0.5}
+          <div style={{ display: "flex", alignItems: "stretch", fontFamily: "'DM Sans', sans-serif" }}>
 
-          // padding={1}
-          >
-            <Grid height={1}>
-              <Typography fontSize={numberSize}>
-                {currentMatch ? homeScore : ""}
+            {/* Left cap — home team */}
+            <div style={{
+              background: "rgba(0,0,0,0.85)",
+              padding: "10px 24px 10px 28px",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "flex-end",
+              minWidth: "180px",
+              borderRadius: "50px 0 0 50px",
+              borderRight: "2px solid #00A3DA",
+            }}>
+              <span style={{ fontSize: "14px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", color: "#fff", lineHeight: 1.3 }}>
+                {getInitials(currentMatch.homeTeam.player1)}
+              </span>
+              <span style={{ fontSize: "14px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", color: "rgba(255,255,255,0.55)", lineHeight: 1.3 }}>
+                {getInitials(currentMatch.homeTeam.player2)}
+              </span>
+            </div>
 
-              </Typography>
-            </Grid>
-            <Grid>
-              <Typography fontSize={numberSize}>
-                -
-              </Typography>
-            </Grid>
-            <Grid>
-              <Typography fontSize={numberSize}>
-                {currentMatch ? awayScore : ""}
-              </Typography>
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid height={60} sx={{
-          borderColor: "#000000",
-          backgroundColor: "#000000",
-          color: "#ffffff",
-        }}>
-          <Grid
-            container
-            // spacing={1}
-            paddingY={0.5}
-            paddingX={2}
-            columns={12}
-            direction={"column"}
-          >
-            <Grid padding={0} margin={0}>
-              <Typography textTransform={"uppercase"} fontSize={8} padding={0} margin={0} noWrap>
-                sets
-              </Typography>
-            </Grid>
-            <Grid padding={0} margin={0}>
-              <Typography fontSize={numberSize} lineHeight={1.2} noWrap>
-                {currentMatch ? awaySetScore : ""}
-              </Typography>
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid height={60}
-          sx={{
-            backgroundColor: "#ffffff",
-            borderColor: "#000000",
-            border: 2,
-          }}>
-          <Grid
-            container
-            spacing={1}
-            height={60}
-            direction="column"
-            justifyContent={"center"}
-            padding={0.5}
-            paddingRight={2}
-            paddingLeft={1}
-            textAlign={"left"}
-          >
-            <Grid
-              padding={0}>
-              <Typography textTransform={"uppercase"} padding={0} fontSize={nameSize} lineHeight={1.4}>
-                {currentMatch ? `${getInitials(currentMatch.awayTeam.player1)}` : ""}
-              </Typography>
-            </Grid>
-            <Grid
-              padding={0}>
-              <Typography textTransform={"uppercase"} padding={0} fontSize={nameSize} lineHeight={1.0}>
-                {currentMatch ? `${getInitials(currentMatch.awayTeam.player2)}` : ""}
-              </Typography>
-            </Grid>
-          </Grid>
-        </Grid>
-      </Grid>}
+            {/* Home sets */}
+            <div style={{
+              background: "#00A3DA",
+              color: "#fff",
+              padding: "6px 4px",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              minWidth: "56px",
+            }}>
+              <span style={{ fontSize: "9px", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(255,255,255,0.7)", lineHeight: 1 }}>SETS</span>
+              <span style={{ fontSize: "36px", fontWeight: 900, fontFamily: "'DM Mono', monospace", lineHeight: 1.1 }}>{homeSetScore}</span>
+            </div>
+
+            {/* Score */}
+            <div style={{
+              background: "rgba(0,0,0,0.9)",
+              padding: "6px 20px",
+              display: "flex",
+              alignItems: "center",
+              gap: "12px",
+            }}>
+              <span style={{ fontSize: "36px", fontWeight: 900, fontFamily: "'DM Mono', monospace", color: "#fff" }}>{homeScore}</span>
+              <span style={{ fontSize: "22px", color: "#444", fontFamily: "'DM Mono', monospace" }}>–</span>
+              <span style={{ fontSize: "36px", fontWeight: 900, fontFamily: "'DM Mono', monospace", color: "#fff" }}>{awayScore}</span>
+            </div>
+
+            {/* Away sets */}
+            <div style={{
+              background: "#00A3DA",
+              color: "#fff",
+              padding: "6px 16px",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              minWidth: "56px",
+            }}>
+              <span style={{ fontSize: "9px", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(255,255,255,0.7)", lineHeight: 1 }}>SETS</span>
+              <span style={{ fontSize: "36px", fontWeight: 900, fontFamily: "'DM Mono', monospace", lineHeight: 1.1 }}>{awaySetScore}</span>
+            </div>
+
+            {/* Right cap — away team */}
+            <div style={{
+              background: "rgba(0,0,0,0.85)",
+              padding: "10px 28px 10px 24px",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "flex-start",
+              minWidth: "180px",
+              borderRadius: "0 50px 50px 0",
+              borderLeft: "2px solid #00A3DA",
+            }}>
+              <span style={{ fontSize: "14px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", color: "#fff", lineHeight: 1.3 }}>
+                {getInitials(currentMatch.awayTeam.player1)}
+              </span>
+              <span style={{ fontSize: "14px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", color: "rgba(255,255,255,0.55)", lineHeight: 1.3 }}>
+                {getInitials(currentMatch.awayTeam.player2)}
+              </span>
+            </div>
+
+          </div>
+        </div>
+      )}
+
+      {/* ── Upcoming matches ── */}
       {!currentMatch && <Grid
         container
         direction="column"
@@ -441,9 +371,7 @@ const TournamentOverlay = () => {
             spacing={0}
             columns={12}
             height={1}
-          ><Grid padding={0} marginTop={"10px"} sx={{
-            // backgroundColor: "#ddA3DA",
-          }}>
+          ><Grid padding={0} marginTop={"10px"} sx={{}}>
               <Typography color={"#FBF9F9"} fontWeight={"bold"} align="left" textTransform={"uppercase"} margin={0} padding={0} fontSize={"50px"} lineHeight={1.0}>
                 Next matches
               </Typography>
@@ -453,7 +381,6 @@ const TournamentOverlay = () => {
         </Grid>
 
         {commingMatches.filter(e => {
-          // return !e.isFinalized
           return true
         }).map((match) => (
           <Grid key={match.matchId} width={1} height={88} padding={0} sx={{
@@ -464,7 +391,7 @@ const TournamentOverlay = () => {
           </Grid>
         ))}
       </Grid>}
-    </div >
+    </div>
   );
 };
 
@@ -482,7 +409,6 @@ const formattedMatch = (match: AdminMatch): React.JSX.Element => {
       height={1}
     >
       <Grid size={3} padding={0} marginTop={"10px"} sx={{
-        // backgroundColor: "#ddA3DA",
         borderColor: "#000000", borderWidth: "2px",
       }}>
         <Typography color={"#000000"} fontWeight={"bold"} align="left" textTransform={"uppercase"} margin={0} padding={0} fontSize={"24px"} lineHeight={1.0}>
@@ -490,22 +416,14 @@ const formattedMatch = (match: AdminMatch): React.JSX.Element => {
         </Typography>
       </Grid>
       <Grid size={4} padding={0} marginTop={"10px"} sx={{
-        // backgroundColor: "#ddA3DA",
         borderColor: "#000000", borderWidth: "2px",
       }}>
-        <Grid
-          direction="column"
-        >
-          <Grid>
-            {match.homeTeam.player1}
-          </Grid>
-          <Grid>
-            {match.homeTeam.player2}
-          </Grid>
+        <Grid direction="column">
+          <Grid>{match.homeTeam.player1}</Grid>
+          <Grid>{match.homeTeam.player2}</Grid>
         </Grid>
       </Grid>
       <Grid size={1} padding={0} marginTop={"10px"} sx={{
-        // backgroundColor: "#ddA3DA",
         borderColor: "#000000", borderWidth: "2px",
       }}>
         <Typography color={"#000000"} fontWeight={"bold"} align="left" textTransform={"uppercase"} margin={0} padding={0} fontSize={"24px"} lineHeight={1.0}>
@@ -513,23 +431,17 @@ const formattedMatch = (match: AdminMatch): React.JSX.Element => {
         </Typography>
       </Grid>
       <Grid size={4} padding={0} marginTop={"10px"} sx={{
-        // backgroundColor: "#ddA3DA",
         borderColor: "#000000", borderWidth: "2px",
       }}>
-        <Grid
-          direction="column"
-        >
-          <Grid>
-            {match.awayTeam.player1}
-          </Grid>
-          <Grid>
-            {match.awayTeam.player2}
-          </Grid>
+        <Grid direction="column">
+          <Grid>{match.awayTeam.player1}</Grid>
+          <Grid>{match.awayTeam.player2}</Grid>
         </Grid>
       </Grid>
     </Grid>
   );
 };
+
 export const getCurrentMatch = (matches: AdminMatch[], courtID: string): AdminMatch | undefined => {
   return matches.filter(e => !e.hasWinner && !e.isFinalized && e.isStarted && e.arenaName === courtID)[0]
 }
