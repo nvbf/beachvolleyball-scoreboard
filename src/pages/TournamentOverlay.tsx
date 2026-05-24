@@ -306,7 +306,7 @@ const TournamentOverlay = () => {
             <div style={{
               background: "#00A3DA",
               color: "#fff",
-              padding: "6px 16px",
+              padding: "6px 4px",
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",
