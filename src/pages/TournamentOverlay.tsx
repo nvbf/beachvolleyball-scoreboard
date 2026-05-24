@@ -1,6 +1,6 @@
 import { Grid, Typography } from "@mui/material";
-import { QueryFieldFilterConstraint, collection, getFirestore, onSnapshot, query, where } from "firebase/firestore";
-import React, { useEffect, useState } from "react";
+import { QueryFieldFilterConstraint, collection, doc, getDoc, getFirestore, onSnapshot, query, where } from "firebase/firestore";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { RootState } from "../store/store";
@@ -10,6 +10,23 @@ import { TeamType } from "../components/types";
 import { getInitials } from "../util/names";
 import { fetchMatchesRequest, updateMatch } from "../store/tournamentAdmin/reducer";
 import { timestampToStringHours } from "../util/time";
+
+const normalizeColor = (value: unknown): string => {
+  if (typeof value !== "string") {
+    return "";
+  }
+
+  const trimmed = value.trim();
+  if (!trimmed) {
+    return "";
+  }
+
+  if (/^[0-9a-fA-F]{3}([0-9a-fA-F]{3})?$/.test(trimmed)) {
+    return `#${trimmed}`;
+  }
+
+  return trimmed;
+};
 
 const demoCurrentMatch: AdminMatch = {
   matchId: 9001,
@@ -149,11 +166,15 @@ const demoUpcomingMatches: AdminMatch[] = [
   },
 ];
 
-const TournamentOverlay = () => {
+export default function TournamentOverlay() {
   const location = useLocation();
   const [fetchedMatches, setFetchedMatches] = useState(false);
   const [createdCallbacks, setCreatedCallbacks] = useState(false);
   const [showDemoCurrentMatch, setShowDemoCurrentMatch] = useState(true);
+  const [homeColor, setHomeColor] = useState<string>("");
+  const [awayColor, setAwayColor] = useState<string>("");
+  const hadCurrentMatchRef = useRef(false);
+  const currentMatchIdRef = useRef<string>("");
   const queryParams = new URLSearchParams(location.search);
   const tournamentSlug = queryParams.get("tournamentId") || "default";
   const isDemoMode = tournamentSlug === "demo";
@@ -228,6 +249,60 @@ const TournamentOverlay = () => {
   const homeScore = latestScore?.[TeamType.Home] ?? 0
   const awayScore = latestScore?.[TeamType.Away] ?? 0
 
+  useEffect(() => {
+    const matchId = currentMatch?.scoreboardID?.trim();
+
+    if (!currentMatch) {
+      hadCurrentMatchRef.current = false;
+      currentMatchIdRef.current = "";
+      setHomeColor("");
+      setAwayColor("");
+      return;
+    }
+
+    const startedCurrentMatch = !hadCurrentMatchRef.current && currentMatch;
+    const switchedCurrentMatch = currentMatchIdRef.current !== matchId;
+
+    hadCurrentMatchRef.current = true;
+    currentMatchIdRef.current = matchId || "";
+
+    if (!matchId || (!startedCurrentMatch && !switchedCurrentMatch)) {
+      return;
+    }
+
+    const fetchColors = async () => {
+      try {
+        const matchDocRef = doc(db, "Matches", matchId);
+        const matchDoc = await getDoc(matchDocRef);
+
+        if (!matchDoc.exists()) {
+          setHomeColor("");
+          setAwayColor("");
+          return;
+        }
+
+        const data = matchDoc.data();
+        const homeColor = normalizeColor(data.homeColor);
+        const awayColor = normalizeColor(data.awayColor);
+
+        if (homeColor || awayColor) {
+          console.log("Found match colors for %s: home=%s away=%s", matchId, homeColor || "<not set>", awayColor || "<not set>");
+        }
+        console.log("Setting match color state for %s: home=%s away=%s", matchId, homeColor || "<empty>", awayColor || "<empty>");
+        setHomeColor(homeColor);
+        setAwayColor(awayColor);
+      } catch (error) {
+        console.error("Unable to fetch match colors", error);
+        setHomeColor("");
+        setAwayColor("");
+      }
+    };
+
+    fetchColors();
+
+    return () => { };
+  }, [currentMatch, db]);
+
   return (
     <div
       style={{
@@ -264,12 +339,13 @@ const TournamentOverlay = () => {
               alignItems: "flex-end",
               minWidth: "180px",
               borderRadius: "50px 0 0 50px",
-              borderRight: "2px solid #00A3DA",
+              borderRight: `2px solid ${homeColor}`,
+              borderLeft: `22px solid ${homeColor}`,
             }}>
               <span style={{ fontSize: "14px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", color: "#fff", lineHeight: 1.3 }}>
                 {getInitials(currentMatch.homeTeam.player1)}
               </span>
-              <span style={{ fontSize: "14px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", color: "rgba(255,255,255,0.55)", lineHeight: 1.3 }}>
+              <span style={{ fontSize: "14px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", color: "#fff", lineHeight: 1.3 }}>
                 {getInitials(currentMatch.homeTeam.player2)}
               </span>
             </div>
@@ -285,7 +361,7 @@ const TournamentOverlay = () => {
               alignItems: "center",
               minWidth: "56px",
             }}>
-              <span style={{ fontSize: "9px", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(255,255,255,0.7)", lineHeight: 1 }}>SETS</span>
+              <span style={{ fontSize: "9px", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "#fff", lineHeight: 1 }}>SETS</span>
               <span style={{ fontSize: "36px", fontWeight: 900, fontFamily: "'DM Mono', monospace", lineHeight: 1.1 }}>{homeSetScore}</span>
             </div>
 
@@ -298,7 +374,7 @@ const TournamentOverlay = () => {
               gap: "12px",
             }}>
               <span style={{ fontSize: "36px", fontWeight: 900, fontFamily: "'DM Mono', monospace", color: "#fff" }}>{homeScore}</span>
-              <span style={{ fontSize: "22px", color: "#444", fontFamily: "'DM Mono', monospace" }}>–</span>
+              <span style={{ fontSize: "22px", fontWeight: 900, color: "#fff", fontFamily: "'DM Mono', monospace" }}>–</span>
               <span style={{ fontSize: "36px", fontWeight: 900, fontFamily: "'DM Mono', monospace", color: "#fff" }}>{awayScore}</span>
             </div>
 
@@ -313,7 +389,7 @@ const TournamentOverlay = () => {
               alignItems: "center",
               minWidth: "56px",
             }}>
-              <span style={{ fontSize: "9px", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(255,255,255,0.7)", lineHeight: 1 }}>SETS</span>
+              <span style={{ fontSize: "9px", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "#fff", lineHeight: 1 }}>SETS</span>
               <span style={{ fontSize: "36px", fontWeight: 900, fontFamily: "'DM Mono', monospace", lineHeight: 1.1 }}>{awaySetScore}</span>
             </div>
 
@@ -327,12 +403,13 @@ const TournamentOverlay = () => {
               alignItems: "flex-start",
               minWidth: "180px",
               borderRadius: "0 50px 50px 0",
-              borderLeft: "2px solid #00A3DA",
+              borderLeft: `2px solid ${awayColor}`,
+              borderRight: `22px solid ${awayColor}`,
             }}>
               <span style={{ fontSize: "14px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", color: "#fff", lineHeight: 1.3 }}>
                 {getInitials(currentMatch.awayTeam.player1)}
               </span>
-              <span style={{ fontSize: "14px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", color: "rgba(255,255,255,0.55)", lineHeight: 1.3 }}>
+              <span style={{ fontSize: "14px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", color: "#fff", lineHeight: 1.3 }}>
                 {getInitials(currentMatch.awayTeam.player2)}
               </span>
             </div>
@@ -393,7 +470,7 @@ const TournamentOverlay = () => {
       </Grid>}
     </div>
   );
-};
+}
 
 const formattedMatch = (match: AdminMatch): React.JSX.Element => {
   const formattedTime = timestampToStringHours(match.startTime)
@@ -452,5 +529,3 @@ export const getCommingMatches = (matches: AdminMatch[], courtID: string): Admin
     (a, b) => (a.startTime - b.startTime)
   ).slice(0, 5)
 }
-
-export default TournamentOverlay;
