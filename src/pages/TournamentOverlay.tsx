@@ -520,12 +520,12 @@ const formattedMatch = (match: AdminMatch): React.JSX.Element => {
 };
 
 export const getCurrentMatch = (matches: AdminMatch[], courtID: string): AdminMatch | undefined => {
-  return matches.filter(e => !e.hasWinner && !e.isFinalized && e.isStarted && e.arenaName === courtID)[0]
+  return matches.filter(e => !e.hasWinner && !e.isFinalized && e.isStarted && e.arenaName.toLowerCase() === courtID.toLowerCase())[0]
 }
 
 export const getCommingMatches = (matches: AdminMatch[], courtID: string): AdminMatch[] => {
   console.log(matches)
-  return matches.filter(e => !e.hasWinner && !e.isFinalized && !e.isStarted && e.arenaName === courtID).sort(
+  return matches.filter(e => !e.hasWinner && !e.isFinalized && !e.isStarted && e.arenaName.toLowerCase() === courtID.toLowerCase()).sort(
     (a, b) => (a.startTime - b.startTime)
   ).slice(0, 5)
 }
