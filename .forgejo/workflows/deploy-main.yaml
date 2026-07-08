@@ -1,0 +1,50 @@
+name: Deploy to k3s (main)
+
+on:
+  push:
+    branches: [main]
+
+concurrency:
+  group: deploy-main
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      IMAGE: forgejo.sindres.no/nvbf/beachvolleyball-scoreboard
+    steps:
+      - name: Checkout
+        uses: https://data.forgejo.org/actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: recursive
+
+      - name: Write registry auth for Kaniko
+        run: |
+          mkdir -p "${{ github.workspace }}/.docker-config"
+          AUTH=$(printf '%s:%s' "${{ secrets.REGISTRY_USER }}" "${{ secrets.REGISTRY_TOKEN }}" | base64 -w0)
+          printf '{"auths":{"forgejo.sindres.no":{"auth":"%s"}}}' "$AUTH" \
+            > "${{ github.workspace }}/.docker-config/config.json"
+
+      # Kaniko builds without a Docker daemon/socket in the job container --
+      # this runner serves ~15 other repos, so we deliberately avoid needing
+      # privileged/docker-socket-mounted job containers for this pipeline.
+      - name: Build and push image (Kaniko)
+        uses: docker://gcr.io/kaniko-project/executor:v1.23.2
+        env:
+          DOCKER_CONFIG: ${{ github.workspace }}/.docker-config
+        with:
+          args: >-
+            --context=dir://${{ github.workspace }}
+            --dockerfile=${{ github.workspace }}/Dockerfile
+            --destination=${{ env.IMAGE }}:main-${{ github.sha }}
+            --destination=${{ env.IMAGE }}:main
+
+      - name: Trigger k3s deploy
+        run: node .forgejo/scripts/notify-k3s-deploy.mjs
+        env:
+          K3S_DEPLOY_WEBHOOK_URL: https://forgejo.sindres.no/hooks/k3s-deploy
+          K3S_DEPLOY_WEBHOOK_SECRET: ${{ secrets.K3S_DEPLOY_WEBHOOK_SECRET }}
+          REPO: nvbf/beachvolleyball-scoreboard
+          IMAGE: ${{ env.IMAGE }}:main-${{ github.sha }}
