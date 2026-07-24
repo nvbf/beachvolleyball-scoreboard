@@ -58,6 +58,35 @@ function Match() {
     return () => clearInterval(intervalId);
   }, [match]);
 
+  useEffect(() => {
+    if (match.finished) return;
+
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = '';
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [match.finished]);
+
+  useEffect(() => {
+    if (match.finished) return;
+
+    // Push a sentinel history entry so a back navigation triggers popstate
+    // instead of immediately leaving the match.
+    window.history.pushState(null, '', window.location.href);
+
+    const handlePopState = () => {
+      if (window.confirm('Leave the match? You will need to reopen it to continue scoring.')) {
+        window.history.back();
+      } else {
+        window.history.pushState(null, '', window.location.href);
+      }
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [match.finished]);
+
   if (!match.id && params.matchId) {
     console.log('set match id : %s', params.matchId)
     dispatch(setId(params.matchId))
