@@ -48,3 +48,22 @@ To populate the Firebase dev database with a demo tournament containing 4 matche
    ```
 
 The script is idempotent - running it again on the same day will add 4 more matches to the existing tournament. See [scripts/POPULATE_DEMO_TOURNAMENT.md](scripts/POPULATE_DEMO_TOURNAMENT.md) for more details.
+
+## Deployment
+
+Deployed via [Dokku](https://dokku.com/) at **https://scoreboard.sindres.no**.
+
+- **Dokku app:** `beachvolleyball-scoreboard`
+- **Nginx proxy port:** 5008
+- **Build:** nodejs buildpack runs `npm run build`, nginx buildpack serves `dist/`
+- **Auto-deploy:** Pushes to `main` trigger deploy via Forgejo webhook
+
+To manually redeploy:
+```bash
+sudo dokku git:sync beachvolleyball-scoreboard https://forgejo.sindres.no/nvbf/beachvolleyball-scoreboard.git main --build
+```
+
+View logs:
+```bash
+dokku logs beachvolleyball-scoreboard -t
+```
