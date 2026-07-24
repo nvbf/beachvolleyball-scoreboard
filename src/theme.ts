@@ -73,6 +73,10 @@ export const colors = {
     reportedStatusBg: "#f5edbc",
     reportedStatusText: "#6a5800",
     reportedDot: "#c8a800",
+
+    // Technical timeout: elapsed-time escalation
+    timeoutWarning: "#c8a800", // time's up, players should be returning
+    timeoutOverdue: "#c0392b", // 2nd referee should already have whistled
 } as const;
 
 // ─── Theme ───────────────────────────────────────────────────────────────────
