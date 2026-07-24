@@ -4,9 +4,10 @@ import moment from "moment";
 
 interface Props {
   startTime: number;
+  onTick?: (elapsedSeconds: number) => void;
 }
 
-const TimeElapsed: React.FC<Props> = ({ startTime }) => {
+const TimeElapsed: React.FC<Props> = ({ startTime, onTick }) => {
   const [time, setTime] = useState<string>("00:00");
 
   useEffect(() => {
@@ -33,10 +34,11 @@ const TimeElapsed: React.FC<Props> = ({ startTime }) => {
       }
 
       setTime(formattedTime);
+      onTick?.(elapsed.asSeconds());
     }, 1000);
 
     return () => clearInterval(intervalId);
-  }, [startTime]);
+  }, [startTime, onTick]);
 
   return (
     <div>
