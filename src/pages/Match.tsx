@@ -58,6 +58,32 @@ function Match() {
     return () => clearInterval(intervalId);
   }, [match]);
 
+  useEffect(() => {
+    if (!('wakeLock' in navigator)) return;
+    let sentinel: WakeLockSentinel | null = null;
+
+    const requestLock = async () => {
+      try {
+        sentinel = await navigator.wakeLock.request('screen');
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
+    requestLock();
+
+    // The wake lock is auto-released when the tab is hidden, so
+    // re-acquire it once the referee comes back to the app.
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') requestLock();
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      sentinel?.release();
+    };
+  }, []);
+
   if (!match.id && params.matchId) {
     console.log('set match id : %s', params.matchId)
     dispatch(setId(params.matchId))
