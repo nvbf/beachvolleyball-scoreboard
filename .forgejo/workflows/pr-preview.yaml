@@ -60,7 +60,7 @@ jobs:
           IMAGE: ${{ env.IMAGE }}:pr-${{ env.PR }}
 
       - name: Comment preview URL on PR
-        if: ${{ github.event.action == 'opened' || github.event.action == 'reopened' }}
+        if: ${{ github.event.action != 'closed' }}
         run: node .forgejo/scripts/comment-preview-url.mjs
         env:
           FORGEJO_API_TOKEN: ${{ secrets.FORGEJO_API_TOKEN }}
