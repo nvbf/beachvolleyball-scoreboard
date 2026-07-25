@@ -1,0 +1,170 @@
+<html lang="en">
+
+  <head>
+    <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main Scoreboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      window.FontAwesomeConfig = {
+        autoReplaceSvg: 'nest'
+      };
+    </script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"
+      crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap"
+      rel="stylesheet">
+    <script>
+      tailwind.config = {
+        theme:
+        {
+          extend:
+          {
+            fontFamily:
+            {
+              sans: ['Inter', 'sans-serif'],
+            },
+            colors:
+            {
+              brand:
+              {
+                sand: '#E6DECE',
+                blue: '#1A6BBA',
+                red: '#E13B4D',
+                dark: '#1C1C1E',
+                gray: '#8E8E93',
+                light: '#F2ECE1'
+              }
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      ::-webkit-scrollbar
+      {
+        display: none;
+      }
+
+      body
+      {
+        -webkit-tap-highlight-color: transparent;
+      }
+    </style>
+  </head>
+
+  <body
+    class="bg-brand-sand text-brand-dark min-h-[840px] max-w-[375px] mx-auto relative antialiased selection:bg-brand-blue selection:text-white pb-24">
+    <!-- Header / Top Bar -->
+    <header id="header"
+      class="pt-10 pb-4 px-4 sticky top-0 bg-brand-sand z-50 flex items-center justify-between">
+      <button
+        class="w-12 h-12 flex items-center justify-center rounded-xl border-2 border-brand-dark bg-transparent text-brand-dark active:bg-black/5 transition-colors"><i
+          class="fa-solid fa-undo text-xl"></i></button>
+      <div class="flex flex-col items-center">
+        <div class="text-4xl font-bold tracking-tighter tabular-nums">00:42
+        </div>
+        <div class="flex gap-2 mt-1"></div>
+      </div><button
+        class="w-12 h-12 flex items-center justify-center rounded-xl border-2 border-brand-dark bg-transparent text-brand-dark active:bg-black/5 transition-colors"><i
+          class="fa-solid fa-ellipsis-vertical text-xl"></i></button>
+    </header>
+    <main id="main-content" class="px-4 space-y-6">
+      <!-- Score Display -->
+      <section id="score-display"
+        class="flex justify-between items-center px-2">
+        <!-- Blue Team Score Info -->
+        <div class="flex items-center gap-3">
+          <div
+            class="w-10 h-12 border-2 border-brand-blue rounded-lg flex items-center justify-center text-xl font-bold text-brand-blue bg-white">
+            0
+          </div>
+          <div
+            class="w-20 h-24 border-4 border-brand-blue rounded-xl flex items-center justify-center text-5xl font-bold text-brand-dark bg-white shadow-sm">
+            2
+          </div>
+        </div><!-- Red Team Score Info -->
+        <div class="flex items-center gap-3">
+          <div
+            class="w-20 h-24 border-4 border-brand-red rounded-xl flex items-center justify-center text-5xl font-bold text-brand-dark bg-white shadow-sm">
+            1
+          </div>
+          <div
+            class="w-10 h-12 border-2 border-brand-red rounded-lg flex items-center justify-center text-xl font-bold text-brand-red bg-white">
+            0
+          </div>
+        </div>
+      </section><!-- Player Names -->
+      <section id="player-names" class="flex justify-between items-center px-4">
+        <div class="text-center">
+          <div
+            class="font-bold text-lg underline decoration-2 underline-offset-4">
+            Alice</div>
+          <div class="font-medium text-brand-dark/80">Bob</div>
+        </div>
+        <div class="text-xl text-brand-dark"><i
+            class="fa-solid fa-chevron-left"></i></div>
+        <div class="text-center">
+          <div class="font-medium text-brand-dark/80">Charlie</div>
+          <div class="font-medium text-brand-dark/80">Dave</div>
+        </div>
+      </section><!-- Main Scoring Buttons -->
+      <section id="scoring-controls" class="grid grid-cols-2 gap-4"><button
+          class="h-32 bg-brand-blue rounded-2xl shadow-md active:scale-95 transition-transform flex items-center justify-center"><i
+            class="fa-solid fa-plus text-6xl text-white"></i></button><button
+          class="h-32 bg-brand-red rounded-2xl shadow-md active:scale-95 transition-transform flex items-center justify-center"><i
+            class="fa-solid fa-plus text-6xl text-brand-dark"></i></button>
+      </section><!-- Timeouts -->
+      <section id="timeout-controls" class="grid grid-cols-2 gap-4"><button
+          class="py-4 bg-brand-dark/20 rounded-xl font-bold text-white tracking-wider active:bg-brand-dark/30 transition-colors uppercase">
+          Timeout
+        </button><button
+          class="py-4 bg-brand-red rounded-xl font-bold text-brand-dark tracking-wider active:bg-brand-red/90 transition-colors uppercase shadow-sm">
+          Timeout
+        </button></section><!-- Quick Actions -->
+      <!-- Event Log -->
+      <section id="event-log" class="bg-white/50 rounded-2xl p-4 mt-6">
+        <div
+          class="grid grid-cols-4 text-xs font-bold text-brand-dark/60 border-b border-black/10 pb-2 mb-2">
+          <div>Local</div>
+          <div>Since Start</div>
+          <div class="col-span-2">Event</div>
+        </div>
+        <div class="space-y-3 text-sm font-medium">
+          <div class="grid grid-cols-4 items-center">
+            <div class="text-brand-dark/70">21:30:26</div>
+            <div class="text-brand-dark/70">00:00:01</div>
+            <div class="col-span-2 flex items-center gap-2"><span
+                class="w-2 h-2 rounded-full bg-brand-red"></span>
+              Timeout Red
+            </div>
+          </div>
+          <div class="grid grid-cols-4 items-center">
+            <div class="text-brand-dark/70">21:30:25</div>
+            <div class="text-brand-dark/70">00:00:01</div>
+            <div class="col-span-2 flex items-center gap-2"><span
+                class="w-2 h-2 rounded-full bg-brand-red"></span>
+              Score Red (2-1)
+            </div>
+          </div>
+          <div class="grid grid-cols-4 items-center">
+            <div class="text-brand-dark/70">21:30:20</div>
+            <div class="text-brand-dark/70">00:00:00</div>
+            <div class="col-span-2 flex items-center gap-2"><span
+                class="w-2 h-2 rounded-full bg-brand-blue"></span>
+              Score Blue (2-0)
+            </div>
+          </div>
+        </div><button
+          class="w-full mt-4 py-3 bg-brand-blue text-white font-bold rounded-xl active:bg-brand-blue/90">
+          SHOW MORE
+        </button>
+      </section>
+    </main>
+  </body>
+
+</html>

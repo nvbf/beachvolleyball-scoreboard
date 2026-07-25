@@ -293,7 +293,7 @@ function parseTeamString(team: string): string {
         const existing = existingMatches.find(e => e.matchId === match.matchId);
         console.log('Rendering:', match, 'Existing:', existing);
         return (
-          <Grid item key={index} xs={12} margin={0}>
+          <Grid size={12} key={index} margin={0}>
             <UpdateView newMatch={match} existingMatch={existing || null} />
           </Grid>
         );
@@ -317,7 +317,7 @@ function parseTeamString(team: string): string {
       alignItems="center"
       marginTop={1}
     >
-      <Grid item xs={12}>
+      <Grid size={12}>
         {renderMatches(adminMatches, matchesList )}
       </Grid>
     </Grid>

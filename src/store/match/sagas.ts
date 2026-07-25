@@ -9,6 +9,8 @@ import { RootState } from '../store';
 import { matchState } from '../types';
 import { getAuth } from 'firebase/auth';
 
+const isDemoId = (id: string): boolean => id.startsWith('demo_');
+
 /*
  * Sagas intercept an action, and then dispatches API calls. When the API call resolves, it either dispatches a success action, or an error action.
  * The sagas below are mostly non-mutative. They call the API with the requested action, and then refetches the integration list after receiving a  succcess,
@@ -49,9 +51,10 @@ export function* pushNewEvent(action: PayloadAction<AddEventPayload>): Generator
     yield put(evaluateEvents())
     console.log("Evaluated events");
 
-    yield call(addEventToMatchToFirestore, action.payload.id, action.payload.event)
-
-    yield put(publishScores())
+    if (!isDemoId(action.payload.id)) {
+      yield call(addEventToMatchToFirestore, action.payload.id, action.payload.event)
+      yield put(publishScores())
+    }
 
   } catch (error) {
     console.log(error)
@@ -64,6 +67,7 @@ export function* publishScoresToTournaments(action: PayloadAction): Generator<Ca
 
   try {
     const matchState: matchState = yield select(getSomePartOfState);
+    if (isDemoId(matchState.id)) return;
     console.log("publishScoresToTournaments events %s", matchState.theCurrentSets);
     console.log((matchState.currentScore[TeamType.Home] + " - " + matchState.currentScore[TeamType.Home]))
     yield call(
@@ -101,6 +105,7 @@ export function* authorizeFirestore(action: PayloadAction): Generator<CallEffect
 export function* getOldEvents(action: PayloadAction<string>): Generator<CallEffect | SelectEffect | PutEffect, void, Event[]> {
 
   try {
+    if (isDemoId(action.payload)) return;
     console.log("check events");
 
     // add a new document with a generated id
@@ -117,6 +122,7 @@ export function* getOldEvents(action: PayloadAction<string>): Generator<CallEffe
 export function* getOldMatch(action: PayloadAction<string>): Generator<CallEffect | SelectEffect | PutEffect, void, Match> {
 
   try {
+    if (isDemoId(action.payload)) return;
     console.log("check events with id %s", action.payload);
 
     // add a new document with a generated id
@@ -139,7 +145,9 @@ export function* undoGivenEvent(action: PayloadAction<AddEventPayload>): Generat
     yield put(evaluateEvents())
     console.log("Evaluated events");
 
-    yield call(addEventToMatchToFirestore, action.payload.id, action.payload.event)
+    if (!isDemoId(action.payload.id)) {
+      yield call(addEventToMatchToFirestore, action.payload.id, action.payload.event)
+    }
 
   } catch (error) {
     console.log("Error when undoing event");
@@ -164,6 +172,7 @@ export function* finalizeEndedMatch(action: PayloadAction): Generator<CallEffect
 
   try {
     const matchState: matchState = yield select(getSomePartOfState);
+    if (isDemoId(matchState.id)) return;
     console.log("To finalize");
 
     yield call(setMatchFinalized, matchState.tournamentId, matchState.matchId)

@@ -18,6 +18,8 @@ import MatchButtons from '../components/scoreboard/matchButtons';
 import MatchFinalized from '../components/scoreboard/matchFinalized';
 import EventList from '../components/eventList';
 import { getLastValidEvent } from '../components/eventFunctions';
+import { trackAreaVisit } from '../analytics/umami';
+import './matchDesign.css';
 
 
 function Match() {
@@ -27,6 +29,10 @@ function Match() {
   const [checkedDb, setCheckedDb] = useState(false);
 
   const params = useParams();
+
+  useEffect(() => {
+    trackAreaVisit('scoreboard', params.matchId ? { matchId: params.matchId } : undefined);
+  }, [params.matchId]);
 
   useEffect(() => {
     // Define your async function
@@ -64,7 +70,7 @@ function Match() {
   }
 
   return (
-    <main>
+    <main className="match-screen">
       <ScoreboardHeader />
 
       {getActiveDisplay(match) === DisplayType.SelectServeorder && <ServeOrder />}

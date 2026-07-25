@@ -1,0 +1,20 @@
+{
+    "projects": {
+        "default": "osvb-scoreboard"
+    },
+    "targets": {
+        "osvb-scoreboard": {
+            "hosting": {
+                "dev": [
+                    "osvb-scoreboard-dev"
+                ],
+                "beta": [
+                    "osvb-scoreboard-beta"
+                ],
+                "prod": [
+                    "osvb-scoreboard"
+                ]
+            }
+        }
+    }
+}

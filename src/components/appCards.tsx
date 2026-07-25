@@ -26,7 +26,7 @@ interface AppCardsProps {
 
 export function AppCards({ title, subHeader, path, iconName, size, deactivated = false }: AppCardsProps) {
     return (
-        <Grid xs={12} md={6} item>
+        <Grid size={{ xs: 12, md: 6 }}>
             <Card sx={{ maxWidth: 820, display: 'flex', justifyContent: 'center' }}>
                 <CardActionArea href={!deactivated ? path : ""}>
                     <CardContent sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>

@@ -10,6 +10,7 @@ import TournamentOverlay from "./pages/TournamentOverlay";
 import TournamentView from "./pages/TournamentView";
 import GrantAdminAccess from "./pages/GrantAdminAccess";
 import ClaimAccess from "./pages/ClaimAccess";
+import DemoMatch from "./pages/DemoMatch";
 
 const App: React.FC = () => {
   return (
@@ -26,6 +27,7 @@ const App: React.FC = () => {
         <Route path="/tournamentoverlay" element={<TournamentOverlay />} />
         <Route path="/get-access/:accessCode" element={<GrantAdminAccess />} />
         <Route path="/claim-access/:tournamentSlug" element={<ClaimAccess />} />
+        <Route path="/demo" element={<DemoMatch />} />
       </Routes>
     </BrowserRouter>
   );

@@ -95,15 +95,15 @@ const ClaimAccess = () => {
     <div>
       <AppBarMain />
       <Grid container spacing={5} justifyContent="center" sx={{ marginTop: '50px' }}>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Typography variant="h5">Request access for {params.tournamentSlug}</Typography>
         </Grid>
         {error && (
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Alert severity="error">{error}</Alert>
           </Grid>
         )}
-        <Grid item md={6} xs={12}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <TextField
             fullWidth
             label="Email"
@@ -114,7 +114,7 @@ const ClaimAccess = () => {
             onChange={(e) => handleEmail(e.target.value)}
           />
         </Grid>
-        <Grid item md={6} xs={12}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <TextField
             fullWidth
             label="TournamentID"
@@ -124,7 +124,7 @@ const ClaimAccess = () => {
             onChange={(e) => handleTournamentId(e.target.value)}
           />
         </Grid>
-        <Grid item md={6} xs={12}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <Button
             fullWidth
             variant="contained"

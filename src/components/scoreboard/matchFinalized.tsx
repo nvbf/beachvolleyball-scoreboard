@@ -7,6 +7,7 @@ import { addEvent } from "../../store/match/reducer";
 import { finalizeMatchEvent } from "../eventFunctions";
 import { getInitials } from "../../util/names";
 import { getPlayer } from "../scoreboard";
+import { ScoreBox } from "./scoreBox";
 
 
 interface TeamColorPickerProps {
@@ -27,13 +28,13 @@ export function MatchFinalized() {
             marginTop={1}
             sx={{ alignSelf: 'center', textAlign: 'center' }}
         >
-            <Grid item xs={12}>
+            <Grid size={12}>
                 <Grid container
                     columnSpacing={2}
                     columns={12}
                     sx={{ alignSelf: 'center', textAlign: 'center' }}
                 >
-                    <Grid item xs={6} sx={{ textAlign: 'right' }}>
+                    <Grid size={6} sx={{ textAlign: 'right' }}>
                         <Typography sx={{
                             fontSize: 18,
                             fontWeight: (match.currentSetScore[TeamType.Home] || 0) === 2 ? 'bold' : ""
@@ -41,7 +42,7 @@ export function MatchFinalized() {
                         }}> {getInitials(getPlayer(match, 1, TeamType.Home))} / {getInitials(getPlayer(match, 2, TeamType.Home))}</Typography>
                     </Grid>
 
-                    <Grid item xs={6} sx={{ textAlign: 'left' }}>
+                    <Grid size={6} sx={{ textAlign: 'left' }}>
                         <Typography sx={{
                             fontSize: 18,
                             fontWeight: (match.currentSetScore[TeamType.Away] || 0) === 2 ? 'bold' : ""
@@ -50,14 +51,14 @@ export function MatchFinalized() {
                     </Grid>
                 </Grid>
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={12}>
                 <Grid container
                     columnSpacing={2}
                     columns={12}
                     sx={{ alignSelf: 'center', textAlign: 'center' }}
                 >
 
-                    <Grid item xs={12} sx={{ textAlign: 'center' }}>
+                    <Grid size={12} sx={{ textAlign: 'center' }}>
                         <Typography sx={{
                             fontSize: 18,
                             fontWeight: (match.currentSetScore[TeamType.Away] || 0) === 2 ? 'bold' : ""
@@ -66,61 +67,27 @@ export function MatchFinalized() {
                     </Grid>
                 </Grid>
             </Grid>
-            <Grid item xs={12} >
+            <Grid size={12}>
                 <Grid container
                     spacing={2}
                     columns={12}
                     justifyContent="center"
                 // alignItems="flex-end"
                 >
-                    <Grid item >
-                        <Typography align='right' sx={{
-                            border: 6, borderRadius: '12px', borderColor: match.teamColor[TeamType.Home],
-                            fontSize: "3.5rem", variant: 'button', lineHeight: 1, paddingTop: 3,
-                            paddingX: 1, minWidth: 50
-                        }}>
-                            {match.currentSetScore[TeamType.Home]}
-                        </Typography>
-
-                    </Grid>
-                    <Grid item>
-                        <Typography align='left' sx={{
-                            border: 6, borderRadius: '12px', borderColor: match.teamColor[TeamType.Away],
-                            fontSize: "3.5rem", variant: 'button', lineHeight: 1, paddingTop: 3,
-                            paddingX: 1, minWidth: 50
-                        }}>
-                            {match.currentSetScore[TeamType.Away]}
-                        </Typography>
-                    </Grid>
+                    <ScoreBox score={match.currentSetScore[TeamType.Home]} color={match.teamColor[TeamType.Home]} size="large" />
+                    <ScoreBox score={match.currentSetScore[TeamType.Away]} color={match.teamColor[TeamType.Away]} size="large" />
                 </Grid>
             </Grid>
             {match.theCurrentSets.map((score, index) => (
-                <Grid item xs={12}  key={index}>
+                <Grid size={12} key={index}>
                     <Grid container
                         spacing={2}
                         columns={12}
                         justifyContent="center"
                         alignItems="flex-end"
                     >
-                        <Grid item>
-                            <Typography align='center' sx={{
-                                border: 4, borderRadius: '12px', borderColor: match.teamColor[TeamType.Home],
-                                fontSize: "2rem", variant: 'button', lineHeight: 1, paddingTop: 1,
-                                paddingX: 1
-                            }}>
-                                {score[TeamType.Home]}
-                            </Typography>
-                        </Grid>
-                        <Grid item>
-                            <Typography align='center' sx={{
-                                border: 4, borderRadius: '12px', borderColor: match.teamColor[TeamType.Away],
-                                fontSize: "2rem", variant: 'button', lineHeight: 1, paddingTop: 1,
-                                paddingX: 1
-                            }}>
-                                {score[TeamType.Away]}
-                            </Typography>
-                        </Grid>
-
+                        <ScoreBox score={score[TeamType.Home]} color={match.teamColor[TeamType.Home]} size="small" />
+                        <ScoreBox score={score[TeamType.Away]} color={match.teamColor[TeamType.Away]} size="small" />
                     </Grid>
                 </Grid>
             ))}

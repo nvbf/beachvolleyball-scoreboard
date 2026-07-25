@@ -1,0 +1,109 @@
+{
+    "hosting": [
+        {
+            "target": "dev",
+            "public": "dist",
+            "ignore": [
+                "firebase.json",
+                "**/.*",
+                "**/node_modules/**"
+            ],
+            "rewrites": [
+                {
+                    "source": "**",
+                    "destination": "/index.html"
+                }
+            ],
+            "headers": [
+                {
+                    "source": "**/*.@(js|css|woff2)",
+                    "headers": [
+                        {
+                            "key": "Cache-Control",
+                            "value": "max-age=31536000,immutable"
+                        }
+                    ]
+                },
+                {
+                    "source": "**",
+                    "headers": [
+                        {
+                            "key": "X-Content-Type-Options",
+                            "value": "nosniff"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "target": "beta",
+            "public": "dist",
+            "ignore": [
+                "firebase.json",
+                "**/.*",
+                "**/node_modules/**"
+            ],
+            "rewrites": [
+                {
+                    "source": "**",
+                    "destination": "/index.html"
+                }
+            ],
+            "headers": [
+                {
+                    "source": "**/*.@(js|css|woff2)",
+                    "headers": [
+                        {
+                            "key": "Cache-Control",
+                            "value": "max-age=31536000,immutable"
+                        }
+                    ]
+                },
+                {
+                    "source": "**",
+                    "headers": [
+                        {
+                            "key": "X-Content-Type-Options",
+                            "value": "nosniff"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "target": "prod",
+            "public": "dist",
+            "ignore": [
+                "firebase.json",
+                "**/.*",
+                "**/node_modules/**"
+            ],
+            "rewrites": [
+                {
+                    "source": "**",
+                    "destination": "/index.html"
+                }
+            ],
+            "headers": [
+                {
+                    "source": "**/*.@(js|css|woff2)",
+                    "headers": [
+                        {
+                            "key": "Cache-Control",
+                            "value": "max-age=31536000,immutable"
+                        }
+                    ]
+                },
+                {
+                    "source": "**",
+                    "headers": [
+                        {
+                            "key": "X-Content-Type-Options",
+                            "value": "nosniff"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
