@@ -74,10 +74,22 @@ export const colors = {
     reportedStatusText: "#6a5800",
     reportedDot: "#c8a800",
 
-    // Technical timeout: elapsed-time escalation
+    // Timeouts (team + technical): elapsed-time escalation
     timeoutWarning: "#c8a800", // time's up, players should be returning
     timeoutOverdue: "#c0392b", // 2nd referee should already have whistled
 } as const;
+
+// FIVB referee procedure: 30s is the timeout itself, the 2nd referee
+// should whistle players back onto the court at 45s. Applies to both
+// team timeouts and technical timeouts.
+export const TIMEOUT_WARNING_SECONDS = 30;
+export const TIMEOUT_OVERDUE_SECONDS = 45;
+
+export function getTimeoutTimerColor(elapsedSeconds: number): string {
+    if (elapsedSeconds >= TIMEOUT_OVERDUE_SECONDS) return colors.timeoutOverdue;
+    if (elapsedSeconds >= TIMEOUT_WARNING_SECONDS) return colors.timeoutWarning;
+    return colors.textPrimary;
+}
 
 // ─── Theme ───────────────────────────────────────────────────────────────────
 
