@@ -4,16 +4,11 @@ import { useAppDispatch, useAppSelector } from '../../store/store';
 import { addEvent } from "../../store/match/reducer";
 import { setClearMessageEvent } from "../eventFunctions";
 import TimeElapsed from "../timeElaped";
-import { colors } from "../../theme";
+import { colors, getTimeoutTimerColor } from "../../theme";
 
 interface TechnicalTimeoutProps {
     startTime: number;
 }
-
-// FIVB referee procedure: 30s is the timeout itself, the 2nd referee
-// should whistle players back onto the court at 45s.
-const TECHNICAL_TIMEOUT_WARNING_SECONDS = 30;
-const TECHNICAL_TIMEOUT_OVERDUE_SECONDS = 45;
 
 export function TechnicalTimeout({ startTime }: TechnicalTimeoutProps) {
     const dispatch = useAppDispatch();
@@ -24,11 +19,7 @@ export function TechnicalTimeout({ startTime }: TechnicalTimeoutProps) {
         dispatch(addEvent({ matchId: match.matchId, id: match.id, event: setClearMessageEvent(match.authUserId) }));
     }
 
-    const timerColor = elapsedSeconds >= TECHNICAL_TIMEOUT_OVERDUE_SECONDS
-        ? colors.timeoutOverdue
-        : elapsedSeconds >= TECHNICAL_TIMEOUT_WARNING_SECONDS
-            ? colors.timeoutWarning
-            : colors.textPrimary;
+    const timerColor = getTimeoutTimerColor(elapsedSeconds);
 
     return (
         <Box sx={{ backgroundColor: colors.pageBg, minHeight: "100vh", px: { xs: 2, sm: 4 }, py: 4 }}>

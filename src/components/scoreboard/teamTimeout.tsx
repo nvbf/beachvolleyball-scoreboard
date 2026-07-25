@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { EventType, TeamType } from "../types";
 import { Box, Button, Typography } from "@mui/material";
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import { addEvent } from "../../store/match/reducer";
 import TimeElapsed from "../timeElaped";
 import { setClearMessageEvent } from "../eventFunctions";
-import { colors } from "../../theme";
+import { colors, getTimeoutTimerColor } from "../../theme";
 
 interface TeamTimeoutProps {
     team: TeamType;
@@ -14,12 +14,14 @@ interface TeamTimeoutProps {
 export function TeamTimeout({ team }: TeamTimeoutProps) {
     const dispatch = useAppDispatch();
     const match = useAppSelector((state) => state.match);
+    const [elapsedSeconds, setElapsedSeconds] = useState(0);
 
     function handleDone() {
         dispatch(addEvent({ matchId: match.matchId, id: match.id, event: setClearMessageEvent(match.authUserId) }));
     }
 
     const timeoutEvent = match.events.slice().reverse().find(e => e.eventType === EventType.Timeout && !e.undone);
+    const timerColor = getTimeoutTimerColor(elapsedSeconds);
 
     return (
         <Box sx={{ backgroundColor: colors.pageBg, minHeight: "100vh", px: { xs: 2, sm: 4 }, py: 4 }}>
@@ -43,14 +45,14 @@ export function TeamTimeout({ team }: TeamTimeoutProps) {
                 sx={{
                     fontSize: { xs: "48px", sm: "64px" },
                     fontWeight: 600,
-                    color: colors.textPrimary,
+                    color: timerColor,
                     textAlign: "center",
                     fontFamily: "'DM Mono', monospace",
                     lineHeight: 1,
                     mb: 4,
                 }}
             >
-                <TimeElapsed startTime={timeoutEvent?.timestamp || 0} />
+                <TimeElapsed startTime={timeoutEvent?.timestamp || 0} onTick={setElapsedSeconds} />
             </Typography>
 
             {/* Done button */}
