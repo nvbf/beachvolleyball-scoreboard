@@ -129,7 +129,7 @@ const EventList: React.FC = () => {
     const localTime = moment(event.timestamp).format("HH.mm:ss");
     const elapsed = formatElapsed(event.timestamp - startTimestamp);
     const eventName = event.eventType === EventType.Comment
-      ? `Remark: ${event.reference}`
+      ? event.reference
       : `${eventTypeToString(event.eventType)}${event.team === TeamType.None ? "" : ` ${teamToString(event.team)}`}`;
     const standing = `${displayHome}-${displayAway}`;
 
@@ -205,7 +205,7 @@ const EventList: React.FC = () => {
             variant="outlined"
             placeholder="Comment"
             value={commentText}
-            onChange={(e) => setCommentText(e.target.value)}
+            onChange={(e) => setCommentText(e.target.value.slice(0, REMARK_MAX_LENGTH))}
             slotProps={{ htmlInput: { maxLength: REMARK_MAX_LENGTH } }}
             sx={{ marginTop: 1 }}
           />
