@@ -50,6 +50,7 @@ export enum EventType {
   SetFinalized = "SET_FINALIZED",
   MatchFinalized = "MATCH_FINALIZED",
   ClearMessage = "CLEAR_MESSAGE",
+  Comment = "COMMENT",
 }
 
 export enum TeamType {

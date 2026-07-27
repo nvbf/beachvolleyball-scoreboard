@@ -82,12 +82,12 @@ function Match() {
 
 
       {getActiveDisplay(match) === DisplayType.TeamTimeout && <Scoreboard />}
-      {getActiveDisplay(match) === DisplayType.TeamTimeout && <TeamTimeout team={match.events.slice().reverse()[0].team} />}
+      {getActiveDisplay(match) === DisplayType.TeamTimeout && <TeamTimeout team={getLastValidEvent(match.events)?.team ?? TeamType.None} />}
       {getActiveDisplay(match) === DisplayType.TeamTimeout && <EventList />}
 
 
       {getActiveDisplay(match) === DisplayType.TechnicalTimeout && <Scoreboard />}
-      {getActiveDisplay(match) === DisplayType.TechnicalTimeout && <TechnicalTimeout startTime={match.events.slice().reverse()[0].timestamp} />}
+      {getActiveDisplay(match) === DisplayType.TechnicalTimeout && <TechnicalTimeout startTime={getLastValidEvent(match.events)?.timestamp ?? 0} />}
       {getActiveDisplay(match) === DisplayType.TechnicalTimeout && <EventList />}
 
 

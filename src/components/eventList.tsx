@@ -1,16 +1,29 @@
 import React, { useState } from "react";
 import { Event, EventType, TeamType } from "./types";
-import { Box, Button, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
-import { useAppSelector } from "../store/store";
+import { Box, Button, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material";
+import { useAppDispatch, useAppSelector } from "../store/store";
+import { addEvent } from "../store/match/reducer";
+import { createCommentEvent } from "./eventFunctions";
 import moment from "moment";
 
 
 const EventList: React.FC = () => {
   const match = useAppSelector((state) => state.match);
+  const dispatch = useAppDispatch();
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
+  const [commentText, setCommentText] = useState<string>("");
 
   const toggleExpansion = () => {
     setIsExpanded((expanded) => !expanded);
+  };
+
+  const submitComment = () => {
+    const trimmed = commentText.trim();
+    if (!trimmed) {
+      return;
+    }
+    dispatch(addEvent({ matchId: match.matchId, id: match.id, event: createCommentEvent(trimmed, match.authUserId) }));
+    setCommentText("");
   };
 
   const formatElapsed = (milliseconds: number): string => {
@@ -54,7 +67,7 @@ const EventList: React.FC = () => {
   };
 
   const timelineEvents = [...match.events]
-    .filter((event) => !event.undone && (event.eventType === EventType.Score || event.eventType === EventType.Timeout))
+    .filter((event) => !event.undone && (event.eventType === EventType.Score || event.eventType === EventType.Timeout || event.eventType === EventType.Comment))
     .sort((a, b) => a.timestamp - b.timestamp);
 
   const startTimestamp = timelineEvents.length > 0 ? timelineEvents[0].timestamp : 0;
@@ -102,7 +115,9 @@ const EventList: React.FC = () => {
 
     const localTime = moment(event.timestamp).format("HH.mm:ss");
     const elapsed = formatElapsed(event.timestamp - startTimestamp);
-    const eventName = `${eventTypeToString(event.eventType)}${event.team === TeamType.None ? "" : ` ${teamToString(event.team)}`}`;
+    const eventName = event.eventType === EventType.Comment
+      ? `Remark: ${event.reference}`
+      : `${eventTypeToString(event.eventType)}${event.team === TeamType.None ? "" : ` ${teamToString(event.team)}`}`;
     const standing = `${displayHome}-${displayAway}`;
 
     return {
@@ -150,6 +165,26 @@ const EventList: React.FC = () => {
           </TableBody>
         </Table>
       </TableContainer>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, justifyContent: 'center', marginTop: 1, paddingTop: 1, borderTop: "1px solid rgba(0,0,0,0.1)" }}>
+        <TextField
+          size="small"
+          variant="standard"
+          placeholder="Add Remarks"
+          value={commentText}
+          onChange={(e) => setCommentText(e.target.value)}
+          onKeyDown={(e) => { if (e.key === "Enter") { submitComment(); } }}
+          slotProps={{ htmlInput: { maxLength: 200 } }}
+          sx={{ maxWidth: 220 }}
+        />
+        <Button
+          size="small"
+          onClick={submitComment}
+          disabled={!commentText.trim()}
+          sx={{ color: "rgba(28,28,30,0.65)", fontWeight: 700, minWidth: 'auto' }}
+        >
+          Add
+        </Button>
+      </Box>
       </Box>
       {timelineRows.length > 3 && (
         <Button variant="contained" onClick={toggleExpansion} sx={{ marginTop: 1.5, borderRadius: '10px', fontWeight: 700, minWidth: 132, backgroundColor: '#1a6bba', '&:hover': { backgroundColor: '#15599d' } }}>
