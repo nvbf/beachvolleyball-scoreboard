@@ -3,6 +3,8 @@ import { v4 } from 'uuid';
 export type Team = {
   player1Name: string
   player2Name: string
+  player1Number?: string
+  player2Number?: string
 }
 
 export type Set = {

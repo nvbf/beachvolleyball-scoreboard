@@ -17,3 +17,7 @@ export function getInitials(names: string) {
 
     return result;
 }
+
+export function withJerseyNumber(label: string, jerseyNumber?: string): string {
+    return jerseyNumber ? `#${jerseyNumber} ${label}` : label;
+}
