@@ -72,6 +72,20 @@ describe("matchReducer — basic actions", () => {
         expect(state.awayTeam).toEqual(team);
     });
 
+    it("addHomeTeam stores jersey numbers when present", () => {
+        const team = { player1Name: "Alice", player2Name: "Bob", player1Number: "7", player2Number: "12" };
+        const state = matchReducer(initMatchState, addHomeTeam(team));
+        expect(state.homeTeam.player1Number).toBe("7");
+        expect(state.homeTeam.player2Number).toBe("12");
+    });
+
+    it("addAwayTeam stores jersey numbers when present", () => {
+        const team = { player1Name: "Carol", player2Name: "Dave", player1Number: "3", player2Number: "9" };
+        const state = matchReducer(initMatchState, addAwayTeam(team));
+        expect(state.awayTeam.player1Number).toBe("3");
+        expect(state.awayTeam.player2Number).toBe("9");
+    });
+
     it("setId stores match document id", () => {
         const state = matchReducer(initMatchState, setId("doc-abc"));
         expect(state.id).toBe("doc-abc");

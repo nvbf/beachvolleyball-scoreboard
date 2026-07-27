@@ -9,7 +9,7 @@ import {
 import { useAppSelector } from '../store/store';
 import { TeamType, Event, EventType } from './types';
 import Grid from "@mui/material/Grid"
-import { getInitials } from "../util/names";
+import { getInitials, withJerseyNumber } from "../util/names";
 import { matchState } from "../store/types";
 import { ScoreBox } from "./scoreboard/scoreBox";
 
@@ -63,7 +63,7 @@ export function Scoreboard() {
               textDecorationThickness: '2px',
               textUnderlineOffset: '4px',
               textDecoration: (getServer(match.events, leftTeam) === 1) ? "underline" : "none"
-            }}> {getInitials(getPlayer(match, 1, leftTeam))} </Typography>
+            }}> {withJerseyNumber(getInitials(getPlayer(match, 1, leftTeam)), getPlayerNumber(match, 1, leftTeam))} </Typography>
           </Grid>
           <Grid size={1} sx={{ color: '#1c1c1e' }}>
             {(getServer(match.events, rightTeam) === 1) && <ArrowForwardIos sx={{ fontSize: 16 }} />}
@@ -76,7 +76,7 @@ export function Scoreboard() {
               textDecorationThickness: '2px',
               textUnderlineOffset: '4px',
               textDecoration: (getServer(match.events, rightTeam) === 1) ? "underline" : "none"
-            }}> {getInitials(getPlayer(match, 1, rightTeam))}</Typography>
+            }}> {withJerseyNumber(getInitials(getPlayer(match, 1, rightTeam)), getPlayerNumber(match, 1, rightTeam))}</Typography>
           </Grid>
 
           <Grid size={6} sx={{ textAlign: 'right' }}>
@@ -86,7 +86,7 @@ export function Scoreboard() {
               textDecorationThickness: '2px',
               textUnderlineOffset: '4px',
               textDecoration: (getServer(match.events, leftTeam) === 2) ? "underline" : "none"
-            }}> {getInitials(getPlayer(match, 2, leftTeam))}</Typography>
+            }}> {withJerseyNumber(getInitials(getPlayer(match, 2, leftTeam)), getPlayerNumber(match, 2, leftTeam))}</Typography>
 
           </Grid>
           <Grid size={1} sx={{ color: '#1c1c1e' }}>
@@ -100,7 +100,7 @@ export function Scoreboard() {
               textDecorationThickness: '2px',
               textUnderlineOffset: '4px',
               textDecoration: (getServer(match.events, rightTeam) === 2) ? "underline" : "none"
-            }}> {getInitials(getPlayer(match, 2, rightTeam))}</Typography>
+            }}> {withJerseyNumber(getInitials(getPlayer(match, 2, rightTeam)), getPlayerNumber(match, 2, rightTeam))}</Typography>
           </Grid>
         </Grid>
       </Grid>
@@ -138,6 +138,22 @@ export const getPlayer = (match: matchState, playerId: number, teamType: TeamTyp
       return match.awayTeam.player1Name
     } else {
       return match.awayTeam.player2Name
+    }
+  }
+}
+
+export const getPlayerNumber = (match: matchState, playerId: number, teamType: TeamType): string | undefined => {
+  if (teamType === TeamType.Home) {
+    if (playerId === 1) {
+      return match.homeTeam.player1Number
+    } else {
+      return match.homeTeam.player2Number
+    }
+  } else {
+    if (playerId === 1) {
+      return match.awayTeam.player1Number
+    } else {
+      return match.awayTeam.player2Number
     }
   }
 }

@@ -19,10 +19,14 @@ export const initMatchState: matchState = {
   homeTeam: {
     player1Name: "",
     player2Name: "",
+    player1Number: "",
+    player2Number: "",
   },
   awayTeam: {
     player1Name: "",
     player2Name: "",
+    player1Number: "",
+    player2Number: "",
   },
   teamColor: { "HOME": "", "AWAY": "" },
   matchId: "null",

@@ -5,7 +5,7 @@ import { initMatch, resetTeamColor } from '../../store/match/reducer';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import { TeamType } from './../types';
 import { getTextColorFromBackground } from "../../util/color";
-import { getInitials } from "../../util/names";
+import { getInitials, withJerseyNumber } from "../../util/names";
 import { colors } from "../../theme";
 
 export function InitMatch() {
@@ -22,8 +22,18 @@ export function InitMatch() {
       id: v4(),
       awayColor: match.teamColor[TeamType.Away],
       homeColor: match.teamColor[TeamType.Home],
-      awayTeam: { player1Name: match.awayTeam.player1Name, player2Name: match.awayTeam.player2Name },
-      homeTeam: { player1Name: match.homeTeam.player1Name, player2Name: match.homeTeam.player2Name },
+      awayTeam: {
+        player1Name: match.awayTeam.player1Name,
+        player2Name: match.awayTeam.player2Name,
+        player1Number: match.awayTeam.player1Number ?? "",
+        player2Number: match.awayTeam.player2Number ?? "",
+      },
+      homeTeam: {
+        player1Name: match.homeTeam.player1Name,
+        player2Name: match.homeTeam.player2Name,
+        player1Number: match.homeTeam.player1Number ?? "",
+        player2Number: match.homeTeam.player2Number ?? "",
+      },
       matchId: match.matchId,
       tournamentId: match.tournamentId,
       timestamp: Date.now(),
@@ -51,16 +61,16 @@ export function InitMatch() {
       <Box sx={{ display: "flex", gap: 2, mb: 5 }}>
         <TeamButton
           label={[
-            getInitials(match.homeTeam.player1Name),
-            getInitials(match.homeTeam.player2Name),
+            withJerseyNumber(getInitials(match.homeTeam.player1Name), match.homeTeam.player1Number),
+            withJerseyNumber(getInitials(match.homeTeam.player2Name), match.homeTeam.player2Number),
           ]}
           color={match.teamColor[TeamType.Home]}
           onClick={() => setTeamColors(TeamType.Home)}
         />
         <TeamButton
           label={[
-            getInitials(match.awayTeam.player1Name),
-            getInitials(match.awayTeam.player2Name),
+            withJerseyNumber(getInitials(match.awayTeam.player1Name), match.awayTeam.player1Number),
+            withJerseyNumber(getInitials(match.awayTeam.player2Name), match.awayTeam.player2Number),
           ]}
           color={match.teamColor[TeamType.Away]}
           onClick={() => setTeamColors(TeamType.Away)}

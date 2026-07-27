@@ -7,7 +7,7 @@ import { addEvent } from '../store/match/reducer';
 import { useAppDispatch, useAppSelector } from '../store/store';
 import { TeamType, Event, EventType } from './types';
 import Grid from "@mui/material/Grid"
-import { getInitials } from "../util/names";
+import { getInitials, withJerseyNumber } from "../util/names";
 import { selectFirstServerEvent, selectFirstServingTeamEvent } from "./eventFunctions";
 import { matchState } from "../store/types";
 import { getTextColorFromBackground } from "../util/color";
@@ -38,8 +38,8 @@ export function ServeOrder() {
           <Box sx={{ flex: 1, display: showServer(match, TeamType.Home, 0) }}>
             <TeamButton
               label={[
-                getInitials(match.homeTeam.player1Name),
-                getInitials(match.homeTeam.player2Name),
+                withJerseyNumber(getInitials(match.homeTeam.player1Name), match.homeTeam.player1Number),
+                withJerseyNumber(getInitials(match.homeTeam.player2Name), match.homeTeam.player2Number),
               ]}
               color={match.teamColor[TeamType.Home]}
               disabled={match.firstServerTeam !== TeamType.None}
@@ -49,8 +49,8 @@ export function ServeOrder() {
           <Box sx={{ flex: 1, display: showServer(match, TeamType.Away, 0) }}>
             <TeamButton
               label={[
-                getInitials(match.awayTeam.player1Name),
-                getInitials(match.awayTeam.player2Name),
+                withJerseyNumber(getInitials(match.awayTeam.player1Name), match.awayTeam.player1Number),
+                withJerseyNumber(getInitials(match.awayTeam.player2Name), match.awayTeam.player2Number),
               ]}
               color={match.teamColor[TeamType.Away]}
               disabled={match.firstServerTeam !== TeamType.None}
@@ -65,7 +65,7 @@ export function ServeOrder() {
         <Box sx={{ display: "flex", gap: 2 }}>
           <Box sx={{ flex: 1, display: showServer(match, TeamType.Home, 1) }}>
             <TeamButton
-              label={[getInitials(match.homeTeam.player1Name)]}
+              label={[withJerseyNumber(getInitials(match.homeTeam.player1Name), match.homeTeam.player1Number)]}
               color={match.teamColor[TeamType.Home]}
               disabled={match.firstServer[TeamType.Home] !== 0}
               onClick={() => setHomeServer(1)}
@@ -73,7 +73,7 @@ export function ServeOrder() {
           </Box>
           <Box sx={{ flex: 1, display: showServer(match, TeamType.Home, 2) }}>
             <TeamButton
-              label={[getInitials(match.homeTeam.player2Name)]}
+              label={[withJerseyNumber(getInitials(match.homeTeam.player2Name), match.homeTeam.player2Number)]}
               color={match.teamColor[TeamType.Home]}
               disabled={match.firstServer[TeamType.Home] !== 0}
               onClick={() => setHomeServer(2)}
@@ -87,7 +87,7 @@ export function ServeOrder() {
         <Box sx={{ display: "flex", gap: 2 }}>
           <Box sx={{ flex: 1, display: showServer(match, TeamType.Away, 1) }}>
             <TeamButton
-              label={[getInitials(match.awayTeam.player1Name)]}
+              label={[withJerseyNumber(getInitials(match.awayTeam.player1Name), match.awayTeam.player1Number)]}
               color={match.teamColor[TeamType.Away]}
               disabled={match.firstServer[TeamType.Away] !== 0}
               onClick={() => setAwayServer(1)}
@@ -95,7 +95,7 @@ export function ServeOrder() {
           </Box>
           <Box sx={{ flex: 1, display: showServer(match, TeamType.Away, 2) }}>
             <TeamButton
-              label={[getInitials(match.awayTeam.player2Name)]}
+              label={[withJerseyNumber(getInitials(match.awayTeam.player2Name), match.awayTeam.player2Number)]}
               color={match.teamColor[TeamType.Away]}
               disabled={match.firstServer[TeamType.Away] !== 0}
               onClick={() => setAwayServer(2)}

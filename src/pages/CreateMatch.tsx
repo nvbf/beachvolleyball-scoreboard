@@ -20,6 +20,10 @@ function Match() {
   const homePlayer2 = searchParams.get('name2');
   const awayPlayer1 = searchParams.get('name3');
   const awayPlayer2 = searchParams.get('name4');
+  const homePlayer1Number = searchParams.get('number1');
+  const homePlayer2Number = searchParams.get('number2');
+  const awayPlayer1Number = searchParams.get('number3');
+  const awayPlayer2Number = searchParams.get('number4');
   const matchId = searchParams.get('matchId');
   const tournamentId = searchParams.get('tournamentId');
 
@@ -35,6 +39,8 @@ function Match() {
     dispatch(addHomeTeam({
       player1Name: homePlayer1,
       player2Name: homePlayer2,
+      player1Number: homePlayer1Number ?? undefined,
+      player2Number: homePlayer2Number ?? undefined,
     }))
   }
 
@@ -42,6 +48,8 @@ function Match() {
     dispatch(addAwayTeam({
       player1Name: awayPlayer1,
       player2Name: awayPlayer2,
+      player1Number: awayPlayer1Number ?? undefined,
+      player2Number: awayPlayer2Number ?? undefined,
     }))
   }
 

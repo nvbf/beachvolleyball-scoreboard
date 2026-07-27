@@ -6,6 +6,7 @@ import { getTextColorFromBackground } from "../../util/color";
 import { addEvent, setTeamColor } from "../../store/match/reducer";
 import { pickTeamColorEvent } from "../eventFunctions";
 import { colors } from "../../theme";
+import { withJerseyNumber } from "../../util/names";
 
 interface TeamColorPickerProps {
     team: TeamType;
@@ -43,6 +44,8 @@ export function TeamColorPicker({ team }: TeamColorPickerProps) {
 
     const player1 = team === TeamType.Home ? match.homeTeam.player1Name : match.awayTeam.player1Name;
     const player2 = team === TeamType.Home ? match.homeTeam.player2Name : match.awayTeam.player2Name;
+    const player1Number = team === TeamType.Home ? match.homeTeam.player1Number : match.awayTeam.player1Number;
+    const player2Number = team === TeamType.Home ? match.homeTeam.player2Number : match.awayTeam.player2Number;
 
     return (
         <Box sx={{ backgroundColor: colors.pageBg, minHeight: "100vh", px: { xs: 2, sm: 4 }, py: 4 }}>
@@ -70,7 +73,7 @@ export function TeamColorPicker({ team }: TeamColorPickerProps) {
                     mb: 3,
                 }}
             >
-                {player1}<br />{player2}
+                {withJerseyNumber(player1, player1Number)}<br />{withJerseyNumber(player2, player2Number)}
             </Typography>
 
             {/* Color grid */}
