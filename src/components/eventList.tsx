@@ -1,20 +1,32 @@
 import React, { useState } from "react";
 import { Event, EventType, TeamType } from "./types";
-import { Box, Button, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material";
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { addEvent } from "../store/match/reducer";
 import { createCommentEvent } from "./eventFunctions";
 import moment from "moment";
 
+const REMARK_MAX_LENGTH = 200;
 
 const EventList: React.FC = () => {
   const match = useAppSelector((state) => state.match);
   const dispatch = useAppDispatch();
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
+  const [isRemarkDialogOpen, setIsRemarkDialogOpen] = useState<boolean>(false);
   const [commentText, setCommentText] = useState<string>("");
 
   const toggleExpansion = () => {
     setIsExpanded((expanded) => !expanded);
+  };
+
+  const openRemarkDialog = () => {
+    setCommentText("");
+    setIsRemarkDialogOpen(true);
+  };
+
+  const closeRemarkDialog = () => {
+    setIsRemarkDialogOpen(false);
+    setCommentText("");
   };
 
   const submitComment = () => {
@@ -23,6 +35,7 @@ const EventList: React.FC = () => {
       return;
     }
     dispatch(addEvent({ matchId: match.matchId, id: match.id, event: createCommentEvent(trimmed, match.authUserId) }));
+    setIsRemarkDialogOpen(false);
     setCommentText("");
   };
 
@@ -165,24 +178,13 @@ const EventList: React.FC = () => {
           </TableBody>
         </Table>
       </TableContainer>
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, justifyContent: 'center', marginTop: 1, paddingTop: 1, borderTop: "1px solid rgba(0,0,0,0.1)" }}>
-        <TextField
-          size="small"
-          variant="standard"
-          placeholder="Add Remarks"
-          value={commentText}
-          onChange={(e) => setCommentText(e.target.value)}
-          onKeyDown={(e) => { if (e.key === "Enter") { submitComment(); } }}
-          slotProps={{ htmlInput: { maxLength: 200 } }}
-          sx={{ maxWidth: 220 }}
-        />
+      <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: 1, paddingTop: 1, borderTop: "1px solid rgba(0,0,0,0.1)" }}>
         <Button
           size="small"
-          onClick={submitComment}
-          disabled={!commentText.trim()}
-          sx={{ color: "rgba(28,28,30,0.65)", fontWeight: 700, minWidth: 'auto' }}
+          onClick={openRemarkDialog}
+          sx={{ color: "rgba(28,28,30,0.65)", fontWeight: 700 }}
         >
-          Add
+          Add Remark
         </Button>
       </Box>
       </Box>
@@ -191,6 +193,31 @@ const EventList: React.FC = () => {
           {isExpanded ? "Show less" : "Show more"}
         </Button>
       )}
+
+      <Dialog open={isRemarkDialogOpen} onClose={closeRemarkDialog} fullWidth maxWidth="xs">
+        <DialogTitle>Add Remark</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            fullWidth
+            multiline
+            minRows={3}
+            variant="outlined"
+            placeholder="Comment"
+            value={commentText}
+            onChange={(e) => setCommentText(e.target.value)}
+            slotProps={{ htmlInput: { maxLength: REMARK_MAX_LENGTH } }}
+            sx={{ marginTop: 1 }}
+          />
+          <Typography variant="caption" sx={{ display: 'block', textAlign: 'right', marginTop: 0.5, color: "rgba(28,28,30,0.55)" }}>
+            {commentText.length} / {REMARK_MAX_LENGTH}
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={closeRemarkDialog}>Cancel</Button>
+          <Button onClick={submitComment} disabled={!commentText.trim()} variant="contained">Save</Button>
+        </DialogActions>
+      </Dialog>
     </Grid>
   );
 };
