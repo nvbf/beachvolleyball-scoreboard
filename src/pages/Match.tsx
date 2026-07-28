@@ -83,26 +83,21 @@ function Match() {
 
       {getActiveDisplay(match) === DisplayType.TeamTimeout && <Scoreboard />}
       {getActiveDisplay(match) === DisplayType.TeamTimeout && <TeamTimeout team={getLastValidEvent(match.events)?.team ?? TeamType.None} />}
-      {getActiveDisplay(match) === DisplayType.TeamTimeout && <EventList />}
 
 
       {getActiveDisplay(match) === DisplayType.TechnicalTimeout && <Scoreboard />}
       {getActiveDisplay(match) === DisplayType.TechnicalTimeout && <TechnicalTimeout startTime={getLastValidEvent(match.events)?.timestamp ?? 0} />}
-      {getActiveDisplay(match) === DisplayType.TechnicalTimeout && <EventList />}
 
 
       {getActiveDisplay(match) === DisplayType.SwitchSides && <Scoreboard />}
       {getActiveDisplay(match) === DisplayType.SwitchSides && <SwitchSides />}
 
       {getActiveDisplay(match) === DisplayType.SetFinished && <SetFinished />}
-      {getActiveDisplay(match) === DisplayType.SetFinished && <EventList />}
 
       {getActiveDisplay(match) === DisplayType.MatchFinished && <MatchFinished />}
-      {getActiveDisplay(match) === DisplayType.MatchFinished && <EventList />}
 
 
       {getActiveDisplay(match) === DisplayType.MatchFinalized && <MatchFinalized />}
-      {getActiveDisplay(match) === DisplayType.MatchFinalized && <EventList />}
 
       {getActiveDisplay(match) === DisplayType.Loading && < Loader />}
     </main>
