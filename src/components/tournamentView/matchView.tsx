@@ -97,7 +97,8 @@ export function MatchView({ match, tournamentSlug }: MatchViewProps) {
                                     paddingX: 1,
                                 }}
                             >
-                                {match.matchCategory + " - " + (match.matchGroup !== "" ? (" Group " + match.matchGroup) : match.name)}
+                        {match.matchCategory}
+                        {match.matchGroup ? ` – Group ${match.matchGroup}` : match.name ? ` – ${match.name}` : ""}
                             </Typography>
                         </Grid>
                         <Grid size={{ xs: 6, md: 6 }}>
