@@ -6,6 +6,7 @@ import CreateMatch from "./pages/CreateMatch";
 import CreateTournament from "./pages/CreateTournament";
 import Tournaments from "./pages/Tournaments";
 import TournamentAdmin from "./pages/TournamentAdmin";
+import TournamentDisplay from "./pages/TournamentDisplay";
 import TournamentOverlay from "./pages/TournamentOverlay";
 import TournamentView from "./pages/TournamentView";
 import GrantAdminAccess from "./pages/GrantAdminAccess";
@@ -25,6 +26,7 @@ const App: React.FC = () => {
         <Route path="/tournament/" element={<TournamentView />} />
         <Route path="/tournamentadmin/:tournamentSlug" element={<TournamentAdmin />} />
         <Route path="/tournamentoverlay" element={<TournamentOverlay />} />
+        <Route path="/tournamentdisplay" element={<TournamentDisplay />} />
         <Route path="/get-access/:accessCode" element={<GrantAdminAccess />} />
         <Route path="/claim-access/:tournamentSlug" element={<ClaimAccess />} />
         <Route path="/demo" element={<DemoMatch />} />
