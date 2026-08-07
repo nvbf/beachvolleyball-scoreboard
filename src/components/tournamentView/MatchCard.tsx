@@ -249,8 +249,8 @@ export const MatchCard: React.FC<MatchCardProps> = ({ match }) => {
                     }}
                 >
                     {match.matchCategory}
-                    {match.matchGroup ? ` – Group ${match.matchGroup}` : ""}
-                </Box>
+                    {match.matchGroup ? ` – Group ${match.matchGroup}` : match.name ? ` – ${match.name}` : ""}
+                 </Box>
 
                 {/* Court */}
                 <Box sx={{ display: "flex", alignItems: "center", gap: "2px", color: colors.textMuted }}>
