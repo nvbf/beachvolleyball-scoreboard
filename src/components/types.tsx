@@ -48,6 +48,7 @@ export enum EventType {
   LeftSideStartTeam = "LEFT_SIDE_START_TEAM",
   SetJerseyNumber = "SET_JERSEY_NUMBER",
   ConfirmPlayerNumbers = "CONFIRM_PLAYER_NUMBERS",
+  ConfirmServeOrder = "CONFIRM_SERVE_ORDER",
   PickColor = "TEAM_COLOR",
   SetFinalized = "SET_FINALIZED",
   MatchFinalized = "MATCH_FINALIZED",
