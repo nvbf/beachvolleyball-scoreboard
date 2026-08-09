@@ -27,6 +27,7 @@ export type matchState = {
   teamTimeout: { [key: string]: boolean },
   firstServer: { [key: string]: number },
   firstServerTeam: string,
+  serveOrderConfirmed: boolean,
   events: Event[],
   shouldUpdate: boolean,
   errorMessage: string,

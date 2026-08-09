@@ -77,7 +77,7 @@ export function SetLeftStartTeam() {
                 />
             </Box>
 
-            {/* Sides set */}
+            {/* Continue */}
             <Box sx={{ display: "flex", justifyContent: "center", mb: 4 }}>
                 <Button
                     variant="contained"
@@ -85,7 +85,7 @@ export function SetLeftStartTeam() {
                     sx={{ width: { xs: "100%", sm: "60%" }, height: { xs: "56px", sm: "64px" }, borderRadius: "10px" }}
                 >
                     <Typography sx={{ fontSize: { xs: "16px", sm: "20px" }, fontWeight: 600 }}>
-                        Sides set!
+                        Continue
                     </Typography>
                 </Button>
             </Box>

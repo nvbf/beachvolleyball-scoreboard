@@ -39,6 +39,16 @@ export function SetPlayerNumbers() {
                     </Typography>
                 </Button>
             </Box>
+            <Typography
+                sx={{
+                    fontSize: { xs: "13px", sm: "14px" },
+                    color: colors.textMuted,
+                    textAlign: "center",
+                    mt: 1.5,
+                }}
+            >
+                No jersey number? Just tap Continue.
+            </Typography>
 
         </Box>
     );

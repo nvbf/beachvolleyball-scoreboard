@@ -164,7 +164,7 @@ function serveOrderSet(state: matchState): boolean {
   if (state.finished) {
     return false
   }
-  return state.firstServerTeam === TeamType.None || state.firstServer[TeamType.Home] === 0 || state.firstServer[TeamType.Away] === 0;
+  return state.firstServerTeam === TeamType.None || state.firstServer[TeamType.Home] === 0 || state.firstServer[TeamType.Away] === 0 || !state.serveOrderConfirmed;
 }
 
 function setLeftServer(state: matchState): boolean {

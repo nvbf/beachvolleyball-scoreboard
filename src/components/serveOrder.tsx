@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Typography,
 } from "@mui/material";
 import React from 'react';
@@ -8,7 +9,7 @@ import { useAppDispatch, useAppSelector } from '../store/store';
 import { TeamType, Event, EventType } from './types';
 import Grid from "@mui/material/Grid"
 import { getInitials, withJerseyNumber, jerseyNumberFor } from "../util/names";
-import { selectFirstServerEvent, selectFirstServingTeamEvent } from "./eventFunctions";
+import { selectFirstServerEvent, selectFirstServingTeamEvent, confirmServeOrderEvent } from "./eventFunctions";
 import { matchState } from "../store/types";
 import { getTextColorFromBackground } from "../util/color";
 import { colors } from "../theme";
@@ -16,6 +17,10 @@ import { colors } from "../theme";
 export function ServeOrder() {
   const match = useAppSelector((state) => state.match);
   const dispatch = useAppDispatch();
+
+  const readyToContinue = match.firstServerTeam !== TeamType.None
+    && match.firstServer[TeamType.Home] !== 0
+    && match.firstServer[TeamType.Away] !== 0;
 
   function setFirstServerTeam(team: TeamType) {
     dispatch(addEvent({ matchId: match.matchId, id: match.id, event: selectFirstServingTeamEvent(team, match.authUserId) }));
@@ -27,6 +32,10 @@ export function ServeOrder() {
 
   function setAwayServer(player: number) {
     dispatch(addEvent({ matchId: match.matchId, id: match.id, event: selectFirstServerEvent(TeamType.Away, player, match.authUserId) }));
+  }
+
+  function handleContinue() {
+    dispatch(addEvent({ matchId: match.matchId, id: match.id, event: confirmServeOrderEvent(match.authUserId) }));
   }
 
   return (
@@ -103,6 +112,20 @@ export function ServeOrder() {
           </Box>
         </Box>
       </Section>
+
+      {/* Continue */}
+      <Box sx={{ display: "flex", justifyContent: "center" }}>
+        <Button
+          variant="contained"
+          disabled={!readyToContinue}
+          onClick={handleContinue}
+          sx={{ width: { xs: "100%", sm: "60%" }, height: { xs: "56px", sm: "64px" }, borderRadius: "10px" }}
+        >
+          <Typography sx={{ fontSize: { xs: "16px", sm: "20px" }, fontWeight: 600 }}>
+            Continue
+          </Typography>
+        </Button>
+      </Box>
 
     </Box>
   );

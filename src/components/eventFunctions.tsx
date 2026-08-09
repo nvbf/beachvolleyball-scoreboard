@@ -151,6 +151,19 @@ export const confirmPlayerNumbersEvent = (userId: string): Event => {
     }
 }
 
+export const confirmServeOrderEvent = (userId: string): Event => {
+    return {
+        id: v4(),
+        eventType: EventType.ConfirmServeOrder,
+        team: TeamType.None,
+        playerId: 0,
+        timestamp: Date.now(),
+        undone: "",
+        author: userId,
+        reference: ""
+    }
+}
+
 export const setClearMessageEvent = (userId: string): Event => {
     return {
         id: v4(),
