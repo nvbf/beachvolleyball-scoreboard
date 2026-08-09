@@ -6,6 +6,7 @@ import { matchState } from '../store/types';
 import { EventType, TeamType } from '../components/types';
 import { ServeOrder } from '../components/serveOrder';
 import { SetLeftStartTeam } from '../components/scoreboard/setLeftStartTeam';
+import { SetPlayerNumbers } from '../components/scoreboard/setPlayerNumbers';
 import SetFinished from '../components/scoreboard/setFinished';
 import MatchFinished from '../components/scoreboard/matchFinished';
 import TeamTimeout from '../components/scoreboard/teamTimeout';
@@ -73,6 +74,7 @@ function Match() {
     <main className="match-screen">
       <ScoreboardHeader />
 
+      {getActiveDisplay(match) === DisplayType.SetPlayerNumbers && <SetPlayerNumbers />}
       {getActiveDisplay(match) === DisplayType.SelectServeorder && <ServeOrder />}
       {getActiveDisplay(match) === DisplayType.SetLeftStartTeam && <SetLeftStartTeam />}
 
@@ -117,6 +119,7 @@ export enum DisplayType {
   SideSwitch,
   TeamTimeout,
   TechnicalTimeout,
+  SetPlayerNumbers,
   SelectServeorder,
   SetLeftStartTeam,
   SwitchSides,
@@ -142,6 +145,8 @@ function getActiveDisplay(state: matchState): DisplayType {
     return DisplayType.MatchFinished
   } else if (switchSides(state) && getLastValidEvent(state.events)?.eventType !== EventType.ClearMessage) {
     return DisplayType.SwitchSides
+  } else if (playerNumbersSet(state)) {
+    return DisplayType.SetPlayerNumbers
   } else if (serveOrderSet(state)) {
     return DisplayType.SelectServeorder
   } else if (setLeftServer(state)) {
@@ -149,6 +154,10 @@ function getActiveDisplay(state: matchState): DisplayType {
     return DisplayType.SetLeftStartTeam
   }
   return DisplayType.ScoreBoard
+}
+
+function playerNumbersSet(state: matchState): boolean {
+  return !state.playerNumbersConfirmed;
 }
 
 function serveOrderSet(state: matchState): boolean {

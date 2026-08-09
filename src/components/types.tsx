@@ -3,8 +3,6 @@ import { v4 } from 'uuid';
 export type Team = {
   player1Name: string
   player2Name: string
-  player1Number?: string
-  player2Number?: string
 }
 
 export type Set = {
@@ -48,6 +46,8 @@ export enum EventType {
   ConfigureTeam = "TEAM_CONFIG",
   NoSideSwitch = "NO_SIDE_SWITCH",
   LeftSideStartTeam = "LEFT_SIDE_START_TEAM",
+  SetJerseyNumber = "SET_JERSEY_NUMBER",
+  ConfirmPlayerNumbers = "CONFIRM_PLAYER_NUMBERS",
   PickColor = "TEAM_COLOR",
   SetFinalized = "SET_FINALIZED",
   MatchFinalized = "MATCH_FINALIZED",

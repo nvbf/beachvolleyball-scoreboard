@@ -13,6 +13,8 @@ export type matchState = {
   switchSide: boolean,
   leftSideTeam: string,
   noMirrorSides: boolean,
+  jerseyNumberOne: { [key: string]: number },
+  playerNumbersConfirmed: boolean,
   matchStarted: boolean,
   technicalTimeout: boolean,
   technicalTimeoutStart: number,

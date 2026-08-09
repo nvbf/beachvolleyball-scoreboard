@@ -90,14 +90,10 @@ export const getMatch = async (
     homeTeam: {
       player1Name: "",
       player2Name: "",
-      player1Number: "",
-      player2Number: "",
     },
     awayTeam: {
       player1Name: "",
       player2Name: "",
-      player1Number: "",
-      player2Number: "",
     },
     homeColor: "",
     awayColor: "",
