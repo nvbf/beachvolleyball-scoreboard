@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { addEvent } from '../../store/match/reducer';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import { TeamType } from '../types';
-import { getInitials, withJerseyNumber } from "../../util/names";
+import { getInitials, withJerseyNumber, jerseyNumberFor } from "../../util/names";
 import { setLeftStartTeamEvent, setNoSideSwitchEvent } from "../eventFunctions";
 import { matchState } from "../../store/types";
 import { getTextColorFromBackground } from "../../util/color";
@@ -39,11 +39,7 @@ export function SetLeftStartTeam() {
     };
 
     const getPlayerNumber = (match: matchState, playerId: number, teamType: TeamType): string | undefined => {
-        if (teamType === TeamType.Home) {
-            return playerId === 1 ? match.homeTeam.player1Number : match.homeTeam.player2Number;
-        } else {
-            return playerId === 1 ? match.awayTeam.player1Number : match.awayTeam.player2Number;
-        }
+        return jerseyNumberFor(match.jerseyNumberOne[teamType], playerId);
     };
 
     return (

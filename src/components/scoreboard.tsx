@@ -9,7 +9,7 @@ import {
 import { useAppSelector } from '../store/store';
 import { TeamType, Event, EventType } from './types';
 import Grid from "@mui/material/Grid"
-import { getInitials, withJerseyNumber } from "../util/names";
+import { getInitials, withJerseyNumber, jerseyNumberFor } from "../util/names";
 import { matchState } from "../store/types";
 import { ScoreBox } from "./scoreboard/scoreBox";
 
@@ -143,19 +143,7 @@ export const getPlayer = (match: matchState, playerId: number, teamType: TeamTyp
 }
 
 export const getPlayerNumber = (match: matchState, playerId: number, teamType: TeamType): string | undefined => {
-  if (teamType === TeamType.Home) {
-    if (playerId === 1) {
-      return match.homeTeam.player1Number
-    } else {
-      return match.homeTeam.player2Number
-    }
-  } else {
-    if (playerId === 1) {
-      return match.awayTeam.player1Number
-    } else {
-      return match.awayTeam.player2Number
-    }
-  }
+  return jerseyNumberFor(match.jerseyNumberOne[teamType], playerId)
 }
 
 export const getServer = (events: Event[], team: TeamType): number => {

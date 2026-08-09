@@ -125,6 +125,32 @@ export const setNoSideSwitchEvent = (userId: string): Event => {
     }
 }
 
+export const setJerseyNumberEvent = (team: TeamType, player: number, userId: string): Event => {
+    return {
+        id: v4(),
+        eventType: EventType.SetJerseyNumber,
+        team: team,
+        playerId: player,
+        timestamp: Date.now(),
+        undone: "",
+        author: userId,
+        reference: ""
+    }
+}
+
+export const confirmPlayerNumbersEvent = (userId: string): Event => {
+    return {
+        id: v4(),
+        eventType: EventType.ConfirmPlayerNumbers,
+        team: TeamType.None,
+        playerId: 0,
+        timestamp: Date.now(),
+        undone: "",
+        author: userId,
+        reference: ""
+    }
+}
+
 export const setClearMessageEvent = (userId: string): Event => {
     return {
         id: v4(),
