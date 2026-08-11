@@ -93,11 +93,13 @@ function Match() {
       {getActiveDisplay(match) === DisplayType.SwitchSides && <SwitchSides />}
 
       {getActiveDisplay(match) === DisplayType.SetFinished && <SetFinished />}
+      {getActiveDisplay(match) === DisplayType.SetFinished && <EventList />}
 
       {getActiveDisplay(match) === DisplayType.MatchFinished && <MatchFinished />}
-
+      {getActiveDisplay(match) === DisplayType.MatchFinished && <EventList />}
 
       {getActiveDisplay(match) === DisplayType.MatchFinalized && <MatchFinalized />}
+      {getActiveDisplay(match) === DisplayType.MatchFinalized && <EventList />}
 
       {getActiveDisplay(match) === DisplayType.Loading && < Loader />}
     </main>
