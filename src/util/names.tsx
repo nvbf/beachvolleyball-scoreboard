@@ -17,3 +17,14 @@ export function getInitials(names: string) {
 
     return result;
 }
+
+export function withJerseyNumber(label: string, jerseyNumber?: string): string {
+    return jerseyNumber ? `#${jerseyNumber} ${label}` : label;
+}
+
+export function jerseyNumberFor(jerseyNumberOne: number, playerId: number): string | undefined {
+    if (jerseyNumberOne === 0) {
+        return undefined;
+    }
+    return jerseyNumberOne === playerId ? "1" : "2";
+}

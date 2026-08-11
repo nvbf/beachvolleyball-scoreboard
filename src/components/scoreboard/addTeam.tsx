@@ -65,7 +65,6 @@ export function AddTeam({ teamType }: AddTeamProps) {
         <Typography sx={{ fontSize: 28 }}>Add {teamType === TeamType.Home ? "home" : "away"} team!</Typography>
       </Grid>
       <Grid size={12}>
-
         <TextField
           sx={{
             width: 1, height: 64
@@ -74,6 +73,8 @@ export function AddTeam({ teamType }: AddTeamProps) {
           value={player1Name}
           onChange={(e) => handlePlayer1Name(e.target.value)}
         />
+      </Grid>
+      <Grid size={12}>
         <TextField
           sx={{
             width: 1, height: 64

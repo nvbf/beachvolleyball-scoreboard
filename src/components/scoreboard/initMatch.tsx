@@ -22,8 +22,14 @@ export function InitMatch() {
       id: v4(),
       awayColor: match.teamColor[TeamType.Away],
       homeColor: match.teamColor[TeamType.Home],
-      awayTeam: { player1Name: match.awayTeam.player1Name, player2Name: match.awayTeam.player2Name },
-      homeTeam: { player1Name: match.homeTeam.player1Name, player2Name: match.homeTeam.player2Name },
+      awayTeam: {
+        player1Name: match.awayTeam.player1Name,
+        player2Name: match.awayTeam.player2Name,
+      },
+      homeTeam: {
+        player1Name: match.homeTeam.player1Name,
+        player2Name: match.homeTeam.player2Name,
+      },
       matchId: match.matchId,
       tournamentId: match.tournamentId,
       timestamp: Date.now(),

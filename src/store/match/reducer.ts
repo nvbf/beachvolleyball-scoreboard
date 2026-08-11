@@ -34,11 +34,14 @@ export const initMatchState: matchState = {
   technicalTimeoutStart: 0,
   switchSide: false,
   noMirrorSides: false,
+  jerseyNumberOne: { "HOME": 0, "AWAY": 0 },
+  playerNumbersConfirmed: false,
   matchStarted: false,
   startTime: 0,
   userMessage: "",
   firstServer: { "HOME": 0, "AWAY": 0 },
   firstServerTeam: TeamType.None,
+  serveOrderConfirmed: false,
   leftSideTeam: TeamType.None,
   currentSet: 0,
   theCurrentSets: [],
@@ -142,8 +145,11 @@ const matchSlice = createSlice({
       let teamTimeout = { "HOME": false, "AWAY": false };
       let firstServer = { "HOME": 0, "AWAY": 0 };
       let firstServerTeam = TeamType.None;
+      let serveOrderConfirmed = false;
       let leftSideTeam = TeamType.None;
       let noMirrorSides = false;
+      let jerseyNumberOne: { [key: string]: number } = { "HOME": 0, "AWAY": 0 };
+      let playerNumbersConfirmed = false;
       let matchStarted = false;
       let matchStartTime = 0;
       let userMessage = "";
@@ -187,6 +193,7 @@ const matchSlice = createSlice({
               teamTimeout = { "HOME": false, "AWAY": false }
               firstServer = { "HOME": 0, "AWAY": 0 }
               firstServerTeam = TeamType.None;
+              serveOrderConfirmed = false;
               leftSideTeam = TeamType.None;
               homeSetScore[setIndex] = 0;
               awaySetScore[setIndex] = 0;
@@ -197,6 +204,7 @@ const matchSlice = createSlice({
               teamTimeout = { "HOME": false, "AWAY": false }
               firstServer = { "HOME": 0, "AWAY": 0 }
               firstServerTeam = TeamType.None;
+              serveOrderConfirmed = false;
               leftSideTeam = TeamType.None;
               homeSetScore[setIndex] = 0;
               awaySetScore[setIndex] = 0;
@@ -236,6 +244,12 @@ const matchSlice = createSlice({
           leftSideTeam = event.team
         } else if (event.eventType === EventType.NoSideSwitch) {
           noMirrorSides = true
+        } else if (event.eventType === EventType.SetJerseyNumber && event.team !== TeamType.None) {
+          jerseyNumberOne[event.team] = event.playerId
+        } else if (event.eventType === EventType.ConfirmPlayerNumbers) {
+          playerNumbersConfirmed = true
+        } else if (event.eventType === EventType.ConfirmServeOrder) {
+          serveOrderConfirmed = true
         } else if (event.eventType === EventType.MatchFinalized) {
           userMessage = "match done! thank you!"
         }
@@ -249,11 +263,14 @@ const matchSlice = createSlice({
       state.currentSet = currentSet;
       state.firstServer = firstServer;
       state.firstServerTeam = firstServerTeam;
+      state.serveOrderConfirmed = serveOrderConfirmed;
       state.teamTimeout = teamTimeout;
       state.finished = matchDone;
       state.leftSideTeam = leftSideTeam;
       state.matchStarted = matchStarted;
       state.noMirrorSides = noMirrorSides;
+      state.jerseyNumberOne = jerseyNumberOne;
+      state.playerNumbersConfirmed = playerNumbersConfirmed;
       state.startTime = matchStartTime;
       state.userMessage = userMessage;
       state.technicalTimeoutStart = technicalTimeoutStart;

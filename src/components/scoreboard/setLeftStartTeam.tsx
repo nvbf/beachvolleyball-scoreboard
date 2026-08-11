@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { addEvent } from '../../store/match/reducer';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import { TeamType } from '../types';
-import { getInitials } from "../../util/names";
+import { getInitials, withJerseyNumber, jerseyNumberFor } from "../../util/names";
 import { setLeftStartTeamEvent, setNoSideSwitchEvent } from "../eventFunctions";
 import { matchState } from "../../store/types";
 import { getTextColorFromBackground } from "../../util/color";
@@ -38,6 +38,10 @@ export function SetLeftStartTeam() {
         }
     };
 
+    const getPlayerNumber = (match: matchState, playerId: number, teamType: TeamType): string | undefined => {
+        return jerseyNumberFor(match.jerseyNumberOne[teamType], playerId);
+    };
+
     return (
         <Box sx={{ backgroundColor: colors.pageBg, minHeight: "100vh", px: { xs: 2, sm: 4 }, py: 4 }}>
 
@@ -59,21 +63,21 @@ export function SetLeftStartTeam() {
             <Box sx={{ display: "flex", gap: 2, mb: 4 }}>
                 <TeamButton
                     label={[
-                        getInitials(getPlayer(match, 1, getLeftTeam())),
-                        getInitials(getPlayer(match, 2, getLeftTeam())),
+                        withJerseyNumber(getInitials(getPlayer(match, 1, getLeftTeam())), getPlayerNumber(match, 1, getLeftTeam())),
+                        withJerseyNumber(getInitials(getPlayer(match, 2, getLeftTeam())), getPlayerNumber(match, 2, getLeftTeam())),
                     ]}
                     color={match.teamColor[getLeftTeam()]}
                 />
                 <TeamButton
                     label={[
-                        getInitials(getPlayer(match, 1, getRightTeam())),
-                        getInitials(getPlayer(match, 2, getRightTeam())),
+                        withJerseyNumber(getInitials(getPlayer(match, 1, getRightTeam())), getPlayerNumber(match, 1, getRightTeam())),
+                        withJerseyNumber(getInitials(getPlayer(match, 2, getRightTeam())), getPlayerNumber(match, 2, getRightTeam())),
                     ]}
                     color={match.teamColor[getRightTeam()]}
                 />
             </Box>
 
-            {/* Sides set */}
+            {/* Continue */}
             <Box sx={{ display: "flex", justifyContent: "center", mb: 4 }}>
                 <Button
                     variant="contained"
@@ -81,7 +85,7 @@ export function SetLeftStartTeam() {
                     sx={{ width: { xs: "100%", sm: "60%" }, height: { xs: "56px", sm: "64px" }, borderRadius: "10px" }}
                 >
                     <Typography sx={{ fontSize: { xs: "16px", sm: "20px" }, fontWeight: 600 }}>
-                        Sides set!
+                        Continue
                     </Typography>
                 </Button>
             </Box>

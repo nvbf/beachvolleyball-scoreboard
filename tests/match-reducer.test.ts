@@ -1,11 +1,13 @@
 import {
     callTimeoutEvent,
+    confirmPlayerNumbersEvent,
     createAddPointEvent,
     finalizeMatchEvent,
     finalizeSetEvent,
     pickTeamColorEvent,
     selectFirstServerEvent,
     selectFirstServingTeamEvent,
+    setJerseyNumberEvent,
     setLeftStartTeamEvent,
     setNoSideSwitchEvent,
 } from "../src/components/eventFunctions";
@@ -204,6 +206,35 @@ describe("evaluateEvents — configuration events", () => {
     it("NO_SIDE_SWITCH sets noMirrorSides", () => {
         const s = stateWithEvents([setNoSideSwitchEvent(USER)]);
         expect(s.noMirrorSides).toBe(true);
+    });
+
+    it("SET_JERSEY_NUMBER sets jerseyNumberOne for home team", () => {
+        const s = stateWithEvents([setJerseyNumberEvent(TeamType.Home, 2, USER)]);
+        expect(s.jerseyNumberOne[TeamType.Home]).toBe(2);
+        expect(s.jerseyNumberOne[TeamType.Away]).toBe(0);
+    });
+
+    it("SET_JERSEY_NUMBER sets jerseyNumberOne for away team", () => {
+        const s = stateWithEvents([setJerseyNumberEvent(TeamType.Away, 1, USER)]);
+        expect(s.jerseyNumberOne[TeamType.Away]).toBe(1);
+    });
+
+    it("a later SET_JERSEY_NUMBER overwrites an earlier pick for the same team", () => {
+        const s = stateWithEvents([
+            setJerseyNumberEvent(TeamType.Home, 1, USER),
+            setJerseyNumberEvent(TeamType.Home, 2, USER),
+        ]);
+        expect(s.jerseyNumberOne[TeamType.Home]).toBe(2);
+    });
+
+    it("CONFIRM_PLAYER_NUMBERS sets playerNumbersConfirmed", () => {
+        const s = stateWithEvents([confirmPlayerNumbersEvent(USER)]);
+        expect(s.playerNumbersConfirmed).toBe(true);
+    });
+
+    it("playerNumbersConfirmed defaults to false with no events", () => {
+        const s = stateWithEvents([]);
+        expect(s.playerNumbersConfirmed).toBe(false);
     });
 
     it("MATCH_FINALIZED sets user message", () => {
