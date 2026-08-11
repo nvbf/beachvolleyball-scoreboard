@@ -68,6 +68,7 @@ const TeamNumberSection: React.FC<TeamNumberSectionProps> = ({ label, team, matc
     const player1Name = team === TeamType.Home ? match.homeTeam.player1Name : match.awayTeam.player1Name;
     const player2Name = team === TeamType.Home ? match.homeTeam.player2Name : match.awayTeam.player2Name;
     const jerseyNumberOne = match.jerseyNumberOne[team];
+    const disabled = jerseyPickDisabled(match, team);
 
     return (
         <Box sx={{ mb: 4 }}>
@@ -77,18 +78,26 @@ const TeamNumberSection: React.FC<TeamNumberSectionProps> = ({ label, team, matc
                     label={withJerseyNumber(getInitials(player1Name), jerseyNumberFor(jerseyNumberOne, 1))}
                     color={color}
                     selected={jerseyNumberOne === 1}
+                    disabled={disabled}
                     onClick={() => onPick(team, 1)}
                 />
                 <PlayerButton
                     label={withJerseyNumber(getInitials(player2Name), jerseyNumberFor(jerseyNumberOne, 2))}
                     color={color}
                     selected={jerseyNumberOne === 2}
+                    disabled={disabled}
                     onClick={() => onPick(team, 2)}
                 />
             </Box>
         </Box>
     );
 };
+
+// ─── Pure helpers ───────────────────────────────────────────────────────────
+
+export function jerseyPickDisabled(match: matchState, team: TeamType): boolean {
+    return match.jerseyNumberOne[team] !== 0;
+}
 
 // ─── Section label ────────────────────────────────────────────────────────────
 
@@ -113,15 +122,16 @@ interface PlayerButtonProps {
     label: string;
     color: string;
     selected: boolean;
+    disabled: boolean;
     onClick: () => void;
 }
 
-const PlayerButton: React.FC<PlayerButtonProps> = ({ label, color, selected, onClick }) => {
+const PlayerButton: React.FC<PlayerButtonProps> = ({ label, color, selected, disabled, onClick }) => {
     const textColor = getTextColorFromBackground(color);
 
     return (
         <Box
-            onClick={onClick}
+            onClick={disabled ? undefined : onClick}
             sx={{
                 flex: 1,
                 minHeight: { xs: "76px", sm: "88px" },
@@ -130,11 +140,12 @@ const PlayerButton: React.FC<PlayerButtonProps> = ({ label, color, selected, onC
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                cursor: "pointer",
+                cursor: disabled ? "default" : "pointer",
+                opacity: disabled && !selected ? 0.5 : 1,
                 border: selected ? "3px solid #2c2925" : "3px solid transparent",
                 boxShadow: selected ? "0 0 0 2px #2c2925" : "0 2px 8px rgba(0,0,0,0.15)",
-                transition: "filter 0.12s, border 0.12s",
-                "&:hover": { filter: "brightness(1.08)" },
+                transition: "filter 0.12s, border 0.12s, opacity 0.12s",
+                "&:hover": disabled ? {} : { filter: "brightness(1.08)" },
                 px: 2,
             }}
         >
