@@ -177,6 +177,19 @@ export const setClearMessageEvent = (userId: string): Event => {
     }
 }
 
+export const createCommentEvent = (text: string, userId: string): Event => {
+    return {
+        id: v4(),
+        eventType: EventType.Comment,
+        team: TeamType.None,
+        playerId: 0,
+        timestamp: Date.now(),
+        undone: "",
+        author: userId,
+        reference: text.trim()
+    }
+}
+
 export const createUndoEvent = (events: Event[], userId: string): Event => {
     const reversedEvents = [...events].reverse();
     const undoneEventIndex = reversedEvents.findIndex((event: Event) => !event.undone && event.eventType !== EventType.Undo);
@@ -208,7 +221,7 @@ export const createUndoEvent = (events: Event[], userId: string): Event => {
 
 export const getLastValidEvent = (events: Event[]): Event | null => {
     const reversedEvents = events.slice().reverse();
-    const undoneEventIndex = reversedEvents.findIndex((event: Event) => !event.undone && event.eventType !== EventType.Undo);
+    const undoneEventIndex = reversedEvents.findIndex((event: Event) => !event.undone && event.eventType !== EventType.Undo && event.eventType !== EventType.Comment);
 
     if (undoneEventIndex < 0) {
         return null

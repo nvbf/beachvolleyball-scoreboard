@@ -2,6 +2,7 @@ import {
     callTimeoutEvent,
     confirmPlayerNumbersEvent,
     createAddPointEvent,
+    createCommentEvent,
     finalizeMatchEvent,
     finalizeSetEvent,
     pickTeamColorEvent,
@@ -248,6 +249,35 @@ describe("evaluateEvents — configuration events", () => {
         const event = pickTeamColorEvent(TeamType.Home, "#abcdef", USER);
         expect(event.eventType).toBe(EventType.PickColor);
         expect(event.reference).toBe("#abcdef");
+    });
+
+    it("COMMENT event is stored via createCommentEvent (reference field holds trimmed text)", () => {
+        const event = createCommentEvent("  green card issued  ", USER);
+        expect(event.eventType).toBe(EventType.Comment);
+        expect(event.reference).toBe("green card issued");
+    });
+
+    it("a COMMENT event does not affect score or set state", () => {
+        let state = { ...initMatchState };
+        state = scorePoints(state, TeamType.Home, 3);
+        state = matchReducer(state, insertEvent(createCommentEvent("note", USER)));
+        state = matchReducer(state, evaluateEvents());
+
+        expect(state.currentScore[TeamType.Home]).toBe(3);
+        expect(state.currentScore[TeamType.Away]).toBe(0);
+        expect(state.finished).toBe(false);
+    });
+
+    it("a COMMENT event does not clear an in-flight userMessage", () => {
+        let state = { ...initMatchState };
+        // Score 6 combined points to trigger the "switch sides" warning
+        state = scorePoints(state, TeamType.Home, 3);
+        state = scorePoints(state, TeamType.Away, 3);
+        expect(state.userMessage).toBe("switch sides");
+
+        state = matchReducer(state, insertEvent(createCommentEvent("note", USER)));
+        state = matchReducer(state, evaluateEvents());
+        expect(state.userMessage).toBe("switch sides");
     });
 });
 

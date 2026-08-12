@@ -1,16 +1,42 @@
 import React, { useState } from "react";
 import { Event, EventType, TeamType } from "./types";
-import { Box, Button, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
-import { useAppSelector } from "../store/store";
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material";
+import { useAppDispatch, useAppSelector } from "../store/store";
+import { addEvent } from "../store/match/reducer";
+import { createCommentEvent } from "./eventFunctions";
 import moment from "moment";
 
+const REMARK_MAX_LENGTH = 200;
 
 const EventList: React.FC = () => {
   const match = useAppSelector((state) => state.match);
+  const dispatch = useAppDispatch();
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
+  const [isRemarkDialogOpen, setIsRemarkDialogOpen] = useState<boolean>(false);
+  const [commentText, setCommentText] = useState<string>("");
 
   const toggleExpansion = () => {
     setIsExpanded((expanded) => !expanded);
+  };
+
+  const openRemarkDialog = () => {
+    setCommentText("");
+    setIsRemarkDialogOpen(true);
+  };
+
+  const closeRemarkDialog = () => {
+    setIsRemarkDialogOpen(false);
+    setCommentText("");
+  };
+
+  const submitComment = () => {
+    const trimmed = commentText.trim();
+    if (!trimmed) {
+      return;
+    }
+    dispatch(addEvent({ matchId: match.matchId, id: match.id, event: createCommentEvent(trimmed, match.authUserId) }));
+    setIsRemarkDialogOpen(false);
+    setCommentText("");
   };
 
   const formatElapsed = (milliseconds: number): string => {
@@ -54,7 +80,7 @@ const EventList: React.FC = () => {
   };
 
   const timelineEvents = [...match.events]
-    .filter((event) => !event.undone && (event.eventType === EventType.Score || event.eventType === EventType.Timeout))
+    .filter((event) => !event.undone && (event.eventType === EventType.Score || event.eventType === EventType.Timeout || event.eventType === EventType.Comment))
     .sort((a, b) => a.timestamp - b.timestamp);
 
   const startTimestamp = timelineEvents.length > 0 ? timelineEvents[0].timestamp : 0;
@@ -102,7 +128,9 @@ const EventList: React.FC = () => {
 
     const localTime = moment(event.timestamp).format("HH.mm:ss");
     const elapsed = formatElapsed(event.timestamp - startTimestamp);
-    const eventName = `${eventTypeToString(event.eventType)}${event.team === TeamType.None ? "" : ` ${teamToString(event.team)}`}`;
+    const eventName = event.eventType === EventType.Comment
+      ? event.reference
+      : `${eventTypeToString(event.eventType)}${event.team === TeamType.None ? "" : ` ${teamToString(event.team)}`}`;
     const standing = `${displayHome}-${displayAway}`;
 
     return {
@@ -150,12 +178,46 @@ const EventList: React.FC = () => {
           </TableBody>
         </Table>
       </TableContainer>
+      <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: 1, paddingTop: 1, borderTop: "1px solid rgba(0,0,0,0.1)" }}>
+        <Button
+          size="small"
+          onClick={openRemarkDialog}
+          sx={{ color: "rgba(28,28,30,0.65)", fontWeight: 700 }}
+        >
+          Add Remark
+        </Button>
+      </Box>
       </Box>
       {timelineRows.length > 3 && (
         <Button variant="contained" onClick={toggleExpansion} sx={{ marginTop: 1.5, borderRadius: '10px', fontWeight: 700, minWidth: 132, backgroundColor: '#1a6bba', '&:hover': { backgroundColor: '#15599d' } }}>
           {isExpanded ? "Show less" : "Show more"}
         </Button>
       )}
+
+      <Dialog open={isRemarkDialogOpen} onClose={closeRemarkDialog} fullWidth maxWidth="xs">
+        <DialogTitle>Add Remark</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            fullWidth
+            multiline
+            minRows={3}
+            variant="outlined"
+            placeholder="Comment"
+            value={commentText}
+            onChange={(e) => setCommentText(e.target.value.slice(0, REMARK_MAX_LENGTH))}
+            slotProps={{ htmlInput: { maxLength: REMARK_MAX_LENGTH } }}
+            sx={{ marginTop: 1 }}
+          />
+          <Typography variant="caption" sx={{ display: 'block', textAlign: 'right', marginTop: 0.5, color: "rgba(28,28,30,0.55)" }}>
+            {commentText.length} / {REMARK_MAX_LENGTH}
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={closeRemarkDialog}>Cancel</Button>
+          <Button onClick={submitComment} disabled={!commentText.trim()} variant="contained">Save</Button>
+        </DialogActions>
+      </Dialog>
     </Grid>
   );
 };
