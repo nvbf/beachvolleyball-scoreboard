@@ -257,7 +257,7 @@ const Tournaments: React.FC = () => {
     );
   }
 
-  const active = data.filter(t => isOngoing(t.startDate, t.endDate)).sort((a, b) => a.startDate < b.startDate ? 1 : -1);
+  const active = data.filter(t => isOngoing(t.startDate, t.endDate) && t.numberOfMatches).sort((a, b) => a.startDate < b.startDate ? 1 : -1);
   const upcoming = data.filter(t => isIncoming(t.startDate) && t.numberOfMatches).sort((a, b) => a.startDate < b.startDate ? 0 : 1);
   const past = data.filter(t => isPast(t.endDate)).sort((a, b) => b.startDate.localeCompare(a.startDate));
 
